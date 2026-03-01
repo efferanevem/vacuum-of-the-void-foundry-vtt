@@ -1,0 +1,12 @@
+/* Weapon item sheet – specific styles only */
+
+.vacuum-of-the-void.sheet.item.weapon .sheet-header .profile {
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
+}
+
+.vacuum-of-the-void.sheet.item.weapon .weapon-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px 12px;
+  margin-bottom: 8px;
+}

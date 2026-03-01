@@ -1,0 +1,20 @@
+Category,Fegyver,Sebzés,Hatótávolság,Harcképzettség_Proba,Fegyver_Ára,Max_Fejlesztés,Fejlesztés_Ára,Speciális
+Könnyű,Kés,1d6,1.5 m,,50 cr,+3,25 cr,
+Könnyű,Pisztoly,1d4,21/42 m,,150 cr,+2,75 cr,Újratöltés: 1 KP
+Könnyű,Géppisztoly,1d4+1,15/30 m,,200 cr,+3,100 cr,Újratöltés: 1 KP; Tár: 6; Sorozat
+Könnyű,Revolver,1d4+3,15/30 m,,250 cr,+3,175 cr,Újratöltés: 2 KP; Tár: 6
+Közepes,Höpengé,2d4+2,1.5 m,,200 cr,+4,100 cr,
+Közepes,Gépkarabély,2d4,27/54 m,,450 cr,+4,225 cr,
+Közepes,Sörétes Puska,3d4+2,4.5 m,,500 cr,+8,250 cr,Újratöltés: 2 KP; Tár: 5 sörét
+Közepes,Puska,1d4+2,13.5 m,,500 cr,+8,250 cr,Újratöltés: 2 KP; Tár: 5 sörét
+Közepes,Karabély,2d6,60/120 m,,600 cr,+6,300 cr,
+Nehéz,Géppuska,4d4,36/72 m,,900 cr,+8,450 cr,Újratöltés: 3 KP; Tár: 5; Sorozat
+Nehéz,Forgó Nehézgépkarabély,2d8+2,27/54 m,,900 cr,+8,450 cr,Feltöltés: 2 KP
+Nehéz,Mesterlövészpuska,3d6,210/420 m,,1250 cr,+12,625 cr,
+Nehéz,Rakétavető,3d10+5,48/96 m,,1500 cr,,,"Újratöltés: 1 KP; Rakéta: 75 cr"
+Dobható,Kinetikus Gránát,3d6,13.5 m,14,30 cr,,,3 m-en belül sebez sikertelen mentődobásnál
+Dobható,Villanógránát,-,13.5 m,12,25 cr,,,3 m-en belül elkábít sikertelen mentődobásnál
+Dobható,EMP Gránát,-,13.5 m,16,50 cr,,,Elektronika kikapcsolása; Droid elkábítás
+Dobható,Gyújtógránát,2d4+2,13.5 m,14,75 cr,,,Tűz; 3 körig égés
+Dobható,C4,3d12+6,13.5 m / 30 m,16,100 cr,,,12 m-en belül sebzés; 1 KP detonálás
+Dobható,Akna,3d10+3,1.5 m,,75 cr,,,Elhelyezhető; rálépéskor robban

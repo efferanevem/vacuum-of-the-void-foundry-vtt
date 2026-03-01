@@ -1,0 +1,34 @@
+<form class="{{cssClass}} votv-ability-sheet" autocomplete="off">
+  <header class="sheet-header">
+    <img class="profile" src="{{item.img}}" data-edit="img" title="{{item.name}}" />
+    <div class="header-fields">
+      <h1 class="item-name">
+        <input name="name" type="text" value="{{item.name}}" placeholder="Képesség neve" />
+      </h1>
+      <div class="item-type">
+        <label>Típus</label>
+        <select name="system.kind">
+          <option value="active" {{#if (eq system.kind "active")}}selected{{/if}}>Aktív</option>
+          <option value="passive" {{#if (eq system.kind "passive")}}selected{{/if}}>Passzív</option>
+          <option value="species" {{#if (eq system.kind "species")}}selected{{/if}}>Faji</option>
+          <option value="background" {{#if (eq system.kind "background")}}selected{{/if}}>Háttér</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <section class="sheet-body">
+    <div class="ability-grid">
+      <div class="field">
+        <label>KP</label>
+        <input type="number" name="system.kp" value="{{system.kp}}" min="0" />
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Leírás</label>
+      <textarea name="system.description" rows="6">{{system.description}}</textarea>
+    </div>
+  </section>
+</form>
+

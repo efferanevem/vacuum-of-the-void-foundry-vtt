@@ -1,0 +1,1292 @@
+/* PC (actor) sheet – layout, panels, weapon slots, microchip slots, actions table */
+
+/* Layout & typography */
+.votv.pc-sheet {
+  font-family: var(--font-body);
+  font-size: var(--votv-font-body);
+  padding: 10px 14px;
+  box-sizing: border-box;
+  background: linear-gradient(145deg, rgba(5, 7, 10, 0.9), rgba(5, 10, 18, 0.98));
+  border-radius: var(--votv-radius);
+  border: 1px solid rgba(66, 135, 245, 0.25);
+  box-shadow: var(--votv-shadow-soft);
+  color: var(--votv-text-main);
+  height: 100%;
+  overflow-y: auto;
+}
+
+.votv-scroll {
+  overflow: auto;
+}
+
+.votv.pc-sheet .pc-header label {
+  font-size: var(--votv-font-label-small);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--votv-text-muted);
+}
+
+.votv.pc-sheet .pc-panel {
+  font-size: var(--votv-font-body);
+  border: 1px solid var(--votv-border-muted);
+  padding: 10px 12px;
+  background: var(--votv-panel-bg);
+  border-radius: var(--votv-radius);
+  box-shadow: inset 0 0 0 1px rgba(1, 3, 6, 0.7);
+}
+
+.votv.pc-sheet .pc-panel label {
+  font-size: var(--votv-font-body);
+  text-transform: none;
+  letter-spacing: 0.02em;
+  color: var(--votv-text-main);
+}
+
+.votv.pc-sheet input[type="text"],
+.votv.pc-sheet input[type="number"] {
+  width: 100%;
+  box-sizing: border-box;
+  font-size: var(--votv-font-body);
+  padding: 4px 6px;
+  background-color: rgba(3, 6, 10, 0.9);
+  border: 1px solid var(--votv-border-muted);
+  color: var(--votv-text-main);
+  border-radius: 2px;
+}
+
+.votv.pc-sheet textarea {
+  width: 100%;
+  min-height: 60px;
+  box-sizing: border-box;
+  font-size: var(--votv-font-body);
+  padding: 4px 6px;
+  resize: vertical;
+  background-color: rgba(3, 6, 10, 0.9);
+  border: 1px solid var(--votv-border-muted);
+  color: var(--votv-text-main);
+  border-radius: 2px;
+}
+
+.votv.pc-sheet input:focus,
+.votv.pc-sheet textarea:focus {
+  outline: none;
+}
+
+.votv.pc-sheet input:focus-visible,
+.votv.pc-sheet textarea:focus-visible {
+  border-color: var(--votv-focus-ring);
+  box-shadow: 0 0 0 1px rgba(43, 255, 136, 0.4);
+}
+
+.votv.pc-sheet .pc-header {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 8px;
+}
+
+.votv.pc-sheet .pc-header-row {
+  display: grid;
+  grid-template-columns: 2fr 0.7fr 1.2fr 1.2fr 1.3fr;
+  gap: 4px;
+}
+
+.votv.pc-sheet .pc-header-row:nth-child(2) {
+  grid-template-columns: 1.2fr 1.2fr 1fr;
+  max-width: 70%;
+}
+
+.votv.pc-sheet .pc-header-field {
+  border: 1px solid var(--votv-border-muted);
+  padding: 3px 6px;
+  background: var(--votv-panel-bg-soft);
+  border-radius: var(--votv-radius);
+  box-shadow: inset 0 0 0 1px rgba(1, 3, 6, 0.6);
+}
+
+.votv.pc-sheet .pc-header-field input {
+  border: none;
+  background: transparent;
+  padding: 0;
+}
+
+.votv.pc-sheet .pc-main {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr 1.4fr;
+  grid-template-rows: auto auto auto;
+  gap: 8px;
+}
+
+.votv.pc-sheet h2 {
+  margin: 0 0 6px;
+  font-size: var(--votv-font-label);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--votv-header-accent);
+  position: relative;
+}
+
+.votv.pc-sheet h2::before {
+  content: "> ";
+  color: rgba(43, 255, 136, 0.9);
+  margin-right: 2px;
+}
+
+.votv.pc-sheet .pc-column {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Cards: portrait, resources, skills, combat */
+.votv.pc-sheet .pc-panel.pc-portrait {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 8px;
+}
+
+.votv.pc-sheet .pc-portrait-frame {
+  width: 180px;
+  height: 180px;
+  border-radius: var(--votv-radius);
+  border: 1px solid var(--votv-border-muted);
+  overflow: hidden;
+  background: rgba(3, 6, 10, 0.9);
+  flex-shrink: 0;
+}
+
+.votv.pc-sheet .pc-portrait-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  cursor: pointer;
+}
+
+.votv.pc-sheet .pc-portrait-img:hover {
+  opacity: 0.9;
+}
+
+.votv.pc-sheet .pc-resource {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.votv.pc-sheet .pc-resource label {
+  flex: 0 0 auto;
+  min-width: 4.5em;
+}
+
+.votv.pc-sheet .pc-resource input[type="number"] {
+  width: 2.8em;
+  min-width: 0;
+  text-align: center;
+}
+
+.votv.pc-sheet .pc-resource span {
+  flex: 0 0 auto;
+  opacity: 0.7;
+}
+
+.votv.pc-sheet .pc-current-hp {
+  margin-bottom: 8px;
+}
+
+.votv.pc-sheet .pc-current-hp h3 {
+  margin: 0 0 4px 0;
+  font-size: 0.9em;
+  font-weight: 600;
+}
+
+.votv.pc-sheet .pc-current-hp input[type="number"] {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.votv.pc-sheet .pc-current-health-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
+.votv.pc-sheet .pc-current-health-row label {
+  flex: 0 0 auto;
+}
+
+.votv.pc-sheet .pc-current-health-row input[type="number"] {
+  width: 2.8em;
+  min-width: 0;
+  text-align: center;
+  flex: 0 0 auto;
+}
+
+.votv.pc-sheet .pc-hit-location {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+
+.votv.pc-sheet .pc-hit-location label {
+  flex: 0 0 auto;
+  min-width: 4em;
+}
+
+.votv.pc-sheet .pc-hit-location input[type="number"] {
+  width: 2.5em;
+  flex: 0 0 auto;
+  min-width: 0;
+  text-align: center;
+}
+
+.votv.pc-sheet .pc-skills-grid {
+  display: flex;
+  gap: 4px 8px;
+  align-items: flex-start;
+}
+
+.votv.pc-sheet .pc-skills-column {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.votv.pc-sheet .pc-skills-column:first-child {
+  border-right: 1px solid var(--votv-border-muted);
+  padding-right: 8px;
+}
+
+.votv.pc-sheet .pc-skill {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.votv.pc-sheet .pc-skill label {
+  flex: 0 1 auto;
+}
+
+.votv.pc-sheet .pc-skill input[type="number"] {
+  width: 2.6em;
+  min-width: 2.6em;
+  max-width: 2.6em;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.votv.pc-sheet .pc-skill-label,
+.votv.pc-sheet .pc-weapon-label {
+  cursor: pointer;
+}
+
+.votv.pc-sheet .pc-defense-speed {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.votv.pc-sheet .pc-defense-speed > div {
+  flex: 1 1 0;
+}
+
+/* Képességek (abilities) grid */
+.votv.pc-sheet .pc-abilities-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.votv.pc-sheet .pc-abilities-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.votv.pc-sheet .pc-abilities-row-top .pc-ability-slot {
+  min-height: 44px;
+}
+
+.votv.pc-sheet .pc-abilities-row-bottom .pc-ability-area {
+  min-height: 40px;
+}
+
+.votv.pc-sheet .pc-ability-slot,
+.votv.pc-sheet .pc-ability-area {
+  border: 1px dashed var(--votv-border-muted);
+  border-radius: var(--votv-radius);
+  background: rgba(3, 6, 10, 0.5);
+  padding: 6px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: border-color 0.15s ease, background 0.15s ease;
+  position: relative;
+}
+
+.votv.pc-sheet .pc-ability-slot-header,
+.votv.pc-sheet .pc-ability-area-header {
+  font-size: var(--votv-font-label-small);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--votv-text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.votv.pc-sheet .pc-ability-slot-content {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.votv.pc-sheet .pc-ability-slot-thumb,
+.votv.pc-sheet .pc-ability-pill-thumb {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  border-radius: 2px;
+  border: 1px solid var(--votv-border-muted);
+  flex-shrink: 0;
+}
+
+.votv.pc-sheet .pc-ability-slot-name,
+.votv.pc-sheet .pc-ability-pill-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.votv.pc-sheet .pc-ability-slot-placeholder,
+.votv.pc-sheet .pc-ability-area-placeholder {
+  font-size: var(--votv-font-body);
+  color: var(--votv-text-muted);
+  opacity: 0.8;
+}
+
+.votv.pc-sheet .pc-ability-slot-clear,
+.votv.pc-sheet .pc-ability-pill-remove {
+  border-radius: 2px;
+  padding: 2px 3px;
+  font-size: 11px;
+  cursor: pointer;
+  border: 1px solid var(--votv-border-muted);
+  background: transparent;
+  color: var(--votv-text-muted);
+  flex-shrink: 0;
+}
+
+.votv.pc-sheet .pc-ability-slot-clear:hover,
+.votv.pc-sheet .pc-ability-pill-remove:hover {
+  border-color: var(--votv-border-accent);
+  color: var(--votv-border-accent);
+}
+
+.votv.pc-sheet .pc-ability-slot-clear {
+  position: static;
+  min-width: 18px;
+  height: 22px;
+}
+
+.votv.pc-sheet .pc-ability-slot-header .pc-ability-slot-clear {
+  flex: 0 0 auto;
+  width: 18px;
+  margin-left: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.votv.pc-sheet .pc-ability-slot-header .pc-ability-slot-clear:hover {
+  color: var(--votv-border-accent);
+}
+
+.votv.pc-sheet .pc-ability-slot-name {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.votv.pc-sheet .pc-ability-pill {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  min-height: 44px;
+  padding: 6px 4px;
+}
+
+.votv.pc-sheet .pc-ability-main {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.votv.pc-sheet .pc-ability-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 0 0 auto;
+  justify-content: flex-end;
+}
+
+.votv.pc-sheet .pc-ability-pill-remove {
+  position: static;
+}
+
+.votv.pc-sheet .pc-ability-area-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-top: 2px;
+}
+
+.votv.pc-sheet .pc-ability-toggle,
+.votv.pc-sheet .pc-ability-chat {
+  border-radius: 2px;
+  padding: 2px 4px;
+  font-size: 11px;
+  cursor: pointer;
+  border: 1px solid var(--votv-border-muted);
+  background: transparent;
+  color: var(--votv-text-muted);
+}
+
+.votv.pc-sheet .pc-ability-chat {
+  min-width: 26px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.votv.pc-sheet .pc-ability-pill-remove {
+  min-width: 18px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.votv.pc-sheet .pc-ability-toggle:hover,
+.votv.pc-sheet .pc-ability-chat:hover {
+  border-color: var(--votv-border-accent);
+  color: var(--votv-border-accent);
+}
+
+.votv.pc-sheet .pc-ability-pill-name {
+  cursor: pointer;
+}
+
+.votv.pc-sheet .pc-ability-open {
+  cursor: pointer;
+}
+
+.votv.pc-sheet .pc-ability-details {
+  display: none;
+  margin-top: 4px;
+  font-size: var(--votv-font-body);
+  color: var(--votv-text-muted);
+}
+
+.votv.pc-sheet .pc-ability-pill.pc-ability-expanded .pc-ability-details,
+.votv.pc-sheet .pc-ability-slot.pc-ability-expanded .pc-ability-details {
+  display: block;
+}
+
+.votv.pc-sheet .pc-ability-detail-line {
+  margin-bottom: 2px;
+}
+
+.votv.pc-sheet .pc-ability-detail-text {
+  white-space: pre-wrap;
+}
+
+.votv.pc-sheet .pc-ability-slot-drag-over,
+.votv.pc-sheet .pc-ability-area-drag-over {
+  border-color: var(--votv-border-accent);
+  background: rgba(43, 255, 136, 0.08);
+}
+
+/* Fegyverek: weapon slots */
+.votv.pc-sheet .pc-fegyverek {
+  margin-top: 6px;
+}
+
+.votv.pc-sheet .pc-weapon-slots {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.votv.pc-sheet .pc-weapon-slots-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 2px 6px 4px;
+  border-bottom: 1px solid var(--votv-border-muted);
+  font-size: var(--votv-font-label-small);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--votv-text-muted);
+}
+
+.votv.pc-sheet .pc-weapon-slots-header .pc-weapon-slot-num {
+  flex: 0 0 20px;
+}
+
+.votv.pc-sheet .pc-weapon-slot-header-name {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.votv.pc-sheet .pc-weapon-slot-header-bonus {
+  flex: 0 0 52px;
+  text-align: center;
+}
+
+.votv.pc-sheet .pc-weapon-slot-header-damage {
+  flex: 0 0 64px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.votv.pc-sheet .pc-weapon-slot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 36px;
+  padding: 4px 6px;
+  border: 1px dashed var(--votv-border-muted);
+  border-radius: var(--votv-radius);
+  background: rgba(3, 6, 10, 0.5);
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.votv.pc-sheet .pc-weapon-slot.pc-weapon-slot-drag-over {
+  border-color: var(--votv-border-accent);
+  background: rgba(43, 255, 136, 0.08);
+}
+
+.votv.pc-sheet .pc-weapon-slot-num-wrap {
+  flex: 0 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  min-height: 28px;
+}
+
+.votv.pc-sheet .pc-weapon-slot-num-value {
+  font-size: var(--votv-font-label-small);
+  font-weight: 600;
+  text-align: center;
+  color: var(--votv-header-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.votv.pc-sheet .pc-weapon-slot-num-wrap:hover .pc-weapon-slot-num-value {
+  visibility: hidden;
+}
+
+.votv.pc-sheet .pc-weapon-slot-num-remove {
+  position: absolute;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  font-size: 0.85rem;
+  line-height: 1;
+  color: var(--votv-text-muted);
+  background: transparent;
+  border: 1px solid var(--votv-border-muted);
+  border-radius: 3px;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+
+.votv.pc-sheet .pc-weapon-slot-num-wrap:hover .pc-weapon-slot-num-remove {
+  display: flex;
+}
+
+.votv.pc-sheet .pc-weapon-slot-num-remove:hover {
+  color: var(--votv-header-accent);
+  border-color: var(--votv-border-accent);
+  background: rgba(43, 255, 136, 0.1);
+}
+
+.votv.pc-sheet .pc-weapon-slot-select-wrap {
+  flex: 1 1 0;
+  min-width: 0;
+  position: relative;
+  display: flex;
+  align-items: stretch;
+}
+
+.votv.pc-sheet .pc-weapon-slot-display {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 10px;
+  font-size: var(--votv-font-body);
+  font-family: var(--font-body);
+  color: var(--votv-text-main);
+  background-color: rgba(3, 6, 10, 0.95);
+  border: 1px solid var(--votv-border-muted);
+  border-radius: var(--votv-radius);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  min-height: 28px;
+}
+
+.votv.pc-sheet .pc-weapon-slot-display:hover {
+  border-color: rgba(43, 255, 136, 0.5);
+}
+
+.votv.pc-sheet .pc-weapon-slot-display:focus {
+  outline: none;
+  border-color: var(--votv-focus-ring);
+  box-shadow: 0 0 0 1px rgba(43, 255, 136, 0.35);
+}
+
+.votv.pc-sheet .pc-weapon-slot-thumb {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  border-radius: 2px;
+  border: 1px solid var(--votv-border-muted);
+  flex-shrink: 0;
+}
+
+.votv.pc-sheet .pc-weapon-slot-display-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: left;
+}
+
+.votv.pc-sheet .pc-weapon-slot-chevron {
+  flex-shrink: 0;
+  color: var(--votv-text-muted);
+  font-size: 10px;
+  transition: transform 0.15s ease;
+}
+
+.votv.pc-sheet .pc-weapon-slot-select-wrap.pc-weapon-slot-open .pc-weapon-slot-chevron {
+  transform: rotate(180deg);
+}
+
+.votv.pc-sheet .pc-weapon-slot-options {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  margin: 2px 0 0;
+  padding: 4px 0;
+  list-style: none;
+  background: rgba(9, 14, 22, 0.98);
+  border: 1px solid var(--votv-border-muted);
+  border-radius: var(--votv-radius);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  max-height: 220px;
+  overflow-y: auto;
+  display: none;
+}
+
+.votv.pc-sheet .pc-weapon-slot-select-wrap.pc-weapon-slot-open .pc-weapon-slot-options {
+  display: block;
+}
+
+.votv.pc-sheet .pc-weapon-slot-bonus {
+  flex: 0 0 52px;
+}
+
+.votv.pc-sheet .pc-weapon-slot-bonus input {
+  width: 100%;
+  font-size: var(--votv-font-body);
+  text-align: center;
+}
+
+.votv.pc-sheet .pc-weapon-slot-damage {
+  flex: 0 0 64px;
+  font-size: var(--votv-font-body);
+  color: var(--votv-text-muted);
+  text-align: left;
+  white-space: nowrap;
+}
+
+.votv.pc-sheet .pc-weapon-slot-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  font-size: var(--votv-font-body);
+  font-family: var(--font-body);
+  color: var(--votv-text-main);
+  cursor: pointer;
+  white-space: normal;
+  word-break: break-word;
+  border-left: 3px solid transparent;
+  transition: background 0.1s ease, border-color 0.1s ease;
+}
+
+.votv.pc-sheet .pc-weapon-slot-option-thumb {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  border-radius: 2px;
+  border: 1px solid var(--votv-border-muted);
+  flex-shrink: 0;
+}
+
+.votv.pc-sheet .pc-weapon-slot-option:first-child .pc-weapon-slot-option-thumb {
+  display: none;
+}
+
+.votv.pc-sheet .pc-weapon-slot-option-text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.votv.pc-sheet .pc-weapon-slot-option:hover {
+  background: rgba(43, 255, 136, 0.12);
+  border-left-color: var(--votv-border-accent);
+}
+
+.votv.pc-sheet .pc-weapon-slot-option:first-child {
+  color: var(--votv-text-muted);
+}
+
+/* removed weapon-slot-add styles (no longer used) */
+
+/* Actions table */
+.votv.pc-sheet .pc-actions-block {
+  margin-top: 4px;
+}
+
+.votv.pc-sheet .pc-actions-title {
+  margin-bottom: 6px;
+}
+
+.votv.pc-sheet .pc-actions-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--votv-font-body);
+}
+
+.votv.pc-sheet .pc-actions-table.pc-actions-table-drag-over {
+  box-shadow: 0 0 0 1px rgba(43, 255, 136, 0.35);
+}
+
+.votv.pc-sheet .pc-actions-table.pc-actions-table-drag-over tbody tr td {
+  background: rgba(43, 255, 136, 0.06) !important;
+}
+
+.votv.pc-sheet .pc-actions-row {
+  transition: background 0.15s ease, transform 0.12s ease, box-shadow 0.12s ease;
+}
+
+.votv.pc-sheet .pc-actions-row-drag-over {
+  background: rgba(43, 255, 136, 0.06);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.votv.pc-sheet .pc-actions-table thead {
+  background: var(--votv-panel-bg-soft);
+  border: 1px solid var(--votv-border-muted);
+  box-shadow: inset 0 0 0 1px rgba(1, 3, 6, 0.5);
+}
+
+.votv.pc-sheet .pc-actions-th-drag {
+  width: 28px;
+  min-width: 28px;
+  padding: 4px 6px !important;
+  border-right: 1px solid var(--votv-border-muted);
+}
+
+.votv.pc-sheet .pc-actions-cell-drag {
+  width: 28px;
+  min-width: 28px;
+  padding: 4px 6px !important;
+  vertical-align: middle;
+  border-right: 1px solid var(--votv-border-muted);
+}
+
+.votv.pc-sheet .pc-actions-drag-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 24px;
+  font-size: 0.7rem;
+  line-height: 1;
+  color: var(--votv-text-muted);
+  cursor: grab;
+  user-select: none;
+  border-radius: 2px;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.votv.pc-sheet .pc-actions-drag-handle:hover {
+  color: var(--votv-header-accent);
+  background: rgba(43, 255, 136, 0.08);
+}
+
+.votv.pc-sheet .pc-actions-drag-handle:active {
+  cursor: grabbing;
+}
+
+.votv.pc-sheet .pc-actions-table th {
+  padding: 8px 10px;
+  text-align: left;
+  font-size: var(--votv-font-label);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--votv-text-muted);
+  border-right: 1px solid var(--votv-border-muted);
+}
+
+.votv.pc-sheet .pc-actions-table th:last-child {
+  border-right: none;
+}
+
+.votv.pc-sheet .pc-actions-table tbody tr {
+  border-bottom: 1px solid var(--votv-border-muted);
+}
+
+.votv.pc-sheet .pc-actions-table td {
+  padding: 6px 10px;
+  vertical-align: middle;
+  border-right: 1px solid var(--votv-border-muted);
+  font-size: var(--votv-font-body);
+}
+
+/* Remove any even/odd striping – all rows flat by default */
+.votv.pc-sheet .pc-actions-table tbody tr td {
+  background: transparent;
+}
+.votv.pc-sheet .pc-actions-table tbody tr:nth-child(odd) td,
+.votv.pc-sheet .pc-actions-table tbody tr:nth-child(even) td {
+  background: transparent !important;
+}
+
+/* Hover only: highlight the row under the cursor */
+.votv.pc-sheet .pc-actions-table tbody tr:hover td {
+  background: rgba(43, 255, 136, 0.06) !important;
+}
+.votv.pc-sheet .pc-actions-table tbody tr:hover td:first-child {
+  box-shadow: inset 2px 0 0 0 var(--votv-border-accent);
+}
+
+.votv.pc-sheet .pc-actions-table td:last-child {
+  border-right: none;
+}
+
+.votv.pc-sheet .pc-actions-cell-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.votv.pc-sheet .pc-actions-icon {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  border-radius: 2px;
+  border: 1px solid var(--votv-border-muted);
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.votv.pc-sheet .pc-actions-cell-name .pc-weapon-label,
+.votv.pc-sheet .pc-actions-cell-name .pc-actions-item-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.votv.pc-sheet .pc-actions-chevron {
+  flex-shrink: 0;
+  color: var(--votv-text-muted);
+  font-size: 10px;
+  cursor: default;
+}
+
+.votv.pc-sheet .pc-equipped-badge {
+  flex-shrink: 0;
+  font-size: 10px;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.votv.pc-sheet .pc-equipped-badge.pc-equipped-weapon {
+  color: var(--votv-accent);
+}
+
+.votv.pc-sheet .pc-equipped-badge.pc-equipped-microchip {
+  color: rgba(43, 255, 136, 0.9);
+}
+
+.votv.pc-sheet .pc-actions-cell-hit input {
+  width: 100%;
+  max-width: 4em;
+  font-size: var(--votv-font-body);
+  padding: 4px 6px;
+  text-align: center;
+}
+
+.votv.pc-sheet .pc-weapon-equip-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-right: 4px;
+  font-size: 10px;
+  color: var(--votv-text-muted);
+}
+
+.votv.pc-sheet .pc-actions-cell-damage,
+.votv.pc-sheet .pc-actions-cell-range {
+  font-size: var(--votv-font-body);
+  color: var(--votv-text-muted);
+  white-space: nowrap;
+}
+
+/* Equipped weapon attack/damage buttons in Fegyverek card */
+.votv.pc-sheet .pc-weapon-slot-damage {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 4px;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+}
+
+.votv.pc-sheet .pc-weapon-attack,
+.votv.pc-sheet .pc-weapon-damage {
+  border-radius: 2px;
+  padding: 2px 6px;
+  font-size: 10px;
+  cursor: pointer;
+  border: 1px solid var(--votv-border-muted);
+  background: transparent;
+  color: var(--votv-text-main);
+  white-space: nowrap;
+}
+
+.votv.pc-sheet .pc-weapon-attack {
+  border-color: rgba(43, 255, 136, 0.6);
+  color: rgba(43, 255, 136, 0.9);
+}
+
+.votv.pc-sheet .pc-weapon-damage {
+  border-color: rgba(66, 135, 245, 0.6);
+  color: rgba(180, 210, 255, 0.9);
+}
+
+.votv.pc-sheet .pc-weapon-attack:disabled,
+.votv.pc-sheet .pc-weapon-damage:disabled {
+  opacity: 0.4;
+  cursor: default;
+  border-color: var(--votv-border-muted);
+  color: var(--votv-text-muted);
+}
+
+.votv.pc-sheet .pc-weapon-attack:not(:disabled):hover {
+  border-color: var(--votv-border-accent);
+  box-shadow: 0 0 4px rgba(43, 255, 136, 0.35);
+}
+
+.votv.pc-sheet .pc-weapon-damage:not(:disabled):hover {
+  border-color: rgba(66, 135, 245, 0.9);
+  box-shadow: 0 0 4px rgba(66, 135, 245, 0.35);
+}
+
+.votv.pc-sheet .pc-actions-cell-qty input {
+  width: 100%;
+  max-width: 3.5em;
+  font-size: var(--votv-font-body);
+  padding: 2px 4px;
+  text-align: center;
+}
+
+.votv.pc-sheet .pc-actions-cell-delete {
+  text-align: center;
+}
+
+.votv.pc-sheet .pc-item-delete {
+  border: 1px solid var(--votv-border-muted);
+  background: transparent;
+  color: var(--votv-text-muted);
+  border-radius: 2px;
+  padding: 2px 6px;
+  cursor: pointer;
+  font-size: 10px;
+}
+
+.votv.pc-sheet .pc-item-delete:hover {
+  border-color: var(--votv-border-accent);
+  color: var(--votv-border-accent);
+}
+
+.votv.pc-sheet .pc-actions-th-name { width: 34%; }
+.votv.pc-sheet .pc-actions-th-qty { width: 8%; }
+.votv.pc-sheet .pc-actions-th-hit { width: 18%; }
+.votv.pc-sheet .pc-actions-th-damage { width: 18%; }
+.votv.pc-sheet .pc-actions-th-range { width: 14%; }
+.votv.pc-sheet .pc-actions-th-delete { width: 8%; }
+
+/* Mikro-chipek */
+.votv.pc-sheet .pc-microchips {
+  grid-column: 1 / -1;
+}
+
+.votv.pc-sheet .pc-abilities {
+  grid-column: 1 / 3;
+}
+
+.votv.pc-sheet .pc-fegyverek {
+  grid-column: 3 / 4;
+}
+
+.votv.pc-sheet .pc-microchip-slots {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 6px;
+}
+
+.votv.pc-sheet .pc-microchip-slot {
+  position: relative;
+  min-height: 44px;
+  padding: 6px 8px;
+  border: 1px dashed var(--votv-border-muted);
+  border-radius: var(--votv-radius);
+  background: rgba(3, 6, 10, 0.5);
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.votv.pc-sheet .pc-microchip-slot.pc-microchip-slot-drag-over {
+  border-color: var(--votv-border-accent);
+  background: rgba(43, 255, 136, 0.08);
+}
+
+.votv.pc-sheet .pc-microchip-slot-active {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  z-index: 2;
+  width: auto;
+  margin: 0;
+  accent-color: var(--votv-border-accent);
+  cursor: pointer;
+}
+
+.votv.pc-sheet .pc-microchip-slot-select-wrap {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  margin-top: 4px;
+}
+
+.votv.pc-sheet .pc-microchip-slot-display {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 10px;
+  font-size: var(--votv-font-body);
+  font-family: var(--font-body);
+  color: var(--votv-text-main);
+  background-color: rgba(3, 6, 10, 0.95);
+  border: 1px solid var(--votv-border-muted);
+  border-radius: var(--votv-radius);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  min-height: 28px;
+}
+
+.votv.pc-sheet .pc-microchip-slot-display:hover {
+  border-color: rgba(43, 255, 136, 0.5);
+}
+
+.votv.pc-sheet .pc-microchip-slot-display:focus {
+  outline: none;
+  border-color: var(--votv-focus-ring);
+  box-shadow: 0 0 0 1px rgba(43, 255, 136, 0.35);
+}
+
+.votv.pc-sheet .pc-microchip-slot-display:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.votv.pc-sheet .pc-microchip-slot-display:disabled:hover {
+  border-color: var(--votv-border-muted);
+}
+
+.votv.pc-sheet .pc-microchip-slot-thumb {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  border-radius: 2px;
+  border: 1px solid var(--votv-border-muted);
+  flex-shrink: 0;
+}
+
+.votv.pc-sheet .pc-microchip-slot-display-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  white-space: normal;
+  word-break: break-word;
+  text-align: left;
+}
+
+.votv.pc-sheet .pc-microchip-slot-chevron {
+  flex-shrink: 0;
+  color: var(--votv-text-muted);
+  font-size: 10px;
+  transition: transform 0.15s ease;
+}
+
+.votv.pc-sheet .pc-microchip-slot-select-wrap.pc-microchip-slot-open .pc-microchip-slot-chevron {
+  transform: rotate(180deg);
+}
+
+.votv.pc-sheet .pc-microchip-slot-options {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  margin: 2px 0 0;
+  padding: 4px 0;
+  list-style: none;
+  background: rgba(9, 14, 22, 0.98);
+  border: 1px solid var(--votv-border-muted);
+  border-radius: var(--votv-radius);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  max-height: 220px;
+  overflow-y: auto;
+  display: none;
+}
+
+.votv.pc-sheet .pc-microchip-slot-select-wrap.pc-microchip-slot-open .pc-microchip-slot-options {
+  display: block;
+}
+
+.votv.pc-sheet .pc-microchip-slot-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  font-size: var(--votv-font-body);
+  font-family: var(--font-body);
+  color: var(--votv-text-main);
+  cursor: pointer;
+  white-space: normal;
+  word-break: break-word;
+  border-left: 3px solid transparent;
+  transition: background 0.1s ease, border-color 0.1s ease;
+}
+
+.votv.pc-sheet .pc-microchip-slot-option-thumb {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  border-radius: 2px;
+  border: 1px solid var(--votv-border-muted);
+  flex-shrink: 0;
+}
+
+.votv.pc-sheet .pc-microchip-slot-option:first-child .pc-microchip-slot-option-thumb {
+  display: none;
+}
+
+.votv.pc-sheet .pc-microchip-slot-option-text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.votv.pc-sheet .pc-microchip-slot-option:hover {
+  background: rgba(43, 255, 136, 0.12);
+  border-left-color: var(--votv-border-accent);
+}
+
+.votv.pc-sheet .pc-microchip-slot-option:first-child {
+  color: var(--votv-text-muted);
+}
+
+/* Equipment / inventory */
+.votv.pc-sheet .pc-equipment {
+  grid-column: 1 / -1;
+}
+
+.votv.pc-sheet .pc-inventory {
+  margin-top: 6px;
+}
+
+.votv.pc-sheet .pc-inventory-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--votv-font-body);
+}
+
+.votv.pc-sheet .pc-inventory-table th,
+.votv.pc-sheet .pc-inventory-table td {
+  border-bottom: 1px solid var(--votv-border-muted);
+  padding: 4px 6px;
+}
+
+.votv.pc-sheet .pc-inventory-table th {
+  text-align: left;
+  font-size: var(--votv-font-label);
+  color: var(--votv-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.votv.pc-sheet .pc-inventory-icon img {
+  border-radius: 2px;
+  border: 1px solid var(--votv-border-muted);
+}

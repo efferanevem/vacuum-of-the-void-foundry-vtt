@@ -1,0 +1,39 @@
+/* Vacuum of the Void – theme variables and typography
+   Imported first so other styles can use --votv-* and --font-* */
+@import url("https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;600&display=swap");
+
+@layer variables.base, votv-overrides;
+
+body.system-vacuum-of-the-void {
+  /* Theme colors */
+  --votv-bg: #05070a;
+  --votv-bg-alt: #070b11;
+  --votv-panel-bg: rgba(9, 14, 22, 0.96);
+  --votv-panel-bg-soft: rgba(14, 20, 32, 0.92);
+  --votv-border-muted: #313a4a;
+  --votv-border-accent: #2bff88;
+  --votv-text-main: #e5f3ff;
+  --votv-text-muted: #7a8b9c;
+  --votv-header-accent: #2bff88;
+  --votv-focus-ring: #2bff88;
+  --votv-shadow-soft: 0 0 24px rgba(9, 255, 140, 0.18);
+  --votv-radius: 4px;
+  --color-shadow-primary: #3c3c3c;
+  /* Typography */
+  --votv-font-base: 14px;
+  --votv-font-body: 13px;
+  --votv-font-label: 12px;
+  --votv-font-label-small: 11px;
+
+  /* Override Foundry font variables */
+  --font-sans: "Rajdhani", "Signika", "Palatino Linotype", sans-serif;
+  --font-serif: "Rajdhani", "Amiri", serif;
+  --font-body: var(--font-sans);
+  --font-blockquote: "Rajdhani", "Signika", "Palatino Linotype", sans-serif;
+  --font-h1: "Rajdhani", "Modesto Condensed", serif;
+  --font-h2: "Rajdhani", "Amiri", serif;
+  --font-h3: "Rajdhani", "Signika", "Palatino Linotype", sans-serif;
+  --font-h4: var(--font-h1);
+  --font-h5: var(--font-h2);
+  --font-h6: var(--font-h3);
+}

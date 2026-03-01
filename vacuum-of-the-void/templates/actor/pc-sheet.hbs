@@ -1,0 +1,516 @@
+<form class="votv pc-sheet" autocomplete="off">
+  <header class="pc-header">
+    <div class="pc-header-row">
+      <div class="pc-header-field pc-header-name">
+        <label>Név</label>
+        <input type="text" name="name" value="{{actor.name}}" placeholder="Karakter neve" data-dtype="String" />
+      </div>
+      <div class="pc-header-field pc-header-level">
+        <label>Szint</label>
+        <input type="number" name="system.identity.level" value="{{system.identity.level}}" />
+      </div>
+      <div class="pc-header-field pc-header-assignment">
+        <label>Beosztás</label>
+        <input type="text" name="system.identity.assignment" value="{{system.identity.assignment}}" />
+      </div>
+      <div class="pc-header-field pc-header-background">
+        <label>Háttér</label>
+        <input type="text" name="system.identity.background" value="{{system.identity.background}}" />
+      </div>
+      <div class="pc-header-field pc-header-languages">
+        <label>Nyelvek</label>
+        <input type="text" name="system.identity.languages" value="{{system.identity.languages}}" />
+      </div>
+    </div>
+    <div class="pc-header-row">
+      <div class="pc-header-field pc-header-species">
+        <label>Faj</label>
+        <input type="text" name="system.identity.species" value="{{system.identity.species}}" />
+      </div>
+      <div class="pc-header-field pc-header-subassignment">
+        <label>Albeosztás</label>
+        <input type="text" name="system.identity.subAssignment" value="{{system.identity.subAssignment}}" />
+      </div>
+      <div class="pc-header-field pc-header-player">
+        <label>Játékos</label>
+        <input type="text" name="system.identity.player" value="{{system.identity.player}}" />
+      </div>
+    </div>
+  </header>
+
+  <section class="pc-main">
+    <section class="pc-column pc-left">
+      <section class="pc-panel pc-health">
+        <h2>Életerő</h2>
+        <div class="pc-hit-location">
+          <label>Fej (1)</label>
+          <input type="number" name="system.resources.hitLocations.head.value" value="{{system.resources.hitLocations.head.value}}" />
+          <input type="checkbox" name="system.resources.hitLocations.head.box1" {{checked system.resources.hitLocations.head.box1}} />
+          <input type="checkbox" name="system.resources.hitLocations.head.box2" {{checked system.resources.hitLocations.head.box2}} />
+          <input type="checkbox" name="system.resources.hitLocations.head.box3" {{checked system.resources.hitLocations.head.box3}} />
+        </div>
+        <div class="pc-hit-location">
+          <label>Törzs (2,3,4)</label>
+          <input type="number" name="system.resources.hitLocations.torso.value" value="{{system.resources.hitLocations.torso.value}}" />
+          <input type="checkbox" name="system.resources.hitLocations.torso.box1" {{checked system.resources.hitLocations.torso.box1}} />
+          <input type="checkbox" name="system.resources.hitLocations.torso.box2" {{checked system.resources.hitLocations.torso.box2}} />
+          <input type="checkbox" name="system.resources.hitLocations.torso.box3" {{checked system.resources.hitLocations.torso.box3}} />
+        </div>
+        <div class="pc-hit-location">
+          <label>Karok (5,6)</label>
+          <input type="number" name="system.resources.hitLocations.arms.value" value="{{system.resources.hitLocations.arms.value}}" />
+          <input type="checkbox" name="system.resources.hitLocations.arms.box1" {{checked system.resources.hitLocations.arms.box1}} />
+          <input type="checkbox" name="system.resources.hitLocations.arms.box2" {{checked system.resources.hitLocations.arms.box2}} />
+          <input type="checkbox" name="system.resources.hitLocations.arms.box3" {{checked system.resources.hitLocations.arms.box3}} />
+        </div>
+        <div class="pc-hit-location">
+          <label>Lábak (7,8)</label>
+          <input type="number" name="system.resources.hitLocations.legs.value" value="{{system.resources.hitLocations.legs.value}}" />
+          <input type="checkbox" name="system.resources.hitLocations.legs.box1" {{checked system.resources.hitLocations.legs.box1}} />
+          <input type="checkbox" name="system.resources.hitLocations.legs.box2" {{checked system.resources.hitLocations.legs.box2}} />
+          <input type="checkbox" name="system.resources.hitLocations.legs.box3" {{checked system.resources.hitLocations.legs.box3}} />
+        </div>
+      </section>
+
+      <section class="pc-panel pc-current-health">
+        <h2>Aktuális életerő</h2>
+        <div class="pc-current-health-row">
+          <label>Fej</label>
+          <input type="number" name="system.resources.currentHealth.head" value="{{system.resources.currentHealth.head}}" />
+        </div>
+        <div class="pc-current-health-row">
+          <label>Törzs</label>
+          <input type="number" name="system.resources.currentHealth.torso" value="{{system.resources.currentHealth.torso}}" />
+        </div>
+        <div class="pc-current-health-row">
+          <label>Karok</label>
+          <input type="number" name="system.resources.currentHealth.arms" value="{{system.resources.currentHealth.arms}}" />
+        </div>
+        <div class="pc-current-health-row">
+          <label>Lábak</label>
+          <input type="number" name="system.resources.currentHealth.legs" value="{{system.resources.currentHealth.legs}}" />
+        </div>
+      </section>
+
+    </section>
+
+    <section class="pc-column pc-center">
+      <section class="pc-panel pc-portrait">
+        <div class="pc-portrait-frame">
+          <img class="pc-portrait-img" src="{{actor.img}}" data-edit="img" alt="{{actor.name}}" title="{{actor.name}}" />
+        </div>
+      </section>
+      <section class="pc-panel pc-resources">
+        <h2>Erőforrások</h2>
+        <div class="pc-resource">
+          <label>Életerő</label>
+          <input type="number" name="system.resources.health.value" value="{{system.resources.health.value}}" />
+          <span>/</span>
+          <input type="number" name="system.resources.health.max" value="{{system.resources.health.max}}" />
+        </div>
+        <div class="pc-resource">
+          <label>Stressz</label>
+          <input type="number" name="system.resources.stress.value" value="{{system.resources.stress.value}}" />
+          <span>/</span>
+          <input type="number" name="system.resources.stress.max" value="{{system.resources.stress.max}}" />
+        </div>
+        <div class="pc-resource">
+          <label>Pénz</label>
+          <input type="number" name="system.resources.money" value="{{system.resources.money}}" />
+        </div>
+        <div class="pc-resource">
+          <label>Morál</label>
+          <input type="number" name="system.resources.morale" value="{{system.resources.morale}}" />
+        </div>
+      </section>
+
+      <section class="pc-panel pc-notes">
+        <h2>Egyéb Információk</h2>
+        {{editor system.notes.biography target="system.notes.biography" button=true owner=owner editable=editable}}
+      </section>
+    </section>
+
+    <section class="pc-column pc-right">
+      <section class="pc-panel pc-skills">
+        <h2>Jártasságok</h2>
+        <div class="pc-skills-grid">
+          <div class="pc-skills-column">
+            <div class="pc-skill"><label class="pc-skill-label" data-skill="deception">Átverés</label><input type="number" name="system.skills.deception" value="{{system.skills.deception}}" min="-99" max="999" /></div>
+            <div class="pc-skill"><label class="pc-skill-label" data-skill="medicalCare">Betegellátás</label><input type="number" name="system.skills.medicalCare" value="{{system.skills.medicalCare}}" min="-99" max="999" /></div>
+            <div class="pc-skill"><label class="pc-skill-label" data-skill="endurance">Erőnlét</label><input type="number" name="system.skills.endurance" value="{{system.skills.endurance}}" min="-99" max="999" /></div>
+            <div class="pc-skill"><label class="pc-skill-label" data-skill="perception">Észlelés</label><input type="number" name="system.skills.perception" value="{{system.skills.perception}}" min="-99" max="999" /></div>
+            <div class="pc-skill"><label class="pc-skill-label" data-skill="cooking">Főzés</label><input type="number" name="system.skills.cooking" value="{{system.skills.cooking}}" min="-99" max="999" /></div>
+            <div class="pc-skill"><label class="pc-skill-label" data-skill="quickThinking">Gyorsgondolkodás</label><input type="number" name="system.skills.quickThinking" value="{{system.skills.quickThinking}}" min="-99" max="999" /></div>
+            <div class="pc-skill"><label class="pc-skill-label" data-skill="combatTraining">Harcképzettség</label><input type="number" name="system.skills.combatTraining" value="{{system.skills.combatTraining}}" min="-99" max="999" /></div>
+            <div class="pc-skill"><label class="pc-skill-label" data-skill="vehicleOperation">Jármű irányítás</label><input type="number" name="system.skills.vehicleOperation" value="{{system.skills.vehicleOperation}}" min="-99" max="999" /></div>
+            <div class="pc-skill"><label class="pc-skill-label" data-skill="grenadeUse">Kézigránát használat</label><input type="number" name="system.skills.grenadeUse" value="{{system.skills.grenadeUse}}" min="-99" max="999" /></div>
+            <div class="pc-skill"><label class="pc-skill-label" data-skill="lexicalKnowledge">Lexikális tudás</label><input type="number" name="system.skills.lexicalKnowledge" value="{{system.skills.lexicalKnowledge}}" min="-99" max="999" /></div>
+          </div>
+          <div class="pc-skills-column">
+            <div class="pc-skill"><label class="pc-skill-label" data-skill="stealth">Lopakodás</label><input type="number" name="system.skills.stealth" value="{{system.skills.stealth}}" min="-99" max="999" /></div>
+            <div class="pc-skill"><label class="pc-skill-label" data-skill="firearms">Lőfegyver használat</label><input type="number" name="system.skills.firearms" value="{{system.skills.firearms}}" min="-99" max="999" /></div>
+            <div class="pc-skill"><label class="pc-skill-label" data-skill="intimidation">Megfélemlítés</label><input type="number" name="system.skills.intimidation" value="{{system.skills.intimidation}}" min="-99" max="999" /></div>
+            <div class="pc-skill"><label class="pc-skill-label" data-skill="persuasion">Meggyőzés</label><input type="number" name="system.skills.persuasion" value="{{system.skills.persuasion}}" min="-99" max="999" /></div>
+            <div class="pc-skill"><label class="pc-skill-label" data-skill="memory">Memória</label><input type="number" name="system.skills.memory" value="{{system.skills.memory}}" min="-99" max="999" /></div>
+            <div class="pc-skill"><label class="pc-skill-label" data-skill="mentalStrength">Mentális erősség</label><input type="number" name="system.skills.mentalStrength" value="{{system.skills.mentalStrength}}" min="-99" max="999" /></div>
+            <div class="pc-skill"><label class="pc-skill-label" data-skill="languages">Nyelvek</label><input type="number" name="system.skills.languages" value="{{system.skills.languages}}" min="-99" max="999" /></div>
+            <div class="pc-skill"><label class="pc-skill-label" data-skill="luck">Szerencse</label><input type="number" name="system.skills.luck" value="{{system.skills.luck}}" min="-99" max="999" /></div>
+            <div class="pc-skill"><label class="pc-skill-label" data-skill="technicalKnowledge">Technikai tudás</label><input type="number" name="system.skills.technicalKnowledge" value="{{system.skills.technicalKnowledge}}" min="-99" max="999" /></div>
+            <div class="pc-skill"><label class="pc-skill-label" data-skill="music">Zene</label><input type="number" name="system.skills.music" value="{{system.skills.music}}" min="-99" max="999" /></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="pc-panel pc-combat">
+        <div class="pc-defense-speed">
+          <div>
+            <label>Védelem</label>
+            <input type="number" name="system.combat.defense" value="{{system.combat.defense}}" />
+          </div>
+          <div>
+            <label>Sebesség</label>
+            <input type="number" name="system.combat.speed" value="{{system.combat.speed}}" />
+          </div>
+        </div>
+      </section>
+
+    </section>
+
+    <section class="pc-panel pc-abilities">
+      <h2>Képességek</h2>
+      <div class="pc-abilities-grid">
+        <div class="pc-abilities-row pc-abilities-row-top">
+          <div class="pc-ability-area pc-ability-slot-single" data-slot="faji" data-drop-zone="ability">
+            <div class="pc-ability-area-header">Faji</div>
+            <div class="pc-ability-area-list">
+              {{#if abilityFajiSlot.itemId}}
+                <div class="pc-ability-pill" data-item-id="{{abilityFajiSlot.itemId}}">
+                  <div class="pc-ability-main">
+                    {{#if abilityFajiSlot.img}}
+                      <img
+                        class="pc-ability-pill-thumb pc-ability-open"
+                        src="{{abilityFajiSlot.img}}"
+                        alt=""
+                        data-item-id="{{abilityFajiSlot.itemId}}"
+                      />
+                    {{/if}}
+                    <span class="pc-ability-pill-name pc-ability-open" data-item-id="{{abilityFajiSlot.itemId}}" title="{{abilityFajiSlot.displayName}}">
+                      {{abilityFajiSlot.displayName}}
+                    </span>
+                  </div>
+                  <div class="pc-ability-actions">
+                    <button type="button" class="pc-ability-chat" data-item-id="{{abilityFajiSlot.itemId}}" title="Chat-be küldés">
+                      <i class="fas fa-comment-dots"></i>
+                    </button>
+                    <button
+                      type="button"
+                      class="pc-ability-slot-clear pc-ability-pill-remove"
+                      data-slot="faji"
+                      data-area="faji"
+                      data-item-id="{{abilityFajiSlot.itemId}}"
+                      title="Eltávolítás"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                </div>
+              {{else}}
+                <div class="pc-ability-area-placeholder">Húzz ide egy képességet</div>
+              {{/if}}
+            </div>
+          </div>
+
+          <div class="pc-ability-area pc-ability-slot-single" data-slot="hatter" data-drop-zone="ability">
+            <div class="pc-ability-area-header">Háttér</div>
+            <div class="pc-ability-area-list">
+              {{#if abilityHatterSlot.itemId}}
+                <div class="pc-ability-pill" data-item-id="{{abilityHatterSlot.itemId}}">
+                  <div class="pc-ability-main">
+                    {{#if abilityHatterSlot.img}}
+                      <img
+                        class="pc-ability-pill-thumb pc-ability-open"
+                        src="{{abilityHatterSlot.img}}"
+                        alt=""
+                        data-item-id="{{abilityHatterSlot.itemId}}"
+                      />
+                    {{/if}}
+                    <span class="pc-ability-pill-name pc-ability-open" data-item-id="{{abilityHatterSlot.itemId}}" title="{{abilityHatterSlot.displayName}}">
+                      {{abilityHatterSlot.displayName}}
+                    </span>
+                  </div>
+                  <div class="pc-ability-actions">
+                    <button type="button" class="pc-ability-chat" data-item-id="{{abilityHatterSlot.itemId}}" title="Chat-be küldés">
+                      <i class="fas fa-comment-dots"></i>
+                    </button>
+                    <button
+                      type="button"
+                      class="pc-ability-slot-clear pc-ability-pill-remove"
+                      data-slot="hatter"
+                      data-area="hatter"
+                      data-item-id="{{abilityHatterSlot.itemId}}"
+                      title="Eltávolítás"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                </div>
+              {{else}}
+                <div class="pc-ability-area-placeholder">Húzz ide egy képességet</div>
+              {{/if}}
+            </div>
+          </div>
+        </div>
+        <div class="pc-abilities-row pc-abilities-row-bottom">
+          <div class="pc-ability-area" data-area="passive" data-drop-zone="ability">
+            <div class="pc-ability-area-header">Passzív</div>
+            <div class="pc-ability-area-list">
+              {{#if abilityPassiveList.length}}
+                {{#each abilityPassiveList}}
+                  <div class="pc-ability-pill" data-item-id="{{this.id}}">
+                    <div class="pc-ability-main">
+                      {{#if this.img}}
+                        <img
+                          class="pc-ability-pill-thumb pc-ability-open"
+                          src="{{this.img}}"
+                          alt=""
+                          data-item-id="{{this.id}}"
+                        />
+                      {{/if}}
+                      <span class="pc-ability-pill-name pc-ability-open" data-item-id="{{this.id}}" title="{{this.name}}">
+                        {{this.name}}
+                      </span>
+                    </div>
+                    <div class="pc-ability-actions">
+                      <button type="button" class="pc-ability-chat" data-item-id="{{this.id}}" title="Chat-be küldés">
+                        <i class="fas fa-comment-dots"></i>
+                      </button>
+                      <button
+                        type="button"
+                        class="pc-ability-pill-remove"
+                        data-area="passive"
+                        data-item-id="{{this.id}}"
+                        title="Eltávolítás"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  </div>
+                {{/each}}
+              {{else}}
+                <div class="pc-ability-area-placeholder">Húzz ide képességeket</div>
+              {{/if}}
+            </div>
+          </div>
+          <div class="pc-ability-area" data-area="active" data-drop-zone="ability">
+            <div class="pc-ability-area-header">Aktív</div>
+            <div class="pc-ability-area-list">
+              {{#if abilityActiveList.length}}
+                {{#each abilityActiveList}}
+                  <div class="pc-ability-pill" data-item-id="{{this.id}}">
+                    <div class="pc-ability-main">
+                      {{#if this.img}}
+                        <img
+                          class="pc-ability-pill-thumb pc-ability-open"
+                          src="{{this.img}}"
+                          alt=""
+                          data-item-id="{{this.id}}"
+                        />
+                      {{/if}}
+                      <span class="pc-ability-pill-name pc-ability-open" data-item-id="{{this.id}}" title="{{this.name}}">
+                        {{this.name}}
+                      </span>
+                    </div>
+                    <div class="pc-ability-actions">
+                      <button type="button" class="pc-ability-chat" data-item-id="{{this.id}}" title="Chat-be küldés">
+                        <i class="fas fa-comment-dots"></i>
+                      </button>
+                      <button
+                        type="button"
+                        class="pc-ability-pill-remove"
+                        data-area="active"
+                        data-item-id="{{this.id}}"
+                        title="Eltávolítás"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  </div>
+                {{/each}}
+              {{else}}
+                <div class="pc-ability-area-placeholder">Húzz ide képességeket</div>
+              {{/if}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="pc-panel pc-fegyverek">
+      <h2>Fegyverek</h2>
+      <div class="pc-weapon-slots">
+          <div class="pc-weapon-slots-header">
+            <span class="pc-weapon-slot-header-name">Fegyver</span>
+            <span class="pc-weapon-slot-header-damage">Támadás / Sebzés</span>
+          </div>
+        {{#each weaponSlots}}
+          <div class="pc-weapon-slot" data-slot="{{this.slotKey}}" data-drop-zone="weapon">
+            <div class="pc-weapon-slot-select-wrap">
+              <div class="pc-weapon-slot-display">
+                {{#if this.img}}
+                  <img class="pc-weapon-slot-thumb" src="{{this.img}}" alt="" />
+                {{/if}}
+                <span class="pc-weapon-slot-display-text">{{this.displayName}}</span>
+              </div>
+            </div>
+            <div class="pc-weapon-slot-damage">
+              <button type="button" class="pc-weapon-attack" data-slot="{{this.slotKey}}">
+                Támadás
+              </button>
+              <button
+                type="button"
+                class="pc-weapon-damage"
+                data-slot="{{this.slotKey}}"
+                {{#unless this.damage}}disabled{{/unless}}
+              >
+                Sebzés
+              </button>
+            </div>
+          </div>
+        {{/each}}
+      </div>
+    </section>
+
+    <section class="pc-panel pc-microchips">
+      <h2>Mikro-chipek</h2>
+      <div class="pc-microchip-slots">
+        <div class="pc-microchip-slot" data-slot="slot1" data-drop-zone="microchip">
+          <input type="checkbox" name="system.gear.microchips.slot1.active" {{checked system.gear.microchips.slot1.active}} title="Aktív" class="pc-microchip-slot-active" data-slot="slot1" />
+          <div class="pc-microchip-slot-select-wrap">
+            <button type="button" class="pc-microchip-slot-display" data-slot="slot1" tabindex="0" {{#unless system.gear.microchips.slot1.active}}disabled{{/unless}}>
+              {{#if microchip1Img}}
+                <img class="pc-microchip-slot-thumb" src="{{microchip1Img}}" alt="" />
+              {{/if}}
+              <span class="pc-microchip-slot-display-text">{{microchip1DisplayName}}</span>
+              <span class="pc-microchip-slot-chevron" aria-hidden="true">▾</span>
+            </button>
+            <ul class="pc-microchip-slot-options" data-slot="slot1" role="listbox">
+              <li class="pc-microchip-slot-option" data-item-id="" data-item-img="" data-item-name="— Nincs chip —" role="option"><span class="pc-microchip-slot-option-text">— Nincs chip —</span></li>
+              {{#each microchipItemsSlot1}}
+                <li class="pc-microchip-slot-option" data-item-id="{{this.id}}" data-item-img="{{this.img}}" data-item-name="{{this.name}}" role="option"><img class="pc-microchip-slot-option-thumb" src="{{this.img}}" alt="" /><span class="pc-microchip-slot-option-text">{{this.name}}</span></li>
+              {{/each}}
+            </ul>
+          </div>
+        </div>
+        <div class="pc-microchip-slot" data-slot="slot2" data-drop-zone="microchip">
+          <input type="checkbox" name="system.gear.microchips.slot2.active" {{checked system.gear.microchips.slot2.active}} title="Aktív" class="pc-microchip-slot-active" data-slot="slot2" />
+          <div class="pc-microchip-slot-select-wrap">
+            <button type="button" class="pc-microchip-slot-display" data-slot="slot2" tabindex="0" {{#unless system.gear.microchips.slot2.active}}disabled{{/unless}}>
+              {{#if microchip2Img}}
+                <img class="pc-microchip-slot-thumb" src="{{microchip2Img}}" alt="" />
+              {{/if}}
+              <span class="pc-microchip-slot-display-text">{{microchip2DisplayName}}</span>
+              <span class="pc-microchip-slot-chevron" aria-hidden="true">▾</span>
+            </button>
+            <ul class="pc-microchip-slot-options" data-slot="slot2" role="listbox">
+              <li class="pc-microchip-slot-option" data-item-id="" data-item-img="" data-item-name="— Nincs chip —" role="option"><span class="pc-microchip-slot-option-text">— Nincs chip —</span></li>
+              {{#each microchipItemsSlot2}}
+                <li class="pc-microchip-slot-option" data-item-id="{{this.id}}" data-item-img="{{this.img}}" data-item-name="{{this.name}}" role="option"><img class="pc-microchip-slot-option-thumb" src="{{this.img}}" alt="" /><span class="pc-microchip-slot-option-text">{{this.name}}</span></li>
+              {{/each}}
+            </ul>
+          </div>
+        </div>
+        <div class="pc-microchip-slot" data-slot="slot3" data-drop-zone="microchip">
+          <input type="checkbox" name="system.gear.microchips.slot3.active" {{checked system.gear.microchips.slot3.active}} title="Aktív" class="pc-microchip-slot-active" data-slot="slot3" />
+          <div class="pc-microchip-slot-select-wrap">
+            <button type="button" class="pc-microchip-slot-display" data-slot="slot3" tabindex="0" {{#unless system.gear.microchips.slot3.active}}disabled{{/unless}}>
+              {{#if microchip3Img}}
+                <img class="pc-microchip-slot-thumb" src="{{microchip3Img}}" alt="" />
+              {{/if}}
+              <span class="pc-microchip-slot-display-text">{{microchip3DisplayName}}</span>
+              <span class="pc-microchip-slot-chevron" aria-hidden="true">▾</span>
+            </button>
+            <ul class="pc-microchip-slot-options" data-slot="slot3" role="listbox">
+              <li class="pc-microchip-slot-option" data-item-id="" data-item-img="" data-item-name="— Nincs chip —" role="option"><span class="pc-microchip-slot-option-text">— Nincs chip —</span></li>
+              {{#each microchipItemsSlot3}}
+                <li class="pc-microchip-slot-option" data-item-id="{{this.id}}" data-item-img="{{this.img}}" data-item-name="{{this.name}}" role="option"><img class="pc-microchip-slot-option-thumb" src="{{this.img}}" alt="" /><span class="pc-microchip-slot-option-text">{{this.name}}</span></li>
+              {{/each}}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="pc-panel pc-equipment">
+      <h2>Felszerelés</h2>
+      <div class="pc-actions-block">
+        <table class="pc-actions-table">
+          <thead>
+            <tr>
+              <th class="pc-actions-th-drag"></th>
+              <th class="pc-actions-th-name">Név</th>
+              <th class="pc-actions-th-qty">Menny.</th>
+              <th class="pc-actions-th-hit">Találat / Bónusz</th>
+              <th class="pc-actions-th-damage">Sebzés</th>
+              <th class="pc-actions-th-range">Hatótáv</th>
+              <th class="pc-actions-th-delete"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each actionsTable}}
+              <tr class="pc-actions-row {{#if this.isEquipped}}pc-actions-row-equipped{{/if}}" data-item-id="{{this.id}}">
+                <td class="pc-actions-cell-drag">
+                  <span class="pc-actions-drag-handle" data-item-id="{{this.id}}" draggable="true" title="Drag to reorder" aria-label="Drag to reorder">⋮⋮</span>
+                </td>
+                <td class="pc-actions-cell-name">
+                  <img class="pc-actions-icon pc-inventory-item-icon" src="{{this.img}}" alt="" data-item-id="{{this.id}}" />
+                  {{#if this.slotKey}}
+                    <span class="pc-equipped-badge pc-equipped-weapon" title="Felszerelve ({{this.slotKey}})">◉</span>
+                    <span class="pc-weapon-label pc-inventory-item-name" data-weapon-slot="{{this.slotKey}}" data-item-id="{{this.id}}">{{this.name}}</span>
+                  {{else}}{{#if this.microchipSlotKey}}
+                    <span class="pc-equipped-badge pc-equipped-microchip" title="Felszerelve ({{this.microchipSlotKey}})">◉</span>
+                    <span class="pc-actions-item-name pc-inventory-item-name" data-item-id="{{this.id}}">{{this.name}}</span>
+                  {{else}}
+                    <span class="pc-actions-item-name pc-inventory-item-name" data-item-id="{{this.id}}">{{this.name}}</span>
+                  {{/if}}{{/if}}
+                </td>
+                <td class="pc-actions-cell-qty">
+                  <input type="number" class="pc-item-qty" data-item-id="{{this.id}}" value="{{this.quantity}}" min="0" />
+                </td>
+                <td class="pc-actions-cell-hit">
+                  {{#if this.isWeapon}}
+                    <label class="pc-weapon-equip-wrap">
+                      <input
+                        type="checkbox"
+                        class="pc-weapon-equip-toggle"
+                        data-item-id="{{this.id}}"
+                        {{#if this.slotKey}}checked{{/if}}
+                      />
+                      <span>Felsz.</span>
+                    </label>
+                    {{#if this.slotKey}}
+                      <input
+                        type="number"
+                        name="system.weapons.{{this.slotKey}}.bonus"
+                        value="{{this.slotBonusNum}}"
+                        min="-99"
+                        max="999"
+                        placeholder="0"
+                        data-dtype="Number"
+                      />
+                    {{/if}}
+                  {{else}}—{{/if}}
+                </td>
+                <td class="pc-actions-cell-damage">{{#if this.damage}}{{this.damage}}{{else}}—{{/if}}</td>
+                <td class="pc-actions-cell-range">{{#if this.rangeStr}}{{this.rangeStr}}{{else}}—{{/if}}</td>
+                <td class="pc-actions-cell-delete">
+                  <button type="button" class="pc-item-delete" data-item-id="{{this.id}}" title="Eltávolítás">✕</button>
+                </td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </section>
+</form>
+

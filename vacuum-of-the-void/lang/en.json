@@ -1,0 +1,14 @@
+{
+  "VOTV.PcSheet": "Player Character",
+  "TYPES.Actor.pc": "Player Character",
+  "VOTV.LabelName": "Name",
+  "VOTV.LabelPlayer": "Player",
+  "VOTV.LabelConcept": "Concept",
+  "VOTV.LabelSpecies": "Species",
+  "VOTV.LabelCareer": "Career",
+  "VOTV.SectionAttributes": "Attributes",
+  "VOTV.SectionResources": "Resources",
+  "VOTV.SectionNotes": "Notes",
+  "VOTV.PortraitSetAsToken": "Portrait set as default token image."
+}
+

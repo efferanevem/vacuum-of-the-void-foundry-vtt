@@ -1,0 +1,86 @@
+/* Common item sheet styles (weapon, microchip, ability) */
+
+.vacuum-of-the-void.sheet.item .window-content {
+  padding: 10px 12px;
+  font-size: var(--votv-font-base);
+}
+
+.vacuum-of-the-void.sheet.item .votv-weapon-sheet,
+.vacuum-of-the-void.sheet.item .votv-microchip-sheet,
+.vacuum-of-the-void.sheet.item .votv-ability-sheet {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: var(--votv-font-body);
+  background: linear-gradient(145deg, rgba(5, 7, 10, 0.9), rgba(5, 10, 18, 0.98));
+  border-radius: var(--votv-radius);
+  border: 1px solid rgba(66, 135, 245, 0.25);
+  box-shadow: var(--votv-shadow-soft);
+  padding: 12px 14px;
+  color: var(--votv-text-main);
+}
+
+.vacuum-of-the-void.sheet.item .sheet-header {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 10px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.vacuum-of-the-void.sheet.item .sheet-header .profile {
+  border-radius: var(--votv-radius);
+  border: 1px solid var(--votv-border-muted);
+}
+
+.vacuum-of-the-void.sheet.item .header-fields .item-name input {
+  font-size: var(--votv-font-body);
+  padding: 6px 8px;
+}
+
+.vacuum-of-the-void.sheet.item label {
+  font-size: var(--votv-font-label);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--votv-text-muted);
+}
+
+.vacuum-of-the-void.sheet.item .header-fields select {
+  width: 100%;
+  font-size: var(--votv-font-body);
+  padding: 4px 6px;
+  background-color: rgba(3, 6, 10, 0.9);
+  border: 1px solid var(--votv-border-muted);
+  color: var(--votv-text-main);
+  border-radius: 2px;
+}
+
+.vacuum-of-the-void.sheet.item .sheet-body {
+  border-top: 1px solid var(--votv-border-muted);
+  padding-top: 8px;
+}
+
+.vacuum-of-the-void.sheet.item .field input,
+.vacuum-of-the-void.sheet.item .field textarea,
+.vacuum-of-the-void.sheet.item .field select {
+  width: 100%;
+  box-sizing: border-box;
+  background-color: rgba(3, 6, 10, 0.9);
+  border: 1px solid var(--votv-border-muted);
+  color: var(--votv-text-main);
+  border-radius: 2px;
+  font-size: var(--votv-font-body);
+}
+
+.vacuum-of-the-void.sheet.item .field textarea {
+  min-height: 72px;
+  resize: vertical;
+}
+
+.vacuum-of-the-void.sheet.item input:focus-visible,
+.vacuum-of-the-void.sheet.item textarea:focus-visible,
+.vacuum-of-the-void.sheet.item select:focus-visible {
+  outline: none;
+  border-color: var(--votv-focus-ring);
+  box-shadow: 0 0 0 1px rgba(43, 255, 136, 0.4);
+}

@@ -1,0 +1,307 @@
+[
+  {
+    "_id": "knife",
+    "name": "Kés",
+    "type": "weapon",
+    "img": "icons/svg/sword.svg",
+    "system": {
+      "type": "light",
+      "damage": "1d6",
+      "range": { "short": 1.5, "long": 0 },
+      "cost": 50,
+      "maxUpgrade": 3,
+      "upgradeCost": 25,
+      "skillDifficulty": 0,
+      "special": ""
+    }
+  },
+  {
+    "_id": "pistol",
+    "name": "Pisztoly",
+    "type": "weapon",
+    "img": "icons/svg/sword.svg",
+    "system": {
+      "type": "light",
+      "damage": "1d4",
+      "range": { "short": 21, "long": 42 },
+      "cost": 150,
+      "maxUpgrade": 2,
+      "upgradeCost": 75,
+      "skillDifficulty": 0,
+      "special": "Újratöltés: 1 KP"
+    }
+  },
+  {
+    "_id": "smg",
+    "name": "Géppisztoly",
+    "type": "weapon",
+    "img": "icons/svg/sword.svg",
+    "system": {
+      "type": "light",
+      "damage": "1d4+1",
+      "range": { "short": 15, "long": 30 },
+      "cost": 200,
+      "maxUpgrade": 3,
+      "upgradeCost": 100,
+      "skillDifficulty": 0,
+      "special": "Újratöltés: 1 KP; Tár: 6; Sorozat"
+    }
+  },
+  {
+    "_id": "revolver",
+    "name": "Revolver",
+    "type": "weapon",
+    "img": "icons/svg/sword.svg",
+    "system": {
+      "type": "light",
+      "damage": "1d4+3",
+      "range": { "short": 15, "long": 30 },
+      "cost": 250,
+      "maxUpgrade": 3,
+      "upgradeCost": 175,
+      "skillDifficulty": 0,
+      "special": "Újratöltés: 2 KP; Tár: 6"
+    }
+  },
+  {
+    "_id": "heat-blade",
+    "name": "Hőpengé",
+    "type": "weapon",
+    "img": "icons/svg/sword.svg",
+    "system": {
+      "type": "medium",
+      "damage": "2d4+2",
+      "range": { "short": 1.5, "long": 0 },
+      "cost": 200,
+      "maxUpgrade": 4,
+      "upgradeCost": 100,
+      "skillDifficulty": 0,
+      "special": ""
+    }
+  },
+  {
+    "_id": "rifle-assault",
+    "name": "Gépkarabély",
+    "type": "weapon",
+    "img": "icons/svg/sword.svg",
+    "system": {
+      "type": "medium",
+      "damage": "2d4",
+      "range": { "short": 27, "long": 54 },
+      "cost": 450,
+      "maxUpgrade": 4,
+      "upgradeCost": 225,
+      "skillDifficulty": 0,
+      "special": ""
+    }
+  },
+  {
+    "_id": "shotgun",
+    "name": "Sörétes Puska",
+    "type": "weapon",
+    "img": "icons/svg/sword.svg",
+    "system": {
+      "type": "medium",
+      "damage": "3d4+2",
+      "range": { "short": 4.5, "long": 0 },
+      "cost": 500,
+      "maxUpgrade": 8,
+      "upgradeCost": 250,
+      "skillDifficulty": 0,
+      "special": "Újratöltés: 2 KP; Tár: 5 sörét"
+    }
+  },
+  {
+    "_id": "rifle",
+    "name": "Puska",
+    "type": "weapon",
+    "img": "icons/svg/sword.svg",
+    "system": {
+      "type": "medium",
+      "damage": "1d4+2",
+      "range": { "short": 13.5, "long": 0 },
+      "cost": 500,
+      "maxUpgrade": 8,
+      "upgradeCost": 250,
+      "skillDifficulty": 0,
+      "special": "Újratöltés: 2 KP; Tár: 5 sörét"
+    }
+  },
+  {
+    "_id": "carbine",
+    "name": "Karabély",
+    "type": "weapon",
+    "img": "icons/svg/sword.svg",
+    "system": {
+      "type": "medium",
+      "damage": "2d6",
+      "range": { "short": 60, "long": 120 },
+      "cost": 600,
+      "maxUpgrade": 6,
+      "upgradeCost": 300,
+      "skillDifficulty": 0,
+      "special": ""
+    }
+  },
+  {
+    "_id": "hmg",
+    "name": "Géppuska",
+    "type": "weapon",
+    "img": "icons/svg/sword.svg",
+    "system": {
+      "type": "heavy",
+      "damage": "4d4",
+      "range": { "short": 36, "long": 72 },
+      "cost": 900,
+      "maxUpgrade": 8,
+      "upgradeCost": 450,
+      "skillDifficulty": 0,
+      "special": "Újratöltés: 3 KP; Tár: 5; Sorozat"
+    }
+  },
+  {
+    "_id": "rotary-hmg",
+    "name": "Forgó Nehézgépkarabély",
+    "type": "weapon",
+    "img": "icons/svg/sword.svg",
+    "system": {
+      "type": "heavy",
+      "damage": "2d8+2",
+      "range": { "short": 27, "long": 54 },
+      "cost": 900,
+      "maxUpgrade": 8,
+      "upgradeCost": 450,
+      "skillDifficulty": 0,
+      "special": "Feltöltés: 2 KP"
+    }
+  },
+  {
+    "_id": "sniper",
+    "name": "Mesterlövészpuska",
+    "type": "weapon",
+    "img": "icons/svg/sword.svg",
+    "system": {
+      "type": "heavy",
+      "damage": "3d6",
+      "range": { "short": 210, "long": 420 },
+      "cost": 1250,
+      "maxUpgrade": 12,
+      "upgradeCost": 625,
+      "skillDifficulty": 0,
+      "special": ""
+    }
+  },
+  {
+    "_id": "rocket-launcher",
+    "name": "Rakétavető",
+    "type": "weapon",
+    "img": "icons/svg/sword.svg",
+    "system": {
+      "type": "heavy",
+      "damage": "3d10+5",
+      "range": { "short": 48, "long": 96 },
+      "cost": 1500,
+      "maxUpgrade": 0,
+      "upgradeCost": 0,
+      "skillDifficulty": 0,
+      "special": "Újratöltés: 1 KP; Rakéta: 75 cr"
+    }
+  },
+  {
+    "_id": "grenade-kinetic",
+    "name": "Kinetikus Gránát",
+    "type": "weapon",
+    "img": "icons/svg/sword.svg",
+    "system": {
+      "type": "thrown",
+      "damage": "3d6",
+      "range": { "short": 13.5, "long": 0 },
+      "cost": 30,
+      "maxUpgrade": 0,
+      "upgradeCost": 0,
+      "skillDifficulty": 14,
+      "special": "3 m-en belül sebez sikertelen mentődobásnál"
+    }
+  },
+  {
+    "_id": "grenade-flash",
+    "name": "Villanógránát",
+    "type": "weapon",
+    "img": "icons/svg/sword.svg",
+    "system": {
+      "type": "thrown",
+      "damage": "",
+      "range": { "short": 13.5, "long": 0 },
+      "cost": 25,
+      "maxUpgrade": 0,
+      "upgradeCost": 0,
+      "skillDifficulty": 12,
+      "special": "3 m-en belül elkábít sikertelen mentődobásnál"
+    }
+  },
+  {
+    "_id": "grenade-emp",
+    "name": "EMP Gránát",
+    "type": "weapon",
+    "img": "icons/svg/sword.svg",
+    "system": {
+      "type": "thrown",
+      "damage": "",
+      "range": { "short": 13.5, "long": 0 },
+      "cost": 50,
+      "maxUpgrade": 0,
+      "upgradeCost": 0,
+      "skillDifficulty": 16,
+      "special": "Elektronika kikapcsolása; Droid elkábítás"
+    }
+  },
+  {
+    "_id": "grenade-incendiary",
+    "name": "Gyújtógránát",
+    "type": "weapon",
+    "img": "icons/svg/sword.svg",
+    "system": {
+      "type": "thrown",
+      "damage": "2d4+2",
+      "range": { "short": 13.5, "long": 0 },
+      "cost": 75,
+      "maxUpgrade": 0,
+      "upgradeCost": 0,
+      "skillDifficulty": 14,
+      "special": "Tűz; 3 körig égés"
+    }
+  },
+  {
+    "_id": "c4",
+    "name": "C4",
+    "type": "weapon",
+    "img": "icons/svg/sword.svg",
+    "system": {
+      "type": "thrown",
+      "damage": "3d12+6",
+      "range": { "short": 13.5, "long": 30 },
+      "cost": 100,
+      "maxUpgrade": 0,
+      "upgradeCost": 0,
+      "skillDifficulty": 16,
+      "special": "12 m-en belül sebzés; 1 KP detonálás"
+    }
+  },
+  {
+    "_id": "mine",
+    "name": "Akna",
+    "type": "weapon",
+    "img": "icons/svg/sword.svg",
+    "system": {
+      "type": "thrown",
+      "damage": "3d10+3",
+      "range": { "short": 1.5, "long": 0 },
+      "cost": 75,
+      "maxUpgrade": 0,
+      "upgradeCost": 0,
+      "skillDifficulty": 0,
+      "special": "Elhelyezhető; rálépéskor robban"
+    }
+  }
+]
+

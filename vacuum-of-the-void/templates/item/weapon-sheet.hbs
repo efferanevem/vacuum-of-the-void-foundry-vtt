@@ -1,0 +1,58 @@
+<form class="{{cssClass}} votv-weapon-sheet" autocomplete="off">
+  <header class="sheet-header">
+    <img class="profile" src="{{item.img}}" data-edit="img" title="{{item.name}}" />
+    <div class="header-fields">
+      <h1 class="item-name">
+        <input name="name" type="text" value="{{item.name}}" placeholder="Weapon Name" />
+      </h1>
+      <div class="item-type">
+        <label>Típus</label>
+        <select name="system.type">
+          <option value="light" {{#if (eq system.type "light")}}selected{{/if}}>Könnyű</option>
+          <option value="medium" {{#if (eq system.type "medium")}}selected{{/if}}>Közepes</option>
+          <option value="heavy" {{#if (eq system.type "heavy")}}selected{{/if}}>Nehéz</option>
+          <option value="thrown" {{#if (eq system.type "thrown")}}selected{{/if}}>Dobható</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <section class="sheet-body">
+    <div class="weapon-grid">
+      <div class="field">
+        <label>Sebzés</label>
+        <input type="text" name="system.damage" value="{{system.damage}}" placeholder="pl. 1d6+2" />
+      </div>
+      <div class="field">
+        <label>Hatótáv (rövid)</label>
+        <input type="number" step="0.5" name="system.range.short" value="{{system.range.short}}" />
+      </div>
+      <div class="field">
+        <label>Hatótáv (hosszú)</label>
+        <input type="number" step="0.5" name="system.range.long" value="{{system.range.long}}" />
+      </div>
+      <div class="field">
+        <label>Ár (cr)</label>
+        <input type="number" name="system.cost" value="{{system.cost}}" />
+      </div>
+      <div class="field">
+        <label>Max. Fejlesztés</label>
+        <input type="number" name="system.maxUpgrade" value="{{system.maxUpgrade}}" />
+      </div>
+      <div class="field">
+        <label>Fejlesztés ára</label>
+        <input type="number" name="system.upgradeCost" value="{{system.upgradeCost}}" />
+      </div>
+      <div class="field">
+        <label>Harcképzettség próba</label>
+        <input type="number" name="system.skillDifficulty" value="{{system.skillDifficulty}}" />
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Speciális</label>
+      <textarea name="system.special">{{system.special}}</textarea>
+    </div>
+  </section>
+</form>
+

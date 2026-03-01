@@ -1,0 +1,64 @@
+{
+  "id": "vacuum-of-the-void",
+  "title": "Vacuum of the Void",
+  "description": "A custom science-fantasy game system for Foundry Virtual Tabletop.",
+  "version": "0.1.1",
+  "compatibility": {
+    "minimum": 13,
+    "verified": 13
+  },
+  "authors": [
+    {
+      "name": "waveen"
+    }
+  ],
+  "esmodules": [
+    "http://localhost:5173/src/vacuum-of-the-void.mjs"
+  ],
+  "styles": [
+    "styles/main.css"
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
+  "documentTypes": {
+    "Actor": {
+      "pc": {}
+    },
+    "Item": {
+      "weapon": {},
+      "microchip": {},
+      "ability": {}
+    }
+  },
+  "packs": [
+    {
+      "name": "weapons",
+      "label": "Void Weapons",
+      "type": "Item",
+      "system": "vacuum-of-the-void",
+      "path": "packs/weapons.db"
+    },
+    {
+      "name": "microchips",
+      "label": "Mikro-chipek",
+      "type": "Item",
+      "system": "vacuum-of-the-void",
+      "path": "packs/microchips.db"
+    }
+  ],
+  "grid": {
+    "distance": 1,
+    "units": "m"
+  },
+  "initiative": "3d6",
+  "primaryTokenAttribute": "resources.health",
+  "secondaryTokenAttribute": "resources.stress",
+  "url": "https://example.com/vacuum-of-the-void",
+  "manifest": "https://example.com/vacuum-of-the-void/system.json",
+  "download": "https://example.com/vacuum-of-the-void/system.zip"
+}

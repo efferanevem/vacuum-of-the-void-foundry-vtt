@@ -1,0 +1,44 @@
+/* Chat: dice rolls and message styling */
+
+body.system-vacuum-of-the-void .chat-message .dice-roll {
+  background: linear-gradient(135deg, rgba(5, 7, 10, 0.95), rgba(5, 10, 18, 0.98));
+  border-radius: var(--votv-radius);
+  border: none;
+  box-shadow: none;
+}
+
+body.system-vacuum-of-the-void .chat-message .dice-roll .dice-formula {
+  color: #ffffff;
+  border: none;
+  box-shadow: none;
+}
+
+body.system-vacuum-of-the-void .chat-message .dice-roll.votv-critical .dice-formula,
+body.system-vacuum-of-the-void .chat-message .dice-roll.votv-critical .dice-total {
+  color: #39ff14;
+}
+
+body.system-vacuum-of-the-void .chat-message .dice-roll.votv-fumble .dice-formula,
+body.system-vacuum-of-the-void .chat-message .dice-roll.votv-fumble .dice-total {
+  color: #ff3131;
+}
+
+body.system-vacuum-of-the-void .chat-message .dice-roll .dice-total {
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: var(--votv-radius);
+  padding: 2px 6px;
+}
+
+body.system-vacuum-of-the-void .chat-message .message-header .flavor-text {
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #e06b3a;
+}
+
+body.system-vacuum-of-the-void .chat-message .message-sender {
+  font-family: var(--font-h3);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
