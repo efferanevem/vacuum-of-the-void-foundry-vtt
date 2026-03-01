@@ -104,19 +104,19 @@
         <div class="pc-health-status-rows">
           <div class="pc-health-status-row">
             <label>Fej</label>
-            <input type="range" name="system.resources.healthStatus.head" value="{{system.resources.healthStatus.head}}" min="0" max="3" step="1" class="pc-health-status-slider" />
+            <div class="pc-health-status-readonly" data-status="{{computedHealthStatus.head}}" title="Az aktuális/teljes arány alapján (nem szerkeszthető)"><span class="pc-health-status-dot" data-value="0"></span><span class="pc-health-status-dot" data-value="1"></span><span class="pc-health-status-dot" data-value="2"></span><span class="pc-health-status-dot" data-value="3"></span></div>
           </div>
           <div class="pc-health-status-row">
             <label>Törzs</label>
-            <input type="range" name="system.resources.healthStatus.torso" value="{{system.resources.healthStatus.torso}}" min="0" max="3" step="1" class="pc-health-status-slider" />
+            <div class="pc-health-status-readonly" data-status="{{computedHealthStatus.torso}}"><span class="pc-health-status-dot" data-value="0"></span><span class="pc-health-status-dot" data-value="1"></span><span class="pc-health-status-dot" data-value="2"></span><span class="pc-health-status-dot" data-value="3"></span></div>
           </div>
           <div class="pc-health-status-row">
             <label>Karok</label>
-            <input type="range" name="system.resources.healthStatus.arms" value="{{system.resources.healthStatus.arms}}" min="0" max="3" step="1" class="pc-health-status-slider" />
+            <div class="pc-health-status-readonly" data-status="{{computedHealthStatus.arms}}"><span class="pc-health-status-dot" data-value="0"></span><span class="pc-health-status-dot" data-value="1"></span><span class="pc-health-status-dot" data-value="2"></span><span class="pc-health-status-dot" data-value="3"></span></div>
           </div>
           <div class="pc-health-status-row">
             <label>Lábak</label>
-            <input type="range" name="system.resources.healthStatus.legs" value="{{system.resources.healthStatus.legs}}" min="0" max="3" step="1" class="pc-health-status-slider" />
+            <div class="pc-health-status-readonly" data-status="{{computedHealthStatus.legs}}"><span class="pc-health-status-dot" data-value="0"></span><span class="pc-health-status-dot" data-value="1"></span><span class="pc-health-status-dot" data-value="2"></span><span class="pc-health-status-dot" data-value="3"></span></div>
           </div>
         </div>
         <div class="pc-health-status-sublabels">

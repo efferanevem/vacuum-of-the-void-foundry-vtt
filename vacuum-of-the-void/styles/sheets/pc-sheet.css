@@ -352,6 +352,37 @@
   accent-color: var(--color-primary, #6b8cce);
 }
 
+.votv.pc-sheet .pc-health-status-readonly {
+  display: flex;
+  flex: 1 1 auto;
+  min-width: 0;
+  align-items: center;
+  gap: 4px;
+  pointer-events: none;
+}
+
+.votv.pc-sheet .pc-health-status-dot {
+  flex: 1 1 0;
+  min-width: 0;
+  height: 8px;
+  border-radius: 2px;
+  background: rgba(0, 0, 0, 0.2);
+  transition: background 0.15s ease;
+}
+
+.votv.pc-sheet .pc-health-status-readonly[data-status="0"] .pc-health-status-dot[data-value="0"] {
+  background: #5c1a1a;
+}
+.votv.pc-sheet .pc-health-status-readonly[data-status="1"] .pc-health-status-dot[data-value="1"] {
+  background: #c0392b;
+}
+.votv.pc-sheet .pc-health-status-readonly[data-status="2"] .pc-health-status-dot[data-value="2"] {
+  background: #d68910;
+}
+.votv.pc-sheet .pc-health-status-readonly[data-status="3"] .pc-health-status-dot[data-value="3"] {
+  background: #1e8449;
+}
+
 .votv.pc-sheet .pc-current-health-row {
   display: flex;
   flex-direction: row;

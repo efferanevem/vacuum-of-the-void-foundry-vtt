@@ -35,11 +35,36 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
     return this.document;
   }
 
+  /**
+   * Compute health status 0–3 from current HP and max HP, using thirds of max.
+   * Max 15 → 11–15 Egészséges, 6–10 Sérült, 1–5 Kritikus, 0 Használhatatlan.
+   */
+  static _healthStatusFromRatio(current, total) {
+    const cur = Number(current);
+    const tot = Number(total);
+    if (tot <= 0 || cur <= 0) return 0;
+    const oneThird = Math.floor(tot / 3);
+    const twoThirds = Math.floor((2 * tot) / 3);
+    if (cur <= oneThird) return 1;
+    if (cur <= twoThirds) return 2;
+    return 3;
+  }
+
   async _prepareContext(options) {
     let context = await super._prepareContext(options);
     context = context ?? {};
     context.actor = context.actor ?? this.actor;
     context.system = this.actor.system;
+    const res = this.actor.system.resources ?? {};
+    const hitLoc = res.hitLocations ?? {};
+    const curHealth = res.currentHealth ?? {};
+    const parts = ["head", "torso", "arms", "legs"];
+    context.computedHealthStatus = {};
+    for (const part of parts) {
+      const total = hitLoc[part]?.value ?? 0;
+      const current = curHealth[part] ?? 0;
+      context.computedHealthStatus[part] = VoidPcSheet._healthStatusFromRatio(current, total);
+    }
     const weapons = this.actor.system.weapons ?? {};
     const ALL_WEAPON_SLOTS = ["slot1", "slot2", "slot3", "slot4", "slot5", "slot6", "slot7", "slot8", "slot9", "slot10"];
     const slotOrderRaw = (weapons.slotOrder ?? "").trim();
@@ -558,11 +583,24 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
     for (const el of form.elements) {
       if (!el.name || el.disabled) continue;
       if (el.type === "radio" && !el.checked) continue;
+      if (el.name.startsWith("system.resources.healthStatus.")) continue;
       let value;
       if (el.type === "checkbox") value = el.checked;
       else if (el.type === "number") value = el.value === "" ? 0 : Number(el.value);
       else value = el.value ?? "";
       foundry.utils.setProperty(updateData, el.name, value);
+    }
+    const res = foundry.utils.mergeObject(
+      this.actor.system?.resources ?? {},
+      foundry.utils.expandObject(updateData).system?.resources ?? {}
+    );
+    const hitLoc = res.hitLocations ?? {};
+    const curHealth = res.currentHealth ?? {};
+    const parts = ["head", "torso", "arms", "legs"];
+    for (const part of parts) {
+      const total = hitLoc[part]?.value ?? 0;
+      const current = curHealth[part] ?? 0;
+      foundry.utils.setProperty(updateData, `system.resources.healthStatus.${part}`, VoidPcSheet._healthStatusFromRatio(current, total));
     }
     return updateData;
   }
