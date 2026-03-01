@@ -208,6 +208,150 @@
   box-sizing: border-box;
 }
 
+.votv.pc-sheet .pc-health-table-wrap {
+  margin-bottom: 12px;
+}
+
+.votv.pc-sheet .pc-health-table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: collapse;
+}
+
+.votv.pc-sheet .pc-health-col-label {
+  width: auto;
+}
+
+.votv.pc-sheet .pc-health-col-hit {
+  width: 5.5em;
+}
+
+.votv.pc-sheet .pc-health-col-num {
+  width: 3.5em;
+}
+
+.votv.pc-sheet .pc-health-col-slash {
+  width: 1.2em;
+}
+
+.votv.pc-sheet .pc-health-table th,
+.votv.pc-sheet .pc-health-table td {
+  padding: 4px 4px;
+  text-align: left;
+  border-bottom: 1px solid var(--votv-border-muted, rgba(0,0,0,0.1));
+}
+
+.votv.pc-sheet .pc-health-th-hit {
+  text-align: center !important;
+  font-weight: 600;
+  font-size: 0.85em;
+}
+
+.votv.pc-sheet .pc-health-th-num {
+  text-align: center;
+  font-weight: 600;
+  font-size: 0.85em;
+}
+
+.votv.pc-sheet .pc-health-cell-hit {
+  text-align: center !important;
+  font-size: 0.9em;
+}
+
+.votv.pc-sheet .pc-health-th-slash,
+.votv.pc-sheet .pc-health-cell-slash {
+  text-align: center;
+  font-weight: 400;
+  color: var(--color-text-dark-secondary, #666);
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.votv.pc-sheet .pc-health-label {
+  font-size: 0.9em;
+}
+
+.votv.pc-sheet .pc-health-row td:nth-child(3),
+.votv.pc-sheet .pc-health-row td:nth-child(5) {
+  text-align: center;
+}
+
+.votv.pc-sheet .pc-health-table input[type="number"] {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+/* ---- Egészségi állapot: 0–3 Használhatatlan → Egészséges ---- */
+.votv.pc-sheet .pc-health-status-title {
+  margin: 0 0 10px 0;
+  font-size: 0.95em;
+  font-weight: 600;
+}
+
+.votv.pc-sheet .pc-health-status-head {
+  display: grid;
+  grid-template-columns: 2.5em 1fr 1fr 1fr 1fr;
+  gap: 0 2px;
+  align-items: center;
+  margin-bottom: 2px;
+  font-size: 0.8em;
+  line-height: 1.2;
+  color: inherit;
+  opacity: 0.75;
+}
+
+.votv.pc-sheet .pc-health-status-head-spacer {
+  min-width: 0;
+}
+
+.votv.pc-sheet .pc-health-status-state {
+  text-align: center;
+}
+
+.votv.pc-sheet .pc-health-status-sublabels {
+  display: grid;
+  grid-template-columns: 2.5em 1fr 1fr 1fr 1fr;
+  gap: 0 2px;
+  align-items: center;
+  margin-top: 4px;
+  font-size: 0.75em;
+  line-height: 1.2;
+  color: inherit;
+  opacity: 0.75;
+}
+
+.votv.pc-sheet .pc-health-status-penalty {
+  text-align: center;
+}
+
+.votv.pc-sheet .pc-health-status-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.votv.pc-sheet .pc-health-status-row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 8px;
+}
+
+.votv.pc-sheet .pc-health-status-row label {
+  flex: 0 0 auto;
+  min-width: 2.5em;
+  font-size: 0.9em;
+}
+
+.votv.pc-sheet .pc-health-status-slider {
+  flex: 1 1 auto;
+  min-width: 0;
+  accent-color: var(--color-primary, #6b8cce);
+}
+
 .votv.pc-sheet .pc-current-health-row {
   display: flex;
   flex-direction: row;

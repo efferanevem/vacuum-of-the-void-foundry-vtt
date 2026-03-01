@@ -50,6 +50,12 @@ export class BaseActorDataModel extends foundry.abstract.TypeDataModel {
           arms: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
           legs: new NumberField({ required: false, integer: true, min: 0, initial: 0 })
         }),
+        healthStatus: new SchemaField({
+          head: new NumberField({ required: false, integer: true, min: 0, max: 3, initial: 0 }),
+          torso: new NumberField({ required: false, integer: true, min: 0, max: 3, initial: 0 }),
+          arms: new NumberField({ required: false, integer: true, min: 0, max: 3, initial: 0 }),
+          legs: new NumberField({ required: false, integer: true, min: 0, max: 3, initial: 0 })
+        }),
         stress: new SchemaField({
           value: new NumberField({ required: true, integer: true, min: 0, initial: 0 }),
           max: new NumberField({ required: true, integer: true, min: 0, initial: 0 })

@@ -42,53 +42,89 @@
     <section class="pc-column pc-left">
       <section class="pc-panel pc-health">
         <h2>Életerő</h2>
-        <div class="pc-hit-location">
-          <label>Fej (1)</label>
-          <input type="number" name="system.resources.hitLocations.head.value" value="{{system.resources.hitLocations.head.value}}" />
-          <input type="checkbox" name="system.resources.hitLocations.head.box1" {{checked system.resources.hitLocations.head.box1}} />
-          <input type="checkbox" name="system.resources.hitLocations.head.box2" {{checked system.resources.hitLocations.head.box2}} />
-          <input type="checkbox" name="system.resources.hitLocations.head.box3" {{checked system.resources.hitLocations.head.box3}} />
+        <div class="pc-health-table-wrap">
+          <table class="pc-health-table">
+            <colgroup>
+              <col class="pc-health-col-label" />
+              <col class="pc-health-col-hit" />
+              <col class="pc-health-col-num" />
+              <col class="pc-health-col-slash" />
+              <col class="pc-health-col-num" />
+            </colgroup>
+            <thead>
+              <tr>
+                <th></th>
+                <th class="pc-health-th-hit">Találati szám</th>
+                <th class="pc-health-th-num">Teljes</th>
+                <th class="pc-health-th-slash">/</th>
+                <th class="pc-health-th-num">Aktuális</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="pc-health-row">
+                <td class="pc-health-label">Fej</td>
+                <td class="pc-health-cell-hit">1</td>
+                <td><input type="number" name="system.resources.hitLocations.head.value" value="{{system.resources.hitLocations.head.value}}" min="0" /></td>
+                <td class="pc-health-cell-slash">/</td>
+                <td><input type="number" name="system.resources.currentHealth.head" value="{{system.resources.currentHealth.head}}" min="0" /></td>
+              </tr>
+              <tr class="pc-health-row">
+                <td class="pc-health-label">Törzs</td>
+                <td class="pc-health-cell-hit">2, 3, 4</td>
+                <td><input type="number" name="system.resources.hitLocations.torso.value" value="{{system.resources.hitLocations.torso.value}}" min="0" /></td>
+                <td class="pc-health-cell-slash">/</td>
+                <td><input type="number" name="system.resources.currentHealth.torso" value="{{system.resources.currentHealth.torso}}" min="0" /></td>
+              </tr>
+              <tr class="pc-health-row">
+                <td class="pc-health-label">Karok</td>
+                <td class="pc-health-cell-hit">5, 6</td>
+                <td><input type="number" name="system.resources.hitLocations.arms.value" value="{{system.resources.hitLocations.arms.value}}" min="0" /></td>
+                <td class="pc-health-cell-slash">/</td>
+                <td><input type="number" name="system.resources.currentHealth.arms" value="{{system.resources.currentHealth.arms}}" min="0" /></td>
+              </tr>
+              <tr class="pc-health-row">
+                <td class="pc-health-label">Lábak</td>
+                <td class="pc-health-cell-hit">7, 8</td>
+                <td><input type="number" name="system.resources.hitLocations.legs.value" value="{{system.resources.hitLocations.legs.value}}" min="0" /></td>
+                <td class="pc-health-cell-slash">/</td>
+                <td><input type="number" name="system.resources.currentHealth.legs" value="{{system.resources.currentHealth.legs}}" min="0" /></td>
+              </tr>
+            </tbody>
+          </table>
         </div>
-        <div class="pc-hit-location">
-          <label>Törzs (2,3,4)</label>
-          <input type="number" name="system.resources.hitLocations.torso.value" value="{{system.resources.hitLocations.torso.value}}" />
-          <input type="checkbox" name="system.resources.hitLocations.torso.box1" {{checked system.resources.hitLocations.torso.box1}} />
-          <input type="checkbox" name="system.resources.hitLocations.torso.box2" {{checked system.resources.hitLocations.torso.box2}} />
-          <input type="checkbox" name="system.resources.hitLocations.torso.box3" {{checked system.resources.hitLocations.torso.box3}} />
-        </div>
-        <div class="pc-hit-location">
-          <label>Karok (5,6)</label>
-          <input type="number" name="system.resources.hitLocations.arms.value" value="{{system.resources.hitLocations.arms.value}}" />
-          <input type="checkbox" name="system.resources.hitLocations.arms.box1" {{checked system.resources.hitLocations.arms.box1}} />
-          <input type="checkbox" name="system.resources.hitLocations.arms.box2" {{checked system.resources.hitLocations.arms.box2}} />
-          <input type="checkbox" name="system.resources.hitLocations.arms.box3" {{checked system.resources.hitLocations.arms.box3}} />
-        </div>
-        <div class="pc-hit-location">
-          <label>Lábak (7,8)</label>
-          <input type="number" name="system.resources.hitLocations.legs.value" value="{{system.resources.hitLocations.legs.value}}" />
-          <input type="checkbox" name="system.resources.hitLocations.legs.box1" {{checked system.resources.hitLocations.legs.box1}} />
-          <input type="checkbox" name="system.resources.hitLocations.legs.box2" {{checked system.resources.hitLocations.legs.box2}} />
-          <input type="checkbox" name="system.resources.hitLocations.legs.box3" {{checked system.resources.hitLocations.legs.box3}} />
-        </div>
-      </section>
 
-      <section class="pc-panel pc-current-health">
-        <h2>Aktuális életerő</h2>
-        <div class="pc-current-health-row">
-          <label>Fej</label>
-          <input type="number" name="system.resources.currentHealth.head" value="{{system.resources.currentHealth.head}}" />
+        <h3 class="pc-health-status-title">Egészségi állapot</h3>
+        <div class="pc-health-status-head">
+          <span class="pc-health-status-head-spacer"></span>
+          <span class="pc-health-status-state">Használhatatlan</span>
+          <span class="pc-health-status-state">Kritikus</span>
+          <span class="pc-health-status-state">Sérült</span>
+          <span class="pc-health-status-state">Egészséges</span>
         </div>
-        <div class="pc-current-health-row">
-          <label>Törzs</label>
-          <input type="number" name="system.resources.currentHealth.torso" value="{{system.resources.currentHealth.torso}}" />
+        <div class="pc-health-status-rows">
+          <div class="pc-health-status-row">
+            <label>Fej</label>
+            <input type="range" name="system.resources.healthStatus.head" value="{{system.resources.healthStatus.head}}" min="0" max="3" step="1" class="pc-health-status-slider" />
+          </div>
+          <div class="pc-health-status-row">
+            <label>Törzs</label>
+            <input type="range" name="system.resources.healthStatus.torso" value="{{system.resources.healthStatus.torso}}" min="0" max="3" step="1" class="pc-health-status-slider" />
+          </div>
+          <div class="pc-health-status-row">
+            <label>Karok</label>
+            <input type="range" name="system.resources.healthStatus.arms" value="{{system.resources.healthStatus.arms}}" min="0" max="3" step="1" class="pc-health-status-slider" />
+          </div>
+          <div class="pc-health-status-row">
+            <label>Lábak</label>
+            <input type="range" name="system.resources.healthStatus.legs" value="{{system.resources.healthStatus.legs}}" min="0" max="3" step="1" class="pc-health-status-slider" />
+          </div>
         </div>
-        <div class="pc-current-health-row">
-          <label>Karok</label>
-          <input type="number" name="system.resources.currentHealth.arms" value="{{system.resources.currentHealth.arms}}" />
-        </div>
-        <div class="pc-current-health-row">
-          <label>Lábak</label>
-          <input type="number" name="system.resources.currentHealth.legs" value="{{system.resources.currentHealth.legs}}" />
+        <div class="pc-health-status-sublabels">
+          <span class="pc-health-status-head-spacer"></span>
+          <span class="pc-health-status-penalty">Nem dobhatsz.</span>
+          <span class="pc-health-status-penalty">-6</span>
+          <span class="pc-health-status-penalty">-3</span>
+          <span class="pc-health-status-penalty">-0</span>
         </div>
       </section>
 
