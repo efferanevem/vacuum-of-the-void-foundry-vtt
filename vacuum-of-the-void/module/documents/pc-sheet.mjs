@@ -11,7 +11,7 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
     width: 1000,
     minWidth: 1000,
     height: 800,
-    form: { submitOnChange: true },
+    form: foundry.utils.mergeObject(super.DEFAULT_OPTIONS?.form ?? {}, { submitOnChange: true }),
     window: foundry.utils.mergeObject(super.DEFAULT_OPTIONS?.window ?? {}, {
       resizable: true,
       contentClasses: [
@@ -521,6 +521,50 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
       actionsTable.addEventListener("dragleave", ev => this._onInventoryAreaDragLeave(ev));
       actionsTable.addEventListener("drop", ev => this._onInventoryAreaDrop(ev));
     }
+
+    // Auto-save form on change/input (submitOnChange fallback) – use document so we catch form events wherever the form is in DOM
+    const sheet = this;
+    const doSubmit = (form) => {
+      if (!form) return;
+      const updateData = sheet._getFormDataForUpdate(form);
+      if (Object.keys(updateData).length === 0) return;
+      sheet.actor.update(updateData).catch(err => console.warn("VoidPcSheet save failed", err));
+    };
+    const isOurForm = (form) => form && (sheet.element?.contains?.(form) || (sheet.id && form.closest?.(`#${CSS.escape(sheet.id)}`)));
+    sheet._votvChange = (ev) => {
+      const form = ev.target?.form ?? ev.target?.closest?.("form");
+      if (!isOurForm(form)) return;
+      doSubmit(form);
+    };
+    sheet._votvInput = (ev) => {
+      const form = ev.target?.form ?? ev.target?.closest?.("form");
+      if (!isOurForm(form)) return;
+      clearTimeout(sheet._votvInputDebounce);
+      sheet._votvInputDebounce = setTimeout(() => doSubmit(form), 300);
+    };
+    document.body.addEventListener("change", sheet._votvChange, true);
+    document.body.addEventListener("input", sheet._votvInput, true);
+  }
+
+  _tearDown(options) {
+    document.body.removeEventListener("change", this._votvChange, true);
+    document.body.removeEventListener("input", this._votvInput, true);
+    clearTimeout(this._votvInputDebounce);
+    return super._tearDown?.(options);
+  }
+
+  _getFormDataForUpdate(form) {
+    const updateData = {};
+    for (const el of form.elements) {
+      if (!el.name || el.disabled) continue;
+      if (el.type === "radio" && !el.checked) continue;
+      let value;
+      if (el.type === "checkbox") value = el.checked;
+      else if (el.type === "number") value = el.value === "" ? 0 : Number(el.value);
+      else value = el.value ?? "";
+      foundry.utils.setProperty(updateData, el.name, value);
+    }
+    return updateData;
   }
 
   async _onDropItem(event, data) {
