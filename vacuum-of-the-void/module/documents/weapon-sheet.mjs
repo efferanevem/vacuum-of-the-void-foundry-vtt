@@ -10,8 +10,19 @@ export class VoidWeaponSheet extends foundry.applications.api.HandlebarsApplicat
     template: "systems/vacuum-of-the-void/templates/item/weapon-sheet.hbs",
     width: 550,
     minWidth: 550,
-    height: 400
+    height: 400,
+    form: { submitOnChange: true }
   });
+
+  _initializeApplicationOptions(options) {
+    const result = super._initializeApplicationOptions(options);
+    const doc = options?.document ?? this.document;
+    if (doc?.uuid || doc?.id) {
+      const raw = doc.uuid ?? doc.id;
+      result.uniqueId = `${this.constructor.name}-${String(raw).replace(/\./g, "-")}`;
+    }
+    return result;
+  }
 
   get item() {
     return this.document;

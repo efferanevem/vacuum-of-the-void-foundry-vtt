@@ -10,8 +10,19 @@ export class VoidAbilitySheet extends foundry.applications.api.HandlebarsApplica
     template: "systems/vacuum-of-the-void/templates/item/ability-sheet.hbs",
     width: 500,
     minWidth: 500,
-    height: 420
+    height: 420,
+    form: { submitOnChange: true }
   });
+
+  _initializeApplicationOptions(options) {
+    const result = super._initializeApplicationOptions(options);
+    const doc = options?.document ?? this.document;
+    if (doc?.uuid || doc?.id) {
+      const raw = doc.uuid ?? doc.id;
+      result.uniqueId = `${this.constructor.name}-${String(raw).replace(/\./g, "-")}`;
+    }
+    return result;
+  }
 
   get item() {
     return this.document;

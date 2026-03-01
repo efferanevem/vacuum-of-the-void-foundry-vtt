@@ -11,6 +11,7 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
     width: 1000,
     minWidth: 1000,
     height: 800,
+    form: { submitOnChange: true },
     window: foundry.utils.mergeObject(super.DEFAULT_OPTIONS?.window ?? {}, {
       resizable: true,
       contentClasses: [
@@ -19,6 +20,16 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
       ]
     })
   });
+
+  _initializeApplicationOptions(options) {
+    const result = super._initializeApplicationOptions(options);
+    const doc = options?.document ?? this.document;
+    if (doc?.uuid || doc?.id) {
+      const raw = doc.uuid ?? doc.id;
+      result.uniqueId = `${this.constructor.name}-${String(raw).replace(/\./g, "-")}`;
+    }
+    return result;
+  }
 
   get actor() {
     return this.document;
@@ -203,14 +214,15 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
 
   _attachFrameListeners(html) {
     super._attachFrameListeners(html);
-    // Use this.element (HTMLElement) from ApplicationV2, wrap with jQuery for compatibility
-    const $html = $(this.element);
+    // ApplicationV2: content lives in the form; use form as root so listeners attach to the right DOM
+    const root = this.form ?? this.element;
+    const $html = $(root);
     $(document).off("click.votv-weapon-dropdown");
     $(document).off("click.votv-microchip-dropdown");
     if (!this.isEditable) return;
 
-    // Skill rolls: click on skill label
-    $html.find(".pc-skill-label").click(ev => {
+    // Skill rolls: click on skill label (delegated)
+    $html.on("click", ".pc-skill-label", ev => {
       ev.preventDefault();
       const element = ev.currentTarget;
       const skillKey = element.dataset.skill;
@@ -235,18 +247,18 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
       item.sheet?.render(true);
     };
 
-    $html.find(".pc-inventory-item-name").click(ev => {
+    $html.on("click", ".pc-inventory-item-name", ev => {
       ev.preventDefault();
       openInventoryItem(ev.currentTarget, ev);
     });
 
-    $html.find(".pc-inventory-item-icon").click(ev => {
+    $html.on("click", ".pc-inventory-item-icon", ev => {
       ev.preventDefault();
       openInventoryItem(ev.currentTarget, ev);
     });
 
-    // Inventory quantity per item
-    $html.find(".pc-item-qty").on("change", async ev => {
+    // Inventory quantity per item (delegated)
+    $html.on("change", ".pc-item-qty", async ev => {
       const input = ev.currentTarget;
       const itemId = input.dataset.itemId;
       if (!itemId) return;
@@ -257,8 +269,8 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
       await item.update({ "system.quantity": qty });
     });
 
-    // Remove inventory item from actor
-    $html.find(".pc-item-delete").on("click", async ev => {
+    // Remove inventory item from actor (delegated)
+    $html.on("click", ".pc-item-delete", async ev => {
       ev.preventDefault();
       const btn = ev.currentTarget;
       const itemId = btn.dataset.itemId;
@@ -293,8 +305,8 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
       await this.actor.deleteEmbeddedDocuments("Item", [itemId]);
     });
 
-    // Equipped weapons: attack and damage from Fegyverek card
-    $html.find(".pc-weapon-attack").on("click", async ev => {
+    // Equipped weapons: attack and damage from Fegyverek card (delegated)
+    $html.on("click", ".pc-weapon-attack", async ev => {
       ev.preventDefault();
       const btn = ev.currentTarget;
       const slot = (btn.dataset.slot ?? "").trim();
@@ -302,7 +314,7 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
       await this._rollWeapon(slot);
     });
 
-    $html.find(".pc-weapon-damage").on("click", async ev => {
+    $html.on("click", ".pc-weapon-damage", async ev => {
       ev.preventDefault();
       const btn = ev.currentTarget;
       const slot = (btn.dataset.slot ?? "").trim();
@@ -314,8 +326,8 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
       await this._rollWeaponDamage(itemId);
     });
 
-    // Weapons: equip / unequip via inventory checkboxes
-    $html.find(".pc-weapon-equip-toggle").on("change", async ev => {
+    // Weapons: equip / unequip via inventory checkboxes (delegated)
+    $html.on("change", ".pc-weapon-equip-toggle", async ev => {
       const checkbox = ev.currentTarget;
       const itemId = (checkbox.dataset.itemId ?? "").trim();
       if (!itemId) return;
@@ -359,8 +371,8 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
       }
     });
 
-    // Mikro-chipek: dropdown open/close and select
-    $html.find(".pc-microchip-slot-display").on("click", ev => {
+    // Mikro-chipek: dropdown open/close and select (delegated)
+    $html.on("click", ".pc-microchip-slot-display", ev => {
       ev.preventDefault();
       const btn = ev.currentTarget;
       if (btn.disabled) return;
@@ -370,7 +382,7 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
       if (!wasOpen && wrap) wrap.classList.add("pc-microchip-slot-open");
     });
 
-    $html.find(".pc-microchip-slot-option").on("click", async ev => {
+    $html.on("click", ".pc-microchip-slot-option", async ev => {
       ev.preventDefault();
       const li = ev.currentTarget;
       const wrap = li.closest(".pc-microchip-slot-select-wrap");
@@ -414,8 +426,8 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
       $html.find(".pc-microchip-slot-select-wrap").removeClass("pc-microchip-slot-open");
     });
 
-    // Microchip slot active checkbox: no extra handler needed if name binding works; ensure we close dropdown on outside click
-    $html.find(".pc-microchip-slot-active").on("change", ev => {
+    // Microchip slot active checkbox (delegated)
+    $html.on("change", ".pc-microchip-slot-active", ev => {
       const slot = ev.currentTarget.dataset.slot;
       if (!slot) return;
       const checked = ev.currentTarget.checked;
@@ -447,8 +459,8 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
       el.addEventListener("drop", ev => this._onAbilityAreaDrop(ev, area));
     });
 
-    // Képességek: clear and remove buttons
-    $html.find(".pc-ability-slot-clear").on("click", async ev => {
+    // Képességek: clear and remove buttons (delegated)
+    $html.on("click", ".pc-ability-slot-clear", async ev => {
       ev.preventDefault();
       const slot = ev.currentTarget.dataset.slot;
       if (!slot) return;
@@ -457,7 +469,7 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
         [`system.abilities.${slot}.name`]: ""
       });
     });
-    $html.find(".pc-ability-pill-remove").on("click", async ev => {
+    $html.on("click", ".pc-ability-pill-remove", async ev => {
       ev.preventDefault();
       const area = ev.currentTarget.dataset.area;
       const itemId = ev.currentTarget.dataset.itemId;
@@ -468,7 +480,7 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
       await this.actor.update({ [`system.abilities.${area}.items`]: next });
     });
 
-    $html.find(".pc-ability-open").on("click", ev => {
+    $html.on("click", ".pc-ability-open", ev => {
       ev.preventDefault();
       const el = ev.currentTarget;
       const itemId = el.dataset.itemId;
@@ -477,7 +489,7 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
       item?.sheet?.render(true);
     });
 
-    $html.find(".pc-ability-chat").on("click", async ev => {
+    $html.on("click", ".pc-ability-chat", async ev => {
       ev.preventDefault();
       const btn = ev.currentTarget;
       const itemId = btn.dataset.itemId;

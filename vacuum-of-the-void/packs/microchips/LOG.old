@@ -1,5 +1,5 @@
-2026/02/24-19:55:27.336793 30b7ef000 Delete type=3 #1
-2026/02/24-21:45:19.014028 305e55000 Level-0 table #5: started
-2026/02/24-21:45:19.014354 305e55000 Level-0 table #5: 4980 bytes OK
-2026/02/24-21:45:19.014465 305e55000 Delete type=0 #3
-2026/02/24-21:45:19.014766 305e55000 Manual compaction at level-0 from '!items!374iXfUqKReQoAos' @ 72057594037927935 : 1 .. '!items!tiStQWLYG9AENHfL' @ 0 : 0; will stop at (end)
+2026/03/01-20:23:55.367 52d0 Log #7: 0 ops saved to Table #8 OK
+2026/03/01-20:23:55.368 52d0 Archiving C:\Users\effer_\AppData\Local\FoundryVTT\Data\systems\vacuum-of-the-void\packs\microchips/000007.log: OK
+2026/03/01-20:23:55.368 52d0 Table #5: 17 entries OK
+2026/03/01-20:23:55.371 52d0 Archiving C:\Users\effer_\AppData\Local\FoundryVTT\Data\systems\vacuum-of-the-void\packs\microchips/MANIFEST-000006: OK
+2026/03/01-20:23:55.375 52d0 **** Repaired leveldb C:\Users\effer_\AppData\Local\FoundryVTT\Data\systems\vacuum-of-the-void\packs\microchips; recovered 1 files; 4980 bytes. Some data may have been lost. ****
