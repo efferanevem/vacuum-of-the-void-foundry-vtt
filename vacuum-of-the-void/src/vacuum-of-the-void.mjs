@@ -13,7 +13,8 @@ Hooks.once("init", () => {
       // 3d6-based checks scaffold
       defaultFormula: "3d6",
       targetType: "under-or-equal"
-    }
+    },
+    _dragSourceActorId: null
   };
 
   // Register PC data model
@@ -60,6 +61,48 @@ Hooks.once("init", () => {
     types: ["ability"],
     makeDefault: true,
     label: "Void Ability"
+  });
+
+  Hooks.on("updateActor", (actor, _changed, _options, _userId) => {
+    const actorId = actor?.id;
+    if (!actorId) return;
+    setTimeout(() => {
+      const doc = game.actors?.get(actorId);
+      if (doc?.apps) for (const app of doc.apps) if (app?.rendered && typeof app.render === "function") app.render(true);
+      const windows = Object.values(ui?.windows ?? {});
+      for (const app of windows) {
+        if (!app?.rendered || typeof app.render !== "function") continue;
+        if (app.document?.id !== actorId || app.document?.documentName !== "Actor" || app.constructor?.name !== "VoidPcSheet") continue;
+        app.render(true);
+      }
+    }, 0);
+  });
+});
+
+Hooks.on("ready", () => {
+  document.body.addEventListener(
+    "dragstart",
+    (ev) => {
+      if (!ev.target?.closest?.("#actors")) return;
+      const el = ev.target?.closest?.("[data-document-id]");
+      const docId = el?.getAttribute?.("data-document-id");
+      if (!docId) return;
+      const id = docId.includes(".") ? docId.split(".").pop() : docId;
+      if (id && game.actors?.get(id)) game.votv._dragSourceActorId = id;
+    },
+    true
+  );
+});
+
+Hooks.on("preCreateToken", (tokenDocument, _data, _options) => {
+  const sourceId = game.votv?._dragSourceActorId;
+  const actorId = sourceId ?? tokenDocument.actorId ?? null;
+  if (sourceId) game.votv._dragSourceActorId = null;
+  const actor = actorId ? game.actors?.get(actorId) : null;
+  if (!actor || actor.type !== "pc") return;
+  tokenDocument.updateSource({
+    ...(sourceId ? { actorId: sourceId } : {}),
+    actorLink: true
   });
 });
 

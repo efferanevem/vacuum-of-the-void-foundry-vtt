@@ -87,6 +87,11 @@ body.system-vacuum-of-the-void select:focus-visible {
   font-size: var(--votv-font-base);
 }
 
+.vacuum-of-the-void.sheet .window-content > *,
+.vacuum-of-the-void.sheet .window-content .votv-scroll {
+  background: transparent !important;
+}
+
 .vacuum-of-the-void.sheet .window-header {
   border-bottom: 1px solid var(--votv-border-muted);
 }
