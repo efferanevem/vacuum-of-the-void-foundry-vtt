@@ -144,6 +144,47 @@
   gap: 6px;
 }
 
+/* Left/right columns: health and skills panels match height of center (portrait + resources) */
+.votv.pc-sheet .pc-column.pc-left .pc-panel.pc-health,
+.votv.pc-sheet .pc-column.pc-right .pc-panel.pc-skills {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Health panel: distribute content to fill space */
+.votv.pc-sheet .pc-column.pc-left .pc-panel.pc-health > h2 {
+  flex: 0 0 auto;
+}
+.votv.pc-sheet .pc-column.pc-left .pc-panel.pc-health .pc-health-table-wrap {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+.votv.pc-sheet .pc-column.pc-left .pc-panel.pc-health .pc-health-status-title,
+.votv.pc-sheet .pc-column.pc-left .pc-panel.pc-health .pc-health-status-head,
+.votv.pc-sheet .pc-column.pc-left .pc-panel.pc-health .pc-health-status-sublabels {
+  flex: 0 0 auto;
+}
+.votv.pc-sheet .pc-column.pc-left .pc-panel.pc-health .pc-health-status-rows {
+  flex: 1 1 auto;
+  min-height: 0;
+  justify-content: space-evenly;
+}
+
+/* Skills panel: grid fills space, skill rows distributed evenly */
+.votv.pc-sheet .pc-column.pc-right .pc-panel.pc-skills > h2 {
+  flex: 0 0 auto;
+}
+.votv.pc-sheet .pc-column.pc-right .pc-panel.pc-skills .pc-skills-grid {
+  flex: 1 1 auto;
+  min-height: 0;
+  align-items: stretch;
+}
+.votv.pc-sheet .pc-column.pc-right .pc-panel.pc-skills .pc-skills-column {
+  justify-content: space-evenly;
+}
+
 /* Cards: portrait, resources, skills, combat */
 .votv.pc-sheet .pc-panel.pc-portrait {
   position: relative;
