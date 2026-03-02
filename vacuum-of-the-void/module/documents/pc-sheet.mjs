@@ -662,7 +662,6 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
       el.addEventListener("dragover", ev => this._onAbilitySingleDragOver(ev, slot));
       el.addEventListener("dragleave", ev => ev.currentTarget?.classList.remove("pc-ability-slot-drag-over"));
       el.addEventListener("drop", ev => {
-        console.log("[VOTV] ability slot drop (single)", slot);
         ev.currentTarget?.classList.remove("pc-ability-slot-drag-over");
       });
     });
@@ -672,7 +671,6 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
       el.addEventListener("dragover", ev => this._onAbilityAreaDragOver(ev, area));
       el.addEventListener("dragleave", ev => ev.currentTarget?.classList.remove("pc-ability-area-drag-over"));
       el.addEventListener("drop", ev => {
-        console.log("[VOTV] ability area drop", area);
         ev.currentTarget?.classList.remove("pc-ability-area-drag-over");
       });
     });
@@ -805,26 +803,8 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
     const slotEl = target?.closest?.(".pc-ability-slot-single");
     const areaEl = target?.closest?.(".pc-ability-area");
 
-    console.log("[VOTV] _onDropItem", {
-      targetTag: target?.tagName,
-      targetClass: target?.className,
-      slotEl: !!slotEl,
-      areaEl: !!areaEl,
-      dataKeys: data ? Object.keys(data) : null,
-      dataType: data?.type,
-      dataUuid: data?.uuid,
-      dataDocumentUuid: data?.documentUuid
-    });
-
-    // Ability grid: ugyanúgy a Foundry által átadott data-val kezeljük, mint az inventory (nem dataTransfer).
-    if (slotEl || areaEl) {
-      console.log("[VOTV] _onDropItem: drop az ability gridre");
-      if (!data) {
-        console.log("[VOTV] _onDropItem: nincs data objektum, super");
-        return super._onDropItem(event, data);
-      }
-
-      // Foundry verziónként eltérhet a drag data formátuma, ezért nem csak data.type-re támaszkodunk.
+    // Elsőként próbáljuk abilityként értelmezni a droppot, függetlenül attól, hova húzták.
+    if (data) {
       let uuid =
         data.uuid ??
         data.documentUuid ??
@@ -832,67 +812,80 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
         (typeof data === "string" ? data : null);
 
       if (!uuid && typeof data === "object") {
-        // Próbáljuk meg végső fallbackként kinyerni az első string mezőt, ami UUID-nek tűnik.
-        for (const [k, v] of Object.entries(data)) {
+        for (const v of Object.values(data)) {
           if (typeof v === "string" && v.includes(".") && v.startsWith("Item.")) {
             uuid = v;
-            console.log("[VOTV] _onDropItem: uuid fallback mezőből", k, uuid);
             break;
           }
         }
       }
 
-      if (!uuid) {
-        console.log("[VOTV] _onDropItem: nincs uuid a data-ban (nem tudok mit kezdeni vele)", data);
-        return super._onDropItem(event, data);
-      }
+      if (uuid) {
+        const doc = await fromUuid(uuid);
+        if (doc && doc.documentName === "Item" && doc.type === "ability") {
+          // Győződjünk meg róla, hogy az ability az adott actornál is létezik.
+          let itemId = doc.id;
+          if (doc.parent?.id !== this.actor.id) {
+            const created = await this.actor.createEmbeddedDocuments("Item", [doc.toObject()]);
+            itemId = created[0]?.id ?? itemId;
+          }
 
-      console.log("[VOTV] _onDropItem: fromUuid", uuid);
-      const doc = await fromUuid(uuid);
-      console.log("[VOTV] _onDropItem: doc", doc?.documentName, doc?.type, doc?.name);
-      if (!doc || doc.documentName !== "Item" || doc.type !== "ability") {
-        console.log("[VOTV] _onDropItem: nem ability item, super");
-        return super._onDropItem(event, data);
-      }
+          const kind = (doc.system?.kind ?? "passive").toString();
+          const abilities = this.actor.system.abilities ?? {};
 
-      let itemId = doc.id;
-      if (doc.parent?.id !== this.actor.id) {
-        console.log("[VOTV] _onDropItem: createEmbedded Item");
-        const created = await this.actor.createEmbeddedDocuments("Item", [doc.toObject()]);
-        itemId = created[0]?.id ?? itemId;
-      }
-      const abilities = this.actor.system.abilities ?? {};
+          // Ha konkrét ability slot/area fölé húzták, azt részesítsük előnyben.
+          if (slotEl) {
+            const slot = slotEl.dataset.slot;
+            if (slot) {
+              await this.actor.update({
+                [`system.abilities.${slot}.itemId`]: itemId,
+                [`system.abilities.${slot}.name`]: doc.name
+              });
+              return;
+            }
+          } else if (areaEl) {
+            const area = areaEl.dataset.area;
+            if (area) {
+              const current = Array.isArray(abilities[area]?.items)
+                ? abilities[area].items.slice()
+                : Array.isArray(abilities[area])
+                ? abilities[area].slice()
+                : [];
+              if (!current.includes(itemId)) current.push(itemId);
+              await this.actor.update({ [`system.abilities.${area}.items`]: current });
+              return;
+            }
+          }
 
-      if (slotEl) {
-        const slot = slotEl.dataset.slot;
-        console.log("[VOTV] _onDropItem: single slot", slot, "itemId", itemId);
-        if (slot) {
-          await this.actor.update({
-            [`system.abilities.${slot}.itemId`]: itemId,
-            [`system.abilities.${slot}.name`]: doc.name
-          });
-          console.log("[VOTV] _onDropItem: slot update kész");
-        }
-        return;
-      }
-      if (areaEl) {
-        const area = areaEl.dataset.area;
-        const current = Array.isArray(abilities[area]?.items)
-          ? abilities[area].items.slice()
-          : Array.isArray(abilities[area])
-          ? abilities[area].slice()
-          : [];
-        if (!current.includes(itemId)) current.push(itemId);
-        console.log("[VOTV] _onDropItem: area", area, "items", current);
-        if (area) {
+          // Egyébként a képesség típusa alapján döntjük el a célhelyet.
+          if (kind === "species") {
+            await this.actor.update({
+              "system.abilities.faji.itemId": itemId,
+              "system.abilities.faji.name": doc.name
+            });
+            return;
+          }
+          if (kind === "background") {
+            await this.actor.update({
+              "system.abilities.hatter.itemId": itemId,
+              "system.abilities.hatter.name": doc.name
+            });
+            return;
+          }
+          const area = kind === "active" ? "active" : "passive";
+          const current = Array.isArray(abilities[area]?.items)
+            ? abilities[area].items.slice()
+            : Array.isArray(abilities[area])
+            ? abilities[area].slice()
+            : [];
+          if (!current.includes(itemId)) current.push(itemId);
           await this.actor.update({ [`system.abilities.${area}.items`]: current });
-          console.log("[VOTV] _onDropItem: area update kész");
+          return;
         }
-        return;
       }
     }
 
-    console.log("[VOTV] _onDropItem: nem ability grid, super");
+    // Ha nem ability dropp, menjen a Foundry alap logikáján.
     return super._onDropItem(event, data);
   }
 
@@ -1054,29 +1047,21 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
       ev.dataTransfer?.getData("text/plain") ||
       ev.dataTransfer?.getData("application/json") ||
       "";
-    if (!raw) {
-      console.log("[VOTV] _parseAbilityDrop: nincs raw data a dataTransfer-ben (dragover/drop alatt)");
-      return null;
-    }
+    if (!raw) return null;
 
     let json;
     try {
       json = typeof raw === "string" ? JSON.parse(raw) : raw;
-    } catch (e) {
-      console.log("[VOTV] _parseAbilityDrop: JSON.parse hiba", e);
+    } catch {
       return null;
     }
-    if (!json || json.type !== "Item" || !json.uuid) {
-      console.log("[VOTV] _parseAbilityDrop: nem Item vagy nincs uuid", json ? { type: json.type, hasUuid: !!json.uuid } : "json null");
-      return null;
-    }
+    if (!json || json.type !== "Item" || !json.uuid) return null;
     return json;
   }
 
   _onAbilitySingleDragOver(ev, _slot) {
     const json = this._parseAbilityDrop(ev);
     if (!json) return;
-    console.log("[VOTV] _onAbilitySingleDragOver: highlight");
     ev.preventDefault();
     ev.currentTarget?.classList.add("pc-ability-slot-drag-over");
   }
@@ -1103,7 +1088,6 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
   _onAbilityAreaDragOver(ev, _area) {
     const json = this._parseAbilityDrop(ev);
     if (!json) return;
-    console.log("[VOTV] _onAbilityAreaDragOver: highlight");
     ev.preventDefault();
     ev.currentTarget?.classList.add("pc-ability-area-drag-over");
   }

@@ -931,10 +931,6 @@
 }
 
 /* Fegyverek: weapon slots */
-.votv.pc-sheet .pc-fegyverek {
-  margin-top: 6px;
-}
-
 .votv.pc-sheet .pc-weapon-slots {
   display: flex;
   flex-direction: column;
