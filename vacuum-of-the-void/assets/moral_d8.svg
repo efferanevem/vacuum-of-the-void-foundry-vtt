@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <g fill="none" stroke="#444444" stroke-width="10" stroke-linejoin="round" stroke-linecap="round">
+    <!-- Külső forma -->
+    <polygon points="100,15 180,65 180,135 100,185 20,135 20,65"></polygon>
+    
+    <!-- Felső belső él -->
+    <line x1="20" y1="65" x2="180" y2="65"></line>
+    
+    <!-- Alsó csúcsba futó élek -->
+    <line x1="20" y1="65" x2="100" y2="185"></line>
+    <line x1="180" y1="65" x2="100" y2="185"></line>
+  </g>
+</svg>

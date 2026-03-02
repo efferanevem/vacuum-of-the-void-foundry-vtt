@@ -65,7 +65,11 @@ export class BaseActorDataModel extends foundry.abstract.TypeDataModel {
       }),
       combat: new SchemaField({
         defense: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
-        speed: new NumberField({ required: false, integer: true, min: 0, initial: 0 })
+        defenseBonus: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
+        givenProtection: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
+        speed: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
+        speedBonus: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
+        givenSpeed: new NumberField({ required: false, integer: true, min: 0, initial: 0 })
       }),
       skills: new SchemaField({
         deception: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),

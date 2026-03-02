@@ -114,6 +114,8 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
     context = context ?? {};
     context.actor = context.actor ?? this.actor;
     context.system = this.actor.system;
+    const stressVal = Number(this.actor.system?.resources?.stress?.value) || 0;
+    context.stressOver10 = stressVal > 10;
     const res = this.actor.system.resources ?? {};
     const hitLoc = res.hitLocations ?? {};
     const curHealth = res.currentHealth ?? {};
@@ -304,6 +306,17 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
     $(document).off("click.votv-weapon-dropdown");
     $(document).off("click.votv-microchip-dropdown");
     if (!this.isEditable) return;
+
+    // Stressz > 10 esetén a textbox piros hátteret kap
+    const updateStressHighlight = (ev) => {
+      const input = ev ? ev.currentTarget : root.querySelector?.('input[name="system.resources.stress.value"]');
+      if (!input) return;
+      const val = Number(input.value) || 0;
+      input.classList.toggle("pc-stress-over-10", val > 10);
+    };
+    $html.on("input change", "input[name=\"system.resources.stress.value\"]", updateStressHighlight);
+    const stressInput = root.querySelector?.('input[name="system.resources.stress.value"]');
+    if (stressInput) updateStressHighlight({ currentTarget: stressInput });
 
     // Karakterkép: kattintásra Foundry fájlkezelő (FilePicker) megnyitása
     $html.on("click", ".pc-portrait-img", (ev) => {

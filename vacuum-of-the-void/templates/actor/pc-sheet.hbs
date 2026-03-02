@@ -135,26 +135,44 @@
         <img class="pc-portrait-img" src="{{actor.img}}" data-edit="img" alt="{{actor.name}}" title="{{actor.name}}" />
       </section>
       <section class="pc-panel pc-resources">
-        <h2>Erőforrások</h2>
-        <div class="pc-resource">
-          <label>Életerő</label>
-          <input type="number" name="system.resources.health.value" value="{{system.resources.health.value}}" />
-          <span>/</span>
-          <input type="number" name="system.resources.health.max" value="{{system.resources.health.max}}" />
-        </div>
-        <div class="pc-resource">
-          <label>Stressz</label>
-          <input type="number" name="system.resources.stress.value" value="{{system.resources.stress.value}}" />
-          <span>/</span>
-          <input type="number" name="system.resources.stress.max" value="{{system.resources.stress.max}}" />
-        </div>
-        <div class="pc-resource">
+        <div class="pc-resource pc-resource-money">
           <label>Pénz</label>
-          <input type="number" name="system.resources.money" value="{{system.resources.money}}" />
+          <input type="number" name="system.resources.money" value="{{system.resources.money}}" class="pc-resource-input-money" />
+          <span class="pc-resource-suffix">cr</span>
         </div>
-        <div class="pc-resource">
-          <label>Morál</label>
-          <input type="number" name="system.resources.morale" value="{{system.resources.morale}}" />
+        <div class="pc-resources-row">
+          <div class="pc-resource pc-resource-stress" data-stress-value="{{system.resources.stress.value}}">
+            <label>Stressz</label>
+            <input type="number" name="system.resources.stress.value" value="{{system.resources.stress.value}}" class="{{#if stressOver10}}pc-stress-over-10{{/if}}" />
+          </div>
+          <div class="pc-resource pc-resource-morale">
+            <label>Morál</label>
+            <input type="number" name="system.resources.morale" value="{{system.resources.morale}}" />
+            <span class="pc-resource-suffix pc-resource-morale-suffix"><span>db</span> &nbsp;<img class="pc-resource-d8-icon" src="systems/vacuum-of-the-void/assets/moral_d8.svg" alt="d8" /></span>
+          </div>
+        </div>
+        <div class="pc-resource pc-resource-defense pc-resource-triple">
+          <label>Védelem</label>
+          <input type="number" name="system.combat.defense" value="{{system.combat.defense}}" min="0" />
+          <span class="pc-resource-plus">+</span>
+          <input type="number" name="system.combat.defenseBonus" value="{{system.combat.defenseBonus}}" min="0" />
+          <span class="pc-resource-plus">+</span>
+          <input type="number" name="system.combat.givenProtection" value="{{system.combat.givenProtection}}" min="0" disabled />
+        </div>
+        <div class="pc-resource pc-resource-speed pc-resource-triple">
+          <label>Sebesség</label>
+          <input type="number" name="system.combat.speed" value="{{system.combat.speed}}" min="0" />
+          <span class="pc-resource-plus">+</span>
+          <input type="number" name="system.combat.speedBonus" value="{{system.combat.speedBonus}}" min="0" />
+          <span class="pc-resource-plus">+</span>
+          <input type="number" name="system.combat.givenSpeed" value="{{system.combat.givenSpeed}}" min="0" disabled />
+          <span class="pc-resource-speed-unit">m</span>
+        </div>
+        <div class="pc-resource-triple-sublabels">
+          <span class="pc-resource-triple-sublabels-spacer"></span>
+          <span class="pc-resource-triple-sublabels-cell">Alap</span>
+          <span class="pc-resource-triple-sublabels-cell">Ideiglenes</span>
+          <span class="pc-resource-triple-sublabels-cell">Kapott</span>
         </div>
       </section>
 
@@ -191,19 +209,6 @@
             <div class="pc-skill"><label class="pc-skill-label" data-skill="luck">Szerencse</label><input type="number" name="system.skills.luck" value="{{system.skills.luck}}" min="-99" max="999" /></div>
             <div class="pc-skill"><label class="pc-skill-label" data-skill="technicalKnowledge">Technikai tudás</label><input type="number" name="system.skills.technicalKnowledge" value="{{system.skills.technicalKnowledge}}" min="-99" max="999" /></div>
             <div class="pc-skill"><label class="pc-skill-label" data-skill="music">Zene</label><input type="number" name="system.skills.music" value="{{system.skills.music}}" min="-99" max="999" /></div>
-          </div>
-        </div>
-      </section>
-
-      <section class="pc-panel pc-combat">
-        <div class="pc-defense-speed">
-          <div>
-            <label>Védelem</label>
-            <input type="number" name="system.combat.defense" value="{{system.combat.defense}}" />
-          </div>
-          <div>
-            <label>Sebesség</label>
-            <input type="number" name="system.combat.speed" value="{{system.combat.speed}}" />
           </div>
         </div>
       </section>
