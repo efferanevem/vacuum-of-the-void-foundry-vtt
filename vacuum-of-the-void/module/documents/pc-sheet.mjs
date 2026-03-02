@@ -64,6 +64,8 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
       if (scrollElBefore) saved.scrollTop = scrollElBefore.scrollTop;
     }
     const out = await super.render(force, options);
+    requestAnimationFrame(() => this._writeEffectiveGivenSpeed());
+    setTimeout(() => this._writeEffectiveGivenSpeed(), 150);
     const rootAfter = this.form ?? this.element;
     const scrollTopToRestore = saved.scrollTop;
     const focusToRestore = saved.focus;
@@ -109,11 +111,50 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
     return 3;
   }
 
+  /** Skill key → body part; used for health-based UI and roll penalties. */
+  static BODY_PART_BY_SKILL = {
+    deception: "head", medicalCare: "head", perception: "head", cooking: "head", quickThinking: "head",
+    combatTraining: "head", mentalStrength: "head", intimidation: "head", persuasion: "head", memory: "head",
+    languages: "head", luck: "head", technicalKnowledge: "head", lexicalKnowledge: "head", music: "head",
+    endurance: "torso", firearms: "torso",
+    vehicleOperation: "arms", grenadeUse: "arms",
+    stealth: "legs"
+  };
+
+  /** Kapott sebesség kijelzés: lábak állapotától 0 / -6 (kritikus) / -3 (sérült) / tárolt givenSpeed. Nincs kivonás. */
+  _writeEffectiveGivenSpeed(scope = null) {
+    const root = scope ?? this.form ?? this.element;
+    let span = root?.querySelector?.(".pc-given-speed-effective");
+    if (!span && this.id) span = document.querySelector(`#${CSS.escape(this.id)} .pc-given-speed-effective`);
+    if (!span) return;
+    const res = this.actor?.system?.resources ?? {};
+    const legsTotal = res.hitLocations?.legs?.value ?? 0;
+    const legsCurrent = res.currentHealth?.legs ?? 0;
+    const legsStatus = VoidPcSheet._healthStatusFromRatio(legsCurrent, legsTotal);
+    const raw = Number(this.actor?.system?.combat?.givenSpeed ?? 0) || 0;
+    let effective;
+    if (legsStatus === 0) effective = 0;
+    else if (legsStatus === 1) effective = -6;
+    else if (legsStatus === 2) effective = -3;
+    else effective = raw;
+    span.textContent = String(effective);
+  }
+
+  /** Return health status 0–3 for the body part linked to this skill, or undefined if not linked. */
+  _getSkillHealthStatus(skillKey) {
+    const part = VoidPcSheet.BODY_PART_BY_SKILL[skillKey];
+    if (part == null) return undefined;
+    const res = this.actor.system?.resources ?? {};
+    const total = res.hitLocations?.[part]?.value ?? 0;
+    const current = res.currentHealth?.[part] ?? 0;
+    return VoidPcSheet._healthStatusFromRatio(current, total);
+  }
+
   async _prepareContext(options) {
     let context = await super._prepareContext(options);
     context = context ?? {};
     context.actor = context.actor ?? this.actor;
-    context.system = this.actor.system;
+    context.system = context.system ?? this.actor.system;
     const stressVal = Number(this.actor.system?.resources?.stress?.value) || 0;
     context.stressOver10 = stressVal > 10;
     const res = this.actor.system.resources ?? {};
@@ -125,6 +166,29 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
       const total = hitLoc[part]?.value ?? 0;
       const current = curHealth[part] ?? 0;
       context.computedHealthStatus[part] = VoidPcSheet._healthStatusFromRatio(current, total);
+    }
+    const legsStatus = context.computedHealthStatus.legs ?? 3;
+    const rawGivenSpeed = Number(this.actor.system?.combat?.givenSpeed ?? 0) || 0;
+    let effectiveGivenSpeed;
+    if (legsStatus === 0) effectiveGivenSpeed = 0;
+    else if (legsStatus === 1) effectiveGivenSpeed = -6;   // kritikus
+    else if (legsStatus === 2) effectiveGivenSpeed = -3;   // sérült
+    else effectiveGivenSpeed = rawGivenSpeed;
+    context.effectiveGivenSpeed = effectiveGivenSpeed;
+    context.system = foundry.utils.mergeObject(
+      foundry.utils.duplicate(this.actor.system),
+      { combat: { givenSpeed: effectiveGivenSpeed } },
+      { inplace: false }
+    );
+    const BODY_PART_BY_SKILL = VoidPcSheet.BODY_PART_BY_SKILL;
+    context.skillHealthStatus = {};
+    context.skillDisabled = {};
+    context.skillHasHealthTint = {};
+    for (const [skill, part] of Object.entries(BODY_PART_BY_SKILL)) {
+      const status = context.computedHealthStatus[part];
+      context.skillHealthStatus[skill] = status;
+      context.skillDisabled[skill] = status === 0 ? " disabled" : "";
+      context.skillHasHealthTint[skill] = true;
     }
     const weapons = this.actor.system.weapons ?? {};
     const ALL_WEAPON_SLOTS = ["slot1", "slot2", "slot3", "slot4", "slot5", "slot6", "slot7", "slot8", "slot9", "slot10"];
@@ -317,6 +381,11 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
     $html.on("input change", "input[name=\"system.resources.stress.value\"]", updateStressHighlight);
     const stressInput = root.querySelector?.('input[name="system.resources.stress.value"]');
     if (stressInput) updateStressHighlight({ currentTarget: stressInput });
+
+    this._writeEffectiveGivenSpeed(html);
+    this._writeEffectiveGivenSpeed(root);
+    requestAnimationFrame(() => this._writeEffectiveGivenSpeed());
+    setTimeout(() => this._writeEffectiveGivenSpeed(), 100);
 
     // Karakterkép: kattintásra Foundry fájlkezelő (FilePicker) megnyitása
     $html.on("click", ".pc-portrait-img", (ev) => {
@@ -644,7 +713,12 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
       if (!form) return;
       const updateData = sheet._getFormDataForUpdate(form);
       if (Object.keys(updateData).length === 0) return;
-      sheet.actor.update(updateData).catch(err => console.warn("VoidPcSheet save failed", err));
+      const touchesHealth =
+        updateData.system?.resources?.currentHealth != null ||
+        updateData.system?.resources?.hitLocations != null;
+      sheet.actor.update(updateData).then(() => {
+        if (touchesHealth) setTimeout(() => sheet.render(true), 260);
+      }).catch(err => console.warn("VoidPcSheet save failed", err));
     };
     const isOurForm = (form) =>
       form && (sheet.element?.contains?.(form) || (sheet.id && form.closest?.(`#${CSS.escape(sheet.id)}`)));
@@ -1052,7 +1126,10 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
   async _rollSkill(skillKey, label) {
     const skills = this.actor.system.skills ?? {};
     const valueRaw = skills[skillKey] ?? 0;
-    const value = Number(valueRaw) || 0;
+    let value = Number(valueRaw) || 0;
+    const healthStatus = this._getSkillHealthStatus(skillKey);
+    if (healthStatus === 1) value -= 6;
+    else if (healthStatus === 2) value -= 3;
     const modifier = value !== 0 ? (value > 0 ? `+${value}` : `${value}`) : "";
     const formula = `3d6${modifier}`;
 
