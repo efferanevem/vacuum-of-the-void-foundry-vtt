@@ -655,21 +655,26 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
       el.addEventListener("drop", ev => this._onMicrochipSlotDrop(ev, slot));
     });
 
-    // Képességek: make areas explicit HTML5 drop targets (visual highlight only;
-    // actual item wiring is handled in _onDropItem).
+    // Képességek: dragover/dragleave csak vizuális; a droppot a Foundry _onDropItem kezeli (ugyanúgy mint inventory).
     $html.find(".pc-ability-slot-single").each((i, el) => {
       const slot = el.dataset.slot;
       if (!slot) return;
       el.addEventListener("dragover", ev => this._onAbilitySingleDragOver(ev, slot));
       el.addEventListener("dragleave", ev => ev.currentTarget?.classList.remove("pc-ability-slot-drag-over"));
-      el.addEventListener("drop", ev => this._onAbilitySingleDrop(ev, slot));
+      el.addEventListener("drop", ev => {
+        console.log("[VOTV] ability slot drop (single)", slot);
+        ev.currentTarget?.classList.remove("pc-ability-slot-drag-over");
+      });
     });
     $html.find(".pc-ability-area").each((i, el) => {
       const area = el.dataset.area;
       if (!area) return;
       el.addEventListener("dragover", ev => this._onAbilityAreaDragOver(ev, area));
       el.addEventListener("dragleave", ev => ev.currentTarget?.classList.remove("pc-ability-area-drag-over"));
-      el.addEventListener("drop", ev => this._onAbilityAreaDrop(ev, area));
+      el.addEventListener("drop", ev => {
+        console.log("[VOTV] ability area drop", area);
+        ev.currentTarget?.classList.remove("pc-ability-area-drag-over");
+      });
     });
 
     // Képességek: clear and remove buttons (delegated)
@@ -800,67 +805,95 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
     const slotEl = target?.closest?.(".pc-ability-slot-single");
     const areaEl = target?.closest?.(".pc-ability-area");
 
-    // If this drop is not over the abilities grid, use default behavior.
-    if (!slotEl && !areaEl) return super._onDropItem(event, data);
+    console.log("[VOTV] _onDropItem", {
+      targetTag: target?.tagName,
+      targetClass: target?.className,
+      slotEl: !!slotEl,
+      areaEl: !!areaEl,
+      dataKeys: data ? Object.keys(data) : null,
+      dataType: data?.type,
+      dataUuid: data?.uuid,
+      dataDocumentUuid: data?.documentUuid
+    });
 
-    // Only handle Item drops ourselves in the abilities grid.
-    if (!data || data.type !== "Item") return;
+    // Ability grid: ugyanúgy a Foundry által átadott data-val kezeljük, mint az inventory (nem dataTransfer).
+    if (slotEl || areaEl) {
+      console.log("[VOTV] _onDropItem: drop az ability gridre");
+      if (!data) {
+        console.log("[VOTV] _onDropItem: nincs data objektum, super");
+        return super._onDropItem(event, data);
+      }
 
-    const uuid = data.uuid ?? data.data?.uuid;
-    if (!uuid) return;
+      // Foundry verziónként eltérhet a drag data formátuma, ezért nem csak data.type-re támaszkodunk.
+      let uuid =
+        data.uuid ??
+        data.documentUuid ??
+        data.data?.uuid ??
+        (typeof data === "string" ? data : null);
 
-    const doc = await fromUuid(uuid);
-    if (!doc || doc.documentName !== "Item" || doc.type !== "ability") return;
+      if (!uuid && typeof data === "object") {
+        // Próbáljuk meg végső fallbackként kinyerni az első string mezőt, ami UUID-nek tűnik.
+        for (const [k, v] of Object.entries(data)) {
+          if (typeof v === "string" && v.includes(".") && v.startsWith("Item.")) {
+            uuid = v;
+            console.log("[VOTV] _onDropItem: uuid fallback mezőből", k, uuid);
+            break;
+          }
+        }
+      }
 
-    const kind = (doc.system?.kind ?? "passive").toString();
+      if (!uuid) {
+        console.log("[VOTV] _onDropItem: nincs uuid a data-ban (nem tudok mit kezdeni vele)", data);
+        return super._onDropItem(event, data);
+      }
 
-    // Ensure the ability exists on this actor.
-    let itemId = doc.id;
-    if (doc.parent?.id !== this.actor.id) {
-      const created = await this.actor.createEmbeddedDocuments("Item", [doc.toObject()]);
-      itemId = created[0]?.id ?? itemId;
+      console.log("[VOTV] _onDropItem: fromUuid", uuid);
+      const doc = await fromUuid(uuid);
+      console.log("[VOTV] _onDropItem: doc", doc?.documentName, doc?.type, doc?.name);
+      if (!doc || doc.documentName !== "Item" || doc.type !== "ability") {
+        console.log("[VOTV] _onDropItem: nem ability item, super");
+        return super._onDropItem(event, data);
+      }
+
+      let itemId = doc.id;
+      if (doc.parent?.id !== this.actor.id) {
+        console.log("[VOTV] _onDropItem: createEmbedded Item");
+        const created = await this.actor.createEmbeddedDocuments("Item", [doc.toObject()]);
+        itemId = created[0]?.id ?? itemId;
+      }
+      const abilities = this.actor.system.abilities ?? {};
+
+      if (slotEl) {
+        const slot = slotEl.dataset.slot;
+        console.log("[VOTV] _onDropItem: single slot", slot, "itemId", itemId);
+        if (slot) {
+          await this.actor.update({
+            [`system.abilities.${slot}.itemId`]: itemId,
+            [`system.abilities.${slot}.name`]: doc.name
+          });
+          console.log("[VOTV] _onDropItem: slot update kész");
+        }
+        return;
+      }
+      if (areaEl) {
+        const area = areaEl.dataset.area;
+        const current = Array.isArray(abilities[area]?.items)
+          ? abilities[area].items.slice()
+          : Array.isArray(abilities[area])
+          ? abilities[area].slice()
+          : [];
+        if (!current.includes(itemId)) current.push(itemId);
+        console.log("[VOTV] _onDropItem: area", area, "items", current);
+        if (area) {
+          await this.actor.update({ [`system.abilities.${area}.items`]: current });
+          console.log("[VOTV] _onDropItem: area update kész");
+        }
+        return;
+      }
     }
 
-    const abilities = this.actor.system.abilities ?? {};
-
-    if (slotEl) {
-      const slot = slotEl.dataset.slot;
-      if (!slot) return;
-
-      const singleKindMap = {
-        faji: "species",
-        hatter: "background"
-      };
-      const expectedKind = singleKindMap[slot];
-      if (!expectedKind || kind !== expectedKind) return;
-
-      await this.actor.update({
-        [`system.abilities.${slot}.itemId`]: itemId,
-        [`system.abilities.${slot}.name`]: doc.name
-      });
-      return;
-    }
-
-    if (areaEl) {
-      const area = areaEl.dataset.area;
-      if (!area) return;
-
-      const areaKindMap = {
-        passive: "passive",
-        active: "active"
-      };
-      const expectedKindArea = areaKindMap[area];
-      if (!expectedKindArea || kind !== expectedKindArea) return;
-
-      const current = Array.isArray(abilities[area]?.items)
-        ? abilities[area].items.slice()
-        : Array.isArray(abilities[area])
-        ? abilities[area].slice()
-        : [];
-      if (!current.includes(itemId)) current.push(itemId);
-      await this.actor.update({ [`system.abilities.${area}.items`]: current });
-      return;
-    }
+    console.log("[VOTV] _onDropItem: nem ability grid, super");
+    return super._onDropItem(event, data);
   }
 
   _onWeaponSlotDragOver(ev, slot) {
@@ -1016,36 +1049,34 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
   }
 
   _parseAbilityDrop(ev) {
+    // Inventory / microchip mintájára: a dataTransfer-ben lévő JSON drag adatot olvassuk ki.
     const raw =
       ev.dataTransfer?.getData("text/plain") ||
       ev.dataTransfer?.getData("application/json") ||
       "";
-    if (!raw) return null;
-
-    // Foundry usually sends JSON for Items, but in some contexts it may be a bare UUID string.
-    if (typeof raw === "string") {
-      const trimmed = raw.trim();
-      // If this looks like a UUID, accept it directly.
-      if (trimmed.includes(".") && !trimmed.startsWith("{")) {
-        return { uuid: trimmed };
-      }
-      try {
-        const json = JSON.parse(trimmed);
-        if (json?.uuid) return json;
-        if (json?.data?.uuid) return { uuid: json.data.uuid };
-        return null;
-      } catch {
-        console.warn("VOTV | _parseAbilityDrop: could not parse drag data string", raw);
-        return null;
-      }
+    if (!raw) {
+      console.log("[VOTV] _parseAbilityDrop: nincs raw data a dataTransfer-ben (dragover/drop alatt)");
+      return null;
     }
 
-    if (raw?.uuid) return raw;
-    if (raw?.data?.uuid) return { uuid: raw.data.uuid };
-    return null;
+    let json;
+    try {
+      json = typeof raw === "string" ? JSON.parse(raw) : raw;
+    } catch (e) {
+      console.log("[VOTV] _parseAbilityDrop: JSON.parse hiba", e);
+      return null;
+    }
+    if (!json || json.type !== "Item" || !json.uuid) {
+      console.log("[VOTV] _parseAbilityDrop: nem Item vagy nincs uuid", json ? { type: json.type, hasUuid: !!json.uuid } : "json null");
+      return null;
+    }
+    return json;
   }
 
   _onAbilitySingleDragOver(ev, _slot) {
+    const json = this._parseAbilityDrop(ev);
+    if (!json) return;
+    console.log("[VOTV] _onAbilitySingleDragOver: highlight");
     ev.preventDefault();
     ev.currentTarget?.classList.add("pc-ability-slot-drag-over");
   }
@@ -1054,17 +1085,9 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
     ev.preventDefault();
     ev.currentTarget?.classList.remove("pc-ability-slot-drag-over");
     const json = this._parseAbilityDrop(ev);
-    if (!json) return;
+    if (!json || !json.uuid) return;
     const doc = await fromUuid(json.uuid);
     if (!doc || doc.type !== "ability") return;
-
-    const kind = (doc.system?.kind ?? "passive").toString();
-    const allowedSingle = {
-      faji: "species",
-      hatter: "background"
-    };
-    const expectedKind = allowedSingle[slot];
-    if (!expectedKind || kind !== expectedKind) return;
 
     let itemId = doc.id;
     if (doc.parent?.id !== this.actor.id) {
@@ -1078,6 +1101,9 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
   }
 
   _onAbilityAreaDragOver(ev, _area) {
+    const json = this._parseAbilityDrop(ev);
+    if (!json) return;
+    console.log("[VOTV] _onAbilityAreaDragOver: highlight");
     ev.preventDefault();
     ev.currentTarget?.classList.add("pc-ability-area-drag-over");
   }
@@ -1086,17 +1112,9 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
     ev.preventDefault();
     ev.currentTarget?.classList.remove("pc-ability-area-drag-over");
     const json = this._parseAbilityDrop(ev);
-    if (!json) return;
+    if (!json || !json.uuid) return;
     const doc = await fromUuid(json.uuid);
     if (!doc || doc.type !== "ability") return;
-
-    const kind = (doc.system?.kind ?? "passive").toString();
-    const allowedArea = {
-      passive: "passive",
-      active: "active"
-    };
-    const expectedKind = allowedArea[area];
-    if (!expectedKind || kind !== expectedKind) return;
 
     let itemId = doc.id;
     if (doc.parent?.id !== this.actor.id) {

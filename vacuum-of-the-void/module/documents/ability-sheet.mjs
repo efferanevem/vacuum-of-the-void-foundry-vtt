@@ -45,7 +45,11 @@ export class VoidAbilitySheet extends foundry.applications.api.HandlebarsApplica
       doSubmit(form);
     };
     sheet._votvInput = (ev) => {
-      const form = ev.target?.form ?? ev.target?.closest?.("form");
+      const target = ev.target;
+      // Ne autosave-eljünk gépelés közben a név mezőn; így elkerüljük,
+      // hogy a név input értéke \"eltűnjön\" egy újrarender után.
+      if (target?.name === "name") return;
+      const form = target?.form ?? target?.closest?.("form");
       if (!isOurForm(form)) return;
       clearTimeout(sheet._votvInputDebounce);
       sheet._votvInputDebounce = setTimeout(() => doSubmit(form), 300);
@@ -70,6 +74,10 @@ export class VoidAbilitySheet extends foundry.applications.api.HandlebarsApplica
       if (el.type === "checkbox") value = el.checked;
       else if (el.type === "number") value = el.value === "" ? 0 : Number(el.value);
       else value = el.value ?? "";
+      // Do not actively overwrite the Item name with an empty string; let Foundry keep
+      // its existing default name instead. This avoids validation errors when the user
+      // changes the ability type before naming the item.
+      if (el.name === "name" && typeof value === "string" && value.trim() === "") continue;
       foundry.utils.setProperty(updateData, el.name, value);
     }
     return updateData;
@@ -78,6 +86,7 @@ export class VoidAbilitySheet extends foundry.applications.api.HandlebarsApplica
   async _prepareContext(options) {
     let context = await super._prepareContext(options);
     context = context ?? {};
+    context.item = this.item;
     context.system = this.item.system;
     return context;
   }
