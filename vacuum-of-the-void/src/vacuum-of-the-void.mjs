@@ -63,7 +63,10 @@ Hooks.once("init", () => {
     label: "Void Ability"
   });
 
-  // Ha egy actort frissítenek, a többi nyitott karakterlapja újrarajzolódjon. Ne újrarajzoljunk, ha bármelyik lapon input/textarea van fókuszban (kurzor + görgetés maradjon).
+  // Ha egy actort frissítenek, a nyitott VoidPcSheet lapok újrarajzolódjanak. Ne újrarajzoljunk, ha
+  // bármelyik lapon input/textarea van fókuszban (kurzor + görgetés maradjon), és ne a lapot, ami
+  // épp mentett (blur save), hogy ne tekerjen fel.
+  const UPDATE_ACTOR_SKIP_RENDER_MS = 500;
   Hooks.on("updateActor", (actor, _changed, _options, _userId) => {
     const actorId = actor?.id;
     if (!actorId) return;
@@ -87,7 +90,7 @@ Hooks.once("init", () => {
     });
     if (anySheetHasFocusedInput) return;
     const lastBlur = game.votv?._lastPcSheetBlurSave;
-    const skipRenderAppId = lastBlur && (Date.now() - lastBlur.at) < 250 ? lastBlur.appId : null;
+    const skipRenderAppId = lastBlur && (Date.now() - lastBlur.at) < UPDATE_ACTOR_SKIP_RENDER_MS ? lastBlur.appId : null;
     setTimeout(() => {
       for (const app of appsToConsider) {
         if (!app?.rendered || typeof app.render !== "function") continue;

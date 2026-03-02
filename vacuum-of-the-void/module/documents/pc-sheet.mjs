@@ -11,7 +11,7 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
     width: 1000,
     minWidth: 1000,
     height: 800,
-    form: foundry.utils.mergeObject(super.DEFAULT_OPTIONS?.form ?? {}, { submitOnChange: true }),
+    form: foundry.utils.mergeObject(super.DEFAULT_OPTIONS?.form ?? {}, { submitOnChange: false }),
     window: foundry.utils.mergeObject(super.DEFAULT_OPTIONS?.window ?? {}, {
       resizable: true,
       contentClasses: [
@@ -35,15 +35,47 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
     return this.document;
   }
 
-  /** Mentjük a görgetést és a fókuszt render előtt, visszaállítjuk utána (ne dobja vissza a kurzort / lap tetejére). */
+  /** A lap fő görgethető tartója: form (.votv.pc-sheet) vagy .votv-scroll / .window-content. */
+  _getScrollContainers(root) {
+    if (!root) return { form: null, windowContent: null };
+    const form = root.querySelector?.("form.votv.pc-sheet") ?? root.querySelector?.("form.votv") ?? null;
+    const windowContent = root.querySelector?.(".votv-scroll") ?? root.querySelector?.(".window-content") ?? null;
+    return { form, windowContent };
+  }
+
+  /** Minden jelenleg görgethető elem scrollTop-ját összegyűjti (form + ablak tartalom). */
+  _saveScrollState(root) {
+    const { form, windowContent } = this._getScrollContainers(root);
+    const state = {};
+    if (form && form.scrollHeight > form.clientHeight && typeof form.scrollTop === "number") {
+      state.formScrollTop = form.scrollTop;
+    }
+    if (windowContent && windowContent.scrollHeight > windowContent.clientHeight && typeof windowContent.scrollTop === "number") {
+      state.windowScrollTop = windowContent.scrollTop;
+    }
+    return state;
+  }
+
+  /** Visszaállítja a mentett scroll pozíciókat. */
+  _applyScrollState(root, state) {
+    if (!root || !state) return;
+    const { form, windowContent } = this._getScrollContainers(root);
+    if (typeof state.formScrollTop === "number" && form) form.scrollTop = state.formScrollTop;
+    if (typeof state.windowScrollTop === "number" && windowContent) windowContent.scrollTop = state.windowScrollTop;
+  }
+
+  /** Mentjük a görgetést és a fókuszt render előtt, visszaállítjuk utána (ne dobja vissza a lap tetejére). */
   async render(force = false, options = {}) {
     const lastBlur = game.votv?._lastPcSheetBlurSave;
-    if (lastBlur?.appId === this.id && (Date.now() - lastBlur.at) < 250) return this;
-    const rootBefore = this.form ?? this.element;
-    let saved = { scrollTop: null, focus: null };
+    const skipRenderMs = 200;
+    if (lastBlur?.appId === this.id && (Date.now() - lastBlur.at) < skipRenderMs) return this;
+    const rootBefore = this.element;
+    const formBefore = this.form ?? this.element;
+    let saved = { scrollState: {}, focus: null };
     if (rootBefore) {
+      saved.scrollState = this._saveScrollState(rootBefore);
       const activeEl = document.activeElement;
-      const isOurs = rootBefore.contains(activeEl);
+      const isOurs = formBefore.contains(activeEl);
       const isInputLike = activeEl && (
         (activeEl.tagName === "INPUT" && activeEl.type !== "checkbox" && activeEl.type !== "radio") ||
         activeEl.tagName === "TEXTAREA"
@@ -56,42 +88,38 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
           selectionEnd: "selectionEnd" in activeEl ? activeEl.selectionEnd : 0
         };
       }
-      const scrollElBefore =
-        rootBefore.closest?.(".votv-scroll") ??
-        rootBefore.querySelector?.(".votv-scroll") ??
-        this.element?.querySelector?.(".votv-scroll") ??
-        (rootBefore.scrollHeight > rootBefore.clientHeight ? rootBefore : null);
-      if (scrollElBefore) saved.scrollTop = scrollElBefore.scrollTop;
     }
     const out = await super.render(force, options);
     requestAnimationFrame(() => this._writeEffectiveGivenSpeed());
     setTimeout(() => this._writeEffectiveGivenSpeed(), 150);
-    const rootAfter = this.form ?? this.element;
-    const scrollTopToRestore = saved.scrollTop;
+    const rootAfter = this.element;
+    const formAfter = this.form ?? this.element;
+    const scrollState = saved.scrollState;
     const focusToRestore = saved.focus;
-    if ((scrollTopToRestore != null || focusToRestore) && rootAfter) {
-      requestAnimationFrame(() => {
-        if (scrollTopToRestore != null) {
-          const scrollElAfter =
-            rootAfter.closest?.(".votv-scroll") ??
-            rootAfter.querySelector?.(".votv-scroll") ??
-            this.element?.querySelector?.(".votv-scroll") ??
-            (rootAfter.scrollHeight > rootAfter.clientHeight ? rootAfter : null);
-          if (scrollElAfter) scrollElAfter.scrollTop = scrollTopToRestore;
-        }
-        if (focusToRestore?.name != null || focusToRestore?.id != null) {
-          const el =
-            rootAfter.querySelector?.(focusToRestore.id ? `#${CSS.escape(focusToRestore.id)}` : null) ??
-            (focusToRestore.name ? rootAfter.querySelector?.(`[name="${CSS.escape(focusToRestore.name)}"]`) : null);
-          if (el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA")) {
-            el.focus();
-            if (typeof el.selectionStart === "number") {
-              el.selectionStart = focusToRestore.selectionStart ?? 0;
-              el.selectionEnd = focusToRestore.selectionEnd ?? focusToRestore.selectionStart ?? 0;
-            }
+    const hasScrollState = typeof scrollState?.formScrollTop === "number" || typeof scrollState?.windowScrollTop === "number";
+    const restoreScrollAndFocus = () => {
+      this._applyScrollState(rootAfter, scrollState);
+      if (focusToRestore?.name != null || focusToRestore?.id != null) {
+        const el =
+          formAfter.querySelector?.(focusToRestore.id ? `#${CSS.escape(focusToRestore.id)}` : null) ??
+          (focusToRestore.name ? formAfter.querySelector?.(`[name="${CSS.escape(focusToRestore.name)}"]`) : null);
+        if (el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA")) {
+          el.focus({ preventScroll: true });
+          if (typeof el.selectionStart === "number") {
+            el.selectionStart = focusToRestore.selectionStart ?? 0;
+            el.selectionEnd = focusToRestore.selectionEnd ?? focusToRestore.selectionStart ?? 0;
           }
         }
-      });
+      }
+      this._applyScrollState(rootAfter, scrollState);
+    };
+    if (hasScrollState || focusToRestore) {
+      requestAnimationFrame(restoreScrollAndFocus);
+      setTimeout(restoreScrollAndFocus, 0);
+      setTimeout(restoreScrollAndFocus, 50);
+      setTimeout(restoreScrollAndFocus, 150);
+      setTimeout(restoreScrollAndFocus, 300);
+      setTimeout(restoreScrollAndFocus, 450);
     }
     return out;
   }
