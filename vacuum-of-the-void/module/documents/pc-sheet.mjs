@@ -305,6 +305,19 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
     $(document).off("click.votv-microchip-dropdown");
     if (!this.isEditable) return;
 
+    // Karakterkép: kattintásra Foundry fájlkezelő (FilePicker) megnyitása
+    $html.on("click", ".pc-portrait-img", (ev) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+      new FilePicker({
+        type: "image",
+        current: this.actor.img || "",
+        callback: (path) => {
+          if (path) this.actor.update({ img: path });
+        }
+      }).browse();
+    });
+
     // Skill rolls: click on skill label (delegated)
     $html.on("click", ".pc-skill-label", ev => {
       ev.preventDefault();

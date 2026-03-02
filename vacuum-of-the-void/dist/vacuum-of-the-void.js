@@ -1,9 +1,9 @@
 var Ue = Object.defineProperty;
-var je = Object.getPrototypeOf;
-var Pe = Reflect.get;
+var Pe = Object.getPrototypeOf;
+var je = Reflect.get;
 var Re = (_, i, e) => i in _ ? Ue(_, i, { enumerable: !0, configurable: !0, writable: !0, value: e }) : _[i] = e;
-var P = (_, i, e) => Re(_, typeof i != "symbol" ? i + "" : i, e);
-var F = (_, i, e) => Pe(je(_), e, i);
+var j = (_, i, e) => Re(_, typeof i != "symbol" ? i + "" : i, e);
+var F = (_, i, e) => je(Pe(_), e, i);
 const { HTMLField: He, NumberField: h, SchemaField: I, StringField: f, BooleanField: N, ArrayField: qe } = foundry.data.fields;
 class Ke extends foundry.abstract.TypeDataModel {
   static defineSchema() {
@@ -457,7 +457,15 @@ const E = class E extends foundry.applications.api.HandlebarsApplicationMixin(
     super._attachFrameListeners(i);
     const e = this.form ?? this.element, t = $(e);
     if ($(document).off("click.votv-weapon-dropdown"), $(document).off("click.votv-microchip-dropdown"), !this.isEditable) return;
-    t.on("click", ".pc-skill-label", (n) => {
+    t.on("click", ".pc-portrait-img", (n) => {
+      n.preventDefault(), n.stopPropagation(), new FilePicker({
+        type: "image",
+        current: this.actor.img || "",
+        callback: (s) => {
+          s && this.actor.update({ img: s });
+        }
+      }).browse();
+    }), t.on("click", ".pc-skill-label", (n) => {
       var p;
       n.preventDefault();
       const s = n.currentTarget, a = s.dataset.skill, u = ((p = s.textContent) == null ? void 0 : p.trim()) || a;
@@ -938,9 +946,9 @@ const E = class E extends foundry.applications.api.HandlebarsApplicationMixin(
     });
   }
 };
-P(E, "PARTS", foundry.utils.mergeObject(F(E, E, "PARTS") ?? {}, {
+j(E, "PARTS", foundry.utils.mergeObject(F(E, E, "PARTS") ?? {}, {
   content: { template: "systems/vacuum-of-the-void/templates/actor/pc-sheet.hbs" }
-})), P(E, "DEFAULT_OPTIONS", foundry.utils.mergeObject(F(E, E, "DEFAULT_OPTIONS"), {
+})), j(E, "DEFAULT_OPTIONS", foundry.utils.mergeObject(F(E, E, "DEFAULT_OPTIONS"), {
   classes: ["vacuum-of-the-void", "sheet", "actor", "pc"],
   template: "systems/vacuum-of-the-void/templates/actor/pc-sheet.hbs",
   width: 1e3,
@@ -1009,9 +1017,9 @@ const M = class M extends foundry.applications.api.HandlebarsApplicationMixin(
     return e = e ?? {}, e.system = this.item.system, e;
   }
 };
-P(M, "PARTS", foundry.utils.mergeObject(F(M, M, "PARTS") ?? {}, {
+j(M, "PARTS", foundry.utils.mergeObject(F(M, M, "PARTS") ?? {}, {
   content: { template: "systems/vacuum-of-the-void/templates/item/weapon-sheet.hbs" }
-})), P(M, "DEFAULT_OPTIONS", foundry.utils.mergeObject(F(M, M, "DEFAULT_OPTIONS"), {
+})), j(M, "DEFAULT_OPTIONS", foundry.utils.mergeObject(F(M, M, "DEFAULT_OPTIONS"), {
   classes: ["vacuum-of-the-void", "sheet", "item", "weapon"],
   template: "systems/vacuum-of-the-void/templates/item/weapon-sheet.hbs",
   width: 550,
@@ -1073,9 +1081,9 @@ const U = class U extends foundry.applications.api.HandlebarsApplicationMixin(
     return e = e ?? {}, e.system = this.item.system, e;
   }
 };
-P(U, "PARTS", foundry.utils.mergeObject(F(U, U, "PARTS") ?? {}, {
+j(U, "PARTS", foundry.utils.mergeObject(F(U, U, "PARTS") ?? {}, {
   content: { template: "systems/vacuum-of-the-void/templates/item/microchip-sheet.hbs" }
-})), P(U, "DEFAULT_OPTIONS", foundry.utils.mergeObject(F(U, U, "DEFAULT_OPTIONS"), {
+})), j(U, "DEFAULT_OPTIONS", foundry.utils.mergeObject(F(U, U, "DEFAULT_OPTIONS"), {
   classes: ["vacuum-of-the-void", "sheet", "item", "microchip"],
   template: "systems/vacuum-of-the-void/templates/item/microchip-sheet.hbs",
   width: 500,
@@ -1085,7 +1093,7 @@ P(U, "PARTS", foundry.utils.mergeObject(F(U, U, "PARTS") ?? {}, {
 }));
 let Y = U;
 var Fe;
-const j = class j extends foundry.applications.api.HandlebarsApplicationMixin(
+const P = class P extends foundry.applications.api.HandlebarsApplicationMixin(
   foundry.applications.sheets.ItemSheetV2
 ) {
   _initializeApplicationOptions(i) {
@@ -1137,17 +1145,17 @@ const j = class j extends foundry.applications.api.HandlebarsApplicationMixin(
     return e = e ?? {}, e.system = this.item.system, e;
   }
 };
-P(j, "PARTS", foundry.utils.mergeObject(F(j, j, "PARTS") ?? {}, {
+j(P, "PARTS", foundry.utils.mergeObject(F(P, P, "PARTS") ?? {}, {
   content: { template: "systems/vacuum-of-the-void/templates/item/ability-sheet.hbs" }
-})), P(j, "DEFAULT_OPTIONS", foundry.utils.mergeObject(F(j, j, "DEFAULT_OPTIONS"), {
+})), j(P, "DEFAULT_OPTIONS", foundry.utils.mergeObject(F(P, P, "DEFAULT_OPTIONS"), {
   classes: ["vacuum-of-the-void", "sheet", "item", "ability"],
   template: "systems/vacuum-of-the-void/templates/item/ability-sheet.hbs",
   width: 500,
   minWidth: 500,
   height: 420,
-  form: foundry.utils.mergeObject(((Fe = F(j, j, "DEFAULT_OPTIONS")) == null ? void 0 : Fe.form) ?? {}, { submitOnChange: !0 })
+  form: foundry.utils.mergeObject(((Fe = F(P, P, "DEFAULT_OPTIONS")) == null ? void 0 : Fe.form) ?? {}, { submitOnChange: !0 })
 }));
-let Z = j;
+let Z = P;
 const Ye = "systems/vacuum-of-the-void/assets/void-bg.jpg";
 Hooks.once("init", () => {
   var _, i, e, t;
