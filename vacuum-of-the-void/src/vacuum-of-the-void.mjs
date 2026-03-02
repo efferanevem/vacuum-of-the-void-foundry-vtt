@@ -75,7 +75,7 @@ Hooks.once("init", () => {
     );
     const appsToConsider = [];
     const doc = game.actors?.get(actorId);
-    if (doc?.apps) appsToConsider.push(...doc.apps);
+    if (doc?.apps) appsToConsider.push(...Array.from(doc.apps));
     const windows = Object.values(ui?.windows ?? {});
     for (const app of windows) {
       if (app.document?.id !== actorId || app.document?.documentName !== "Actor" || app.constructor?.name !== "VoidPcSheet") continue;
