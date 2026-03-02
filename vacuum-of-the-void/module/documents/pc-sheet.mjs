@@ -340,6 +340,12 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
       this._rollSkill(skillKey, label);
     });
 
+    // Morale d8: click on d8 icon – roll 1d8 (same style as skill), then subtract 1 from morale
+    $html.on("click", ".pc-roll-morale-d8", ev => {
+      ev.preventDefault();
+      this._rollMorale();
+    });
+
     // Inventory: click weapon or item name/icon to open its sheet.
     const openInventoryItem = (target, ev) => {
       const itemId = target.dataset.itemId;
@@ -1060,6 +1066,23 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
       flags: { "vacuum-of-the-void": { resultType } },
       rollMode
     });
+  }
+
+  async _rollMorale() {
+    const current = Number(this.actor.system.resources?.morale ?? 0) || 0;
+    if (current <= 0) return;
+
+    const roll = new Roll("1d8");
+    await roll.evaluate({ async: true });
+    const rollMode = game.settings.get("core", "rollMode") ?? CONST.DICE_ROLL_MODES.PUBLIC;
+    await roll.toMessage({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      flavor: "Morál",
+      flags: { "vacuum-of-the-void": {} },
+      rollMode
+    });
+    const next = Math.max(0, current - 1);
+    await this.actor.update({ "system.resources.morale": next });
   }
 
   async _rollWeapon(slot) {

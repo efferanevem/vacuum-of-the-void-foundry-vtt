@@ -224,6 +224,10 @@
   object-fit: contain;
 }
 
+.votv.pc-sheet .pc-roll-morale-d8 {
+  cursor: pointer;
+}
+
 .votv.pc-sheet .pc-panel.pc-resources {
   padding-left: 6px;
 }
