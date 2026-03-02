@@ -1,212 +1,212 @@
-var je = Object.defineProperty;
-var Ue = Object.getPrototypeOf;
-var Ke = Reflect.get;
-var Pe = (T, i, e) => i in T ? je(T, i, { enumerable: !0, configurable: !0, writable: !0, value: e }) : T[i] = e;
-var j = (T, i, e) => Pe(T, typeof i != "symbol" ? i + "" : i, e);
-var A = (T, i, e) => Ke(Ue(T), e, i);
-const { HTMLField: Re, NumberField: y, SchemaField: v, StringField: f, BooleanField: F, ArrayField: qe } = foundry.data.fields;
-class He extends foundry.abstract.TypeDataModel {
+var Ue = Object.defineProperty;
+var je = Object.getPrototypeOf;
+var Pe = Reflect.get;
+var Re = (_, i, e) => i in _ ? Ue(_, i, { enumerable: !0, configurable: !0, writable: !0, value: e }) : _[i] = e;
+var P = (_, i, e) => Re(_, typeof i != "symbol" ? i + "" : i, e);
+var F = (_, i, e) => Pe(je(_), e, i);
+const { HTMLField: He, NumberField: h, SchemaField: I, StringField: f, BooleanField: N, ArrayField: qe } = foundry.data.fields;
+class Ke extends foundry.abstract.TypeDataModel {
   static defineSchema() {
     return {
-      identity: new v({
+      identity: new I({
         name: new f({ required: !1, blank: !0, initial: "" }),
         player: new f({ required: !1, blank: !0, initial: "" }),
-        level: new y({ required: !1, integer: !0, min: 1, initial: 1 }),
+        level: new h({ required: !1, integer: !0, min: 1, initial: 1 }),
         species: new f({ required: !1, blank: !0, initial: "" }),
         assignment: new f({ required: !1, blank: !0, initial: "" }),
         subAssignment: new f({ required: !1, blank: !0, initial: "" }),
         background: new f({ required: !1, blank: !0, initial: "" }),
         languages: new f({ required: !1, blank: !0, initial: "" })
       }),
-      resources: new v({
-        health: new v({
-          value: new y({ required: !0, integer: !0, min: 0, initial: 0 }),
-          max: new y({ required: !0, integer: !0, min: 0, initial: 0 })
+      resources: new I({
+        health: new I({
+          value: new h({ required: !0, integer: !0, min: 0, initial: 0 }),
+          max: new h({ required: !0, integer: !0, min: 0, initial: 0 })
         }),
-        hitLocations: new v({
-          head: new v({
-            value: new y({ required: !1, integer: !0, min: 0, initial: 0 }),
-            box1: new F({ required: !1, initial: !1 }),
-            box2: new F({ required: !1, initial: !1 }),
-            box3: new F({ required: !1, initial: !1 })
+        hitLocations: new I({
+          head: new I({
+            value: new h({ required: !1, integer: !0, min: 0, initial: 0 }),
+            box1: new N({ required: !1, initial: !1 }),
+            box2: new N({ required: !1, initial: !1 }),
+            box3: new N({ required: !1, initial: !1 })
           }),
-          torso: new v({
-            value: new y({ required: !1, integer: !0, min: 0, initial: 0 }),
-            box1: new F({ required: !1, initial: !1 }),
-            box2: new F({ required: !1, initial: !1 }),
-            box3: new F({ required: !1, initial: !1 })
+          torso: new I({
+            value: new h({ required: !1, integer: !0, min: 0, initial: 0 }),
+            box1: new N({ required: !1, initial: !1 }),
+            box2: new N({ required: !1, initial: !1 }),
+            box3: new N({ required: !1, initial: !1 })
           }),
-          arms: new v({
-            value: new y({ required: !1, integer: !0, min: 0, initial: 0 }),
-            box1: new F({ required: !1, initial: !1 }),
-            box2: new F({ required: !1, initial: !1 }),
-            box3: new F({ required: !1, initial: !1 })
+          arms: new I({
+            value: new h({ required: !1, integer: !0, min: 0, initial: 0 }),
+            box1: new N({ required: !1, initial: !1 }),
+            box2: new N({ required: !1, initial: !1 }),
+            box3: new N({ required: !1, initial: !1 })
           }),
-          legs: new v({
-            value: new y({ required: !1, integer: !0, min: 0, initial: 0 }),
-            box1: new F({ required: !1, initial: !1 }),
-            box2: new F({ required: !1, initial: !1 }),
-            box3: new F({ required: !1, initial: !1 })
+          legs: new I({
+            value: new h({ required: !1, integer: !0, min: 0, initial: 0 }),
+            box1: new N({ required: !1, initial: !1 }),
+            box2: new N({ required: !1, initial: !1 }),
+            box3: new N({ required: !1, initial: !1 })
           })
         }),
-        currentHealth: new v({
-          head: new y({ required: !1, integer: !0, min: 0, initial: 0 }),
-          torso: new y({ required: !1, integer: !0, min: 0, initial: 0 }),
-          arms: new y({ required: !1, integer: !0, min: 0, initial: 0 }),
-          legs: new y({ required: !1, integer: !0, min: 0, initial: 0 })
+        currentHealth: new I({
+          head: new h({ required: !1, integer: !0, min: 0, initial: 0 }),
+          torso: new h({ required: !1, integer: !0, min: 0, initial: 0 }),
+          arms: new h({ required: !1, integer: !0, min: 0, initial: 0 }),
+          legs: new h({ required: !1, integer: !0, min: 0, initial: 0 })
         }),
-        healthStatus: new v({
-          head: new y({ required: !1, integer: !0, min: 0, max: 3, initial: 0 }),
-          torso: new y({ required: !1, integer: !0, min: 0, max: 3, initial: 0 }),
-          arms: new y({ required: !1, integer: !0, min: 0, max: 3, initial: 0 }),
-          legs: new y({ required: !1, integer: !0, min: 0, max: 3, initial: 0 })
+        healthStatus: new I({
+          head: new h({ required: !1, integer: !0, min: 0, max: 3, initial: 0 }),
+          torso: new h({ required: !1, integer: !0, min: 0, max: 3, initial: 0 }),
+          arms: new h({ required: !1, integer: !0, min: 0, max: 3, initial: 0 }),
+          legs: new h({ required: !1, integer: !0, min: 0, max: 3, initial: 0 })
         }),
-        stress: new v({
-          value: new y({ required: !0, integer: !0, min: 0, initial: 0 }),
-          max: new y({ required: !0, integer: !0, min: 0, initial: 0 })
+        stress: new I({
+          value: new h({ required: !0, integer: !0, min: 0, initial: 0 }),
+          max: new h({ required: !0, integer: !0, min: 0, initial: 0 })
         }),
-        money: new y({ required: !1, integer: !0, min: 0, initial: 0 }),
-        morale: new y({ required: !1, integer: !0, min: 0, initial: 0 })
+        money: new h({ required: !1, integer: !0, min: 0, initial: 0 }),
+        morale: new h({ required: !1, integer: !0, min: 0, initial: 0 })
       }),
-      combat: new v({
-        defense: new y({ required: !1, integer: !0, min: 0, initial: 0 }),
-        speed: new y({ required: !1, integer: !0, min: 0, initial: 0 })
+      combat: new I({
+        defense: new h({ required: !1, integer: !0, min: 0, initial: 0 }),
+        speed: new h({ required: !1, integer: !0, min: 0, initial: 0 })
       }),
-      skills: new v({
-        deception: new y({ required: !1, integer: !0, min: 0, initial: 0 }),
-        medicalCare: new y({ required: !1, integer: !0, min: 0, initial: 0 }),
-        endurance: new y({ required: !1, integer: !0, min: 0, initial: 0 }),
-        perception: new y({ required: !1, integer: !0, min: 0, initial: 0 }),
-        cooking: new y({ required: !1, integer: !0, min: 0, initial: 0 }),
-        quickThinking: new y({ required: !1, integer: !0, min: 0, initial: 0 }),
-        combatTraining: new y({ required: !1, integer: !0, min: 0, initial: 0 }),
-        vehicleOperation: new y({ required: !1, integer: !0, min: 0, initial: 0 }),
-        grenadeUse: new y({ required: !1, integer: !0, min: 0, initial: 0 }),
-        lexicalKnowledge: new y({ required: !1, integer: !0, min: 0, initial: 0 }),
-        stealth: new y({ required: !1, integer: !0, min: 0, initial: 0 }),
-        firearms: new y({ required: !1, integer: !0, min: 0, initial: 0 }),
-        intimidation: new y({ required: !1, integer: !0, min: 0, initial: 0 }),
-        persuasion: new y({ required: !1, integer: !0, min: 0, initial: 0 }),
-        memory: new y({ required: !1, integer: !0, min: 0, initial: 0 }),
-        mentalStrength: new y({ required: !1, integer: !0, min: 0, initial: 0 }),
-        luck: new y({ required: !1, integer: !0, min: 0, initial: 0 }),
-        languages: new y({ required: !1, integer: !0, min: 0, initial: 0 }),
-        technicalKnowledge: new y({ required: !1, integer: !0, min: 0, initial: 0 }),
-        music: new y({ required: !1, integer: !0, min: 0, initial: 0 })
+      skills: new I({
+        deception: new h({ required: !1, integer: !0, min: 0, initial: 0 }),
+        medicalCare: new h({ required: !1, integer: !0, min: 0, initial: 0 }),
+        endurance: new h({ required: !1, integer: !0, min: 0, initial: 0 }),
+        perception: new h({ required: !1, integer: !0, min: 0, initial: 0 }),
+        cooking: new h({ required: !1, integer: !0, min: 0, initial: 0 }),
+        quickThinking: new h({ required: !1, integer: !0, min: 0, initial: 0 }),
+        combatTraining: new h({ required: !1, integer: !0, min: 0, initial: 0 }),
+        vehicleOperation: new h({ required: !1, integer: !0, min: 0, initial: 0 }),
+        grenadeUse: new h({ required: !1, integer: !0, min: 0, initial: 0 }),
+        lexicalKnowledge: new h({ required: !1, integer: !0, min: 0, initial: 0 }),
+        stealth: new h({ required: !1, integer: !0, min: 0, initial: 0 }),
+        firearms: new h({ required: !1, integer: !0, min: 0, initial: 0 }),
+        intimidation: new h({ required: !1, integer: !0, min: 0, initial: 0 }),
+        persuasion: new h({ required: !1, integer: !0, min: 0, initial: 0 }),
+        memory: new h({ required: !1, integer: !0, min: 0, initial: 0 }),
+        mentalStrength: new h({ required: !1, integer: !0, min: 0, initial: 0 }),
+        luck: new h({ required: !1, integer: !0, min: 0, initial: 0 }),
+        languages: new h({ required: !1, integer: !0, min: 0, initial: 0 }),
+        technicalKnowledge: new h({ required: !1, integer: !0, min: 0, initial: 0 }),
+        music: new h({ required: !1, integer: !0, min: 0, initial: 0 })
       }),
-      weapons: new v({
+      weapons: new I({
         slotOrder: new f({ required: !1, blank: !0, initial: "slot1" }),
-        slot1: new v({
+        slot1: new I({
           name: new f({ required: !1, blank: !0, initial: "" }),
           bonus: new f({ required: !1, blank: !0, initial: "" }),
           damage: new f({ required: !1, blank: !0, initial: "" }),
           itemId: new f({ required: !1, blank: !0, initial: "" })
         }),
-        slot2: new v({
+        slot2: new I({
           name: new f({ required: !1, blank: !0, initial: "" }),
           bonus: new f({ required: !1, blank: !0, initial: "" }),
           damage: new f({ required: !1, blank: !0, initial: "" }),
           itemId: new f({ required: !1, blank: !0, initial: "" })
         }),
-        slot3: new v({
+        slot3: new I({
           name: new f({ required: !1, blank: !0, initial: "" }),
           bonus: new f({ required: !1, blank: !0, initial: "" }),
           damage: new f({ required: !1, blank: !0, initial: "" }),
           itemId: new f({ required: !1, blank: !0, initial: "" })
         }),
-        slot4: new v({
+        slot4: new I({
           name: new f({ required: !1, blank: !0, initial: "" }),
           bonus: new f({ required: !1, blank: !0, initial: "" }),
           damage: new f({ required: !1, blank: !0, initial: "" }),
           itemId: new f({ required: !1, blank: !0, initial: "" })
         }),
-        slot5: new v({
+        slot5: new I({
           name: new f({ required: !1, blank: !0, initial: "" }),
           bonus: new f({ required: !1, blank: !0, initial: "" }),
           damage: new f({ required: !1, blank: !0, initial: "" }),
           itemId: new f({ required: !1, blank: !0, initial: "" })
         }),
-        slot6: new v({
+        slot6: new I({
           name: new f({ required: !1, blank: !0, initial: "" }),
           bonus: new f({ required: !1, blank: !0, initial: "" }),
           damage: new f({ required: !1, blank: !0, initial: "" }),
           itemId: new f({ required: !1, blank: !0, initial: "" })
         }),
-        slot7: new v({
+        slot7: new I({
           name: new f({ required: !1, blank: !0, initial: "" }),
           bonus: new f({ required: !1, blank: !0, initial: "" }),
           damage: new f({ required: !1, blank: !0, initial: "" }),
           itemId: new f({ required: !1, blank: !0, initial: "" })
         }),
-        slot8: new v({
+        slot8: new I({
           name: new f({ required: !1, blank: !0, initial: "" }),
           bonus: new f({ required: !1, blank: !0, initial: "" }),
           damage: new f({ required: !1, blank: !0, initial: "" }),
           itemId: new f({ required: !1, blank: !0, initial: "" })
         }),
-        slot9: new v({
+        slot9: new I({
           name: new f({ required: !1, blank: !0, initial: "" }),
           bonus: new f({ required: !1, blank: !0, initial: "" }),
           damage: new f({ required: !1, blank: !0, initial: "" }),
           itemId: new f({ required: !1, blank: !0, initial: "" })
         }),
-        slot10: new v({
+        slot10: new I({
           name: new f({ required: !1, blank: !0, initial: "" }),
           bonus: new f({ required: !1, blank: !0, initial: "" }),
           damage: new f({ required: !1, blank: !0, initial: "" }),
           itemId: new f({ required: !1, blank: !0, initial: "" })
         })
       }),
-      gear: new v({
-        microchips: new v({
-          slot1: new v({
+      gear: new I({
+        microchips: new I({
+          slot1: new I({
             itemId: new f({ required: !1, blank: !0, initial: "" }),
             name: new f({ required: !1, blank: !0, initial: "" }),
-            active: new F({ required: !1, initial: !0 })
+            active: new N({ required: !1, initial: !0 })
           }),
-          slot2: new v({
+          slot2: new I({
             itemId: new f({ required: !1, blank: !0, initial: "" }),
             name: new f({ required: !1, blank: !0, initial: "" }),
-            active: new F({ required: !1, initial: !0 })
+            active: new N({ required: !1, initial: !0 })
           }),
-          slot3: new v({
+          slot3: new I({
             itemId: new f({ required: !1, blank: !0, initial: "" }),
             name: new f({ required: !1, blank: !0, initial: "" }),
-            active: new F({ required: !1, initial: !0 })
+            active: new N({ required: !1, initial: !0 })
           })
         }),
         equipment: new f({ required: !1, blank: !0, initial: "" })
       }),
-      abilities: new v({
-        faji: new v({
+      abilities: new I({
+        faji: new I({
           itemId: new f({ required: !1, blank: !0, initial: "" }),
           name: new f({ required: !1, blank: !0, initial: "" })
         }),
-        hatter: new v({
+        hatter: new I({
           itemId: new f({ required: !1, blank: !0, initial: "" }),
           name: new f({ required: !1, blank: !0, initial: "" })
         }),
-        passive: new v({
+        passive: new I({
           items: new qe(
             new f({ required: !1, blank: !0 }),
             { required: !1, initial: [] }
           )
         }),
-        active: new v({
+        active: new I({
           items: new qe(
             new f({ required: !1, blank: !0 }),
             { required: !1, initial: [] }
           )
         })
       }),
-      notes: new v({
-        biography: new Re({ required: !1, blank: !0 })
+      notes: new I({
+        biography: new He({ required: !1, blank: !0 })
       })
     };
   }
 }
 const { NumberField: W, SchemaField: Be } = foundry.data.fields;
-class ze extends He {
+class ze extends Ke {
   static defineSchema() {
     return {
       ...super.defineSchema(),
@@ -218,7 +218,7 @@ class ze extends He {
     };
   }
 }
-const { NumberField: P, SchemaField: We, StringField: G } = foundry.data.fields;
+const { NumberField: H, SchemaField: We, StringField: G } = foundry.data.fields;
 class Ge extends foundry.abstract.TypeDataModel {
   static defineSchema() {
     return {
@@ -234,15 +234,15 @@ class Ge extends foundry.abstract.TypeDataModel {
         initial: ""
       }),
       range: new We({
-        short: new P({ required: !1, integer: !1, min: 0, initial: 0 }),
-        long: new P({ required: !1, integer: !1, min: 0, initial: 0 })
+        short: new H({ required: !1, integer: !1, min: 0, initial: 0 }),
+        long: new H({ required: !1, integer: !1, min: 0, initial: 0 })
       }),
-      cost: new P({ required: !1, integer: !0, min: 0, initial: 0 }),
-      maxUpgrade: new P({ required: !1, integer: !0, min: 0, initial: 0 }),
-      upgradeCost: new P({ required: !1, integer: !0, min: 0, initial: 0 }),
-      skillDifficulty: new P({ required: !1, integer: !0, min: 0, initial: 0 }),
+      cost: new H({ required: !1, integer: !0, min: 0, initial: 0 }),
+      maxUpgrade: new H({ required: !1, integer: !0, min: 0, initial: 0 }),
+      upgradeCost: new H({ required: !1, integer: !0, min: 0, initial: 0 }),
+      skillDifficulty: new H({ required: !1, integer: !0, min: 0, initial: 0 }),
       special: new G({ required: !1, blank: !0, initial: "" }),
-      quantity: new P({ required: !1, integer: !0, min: 0, initial: 1 })
+      quantity: new H({ required: !1, integer: !0, min: 0, initial: 1 })
     };
   }
 }
@@ -267,8 +267,8 @@ class Je extends foundry.abstract.TypeDataModel {
     };
   }
 }
-const { NumberField: Qe, StringField: Te } = foundry.data.fields;
-class Xe extends foundry.abstract.TypeDataModel {
+const { NumberField: Xe, StringField: Te } = foundry.data.fields;
+class Qe extends foundry.abstract.TypeDataModel {
   static defineSchema() {
     return {
       kind: new Te({
@@ -282,7 +282,7 @@ class Xe extends foundry.abstract.TypeDataModel {
         blank: !0,
         initial: ""
       }),
-      kp: new Qe({
+      kp: new Xe({
         required: !1,
         integer: !0,
         min: 0,
@@ -291,456 +291,486 @@ class Xe extends foundry.abstract.TypeDataModel {
     };
   }
 }
-var _e, Oe, Le, Se;
-const S = class S extends foundry.applications.api.HandlebarsApplicationMixin(
+var Se, Oe, _e, Le;
+const E = class E extends foundry.applications.api.HandlebarsApplicationMixin(
   foundry.applications.sheets.ActorSheetV2
 ) {
   _initializeApplicationOptions(i) {
     const e = super._initializeApplicationOptions(i), t = (i == null ? void 0 : i.document) ?? this.document;
     if (t != null && t.uuid || t != null && t.id) {
-      const a = t.uuid ?? t.id;
-      e.uniqueId = `${this.constructor.name}-${String(a).replace(/\./g, "-")}`;
+      const r = t.uuid ?? t.id;
+      e.uniqueId = `${this.constructor.name}-${String(r).replace(/\./g, "-")}`;
     }
     return e;
   }
   get actor() {
     return this.document;
   }
+  /** Mentjük a görgetést és a fókuszt render előtt, visszaállítjuk utána (ne dobja vissza a kurzort / lap tetejére). */
+  async render(i = !1, e = {}) {
+    var s, a, u, p, b;
+    const t = (s = game.votv) == null ? void 0 : s._lastPcSheetBlurSave;
+    if ((t == null ? void 0 : t.appId) === this.id && Date.now() - t.at < 250) return this;
+    const r = this.form ?? this.element;
+    let o = { scrollTop: null, focus: null };
+    if (r) {
+      const g = document.activeElement, T = r.contains(g), L = g && (g.tagName === "INPUT" && g.type !== "checkbox" && g.type !== "radio" || g.tagName === "TEXTAREA");
+      T && L && (o.focus = {
+        name: g.name || null,
+        id: g.id || null,
+        selectionStart: "selectionStart" in g ? g.selectionStart : 0,
+        selectionEnd: "selectionEnd" in g ? g.selectionEnd : 0
+      });
+      const y = ((a = r.closest) == null ? void 0 : a.call(r, ".votv-scroll")) ?? ((u = r.querySelector) == null ? void 0 : u.call(r, ".votv-scroll")) ?? ((b = (p = this.element) == null ? void 0 : p.querySelector) == null ? void 0 : b.call(p, ".votv-scroll")) ?? (r.scrollHeight > r.clientHeight ? r : null);
+      y && (o.scrollTop = y.scrollTop);
+    }
+    const l = await super.render(i, e), c = this.form ?? this.element, d = o.scrollTop, n = o.focus;
+    return (d != null || n) && c && requestAnimationFrame(() => {
+      var g, T, L, y, w, k;
+      if (d != null) {
+        const q = ((g = c.closest) == null ? void 0 : g.call(c, ".votv-scroll")) ?? ((T = c.querySelector) == null ? void 0 : T.call(c, ".votv-scroll")) ?? ((y = (L = this.element) == null ? void 0 : L.querySelector) == null ? void 0 : y.call(L, ".votv-scroll")) ?? (c.scrollHeight > c.clientHeight ? c : null);
+        q && (q.scrollTop = d);
+      }
+      if ((n == null ? void 0 : n.name) != null || (n == null ? void 0 : n.id) != null) {
+        const q = ((w = c.querySelector) == null ? void 0 : w.call(c, n.id ? `#${CSS.escape(n.id)}` : null)) ?? (n.name ? (k = c.querySelector) == null ? void 0 : k.call(c, `[name="${CSS.escape(n.name)}"]`) : null);
+        q && (q.tagName === "INPUT" || q.tagName === "TEXTAREA") && (q.focus(), typeof q.selectionStart == "number" && (q.selectionStart = n.selectionStart ?? 0, q.selectionEnd = n.selectionEnd ?? n.selectionStart ?? 0));
+      }
+    }), l;
+  }
   /**
    * Compute health status 0–3 from current HP and max HP, using thirds of max.
    * Max 15 → 11–15 Egészséges, 6–10 Sérült, 1–5 Kritikus, 0 Használhatatlan.
    */
   static _healthStatusFromRatio(i, e) {
-    const t = Number(i), a = Number(e);
-    if (a <= 0 || t <= 0) return 0;
-    const o = Math.floor(a / 3), l = Math.floor(2 * a / 3);
+    const t = Number(i), r = Number(e);
+    if (r <= 0 || t <= 0) return 0;
+    const o = Math.floor(r / 3), l = Math.floor(2 * r / 3);
     return t <= o ? 1 : t <= l ? 2 : 3;
   }
   async _prepareContext(i) {
-    var ne, ae, se, oe, le, ce, ue, de;
+    var re, ae, se, oe, le, ce, ue, de;
     let e = await super._prepareContext(i);
     e = e ?? {}, e.actor = e.actor ?? this.actor, e.system = this.actor.system;
-    const t = this.actor.system.resources ?? {}, a = t.hitLocations ?? {}, o = t.currentHealth ?? {}, l = ["head", "torso", "arms", "legs"];
+    const t = this.actor.system.resources ?? {}, r = t.hitLocations ?? {}, o = t.currentHealth ?? {}, l = ["head", "torso", "arms", "legs"];
     e.computedHealthStatus = {};
     for (const m of l) {
-      const w = ((ne = a[m]) == null ? void 0 : ne.value) ?? 0, I = o[m] ?? 0;
-      e.computedHealthStatus[m] = S._healthStatusFromRatio(I, w);
+      const v = ((re = r[m]) == null ? void 0 : re.value) ?? 0, D = o[m] ?? 0;
+      e.computedHealthStatus[m] = E._healthStatusFromRatio(D, v);
     }
-    const u = this.actor.system.weapons ?? {}, d = ["slot1", "slot2", "slot3", "slot4", "slot5", "slot6", "slot7", "slot8", "slot9", "slot10"], r = (u.slotOrder ?? "").trim(), s = r ? r.split(/\s*,\s*/).filter((m) => d.includes(m)) : [], n = (ae = this.actor.system.gear) == null ? void 0 : ae.microchips, c = n && typeof n == "object" && !Array.isArray(n) ? n : {}, p = (((se = c.slot1) == null ? void 0 : se.itemId) ?? "").trim(), b = (((oe = c.slot2) == null ? void 0 : oe.itemId) ?? "").trim(), g = (((le = c.slot3) == null ? void 0 : le.itemId) ?? "").trim(), E = this.actor.items.contents.filter((m) => m.type !== "ability").slice().sort((m, w) => {
-      const I = typeof m.sort == "number" ? m.sort : 0, D = typeof w.sort == "number" ? w.sort : 0;
-      return I - D;
+    const c = this.actor.system.weapons ?? {}, d = ["slot1", "slot2", "slot3", "slot4", "slot5", "slot6", "slot7", "slot8", "slot9", "slot10"], n = (c.slotOrder ?? "").trim(), s = n ? n.split(/\s*,\s*/).filter((m) => d.includes(m)) : [], a = (ae = this.actor.system.gear) == null ? void 0 : ae.microchips, u = a && typeof a == "object" && !Array.isArray(a) ? a : {}, p = (((se = u.slot1) == null ? void 0 : se.itemId) ?? "").trim(), b = (((oe = u.slot2) == null ? void 0 : oe.itemId) ?? "").trim(), g = (((le = u.slot3) == null ? void 0 : le.itemId) ?? "").trim(), L = this.actor.items.contents.filter((m) => m.type !== "ability").slice().sort((m, v) => {
+      const D = typeof m.sort == "number" ? m.sort : 0, O = typeof v.sort == "number" ? v.sort : 0;
+      return D - O;
     }).map((m) => {
       var fe, ge, ye, he, be, we, ve, Ie, ke;
-      const w = m.type === "weapon", I = m.type === "microchip";
-      let D = 0, O = "", x = null;
+      const v = m.type === "weapon", D = m.type === "microchip";
+      let O = 0, A = "", x = null;
       for (let B = 0; B < s.length; B++) {
         const z = s[B];
-        if ((((fe = u[z]) == null ? void 0 : fe.itemId) ?? "") === m.id) {
-          D = B + 1, O = ((ge = u[z]) == null ? void 0 : ge.bonus) ?? "", x = z;
+        if ((((fe = c[z]) == null ? void 0 : fe.itemId) ?? "") === m.id) {
+          O = B + 1, A = ((ge = c[z]) == null ? void 0 : ge.bonus) ?? "", x = z;
           break;
         }
       }
-      let H = null;
-      I && (p === m.id ? H = "slot1" : b === m.id ? H = "slot2" : g === m.id && (H = "slot3"));
-      const Ne = w && ((ye = m.system) != null && ye.damage) ? m.system.damage : "", me = w && ((be = (he = m.system) == null ? void 0 : he.range) == null ? void 0 : be.short) != null ? m.system.range.short : null, pe = w && ((ve = (we = m.system) == null ? void 0 : we.range) == null ? void 0 : ve.long) != null ? m.system.range.long : null, Ce = me != null && pe != null ? `${me} / ${pe} m` : "", Me = x ? Number((Ie = u[x]) == null ? void 0 : Ie.bonus) || 0 : "";
+      let K = null;
+      D && (p === m.id ? K = "slot1" : b === m.id ? K = "slot2" : g === m.id && (K = "slot3"));
+      const xe = v && ((ye = m.system) != null && ye.damage) ? m.system.damage : "", me = v && ((be = (he = m.system) == null ? void 0 : he.range) == null ? void 0 : be.short) != null ? m.system.range.short : null, pe = v && ((ve = (we = m.system) == null ? void 0 : we.range) == null ? void 0 : ve.long) != null ? m.system.range.long : null, Ce = me != null && pe != null ? `${me} / ${pe} m` : "", Me = x ? Number((Ie = c[x]) == null ? void 0 : Ie.bonus) || 0 : "";
       return {
         id: m.id,
         name: m.name,
         img: m.img,
         type: m.type,
-        isWeapon: w,
-        slotAssignment: D,
-        slotBonus: O,
+        isWeapon: v,
+        slotAssignment: O,
+        slotBonus: A,
         slotKey: x,
-        microchipSlotKey: H,
-        isEquipped: !!(x || H),
-        damage: Ne,
+        microchipSlotKey: K,
+        isEquipped: !!(x || K),
+        damage: xe,
         rangeStr: Ce,
         slotBonusNum: Me,
         quantity: Number(((ke = m.system) == null ? void 0 : ke.quantity) ?? 1) || 1
       };
     });
-    e.actionsTable = E;
-    const h = (((ce = this.actor.items) == null ? void 0 : ce.contents) ?? []).filter((m) => m.type === "weapon"), k = h.map((m) => ({ id: m.id, name: m.name, img: m.img }));
-    e.weaponItems = k;
-    const q = "— Nincs fegyver —", L = s.filter((m) => {
-      const I = ((u[m] ?? {}).itemId ?? "").trim();
-      return I ? !!h.find((O) => O.id === I) : !1;
+    e.actionsTable = L;
+    const y = (((ce = this.actor.items) == null ? void 0 : ce.contents) ?? []).filter((m) => m.type === "weapon"), w = y.map((m) => ({ id: m.id, name: m.name, img: m.img }));
+    e.weaponItems = w;
+    const k = "— Nincs fegyver —", q = s.filter((m) => {
+      const D = ((c[m] ?? {}).itemId ?? "").trim();
+      return D ? !!y.find((A) => A.id === D) : !1;
     });
-    e.weaponSlots = L.map((m, w) => {
-      const I = u[m] ?? {}, D = (I.itemId ?? "").trim(), O = k.find((x) => x.id === D);
+    e.weaponSlots = q.map((m, v) => {
+      const D = c[m] ?? {}, O = (D.itemId ?? "").trim(), A = w.find((x) => x.id === O);
       return {
         slotKey: m,
-        slotNum: w + 1,
-        displayName: (O == null ? void 0 : O.name) || I.name || q,
-        img: (O == null ? void 0 : O.img) || "",
-        bonus: Number(I.bonus) || 0,
-        damage: I.damage ?? ""
+        slotNum: v + 1,
+        displayName: (A == null ? void 0 : A.name) || D.name || k,
+        img: (A == null ? void 0 : A.img) || "",
+        bonus: Number(D.bonus) || 0,
+        damage: D.damage ?? ""
       };
     });
-    const R = (((ue = this.actor.items) == null ? void 0 : ue.contents) ?? []).filter((m) => m.type === "microchip").map((m) => ({ id: m.id, name: m.name, img: m.img })), K = "— Nincs chip —", U = (m) => {
-      const w = [];
-      return m !== 1 && w.push(p), m !== 2 && w.push(b), m !== 3 && w.push(g), w;
+    const S = (((ue = this.actor.items) == null ? void 0 : ue.contents) ?? []).filter((m) => m.type === "microchip").map((m) => ({ id: m.id, name: m.name, img: m.img })), C = "— Nincs chip —", R = (m) => {
+      const v = [];
+      return m !== 1 && v.push(p), m !== 2 && v.push(b), m !== 3 && v.push(g), v;
     };
-    e.microchipItemsSlot1 = R.filter((m) => !U(1).includes(m.id)), e.microchipItemsSlot2 = R.filter((m) => !U(2).includes(m.id)), e.microchipItemsSlot3 = R.filter((m) => !U(3).includes(m.id)), ["1", "2", "3"].forEach((m) => {
-      const w = `slot${m}`, I = c[w] ?? {}, D = (I.itemId ?? "").trim(), O = R.find((x) => x.id === D);
-      e[`microchip${m}ItemId`] = D, e[`microchip${m}DisplayName`] = (O == null ? void 0 : O.name) || I.name || K, e[`microchip${m}Img`] = (O == null ? void 0 : O.img) || "", e[`microchip${m}Active`] = I.active === !0;
+    e.microchipItemsSlot1 = S.filter((m) => !R(1).includes(m.id)), e.microchipItemsSlot2 = S.filter((m) => !R(2).includes(m.id)), e.microchipItemsSlot3 = S.filter((m) => !R(3).includes(m.id)), ["1", "2", "3"].forEach((m) => {
+      const v = `slot${m}`, D = u[v] ?? {}, O = (D.itemId ?? "").trim(), A = S.find((x) => x.id === O);
+      e[`microchip${m}ItemId`] = O, e[`microchip${m}DisplayName`] = (A == null ? void 0 : A.name) || D.name || C, e[`microchip${m}Img`] = (A == null ? void 0 : A.img) || "", e[`microchip${m}Active`] = D.active === !0;
     });
-    const V = this.actor.system.abilities ?? {}, Ee = (((de = this.actor.items) == null ? void 0 : de.contents) ?? []).map((m) => {
-      var w, I, D;
+    const V = this.actor.system.abilities ?? {}, Ne = (((de = this.actor.items) == null ? void 0 : de.contents) ?? []).map((m) => {
+      var v, D, O;
       return {
         id: m.id,
         name: m.name,
         img: m.img,
-        kind: ((w = m.system) == null ? void 0 : w.kind) ?? "passive",
-        description: ((I = m.system) == null ? void 0 : I.description) ?? "",
-        kp: Number(((D = m.system) == null ? void 0 : D.kp) ?? 0) || 0
+        kind: ((v = m.system) == null ? void 0 : v.kind) ?? "passive",
+        description: ((D = m.system) == null ? void 0 : D.description) ?? "",
+        kp: Number(((O = m.system) == null ? void 0 : O.kp) ?? 0) || 0
       };
-    }), ee = new Map(Ee.map((m) => [m.id, m])), xe = "— Nincs képesség —", te = (m) => {
-      const w = V[m] ?? {}, I = (w.itemId ?? "").trim(), D = I ? ee.get(I) : null, O = (D == null ? void 0 : D.description) ?? "", x = (D == null ? void 0 : D.kp) ?? 0;
+    }), ee = new Map(Ne.map((m) => [m.id, m])), $e = "— Nincs képesség —", te = (m) => {
+      const v = V[m] ?? {}, D = (v.itemId ?? "").trim(), O = D ? ee.get(D) : null, A = (O == null ? void 0 : O.description) ?? "", x = (O == null ? void 0 : O.kp) ?? 0;
       return {
-        itemId: I,
-        displayName: (D == null ? void 0 : D.name) || w.name || xe,
-        img: (D == null ? void 0 : D.img) || "",
-        description: O,
+        itemId: D,
+        displayName: (O == null ? void 0 : O.name) || v.name || $e,
+        img: (O == null ? void 0 : O.img) || "",
+        description: A,
         kp: x
       };
     };
     e.abilityFajiSlot = te("faji"), e.abilityHatterSlot = te("hatter");
     const ie = (m) => {
-      const w = V[m];
-      return w ? Array.isArray(w == null ? void 0 : w.items) ? w.items : Array.isArray(w) ? w : [] : [];
-    }, re = (m) => m.map((w) => {
-      const I = ee.get(w);
-      return I ? {
-        id: I.id,
-        name: I.name,
-        img: I.img,
-        description: I.description,
-        kp: I.kp
+      const v = V[m];
+      return v ? Array.isArray(v == null ? void 0 : v.items) ? v.items : Array.isArray(v) ? v : [] : [];
+    }, ne = (m) => m.map((v) => {
+      const D = ee.get(v);
+      return D ? {
+        id: D.id,
+        name: D.name,
+        img: D.img,
+        description: D.description,
+        kp: D.kp
       } : null;
     }).filter(Boolean);
-    return e.abilityPassiveList = re(ie("passive")), e.abilityActiveList = re(ie("active")), e;
+    return e.abilityPassiveList = ne(ie("passive")), e.abilityActiveList = ne(ie("active")), e;
   }
   _attachFrameListeners(i) {
     super._attachFrameListeners(i);
     const e = this.form ?? this.element, t = $(e);
     if ($(document).off("click.votv-weapon-dropdown"), $(document).off("click.votv-microchip-dropdown"), !this.isEditable) return;
-    t.on("click", ".pc-skill-label", (r) => {
+    t.on("click", ".pc-skill-label", (n) => {
       var p;
-      r.preventDefault();
-      const s = r.currentTarget, n = s.dataset.skill, c = ((p = s.textContent) == null ? void 0 : p.trim()) || n;
-      this._rollSkill(n, c);
+      n.preventDefault();
+      const s = n.currentTarget, a = s.dataset.skill, u = ((p = s.textContent) == null ? void 0 : p.trim()) || a;
+      this._rollSkill(a, u);
     });
-    const a = (r, s) => {
+    const r = (n, s) => {
       var p;
-      const n = r.dataset.itemId;
-      if (!n) return;
-      const c = this.actor.items.get(n);
-      if (c) {
-        if (r.classList.contains("pc-weapon-label") && (s.altKey || s.shiftKey || s.ctrlKey || s.metaKey)) {
-          const b = r.dataset.weaponSlot;
+      const a = n.dataset.itemId;
+      if (!a) return;
+      const u = this.actor.items.get(a);
+      if (u) {
+        if (n.classList.contains("pc-weapon-label") && (s.altKey || s.shiftKey || s.ctrlKey || s.metaKey)) {
+          const b = n.dataset.weaponSlot;
           b && this._rollWeapon(b);
           return;
         }
-        (p = c.sheet) == null || p.render(!0);
+        (p = u.sheet) == null || p.render(!0);
       }
     };
-    t.on("click", ".pc-inventory-item-name", (r) => {
-      r.preventDefault(), a(r.currentTarget, r);
-    }), t.on("click", ".pc-inventory-item-icon", (r) => {
-      r.preventDefault(), a(r.currentTarget, r);
-    }), t.on("change", ".pc-item-qty", async (r) => {
-      const s = r.currentTarget, n = s.dataset.itemId;
-      if (!n) return;
-      const c = this.actor.items.get(n);
-      if (!c) return;
+    t.on("click", ".pc-inventory-item-name", (n) => {
+      n.preventDefault(), r(n.currentTarget, n);
+    }), t.on("click", ".pc-inventory-item-icon", (n) => {
+      n.preventDefault(), r(n.currentTarget, n);
+    }), t.on("change", ".pc-item-qty", async (n) => {
+      const s = n.currentTarget, a = s.dataset.itemId;
+      if (!a) return;
+      const u = this.actor.items.get(a);
+      if (!u) return;
       let p = Number(s.value);
-      (!Number.isFinite(p) || p < 0) && (p = 0), await c.update({ "system.quantity": p });
-    }), t.on("click", ".pc-item-delete", async (r) => {
-      r.preventDefault();
-      const n = r.currentTarget.dataset.itemId;
-      if (!n) return;
-      const c = this.actor.items.get(n), p = {};
-      if ((c == null ? void 0 : c.type) === "weapon") {
-        const b = this.actor.system.weapons ?? {}, g = (b.slotOrder ?? "").trim(), _ = ["slot1", "slot2", "slot3", "slot4", "slot5", "slot6", "slot7", "slot8", "slot9", "slot10"], E = g ? g.split(/\s*,\s*/).filter((k) => _.includes(k)) : [], h = E.find((k) => {
-          var q;
-          return (((q = b[k]) == null ? void 0 : q.itemId) ?? "").trim() === n;
+      (!Number.isFinite(p) || p < 0) && (p = 0), await u.update({ "system.quantity": p });
+    }), t.on("click", ".pc-item-delete", async (n) => {
+      n.preventDefault();
+      const a = n.currentTarget.dataset.itemId;
+      if (!a) return;
+      const u = this.actor.items.get(a), p = {};
+      if ((u == null ? void 0 : u.type) === "weapon") {
+        const b = this.actor.system.weapons ?? {}, g = (b.slotOrder ?? "").trim(), T = ["slot1", "slot2", "slot3", "slot4", "slot5", "slot6", "slot7", "slot8", "slot9", "slot10"], L = g ? g.split(/\s*,\s*/).filter((w) => T.includes(w)) : [], y = L.find((w) => {
+          var k;
+          return (((k = b[w]) == null ? void 0 : k.itemId) ?? "").trim() === a;
         });
-        if (h) {
-          const k = E.filter((q) => q !== h);
-          p["system.weapons.slotOrder"] = k.join(","), p[`system.weapons.${h}.itemId`] = "", p[`system.weapons.${h}.name`] = "", p[`system.weapons.${h}.damage`] = "", p[`system.weapons.${h}.bonus`] = "";
+        if (y) {
+          const w = L.filter((k) => k !== y);
+          p["system.weapons.slotOrder"] = w.join(","), p[`system.weapons.${y}.itemId`] = "", p[`system.weapons.${y}.name`] = "", p[`system.weapons.${y}.damage`] = "", p[`system.weapons.${y}.bonus`] = "";
         }
       }
-      Object.keys(p).length && await this.actor.update(p), await this.actor.deleteEmbeddedDocuments("Item", [n]);
-    }), t.on("click", ".pc-weapon-attack", async (r) => {
-      r.preventDefault();
-      const n = (r.currentTarget.dataset.slot ?? "").trim();
-      n && await this._rollWeapon(n);
-    }), t.on("click", ".pc-weapon-damage", async (r) => {
-      r.preventDefault();
-      const n = (r.currentTarget.dataset.slot ?? "").trim();
-      if (!n) return;
-      const b = (((this.actor.system.weapons ?? {})[n] ?? {}).itemId ?? "").trim();
+      Object.keys(p).length && await this.actor.update(p), await this.actor.deleteEmbeddedDocuments("Item", [a]);
+    }), t.on("click", ".pc-weapon-attack", async (n) => {
+      n.preventDefault();
+      const a = (n.currentTarget.dataset.slot ?? "").trim();
+      a && await this._rollWeapon(a);
+    }), t.on("click", ".pc-weapon-damage", async (n) => {
+      n.preventDefault();
+      const a = (n.currentTarget.dataset.slot ?? "").trim();
+      if (!a) return;
+      const b = (((this.actor.system.weapons ?? {})[a] ?? {}).itemId ?? "").trim();
       b && await this._rollWeaponDamage(b);
-    }), t.on("change", ".pc-weapon-equip-toggle", async (r) => {
-      var h;
-      const s = r.currentTarget, n = (s.dataset.itemId ?? "").trim();
-      if (!n) return;
-      const c = this.actor.system.weapons ?? {}, p = (c.slotOrder ?? "").trim(), b = ["slot1", "slot2", "slot3", "slot4", "slot5", "slot6", "slot7", "slot8", "slot9", "slot10"], g = p ? p.split(/\s*,\s*/).filter((k) => b.includes(k)) : [], _ = g.find((k) => {
-        var q;
-        return (((q = c[k]) == null ? void 0 : q.itemId) ?? "").trim() === n;
+    }), t.on("change", ".pc-weapon-equip-toggle", async (n) => {
+      var y;
+      const s = n.currentTarget, a = (s.dataset.itemId ?? "").trim();
+      if (!a) return;
+      const u = this.actor.system.weapons ?? {}, p = (u.slotOrder ?? "").trim(), b = ["slot1", "slot2", "slot3", "slot4", "slot5", "slot6", "slot7", "slot8", "slot9", "slot10"], g = p ? p.split(/\s*,\s*/).filter((w) => b.includes(w)) : [], T = g.find((w) => {
+        var k;
+        return (((k = u[w]) == null ? void 0 : k.itemId) ?? "").trim() === a;
       }) ?? null;
       if (s.checked) {
-        if (_) return;
-        let k = g.find((K) => {
-          var U;
-          return !((U = c[K]) != null && U.itemId);
+        if (T) return;
+        let w = g.find((C) => {
+          var R;
+          return !((R = u[C]) != null && R.itemId);
         });
-        const q = new Set(g);
-        if (!k) {
-          const K = b.find((U) => !q.has(U));
-          if (!K) return;
-          k = K, g.push(K);
+        const k = new Set(g);
+        if (!w) {
+          const C = b.find((R) => !k.has(R));
+          if (!C) return;
+          w = C, g.push(C);
         }
-        const L = this.actor.items.get(n), R = {
+        const q = this.actor.items.get(a), S = {
           "system.weapons.slotOrder": g.join(","),
-          [`system.weapons.${k}.itemId`]: n,
-          [`system.weapons.${k}.name`]: (L == null ? void 0 : L.name) ?? "",
-          [`system.weapons.${k}.damage`]: ((h = L == null ? void 0 : L.system) == null ? void 0 : h.damage) ?? ""
+          [`system.weapons.${w}.itemId`]: a,
+          [`system.weapons.${w}.name`]: (q == null ? void 0 : q.name) ?? "",
+          [`system.weapons.${w}.damage`]: ((y = q == null ? void 0 : q.system) == null ? void 0 : y.damage) ?? ""
         };
-        await this.actor.update(R);
-      } else if (_) {
-        const q = {
-          "system.weapons.slotOrder": g.filter((L) => L !== _).join(",")
+        await this.actor.update(S);
+      } else if (T) {
+        const k = {
+          "system.weapons.slotOrder": g.filter((q) => q !== T).join(",")
         };
-        q[`system.weapons.${_}.itemId`] = "", q[`system.weapons.${_}.name`] = "", q[`system.weapons.${_}.damage`] = "", q[`system.weapons.${_}.bonus`] = "", await this.actor.update(q);
+        k[`system.weapons.${T}.itemId`] = "", k[`system.weapons.${T}.name`] = "", k[`system.weapons.${T}.damage`] = "", k[`system.weapons.${T}.bonus`] = "", await this.actor.update(k);
       }
-    }), t.on("click", ".pc-microchip-slot-display", (r) => {
-      r.preventDefault();
-      const s = r.currentTarget;
+    }), t.on("click", ".pc-microchip-slot-display", (n) => {
+      n.preventDefault();
+      const s = n.currentTarget;
       if (s.disabled) return;
-      const n = s.closest(".pc-microchip-slot-select-wrap"), c = n == null ? void 0 : n.classList.contains("pc-microchip-slot-open");
-      t.find(".pc-microchip-slot-select-wrap").removeClass("pc-microchip-slot-open"), !c && n && n.classList.add("pc-microchip-slot-open");
-    }), t.on("click", ".pc-microchip-slot-option", async (r) => {
-      var L;
-      r.preventDefault();
-      const s = r.currentTarget, n = s.closest(".pc-microchip-slot-select-wrap"), c = n == null ? void 0 : n.querySelector(".pc-microchip-slot-display"), p = c == null ? void 0 : c.dataset.slot;
+      const a = s.closest(".pc-microchip-slot-select-wrap"), u = a == null ? void 0 : a.classList.contains("pc-microchip-slot-open");
+      t.find(".pc-microchip-slot-select-wrap").removeClass("pc-microchip-slot-open"), !u && a && a.classList.add("pc-microchip-slot-open");
+    }), t.on("click", ".pc-microchip-slot-option", async (n) => {
+      var q;
+      n.preventDefault();
+      const s = n.currentTarget, a = s.closest(".pc-microchip-slot-select-wrap"), u = a == null ? void 0 : a.querySelector(".pc-microchip-slot-display"), p = u == null ? void 0 : u.dataset.slot;
       if (!p) return;
-      const b = (s.dataset.itemId ?? "").trim(), g = (s.dataset.itemName ?? ((L = s.textContent) == null ? void 0 : L.trim()) ?? "").trim() || "— Nincs chip —", _ = (s.dataset.itemImg ?? "").trim(), E = n == null ? void 0 : n.querySelector(".pc-microchip-slot-display-text");
-      E && (E.textContent = g);
-      let h = n == null ? void 0 : n.querySelector(".pc-microchip-slot-thumb");
-      _ ? (h || (h = document.createElement("img"), h.className = "pc-microchip-slot-thumb", h.alt = "", c == null || c.insertBefore(h, E)), h.src = _, h.style.display = "") : h && h.remove(), n == null || n.classList.remove("pc-microchip-slot-open");
-      const k = b ? this.actor.items.get(b) : null, q = {
+      const b = (s.dataset.itemId ?? "").trim(), g = (s.dataset.itemName ?? ((q = s.textContent) == null ? void 0 : q.trim()) ?? "").trim() || "— Nincs chip —", T = (s.dataset.itemImg ?? "").trim(), L = a == null ? void 0 : a.querySelector(".pc-microchip-slot-display-text");
+      L && (L.textContent = g);
+      let y = a == null ? void 0 : a.querySelector(".pc-microchip-slot-thumb");
+      T ? (y || (y = document.createElement("img"), y.className = "pc-microchip-slot-thumb", y.alt = "", u == null || u.insertBefore(y, L)), y.src = T, y.style.display = "") : y && y.remove(), a == null || a.classList.remove("pc-microchip-slot-open");
+      const w = b ? this.actor.items.get(b) : null, k = {
         [`system.gear.microchips.${p}.itemId`]: b,
-        [`system.gear.microchips.${p}.name`]: (k == null ? void 0 : k.name) ?? ""
+        [`system.gear.microchips.${p}.name`]: (w == null ? void 0 : w.name) ?? ""
       };
-      b && (q[`system.gear.microchips.${p}.active`] = !0), await this.actor.update(q);
-    }), $(document).on("click.votv-microchip-dropdown", (r) => {
-      $(r.target).closest(".pc-microchip-slot-select-wrap").length || t.find(".pc-microchip-slot-select-wrap").removeClass("pc-microchip-slot-open");
-    }), t.on("change", ".pc-microchip-slot-active", (r) => {
-      const s = r.currentTarget.dataset.slot;
+      b && (k[`system.gear.microchips.${p}.active`] = !0), await this.actor.update(k);
+    }), $(document).on("click.votv-microchip-dropdown", (n) => {
+      $(n.target).closest(".pc-microchip-slot-select-wrap").length || t.find(".pc-microchip-slot-select-wrap").removeClass("pc-microchip-slot-open");
+    }), t.on("change", ".pc-microchip-slot-active", (n) => {
+      const s = n.currentTarget.dataset.slot;
       if (!s) return;
-      const n = r.currentTarget.checked;
-      this.actor.update({ [`system.gear.microchips.${s}.active`]: n });
-    }), t.find(".pc-microchip-slot").each((r, s) => {
-      const n = s.dataset.slot;
-      s.addEventListener("dragover", (c) => this._onMicrochipSlotDragOver(c, n)), s.addEventListener("dragleave", (c) => {
+      const a = n.currentTarget.checked;
+      this.actor.update({ [`system.gear.microchips.${s}.active`]: a });
+    }), t.find(".pc-microchip-slot").each((n, s) => {
+      const a = s.dataset.slot;
+      s.addEventListener("dragover", (u) => this._onMicrochipSlotDragOver(u, a)), s.addEventListener("dragleave", (u) => {
         var p;
-        return (p = c.currentTarget) == null ? void 0 : p.classList.remove("pc-microchip-slot-drag-over");
-      }), s.addEventListener("drop", (c) => this._onMicrochipSlotDrop(c, n));
-    }), t.find(".pc-ability-slot-single").each((r, s) => {
-      const n = s.dataset.slot;
-      n && (s.addEventListener("dragover", (c) => this._onAbilitySingleDragOver(c, n)), s.addEventListener("dragleave", (c) => {
+        return (p = u.currentTarget) == null ? void 0 : p.classList.remove("pc-microchip-slot-drag-over");
+      }), s.addEventListener("drop", (u) => this._onMicrochipSlotDrop(u, a));
+    }), t.find(".pc-ability-slot-single").each((n, s) => {
+      const a = s.dataset.slot;
+      a && (s.addEventListener("dragover", (u) => this._onAbilitySingleDragOver(u, a)), s.addEventListener("dragleave", (u) => {
         var p;
-        return (p = c.currentTarget) == null ? void 0 : p.classList.remove("pc-ability-slot-drag-over");
-      }), s.addEventListener("drop", (c) => this._onAbilitySingleDrop(c, n)));
-    }), t.find(".pc-ability-area").each((r, s) => {
-      const n = s.dataset.area;
-      n && (s.addEventListener("dragover", (c) => this._onAbilityAreaDragOver(c, n)), s.addEventListener("dragleave", (c) => {
+        return (p = u.currentTarget) == null ? void 0 : p.classList.remove("pc-ability-slot-drag-over");
+      }), s.addEventListener("drop", (u) => this._onAbilitySingleDrop(u, a)));
+    }), t.find(".pc-ability-area").each((n, s) => {
+      const a = s.dataset.area;
+      a && (s.addEventListener("dragover", (u) => this._onAbilityAreaDragOver(u, a)), s.addEventListener("dragleave", (u) => {
         var p;
-        return (p = c.currentTarget) == null ? void 0 : p.classList.remove("pc-ability-area-drag-over");
-      }), s.addEventListener("drop", (c) => this._onAbilityAreaDrop(c, n)));
-    }), t.on("click", ".pc-ability-slot-clear", async (r) => {
-      r.preventDefault();
-      const s = r.currentTarget.dataset.slot;
+        return (p = u.currentTarget) == null ? void 0 : p.classList.remove("pc-ability-area-drag-over");
+      }), s.addEventListener("drop", (u) => this._onAbilityAreaDrop(u, a)));
+    }), t.on("click", ".pc-ability-slot-clear", async (n) => {
+      n.preventDefault();
+      const s = n.currentTarget.dataset.slot;
       s && await this.actor.update({
         [`system.abilities.${s}.itemId`]: "",
         [`system.abilities.${s}.name`]: ""
       });
-    }), t.on("click", ".pc-ability-pill-remove", async (r) => {
+    }), t.on("click", ".pc-ability-pill-remove", async (n) => {
       var g;
-      r.preventDefault();
-      const s = r.currentTarget.dataset.area, n = r.currentTarget.dataset.itemId;
-      if (!s || !n) return;
-      const c = this.actor.system.abilities ?? {}, b = (Array.isArray((g = c[s]) == null ? void 0 : g.items) ? c[s].items.slice() : []).filter((_) => _ !== n);
+      n.preventDefault();
+      const s = n.currentTarget.dataset.area, a = n.currentTarget.dataset.itemId;
+      if (!s || !a) return;
+      const u = this.actor.system.abilities ?? {}, b = (Array.isArray((g = u[s]) == null ? void 0 : g.items) ? u[s].items.slice() : []).filter((T) => T !== a);
       await this.actor.update({ [`system.abilities.${s}.items`]: b });
-    }), t.on("click", ".pc-ability-open", (r) => {
+    }), t.on("click", ".pc-ability-open", (n) => {
       var p;
-      r.preventDefault();
-      const n = r.currentTarget.dataset.itemId;
-      if (!n) return;
-      const c = this.actor.items.get(n);
-      (p = c == null ? void 0 : c.sheet) == null || p.render(!0);
-    }), t.on("click", ".pc-ability-chat", async (r) => {
-      r.preventDefault();
-      const n = r.currentTarget.dataset.itemId;
-      n && await this._postAbilityToChat(n);
-    }), t.find(".pc-actions-drag-handle").each((r, s) => {
+      n.preventDefault();
+      const a = n.currentTarget.dataset.itemId;
+      if (!a) return;
+      const u = this.actor.items.get(a);
+      (p = u == null ? void 0 : u.sheet) == null || p.render(!0);
+    }), t.on("click", ".pc-ability-chat", async (n) => {
+      n.preventDefault();
+      const a = n.currentTarget.dataset.itemId;
+      a && await this._postAbilityToChat(a);
+    }), t.find(".pc-actions-drag-handle").each((n, s) => {
       var b, g;
-      const n = s, c = n.closest(".pc-actions-row"), p = ((b = c == null ? void 0 : c.dataset) == null ? void 0 : b.itemId) ?? ((g = n.dataset) == null ? void 0 : g.itemId);
-      p && n.addEventListener("dragstart", (_) => this._onInventoryDragHandleStart(_, p, c));
-    }), t.find(".pc-actions-row").each((r, s) => {
-      const n = s, c = n.dataset.itemId;
-      c && (n.addEventListener("dragover", (p) => this._onInventoryRowDragOver(p, c)), n.addEventListener("dragleave", (p) => this._onInventoryRowDragLeave(p, c)), n.addEventListener("drop", (p) => this._onInventoryRowDrop(p, c)));
+      const a = s, u = a.closest(".pc-actions-row"), p = ((b = u == null ? void 0 : u.dataset) == null ? void 0 : b.itemId) ?? ((g = a.dataset) == null ? void 0 : g.itemId);
+      p && a.addEventListener("dragstart", (T) => this._onInventoryDragHandleStart(T, p, u));
+    }), t.find(".pc-actions-row").each((n, s) => {
+      const a = s, u = a.dataset.itemId;
+      u && (a.addEventListener("dragover", (p) => this._onInventoryRowDragOver(p, u)), a.addEventListener("dragleave", (p) => this._onInventoryRowDragLeave(p, u)), a.addEventListener("drop", (p) => this._onInventoryRowDrop(p, u)));
     });
     const o = t.find(".pc-actions-table")[0];
-    o && (o.addEventListener("dragover", (r) => this._onInventoryAreaDragOver(r)), o.addEventListener("dragleave", (r) => this._onInventoryAreaDragLeave(r)), o.addEventListener("drop", (r) => this._onInventoryAreaDrop(r)));
-    const l = this, u = (r) => {
-      if (!r) return;
-      const s = l._getFormDataForUpdate(r);
-      Object.keys(s).length !== 0 && l.actor.update(s).catch((n) => console.warn("VoidPcSheet save failed", n));
-    }, d = (r) => {
-      var s, n, c;
-      return r && (((n = (s = l.element) == null ? void 0 : s.contains) == null ? void 0 : n.call(s, r)) || l.id && ((c = r.closest) == null ? void 0 : c.call(r, `#${CSS.escape(l.id)}`)));
+    o && (o.addEventListener("dragover", (n) => this._onInventoryAreaDragOver(n)), o.addEventListener("dragleave", (n) => this._onInventoryAreaDragLeave(n)), o.addEventListener("drop", (n) => this._onInventoryAreaDrop(n)));
+    const l = this, c = (n) => {
+      if (!n) return;
+      const s = l._getFormDataForUpdate(n);
+      Object.keys(s).length !== 0 && l.actor.update(s).catch((a) => console.warn("VoidPcSheet save failed", a));
+    }, d = (n) => {
+      var s, a, u;
+      return n && (((a = (s = l.element) == null ? void 0 : s.contains) == null ? void 0 : a.call(s, n)) || l.id && ((u = n.closest) == null ? void 0 : u.call(n, `#${CSS.escape(l.id)}`)));
     };
-    l._votvChange = (r) => {
-      var n, c, p;
-      const s = ((n = r.target) == null ? void 0 : n.form) ?? ((p = (c = r.target) == null ? void 0 : c.closest) == null ? void 0 : p.call(c, "form"));
-      d(s) && u(s);
-    }, l._votvInput = (r) => {
-      var n, c, p;
-      const s = ((n = r.target) == null ? void 0 : n.form) ?? ((p = (c = r.target) == null ? void 0 : c.closest) == null ? void 0 : p.call(c, "form"));
-      d(s) && (clearTimeout(l._votvInputDebounce), l._votvInputDebounce = setTimeout(() => u(s), 300));
-    }, document.body.addEventListener("change", l._votvChange, !0), document.body.addEventListener("input", l._votvInput, !0);
+    l._votvBlur = (n) => {
+      const s = n.target;
+      if (!s || !s.form) return;
+      const a = s.tagName;
+      if (a !== "INPUT" && a !== "TEXTAREA" && a !== "SELECT") return;
+      const u = s.form;
+      d(u) && (game.votv && (game.votv._lastPcSheetBlurSave = { appId: l.id, at: Date.now() }), c(u));
+    }, document.body.addEventListener("blur", l._votvBlur, !0);
   }
   _tearDown(i) {
     var e;
-    return document.body.removeEventListener("change", this._votvChange, !0), document.body.removeEventListener("input", this._votvInput, !0), clearTimeout(this._votvInputDebounce), (e = super._tearDown) == null ? void 0 : e.call(this, i);
+    return document.body.removeEventListener("blur", this._votvBlur, !0), (e = super._tearDown) == null ? void 0 : e.call(this, i);
   }
   _getFormDataForUpdate(i) {
-    var u, d, r;
+    var c, d, n;
     const e = {};
     for (const s of i.elements) {
       if (!s.name || s.disabled || s.type === "radio" && !s.checked || s.name.startsWith("system.resources.healthStatus.")) continue;
-      let n;
-      s.type === "checkbox" ? n = s.checked : s.type === "number" ? n = s.value === "" ? 0 : Number(s.value) : n = s.value ?? "", foundry.utils.setProperty(e, s.name, n);
+      let a;
+      s.type === "checkbox" ? a = s.checked : s.type === "number" ? a = s.value === "" ? 0 : Number(s.value) : a = s.value ?? "", foundry.utils.setProperty(e, s.name, a);
     }
     const t = foundry.utils.mergeObject(
-      ((u = this.actor.system) == null ? void 0 : u.resources) ?? {},
+      ((c = this.actor.system) == null ? void 0 : c.resources) ?? {},
       ((d = foundry.utils.expandObject(e).system) == null ? void 0 : d.resources) ?? {}
-    ), a = t.hitLocations ?? {}, o = t.currentHealth ?? {}, l = ["head", "torso", "arms", "legs"];
+    ), r = t.hitLocations ?? {}, o = t.currentHealth ?? {}, l = ["head", "torso", "arms", "legs"];
     for (const s of l) {
-      const n = ((r = a[s]) == null ? void 0 : r.value) ?? 0, c = o[s] ?? 0;
-      foundry.utils.setProperty(e, `system.resources.healthStatus.${s}`, S._healthStatusFromRatio(c, n));
+      const a = ((n = r[s]) == null ? void 0 : n.value) ?? 0, u = o[s] ?? 0;
+      foundry.utils.setProperty(e, `system.resources.healthStatus.${s}`, E._healthStatusFromRatio(u, a));
     }
     return e;
   }
   async _onDropItem(i, e) {
-    var n, c, p, b, g, _, E;
-    const t = i.target, a = (n = t == null ? void 0 : t.closest) == null ? void 0 : n.call(t, ".pc-ability-slot-single"), o = (c = t == null ? void 0 : t.closest) == null ? void 0 : c.call(t, ".pc-ability-area");
-    if (!a && !o) return super._onDropItem(i, e);
+    var a, u, p, b, g, T, L;
+    const t = i.target, r = (a = t == null ? void 0 : t.closest) == null ? void 0 : a.call(t, ".pc-ability-slot-single"), o = (u = t == null ? void 0 : t.closest) == null ? void 0 : u.call(t, ".pc-ability-area");
+    if (!r && !o) return super._onDropItem(i, e);
     if (!e || e.type !== "Item") return;
     const l = e.uuid ?? ((p = e.data) == null ? void 0 : p.uuid);
     if (!l) return;
-    const u = await fromUuid(l);
-    if (!u || u.documentName !== "Item" || u.type !== "ability") return;
-    const d = (((b = u.system) == null ? void 0 : b.kind) ?? "passive").toString();
-    let r = u.id;
-    ((g = u.parent) == null ? void 0 : g.id) !== this.actor.id && (r = ((_ = (await this.actor.createEmbeddedDocuments("Item", [u.toObject()]))[0]) == null ? void 0 : _.id) ?? r);
+    const c = await fromUuid(l);
+    if (!c || c.documentName !== "Item" || c.type !== "ability") return;
+    const d = (((b = c.system) == null ? void 0 : b.kind) ?? "passive").toString();
+    let n = c.id;
+    ((g = c.parent) == null ? void 0 : g.id) !== this.actor.id && (n = ((T = (await this.actor.createEmbeddedDocuments("Item", [c.toObject()]))[0]) == null ? void 0 : T.id) ?? n);
     const s = this.actor.system.abilities ?? {};
-    if (a) {
-      const h = a.dataset.slot;
-      if (!h) return;
-      const q = {
+    if (r) {
+      const y = r.dataset.slot;
+      if (!y) return;
+      const k = {
         faji: "species",
         hatter: "background"
-      }[h];
-      if (!q || d !== q) return;
+      }[y];
+      if (!k || d !== k) return;
       await this.actor.update({
-        [`system.abilities.${h}.itemId`]: r,
-        [`system.abilities.${h}.name`]: u.name
+        [`system.abilities.${y}.itemId`]: n,
+        [`system.abilities.${y}.name`]: c.name
       });
       return;
     }
     if (o) {
-      const h = o.dataset.area;
-      if (!h) return;
-      const q = {
+      const y = o.dataset.area;
+      if (!y) return;
+      const k = {
         passive: "passive",
         active: "active"
-      }[h];
-      if (!q || d !== q) return;
-      const L = Array.isArray((E = s[h]) == null ? void 0 : E.items) ? s[h].items.slice() : Array.isArray(s[h]) ? s[h].slice() : [];
-      L.includes(r) || L.push(r), await this.actor.update({ [`system.abilities.${h}.items`]: L });
+      }[y];
+      if (!k || d !== k) return;
+      const q = Array.isArray((L = s[y]) == null ? void 0 : L.items) ? s[y].items.slice() : Array.isArray(s[y]) ? s[y].slice() : [];
+      q.includes(n) || q.push(n), await this.actor.update({ [`system.abilities.${y}.items`]: q });
       return;
     }
   }
   _onWeaponSlotDragOver(i, e) {
-    var o, l, u;
+    var o, l, c;
     const t = ((o = i.dataTransfer) == null ? void 0 : o.getData("text/plain")) || ((l = i.dataTransfer) == null ? void 0 : l.getData("application/json")) || "";
-    let a;
+    let r;
     try {
-      a = typeof t == "string" ? JSON.parse(t) : t;
+      r = typeof t == "string" ? JSON.parse(t) : t;
     } catch {
       return;
     }
-    (a == null ? void 0 : a.type) === "Item" && (i.preventDefault(), (u = i.currentTarget) == null || u.classList.add("pc-weapon-slot-drag-over"));
+    (r == null ? void 0 : r.type) === "Item" && (i.preventDefault(), (c = i.currentTarget) == null || c.classList.add("pc-weapon-slot-drag-over"));
   }
   async _onWeaponSlotDrop(i, e) {
-    var d, r, s, n, c, p;
+    var d, n, s, a, u, p;
     i.preventDefault(), (d = i.currentTarget) == null || d.classList.remove("pc-weapon-slot-drag-over");
-    const t = ((r = i.dataTransfer) == null ? void 0 : r.getData("text/plain")) || ((s = i.dataTransfer) == null ? void 0 : s.getData("application/json")) || "";
-    let a;
+    const t = ((n = i.dataTransfer) == null ? void 0 : n.getData("text/plain")) || ((s = i.dataTransfer) == null ? void 0 : s.getData("application/json")) || "";
+    let r;
     try {
-      a = typeof t == "string" ? JSON.parse(t) : t;
+      r = typeof t == "string" ? JSON.parse(t) : t;
     } catch {
       return;
     }
-    if ((a == null ? void 0 : a.type) !== "Item" || !(a != null && a.uuid)) return;
-    const o = await fromUuid(a.uuid);
+    if ((r == null ? void 0 : r.type) !== "Item" || !(r != null && r.uuid)) return;
+    const o = await fromUuid(r.uuid);
     if (!o || o.type !== "weapon") return;
     let l = o.id;
-    ((n = o.parent) == null ? void 0 : n.id) !== this.actor.id && (l = ((c = (await this.actor.createEmbeddedDocuments("Item", [o.toObject()]))[0]) == null ? void 0 : c.id) ?? l);
-    const u = {
+    ((a = o.parent) == null ? void 0 : a.id) !== this.actor.id && (l = ((u = (await this.actor.createEmbeddedDocuments("Item", [o.toObject()]))[0]) == null ? void 0 : u.id) ?? l);
+    const c = {
       [`system.weapons.${e}.itemId`]: l,
       [`system.weapons.${e}.name`]: o.name,
       [`system.weapons.${e}.damage`]: ((p = o.system) == null ? void 0 : p.damage) ?? ""
     };
-    await this.actor.update(u);
+    await this.actor.update(c);
   }
   _onInventoryDragHandleStart(i, e, t) {
     t && (i.dataTransfer && (i.dataTransfer.setData("text/plain", e), i.dataTransfer.effectAllowed = "move", typeof i.dataTransfer.setDragImage == "function" && i.dataTransfer.setDragImage(t, 0, 0)), this._draggingInventoryItemId = e);
   }
   _onInventoryRowDragOver(i, e) {
-    var a;
+    var r;
     const t = this._draggingInventoryItemId;
-    !t || t === e || (i.preventDefault(), i.dataTransfer && (i.dataTransfer.dropEffect = "move"), (a = i.currentTarget) == null || a.classList.add("pc-actions-row-drag-over"));
+    !t || t === e || (i.preventDefault(), i.dataTransfer && (i.dataTransfer.dropEffect = "move"), (r = i.currentTarget) == null || r.classList.add("pc-actions-row-drag-over"));
   }
   _onInventoryRowDragLeave(i, e) {
     var t;
     (t = i.currentTarget) == null || t.classList.remove("pc-actions-row-drag-over");
   }
   async _onInventoryRowDrop(i, e) {
-    var r, s;
-    i.preventDefault(), (r = i.currentTarget) == null || r.classList.remove("pc-actions-row-drag-over");
+    var n, s;
+    i.preventDefault(), (n = i.currentTarget) == null || n.classList.remove("pc-actions-row-drag-over");
     const t = this._draggingInventoryItemId || ((s = i.dataTransfer) == null ? void 0 : s.getData("text/plain"));
     if (this._draggingInventoryItemId = null, !t || !e || t === e) return;
-    const o = this.actor.items.contents.slice().sort((n, c) => {
-      const p = typeof n.sort == "number" ? n.sort : 0, b = typeof c.sort == "number" ? c.sort : 0;
+    const o = this.actor.items.contents.slice().sort((a, u) => {
+      const p = typeof a.sort == "number" ? a.sort : 0, b = typeof u.sort == "number" ? u.sort : 0;
       return p - b;
-    }).map((n) => n.id), l = o.indexOf(t), u = o.indexOf(e);
-    if (l === -1 || u === -1) return;
-    o.splice(l, 1), o.splice(u, 0, t);
-    const d = o.map((n, c) => ({
-      _id: n,
-      sort: (c + 1) * 10
+    }).map((a) => a.id), l = o.indexOf(t), c = o.indexOf(e);
+    if (l === -1 || c === -1) return;
+    o.splice(l, 1), o.splice(c, 0, t);
+    const d = o.map((a, u) => ({
+      _id: a,
+      sort: (u + 1) * 10
     }));
     await this.actor.updateEmbeddedDocuments("Item", d);
   }
   _onInventoryAreaDragOver(i) {
-    var a, o, l;
-    const e = ((a = i.dataTransfer) == null ? void 0 : a.getData("text/plain")) || ((o = i.dataTransfer) == null ? void 0 : o.getData("application/json")) || "";
+    var r, o, l;
+    const e = ((r = i.dataTransfer) == null ? void 0 : r.getData("text/plain")) || ((o = i.dataTransfer) == null ? void 0 : o.getData("application/json")) || "";
     let t = null;
     if (typeof e == "string" && e.trim())
       try {
@@ -759,31 +789,31 @@ const S = class S extends foundry.applications.api.HandlebarsApplicationMixin(
     (e = i.currentTarget) == null || e.classList.remove("pc-actions-table-drag-over");
   }
   async _postAbilityToChat(i) {
-    var s, n, c;
+    var s, a, u;
     const e = this.actor.items.get(i);
     if (!e || e.type !== "ability") return;
-    const t = ((s = e.system) == null ? void 0 : s.kind) ?? "passive", a = Number(((n = e.system) == null ? void 0 : n.kp) ?? 0) || 0, o = (((c = e.system) == null ? void 0 : c.description) ?? "").trim(), l = t === "active" ? "Aktív" : t === "species" ? "Faji" : t === "background" ? "Háttér" : "Passzív", u = a > 0 ? `<p><strong>KP:</strong> ${a}</p>` : "", d = o ? `<p>${o}</p>` : "", r = `
+    const t = ((s = e.system) == null ? void 0 : s.kind) ?? "passive", r = Number(((a = e.system) == null ? void 0 : a.kp) ?? 0) || 0, o = (((u = e.system) == null ? void 0 : u.description) ?? "").trim(), l = t === "active" ? "Aktív" : t === "species" ? "Faji" : t === "background" ? "Háttér" : "Passzív", c = r > 0 ? `<p><strong>KP:</strong> ${r}</p>` : "", d = o ? `<p>${o}</p>` : "", n = `
       <h2>${e.name}</h2>
       <p><strong>Típus:</strong> ${l}</p>
-      ${u}
+      ${c}
       ${d}
     `;
     return ChatMessage.create({
       speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-      content: r,
+      content: n,
       flags: { "vacuum-of-the-void": { abilityId: e.id } }
     });
   }
   _parseAbilityDrop(i) {
-    var t, a, o, l;
-    const e = ((t = i.dataTransfer) == null ? void 0 : t.getData("text/plain")) || ((a = i.dataTransfer) == null ? void 0 : a.getData("application/json")) || "";
+    var t, r, o, l;
+    const e = ((t = i.dataTransfer) == null ? void 0 : t.getData("text/plain")) || ((r = i.dataTransfer) == null ? void 0 : r.getData("application/json")) || "";
     if (!e) return null;
     if (typeof e == "string") {
-      const u = e.trim();
-      if (u.includes(".") && !u.startsWith("{"))
-        return { uuid: u };
+      const c = e.trim();
+      if (c.includes(".") && !c.startsWith("{"))
+        return { uuid: c };
       try {
-        const d = JSON.parse(u);
+        const d = JSON.parse(c);
         return d != null && d.uuid ? d : (o = d == null ? void 0 : d.data) != null && o.uuid ? { uuid: d.data.uuid } : null;
       } catch {
         return console.warn("VOTV | _parseAbilityDrop: could not parse drag data string", e), null;
@@ -796,21 +826,21 @@ const S = class S extends foundry.applications.api.HandlebarsApplicationMixin(
     i.preventDefault(), (t = i.currentTarget) == null || t.classList.add("pc-ability-slot-drag-over");
   }
   async _onAbilitySingleDrop(i, e) {
-    var r, s, n, c;
-    i.preventDefault(), (r = i.currentTarget) == null || r.classList.remove("pc-ability-slot-drag-over");
+    var n, s, a, u;
+    i.preventDefault(), (n = i.currentTarget) == null || n.classList.remove("pc-ability-slot-drag-over");
     const t = this._parseAbilityDrop(i);
     if (!t) return;
-    const a = await fromUuid(t.uuid);
-    if (!a || a.type !== "ability") return;
-    const o = (((s = a.system) == null ? void 0 : s.kind) ?? "passive").toString(), u = {
+    const r = await fromUuid(t.uuid);
+    if (!r || r.type !== "ability") return;
+    const o = (((s = r.system) == null ? void 0 : s.kind) ?? "passive").toString(), c = {
       faji: "species",
       hatter: "background"
     }[e];
-    if (!u || o !== u) return;
-    let d = a.id;
-    ((n = a.parent) == null ? void 0 : n.id) !== this.actor.id && (d = ((c = (await this.actor.createEmbeddedDocuments("Item", [a.toObject()]))[0]) == null ? void 0 : c.id) ?? d), await this.actor.update({
+    if (!c || o !== c) return;
+    let d = r.id;
+    ((a = r.parent) == null ? void 0 : a.id) !== this.actor.id && (d = ((u = (await this.actor.createEmbeddedDocuments("Item", [r.toObject()]))[0]) == null ? void 0 : u.id) ?? d), await this.actor.update({
       [`system.abilities.${e}.itemId`]: d,
-      [`system.abilities.${e}.name`]: a.name
+      [`system.abilities.${e}.name`]: r.name
     });
   }
   _onAbilityAreaDragOver(i, e) {
@@ -818,77 +848,77 @@ const S = class S extends foundry.applications.api.HandlebarsApplicationMixin(
     i.preventDefault(), (t = i.currentTarget) == null || t.classList.add("pc-ability-area-drag-over");
   }
   async _onAbilityAreaDrop(i, e) {
-    var n, c, p, b, g;
-    i.preventDefault(), (n = i.currentTarget) == null || n.classList.remove("pc-ability-area-drag-over");
+    var a, u, p, b, g;
+    i.preventDefault(), (a = i.currentTarget) == null || a.classList.remove("pc-ability-area-drag-over");
     const t = this._parseAbilityDrop(i);
     if (!t) return;
-    const a = await fromUuid(t.uuid);
-    if (!a || a.type !== "ability") return;
-    const o = (((c = a.system) == null ? void 0 : c.kind) ?? "passive").toString(), u = {
+    const r = await fromUuid(t.uuid);
+    if (!r || r.type !== "ability") return;
+    const o = (((u = r.system) == null ? void 0 : u.kind) ?? "passive").toString(), c = {
       passive: "passive",
       active: "active"
     }[e];
-    if (!u || o !== u) return;
-    let d = a.id;
-    ((p = a.parent) == null ? void 0 : p.id) !== this.actor.id && (d = ((b = (await this.actor.createEmbeddedDocuments("Item", [a.toObject()]))[0]) == null ? void 0 : b.id) ?? d);
-    const r = this.actor.system.abilities ?? {}, s = Array.isArray((g = r[e]) == null ? void 0 : g.items) ? r[e].items.slice() : Array.isArray(r[e]) ? r[e].slice() : [];
+    if (!c || o !== c) return;
+    let d = r.id;
+    ((p = r.parent) == null ? void 0 : p.id) !== this.actor.id && (d = ((b = (await this.actor.createEmbeddedDocuments("Item", [r.toObject()]))[0]) == null ? void 0 : b.id) ?? d);
+    const n = this.actor.system.abilities ?? {}, s = Array.isArray((g = n[e]) == null ? void 0 : g.items) ? n[e].items.slice() : Array.isArray(n[e]) ? n[e].slice() : [];
     s.includes(d) || s.push(d), await this.actor.update({ [`system.abilities.${e}.items`]: s });
   }
   _onMicrochipSlotDragOver(i, e) {
-    var o, l, u;
+    var o, l, c;
     const t = ((o = i.dataTransfer) == null ? void 0 : o.getData("text/plain")) || ((l = i.dataTransfer) == null ? void 0 : l.getData("application/json")) || "";
-    let a;
+    let r;
     try {
-      a = typeof t == "string" ? JSON.parse(t) : t;
+      r = typeof t == "string" ? JSON.parse(t) : t;
     } catch {
       return;
     }
-    (a == null ? void 0 : a.type) === "Item" && (i.preventDefault(), (u = i.currentTarget) == null || u.classList.add("pc-microchip-slot-drag-over"));
+    (r == null ? void 0 : r.type) === "Item" && (i.preventDefault(), (c = i.currentTarget) == null || c.classList.add("pc-microchip-slot-drag-over"));
   }
   async _onMicrochipSlotDrop(i, e) {
-    var u, d, r, s, n;
-    i.preventDefault(), (u = i.currentTarget) == null || u.classList.remove("pc-microchip-slot-drag-over");
-    const t = ((d = i.dataTransfer) == null ? void 0 : d.getData("text/plain")) || ((r = i.dataTransfer) == null ? void 0 : r.getData("application/json")) || "";
-    let a;
+    var c, d, n, s, a;
+    i.preventDefault(), (c = i.currentTarget) == null || c.classList.remove("pc-microchip-slot-drag-over");
+    const t = ((d = i.dataTransfer) == null ? void 0 : d.getData("text/plain")) || ((n = i.dataTransfer) == null ? void 0 : n.getData("application/json")) || "";
+    let r;
     try {
-      a = typeof t == "string" ? JSON.parse(t) : t;
+      r = typeof t == "string" ? JSON.parse(t) : t;
     } catch {
       return;
     }
-    if ((a == null ? void 0 : a.type) !== "Item" || !(a != null && a.uuid)) return;
-    const o = await fromUuid(a.uuid);
+    if ((r == null ? void 0 : r.type) !== "Item" || !(r != null && r.uuid)) return;
+    const o = await fromUuid(r.uuid);
     if (!o || o.type !== "microchip") return;
     let l = o.id;
-    ((s = o.parent) == null ? void 0 : s.id) !== this.actor.id && (l = ((n = (await this.actor.createEmbeddedDocuments("Item", [o.toObject()]))[0]) == null ? void 0 : n.id) ?? l), await this.actor.update({
+    ((s = o.parent) == null ? void 0 : s.id) !== this.actor.id && (l = ((a = (await this.actor.createEmbeddedDocuments("Item", [o.toObject()]))[0]) == null ? void 0 : a.id) ?? l), await this.actor.update({
       [`system.gear.microchips.${e}.itemId`]: l,
       [`system.gear.microchips.${e}.name`]: o.name,
       [`system.gear.microchips.${e}.active`]: !0
     });
   }
   async _rollSkill(i, e) {
-    const a = (this.actor.system.skills ?? {})[i] ?? 0, o = Number(a) || 0, u = `3d6${o !== 0 ? o > 0 ? `+${o}` : `${o}` : ""}`, d = new Roll(u);
+    const r = (this.actor.system.skills ?? {})[i] ?? 0, o = Number(r) || 0, c = `3d6${o !== 0 ? o > 0 ? `+${o}` : `${o}` : ""}`, d = new Roll(c);
     await d.evaluate({ async: !0 });
-    const r = d.total >= 18 ? "critical" : d.total <= 3 ? "fumble" : null, s = game.settings.get("core", "rollMode") ?? CONST.DICE_ROLL_MODES.PUBLIC;
+    const n = d.total >= 18 ? "critical" : d.total <= 3 ? "fumble" : null, s = game.settings.get("core", "rollMode") ?? CONST.DICE_ROLL_MODES.PUBLIC;
     return d.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this.actor }),
       flavor: e,
-      flags: { "vacuum-of-the-void": { resultType: r } },
+      flags: { "vacuum-of-the-void": { resultType: n } },
       rollMode: s
     });
   }
   async _rollWeapon(i) {
-    var h;
-    const t = (this.actor.system.weapons ?? {})[i] ?? {}, a = this.actor.system.skills ?? {}, o = this.actor.items.filter((k) => k.type === "weapon");
+    var y;
+    const t = (this.actor.system.weapons ?? {})[i] ?? {}, r = this.actor.system.skills ?? {}, o = this.actor.items.filter((w) => w.type === "weapon");
     let l = null;
-    t.itemId && (l = o.find((k) => k.id === t.itemId) ?? null);
-    const u = l && l.name || t.name || `Fegyver (${i})`, d = Number(t.bonus || 0) || 0, s = (((h = l == null ? void 0 : l.system) == null ? void 0 : h.type) || "light") === "thrown" ? "grenadeUse" : "firearms", n = Number(a[s] || 0) || 0, c = d + n, b = `3d6${c !== 0 ? c > 0 ? `+${c}` : `${c}` : ""}`, g = new Roll(b);
+    t.itemId && (l = o.find((w) => w.id === t.itemId) ?? null);
+    const c = l && l.name || t.name || `Fegyver (${i})`, d = Number(t.bonus || 0) || 0, s = (((y = l == null ? void 0 : l.system) == null ? void 0 : y.type) || "light") === "thrown" ? "grenadeUse" : "firearms", a = Number(r[s] || 0) || 0, u = d + a, b = `3d6${u !== 0 ? u > 0 ? `+${u}` : `${u}` : ""}`, g = new Roll(b);
     await g.evaluate({ async: !0 });
-    const _ = g.total >= 18 ? "critical" : g.total <= 3 ? "fumble" : null, E = game.settings.get("core", "rollMode") ?? CONST.DICE_ROLL_MODES.PUBLIC;
+    const T = g.total >= 18 ? "critical" : g.total <= 3 ? "fumble" : null, L = game.settings.get("core", "rollMode") ?? CONST.DICE_ROLL_MODES.PUBLIC;
     return g.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this.actor }),
-      flavor: `${u} – találat`,
-      flags: { "vacuum-of-the-void": { resultType: _ } },
-      rollMode: E
+      flavor: `${c} – találat`,
+      flags: { "vacuum-of-the-void": { resultType: T } },
+      rollMode: L
     });
   }
   async _rollWeaponDamage(i) {
@@ -897,10 +927,10 @@ const S = class S extends foundry.applications.api.HandlebarsApplicationMixin(
     if (!e || e.type !== "weapon") return;
     const t = (((l = e.system) == null ? void 0 : l.damage) ?? "").trim();
     if (!t) return;
-    const a = new Roll(t);
-    await a.evaluate({ async: !0 });
+    const r = new Roll(t);
+    await r.evaluate({ async: !0 });
     const o = game.settings.get("core", "rollMode") ?? CONST.DICE_ROLL_MODES.PUBLIC;
-    return a.toMessage({
+    return r.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this.actor }),
       flavor: `${e.name} – sebzés`,
       flags: { "vacuum-of-the-void": {} },
@@ -908,161 +938,33 @@ const S = class S extends foundry.applications.api.HandlebarsApplicationMixin(
     });
   }
 };
-j(S, "PARTS", foundry.utils.mergeObject(A(S, S, "PARTS") ?? {}, {
+P(E, "PARTS", foundry.utils.mergeObject(F(E, E, "PARTS") ?? {}, {
   content: { template: "systems/vacuum-of-the-void/templates/actor/pc-sheet.hbs" }
-})), j(S, "DEFAULT_OPTIONS", foundry.utils.mergeObject(A(S, S, "DEFAULT_OPTIONS"), {
+})), P(E, "DEFAULT_OPTIONS", foundry.utils.mergeObject(F(E, E, "DEFAULT_OPTIONS"), {
   classes: ["vacuum-of-the-void", "sheet", "actor", "pc"],
   template: "systems/vacuum-of-the-void/templates/actor/pc-sheet.hbs",
   width: 1e3,
   minWidth: 1e3,
   height: 800,
-  form: foundry.utils.mergeObject(((_e = A(S, S, "DEFAULT_OPTIONS")) == null ? void 0 : _e.form) ?? {}, { submitOnChange: !0 }),
-  window: foundry.utils.mergeObject(((Oe = A(S, S, "DEFAULT_OPTIONS")) == null ? void 0 : Oe.window) ?? {}, {
+  form: foundry.utils.mergeObject(((Se = F(E, E, "DEFAULT_OPTIONS")) == null ? void 0 : Se.form) ?? {}, { submitOnChange: !0 }),
+  window: foundry.utils.mergeObject(((Oe = F(E, E, "DEFAULT_OPTIONS")) == null ? void 0 : Oe.window) ?? {}, {
     resizable: !0,
     contentClasses: [
-      ...((Se = (Le = A(S, S, "DEFAULT_OPTIONS")) == null ? void 0 : Le.window) == null ? void 0 : Se.contentClasses) ?? [],
+      ...((Le = (_e = F(E, E, "DEFAULT_OPTIONS")) == null ? void 0 : _e.window) == null ? void 0 : Le.contentClasses) ?? [],
       "votv-scroll"
     ]
   })
 }));
-let Q = S;
+let X = E;
 var Ae;
-const N = class N extends foundry.applications.api.HandlebarsApplicationMixin(
-  foundry.applications.sheets.ItemSheetV2
-) {
-  _initializeApplicationOptions(i) {
-    const e = super._initializeApplicationOptions(i), t = (i == null ? void 0 : i.document) ?? this.document;
-    if (t != null && t.uuid || t != null && t.id) {
-      const a = t.uuid ?? t.id;
-      e.uniqueId = `${this.constructor.name}-${String(a).replace(/\./g, "-")}`;
-    }
-    return e;
-  }
-  get item() {
-    return this.document;
-  }
-  _attachFrameListeners(i) {
-    if (super._attachFrameListeners(i), !this.isEditable) return;
-    const e = this, t = (o) => {
-      if (!o) return;
-      const l = e._getFormDataForUpdate(o);
-      Object.keys(l).length !== 0 && e.document.update(l).catch((u) => console.warn("VoidWeaponSheet save failed", u));
-    }, a = (o) => {
-      var l, u, d;
-      return o && (((u = (l = e.element) == null ? void 0 : l.contains) == null ? void 0 : u.call(l, o)) || e.id && ((d = o.closest) == null ? void 0 : d.call(o, `#${CSS.escape(e.id)}`)));
-    };
-    e._votvChange = (o) => {
-      var u, d, r;
-      const l = ((u = o.target) == null ? void 0 : u.form) ?? ((r = (d = o.target) == null ? void 0 : d.closest) == null ? void 0 : r.call(d, "form"));
-      a(l) && t(l);
-    }, e._votvInput = (o) => {
-      var u, d, r;
-      const l = ((u = o.target) == null ? void 0 : u.form) ?? ((r = (d = o.target) == null ? void 0 : d.closest) == null ? void 0 : r.call(d, "form"));
-      a(l) && (clearTimeout(e._votvInputDebounce), e._votvInputDebounce = setTimeout(() => t(l), 300));
-    }, document.body.addEventListener("change", e._votvChange, !0), document.body.addEventListener("input", e._votvInput, !0);
-  }
-  _tearDown(i) {
-    var e;
-    return document.body.removeEventListener("change", this._votvChange, !0), document.body.removeEventListener("input", this._votvInput, !0), clearTimeout(this._votvInputDebounce), (e = super._tearDown) == null ? void 0 : e.call(this, i);
-  }
-  _getFormDataForUpdate(i) {
-    const e = {};
-    for (const t of i.elements) {
-      if (!t.name || t.disabled || t.type === "radio" && !t.checked) continue;
-      let a;
-      t.type === "checkbox" ? a = t.checked : t.type === "number" ? a = t.value === "" ? 0 : Number(t.value) : a = t.value ?? "", foundry.utils.setProperty(e, t.name, a);
-    }
-    return e;
-  }
-  async _prepareContext(i) {
-    let e = await super._prepareContext(i);
-    return e = e ?? {}, e.system = this.item.system, e;
-  }
-};
-j(N, "PARTS", foundry.utils.mergeObject(A(N, N, "PARTS") ?? {}, {
-  content: { template: "systems/vacuum-of-the-void/templates/item/weapon-sheet.hbs" }
-})), j(N, "DEFAULT_OPTIONS", foundry.utils.mergeObject(A(N, N, "DEFAULT_OPTIONS"), {
-  classes: ["vacuum-of-the-void", "sheet", "item", "weapon"],
-  template: "systems/vacuum-of-the-void/templates/item/weapon-sheet.hbs",
-  width: 550,
-  minWidth: 550,
-  height: 400,
-  form: foundry.utils.mergeObject(((Ae = A(N, N, "DEFAULT_OPTIONS")) == null ? void 0 : Ae.form) ?? {}, { submitOnChange: !0 })
-}));
-let X = N;
-var Fe;
-const C = class C extends foundry.applications.api.HandlebarsApplicationMixin(
-  foundry.applications.sheets.ItemSheetV2
-) {
-  _initializeApplicationOptions(i) {
-    const e = super._initializeApplicationOptions(i), t = (i == null ? void 0 : i.document) ?? this.document;
-    if (t != null && t.uuid || t != null && t.id) {
-      const a = t.uuid ?? t.id;
-      e.uniqueId = `${this.constructor.name}-${String(a).replace(/\./g, "-")}`;
-    }
-    return e;
-  }
-  get item() {
-    return this.document;
-  }
-  _attachFrameListeners(i) {
-    if (super._attachFrameListeners(i), !this.isEditable) return;
-    const e = this, t = (o) => {
-      if (!o) return;
-      const l = e._getFormDataForUpdate(o);
-      Object.keys(l).length !== 0 && e.document.update(l).catch((u) => console.warn("VoidMicrochipSheet save failed", u));
-    }, a = (o) => {
-      var l, u, d;
-      return o && (((u = (l = e.element) == null ? void 0 : l.contains) == null ? void 0 : u.call(l, o)) || e.id && ((d = o.closest) == null ? void 0 : d.call(o, `#${CSS.escape(e.id)}`)));
-    };
-    e._votvChange = (o) => {
-      var u, d, r;
-      const l = ((u = o.target) == null ? void 0 : u.form) ?? ((r = (d = o.target) == null ? void 0 : d.closest) == null ? void 0 : r.call(d, "form"));
-      a(l) && t(l);
-    }, e._votvInput = (o) => {
-      var u, d, r;
-      const l = ((u = o.target) == null ? void 0 : u.form) ?? ((r = (d = o.target) == null ? void 0 : d.closest) == null ? void 0 : r.call(d, "form"));
-      a(l) && (clearTimeout(e._votvInputDebounce), e._votvInputDebounce = setTimeout(() => t(l), 300));
-    }, document.body.addEventListener("change", e._votvChange, !0), document.body.addEventListener("input", e._votvInput, !0);
-  }
-  _tearDown(i) {
-    var e;
-    return document.body.removeEventListener("change", this._votvChange, !0), document.body.removeEventListener("input", this._votvInput, !0), clearTimeout(this._votvInputDebounce), (e = super._tearDown) == null ? void 0 : e.call(this, i);
-  }
-  _getFormDataForUpdate(i) {
-    const e = {};
-    for (const t of i.elements) {
-      if (!t.name || t.disabled || t.type === "radio" && !t.checked) continue;
-      let a;
-      t.type === "checkbox" ? a = t.checked : t.type === "number" ? a = t.value === "" ? 0 : Number(t.value) : a = t.value ?? "", foundry.utils.setProperty(e, t.name, a);
-    }
-    return e;
-  }
-  async _prepareContext(i) {
-    let e = await super._prepareContext(i);
-    return e = e ?? {}, e.system = this.item.system, e;
-  }
-};
-j(C, "PARTS", foundry.utils.mergeObject(A(C, C, "PARTS") ?? {}, {
-  content: { template: "systems/vacuum-of-the-void/templates/item/microchip-sheet.hbs" }
-})), j(C, "DEFAULT_OPTIONS", foundry.utils.mergeObject(A(C, C, "DEFAULT_OPTIONS"), {
-  classes: ["vacuum-of-the-void", "sheet", "item", "microchip"],
-  template: "systems/vacuum-of-the-void/templates/item/microchip-sheet.hbs",
-  width: 500,
-  minWidth: 500,
-  height: 420,
-  form: foundry.utils.mergeObject(((Fe = A(C, C, "DEFAULT_OPTIONS")) == null ? void 0 : Fe.form) ?? {}, { submitOnChange: !0 })
-}));
-let Y = C;
-var $e;
 const M = class M extends foundry.applications.api.HandlebarsApplicationMixin(
   foundry.applications.sheets.ItemSheetV2
 ) {
   _initializeApplicationOptions(i) {
     const e = super._initializeApplicationOptions(i), t = (i == null ? void 0 : i.document) ?? this.document;
     if (t != null && t.uuid || t != null && t.id) {
-      const a = t.uuid ?? t.id;
-      e.uniqueId = `${this.constructor.name}-${String(a).replace(/\./g, "-")}`;
+      const r = t.uuid ?? t.id;
+      e.uniqueId = `${this.constructor.name}-${String(r).replace(/\./g, "-")}`;
     }
     return e;
   }
@@ -1074,19 +976,19 @@ const M = class M extends foundry.applications.api.HandlebarsApplicationMixin(
     const e = this, t = (o) => {
       if (!o) return;
       const l = e._getFormDataForUpdate(o);
-      Object.keys(l).length !== 0 && e.document.update(l).catch((u) => console.warn("VoidAbilitySheet save failed", u));
-    }, a = (o) => {
-      var l, u, d;
-      return o && (((u = (l = e.element) == null ? void 0 : l.contains) == null ? void 0 : u.call(l, o)) || e.id && ((d = o.closest) == null ? void 0 : d.call(o, `#${CSS.escape(e.id)}`)));
+      Object.keys(l).length !== 0 && e.document.update(l).catch((c) => console.warn("VoidWeaponSheet save failed", c));
+    }, r = (o) => {
+      var l, c, d;
+      return o && (((c = (l = e.element) == null ? void 0 : l.contains) == null ? void 0 : c.call(l, o)) || e.id && ((d = o.closest) == null ? void 0 : d.call(o, `#${CSS.escape(e.id)}`)));
     };
     e._votvChange = (o) => {
-      var u, d, r;
-      const l = ((u = o.target) == null ? void 0 : u.form) ?? ((r = (d = o.target) == null ? void 0 : d.closest) == null ? void 0 : r.call(d, "form"));
-      a(l) && t(l);
+      var c, d, n;
+      const l = ((c = o.target) == null ? void 0 : c.form) ?? ((n = (d = o.target) == null ? void 0 : d.closest) == null ? void 0 : n.call(d, "form"));
+      r(l) && t(l);
     }, e._votvInput = (o) => {
-      var u, d, r;
-      const l = ((u = o.target) == null ? void 0 : u.form) ?? ((r = (d = o.target) == null ? void 0 : d.closest) == null ? void 0 : r.call(d, "form"));
-      a(l) && (clearTimeout(e._votvInputDebounce), e._votvInputDebounce = setTimeout(() => t(l), 300));
+      var c, d, n;
+      const l = ((c = o.target) == null ? void 0 : c.form) ?? ((n = (d = o.target) == null ? void 0 : d.closest) == null ? void 0 : n.call(d, "form"));
+      r(l) && (clearTimeout(e._votvInputDebounce), e._votvInputDebounce = setTimeout(() => t(l), 300));
     }, document.body.addEventListener("change", e._votvChange, !0), document.body.addEventListener("input", e._votvInput, !0);
   }
   _tearDown(i) {
@@ -1097,8 +999,8 @@ const M = class M extends foundry.applications.api.HandlebarsApplicationMixin(
     const e = {};
     for (const t of i.elements) {
       if (!t.name || t.disabled || t.type === "radio" && !t.checked) continue;
-      let a;
-      t.type === "checkbox" ? a = t.checked : t.type === "number" ? a = t.value === "" ? 0 : Number(t.value) : a = t.value ?? "", foundry.utils.setProperty(e, t.name, a);
+      let r;
+      t.type === "checkbox" ? r = t.checked : t.type === "number" ? r = t.value === "" ? 0 : Number(t.value) : r = t.value ?? "", foundry.utils.setProperty(e, t.name, r);
     }
     return e;
   }
@@ -1107,20 +1009,148 @@ const M = class M extends foundry.applications.api.HandlebarsApplicationMixin(
     return e = e ?? {}, e.system = this.item.system, e;
   }
 };
-j(M, "PARTS", foundry.utils.mergeObject(A(M, M, "PARTS") ?? {}, {
+P(M, "PARTS", foundry.utils.mergeObject(F(M, M, "PARTS") ?? {}, {
+  content: { template: "systems/vacuum-of-the-void/templates/item/weapon-sheet.hbs" }
+})), P(M, "DEFAULT_OPTIONS", foundry.utils.mergeObject(F(M, M, "DEFAULT_OPTIONS"), {
+  classes: ["vacuum-of-the-void", "sheet", "item", "weapon"],
+  template: "systems/vacuum-of-the-void/templates/item/weapon-sheet.hbs",
+  width: 550,
+  minWidth: 550,
+  height: 400,
+  form: foundry.utils.mergeObject(((Ae = F(M, M, "DEFAULT_OPTIONS")) == null ? void 0 : Ae.form) ?? {}, { submitOnChange: !0 })
+}));
+let Q = M;
+var Ee;
+const U = class U extends foundry.applications.api.HandlebarsApplicationMixin(
+  foundry.applications.sheets.ItemSheetV2
+) {
+  _initializeApplicationOptions(i) {
+    const e = super._initializeApplicationOptions(i), t = (i == null ? void 0 : i.document) ?? this.document;
+    if (t != null && t.uuid || t != null && t.id) {
+      const r = t.uuid ?? t.id;
+      e.uniqueId = `${this.constructor.name}-${String(r).replace(/\./g, "-")}`;
+    }
+    return e;
+  }
+  get item() {
+    return this.document;
+  }
+  _attachFrameListeners(i) {
+    if (super._attachFrameListeners(i), !this.isEditable) return;
+    const e = this, t = (o) => {
+      if (!o) return;
+      const l = e._getFormDataForUpdate(o);
+      Object.keys(l).length !== 0 && e.document.update(l).catch((c) => console.warn("VoidMicrochipSheet save failed", c));
+    }, r = (o) => {
+      var l, c, d;
+      return o && (((c = (l = e.element) == null ? void 0 : l.contains) == null ? void 0 : c.call(l, o)) || e.id && ((d = o.closest) == null ? void 0 : d.call(o, `#${CSS.escape(e.id)}`)));
+    };
+    e._votvChange = (o) => {
+      var c, d, n;
+      const l = ((c = o.target) == null ? void 0 : c.form) ?? ((n = (d = o.target) == null ? void 0 : d.closest) == null ? void 0 : n.call(d, "form"));
+      r(l) && t(l);
+    }, e._votvInput = (o) => {
+      var c, d, n;
+      const l = ((c = o.target) == null ? void 0 : c.form) ?? ((n = (d = o.target) == null ? void 0 : d.closest) == null ? void 0 : n.call(d, "form"));
+      r(l) && (clearTimeout(e._votvInputDebounce), e._votvInputDebounce = setTimeout(() => t(l), 300));
+    }, document.body.addEventListener("change", e._votvChange, !0), document.body.addEventListener("input", e._votvInput, !0);
+  }
+  _tearDown(i) {
+    var e;
+    return document.body.removeEventListener("change", this._votvChange, !0), document.body.removeEventListener("input", this._votvInput, !0), clearTimeout(this._votvInputDebounce), (e = super._tearDown) == null ? void 0 : e.call(this, i);
+  }
+  _getFormDataForUpdate(i) {
+    const e = {};
+    for (const t of i.elements) {
+      if (!t.name || t.disabled || t.type === "radio" && !t.checked) continue;
+      let r;
+      t.type === "checkbox" ? r = t.checked : t.type === "number" ? r = t.value === "" ? 0 : Number(t.value) : r = t.value ?? "", foundry.utils.setProperty(e, t.name, r);
+    }
+    return e;
+  }
+  async _prepareContext(i) {
+    let e = await super._prepareContext(i);
+    return e = e ?? {}, e.system = this.item.system, e;
+  }
+};
+P(U, "PARTS", foundry.utils.mergeObject(F(U, U, "PARTS") ?? {}, {
+  content: { template: "systems/vacuum-of-the-void/templates/item/microchip-sheet.hbs" }
+})), P(U, "DEFAULT_OPTIONS", foundry.utils.mergeObject(F(U, U, "DEFAULT_OPTIONS"), {
+  classes: ["vacuum-of-the-void", "sheet", "item", "microchip"],
+  template: "systems/vacuum-of-the-void/templates/item/microchip-sheet.hbs",
+  width: 500,
+  minWidth: 500,
+  height: 420,
+  form: foundry.utils.mergeObject(((Ee = F(U, U, "DEFAULT_OPTIONS")) == null ? void 0 : Ee.form) ?? {}, { submitOnChange: !0 })
+}));
+let Y = U;
+var Fe;
+const j = class j extends foundry.applications.api.HandlebarsApplicationMixin(
+  foundry.applications.sheets.ItemSheetV2
+) {
+  _initializeApplicationOptions(i) {
+    const e = super._initializeApplicationOptions(i), t = (i == null ? void 0 : i.document) ?? this.document;
+    if (t != null && t.uuid || t != null && t.id) {
+      const r = t.uuid ?? t.id;
+      e.uniqueId = `${this.constructor.name}-${String(r).replace(/\./g, "-")}`;
+    }
+    return e;
+  }
+  get item() {
+    return this.document;
+  }
+  _attachFrameListeners(i) {
+    if (super._attachFrameListeners(i), !this.isEditable) return;
+    const e = this, t = (o) => {
+      if (!o) return;
+      const l = e._getFormDataForUpdate(o);
+      Object.keys(l).length !== 0 && e.document.update(l).catch((c) => console.warn("VoidAbilitySheet save failed", c));
+    }, r = (o) => {
+      var l, c, d;
+      return o && (((c = (l = e.element) == null ? void 0 : l.contains) == null ? void 0 : c.call(l, o)) || e.id && ((d = o.closest) == null ? void 0 : d.call(o, `#${CSS.escape(e.id)}`)));
+    };
+    e._votvChange = (o) => {
+      var c, d, n;
+      const l = ((c = o.target) == null ? void 0 : c.form) ?? ((n = (d = o.target) == null ? void 0 : d.closest) == null ? void 0 : n.call(d, "form"));
+      r(l) && t(l);
+    }, e._votvInput = (o) => {
+      var c, d, n;
+      const l = ((c = o.target) == null ? void 0 : c.form) ?? ((n = (d = o.target) == null ? void 0 : d.closest) == null ? void 0 : n.call(d, "form"));
+      r(l) && (clearTimeout(e._votvInputDebounce), e._votvInputDebounce = setTimeout(() => t(l), 300));
+    }, document.body.addEventListener("change", e._votvChange, !0), document.body.addEventListener("input", e._votvInput, !0);
+  }
+  _tearDown(i) {
+    var e;
+    return document.body.removeEventListener("change", this._votvChange, !0), document.body.removeEventListener("input", this._votvInput, !0), clearTimeout(this._votvInputDebounce), (e = super._tearDown) == null ? void 0 : e.call(this, i);
+  }
+  _getFormDataForUpdate(i) {
+    const e = {};
+    for (const t of i.elements) {
+      if (!t.name || t.disabled || t.type === "radio" && !t.checked) continue;
+      let r;
+      t.type === "checkbox" ? r = t.checked : t.type === "number" ? r = t.value === "" ? 0 : Number(t.value) : r = t.value ?? "", foundry.utils.setProperty(e, t.name, r);
+    }
+    return e;
+  }
+  async _prepareContext(i) {
+    let e = await super._prepareContext(i);
+    return e = e ?? {}, e.system = this.item.system, e;
+  }
+};
+P(j, "PARTS", foundry.utils.mergeObject(F(j, j, "PARTS") ?? {}, {
   content: { template: "systems/vacuum-of-the-void/templates/item/ability-sheet.hbs" }
-})), j(M, "DEFAULT_OPTIONS", foundry.utils.mergeObject(A(M, M, "DEFAULT_OPTIONS"), {
+})), P(j, "DEFAULT_OPTIONS", foundry.utils.mergeObject(F(j, j, "DEFAULT_OPTIONS"), {
   classes: ["vacuum-of-the-void", "sheet", "item", "ability"],
   template: "systems/vacuum-of-the-void/templates/item/ability-sheet.hbs",
   width: 500,
   minWidth: 500,
   height: 420,
-  form: foundry.utils.mergeObject((($e = A(M, M, "DEFAULT_OPTIONS")) == null ? void 0 : $e.form) ?? {}, { submitOnChange: !0 })
+  form: foundry.utils.mergeObject(((Fe = F(j, j, "DEFAULT_OPTIONS")) == null ? void 0 : Fe.form) ?? {}, { submitOnChange: !0 })
 }));
-let Z = M;
+let Z = j;
 const Ye = "systems/vacuum-of-the-void/assets/void-bg.jpg";
 Hooks.once("init", () => {
-  var T, i, e, t;
+  var _, i, e, t;
   console.log("Vacuum of the Void | Initializing system"), game.votv = {
     systemId: "vacuum-of-the-void",
     checks: {
@@ -1129,14 +1159,14 @@ Hooks.once("init", () => {
       targetType: "under-or-equal"
     },
     _dragSourceActorId: null
-  }, (T = CONFIG.Actor).dataModels ?? (T.dataModels = {}), CONFIG.Actor.dataModels.pc = ze, (i = CONFIG.Item).dataModels ?? (i.dataModels = {}), CONFIG.Item.dataModels.weapon = Ge, CONFIG.Item.dataModels.microchip = Je, CONFIG.Item.dataModels.ability = Xe, (e = CONFIG.Actor).trackableAttributes ?? (e.trackableAttributes = {}), CONFIG.Actor.trackableAttributes.pc = {
+  }, (_ = CONFIG.Actor).dataModels ?? (_.dataModels = {}), CONFIG.Actor.dataModels.pc = ze, (i = CONFIG.Item).dataModels ?? (i.dataModels = {}), CONFIG.Item.dataModels.weapon = Ge, CONFIG.Item.dataModels.microchip = Je, CONFIG.Item.dataModels.ability = Qe, (e = CONFIG.Actor).trackableAttributes ?? (e.trackableAttributes = {}), CONFIG.Actor.trackableAttributes.pc = {
     bar: ["resources.health", "resources.stress"],
     value: []
-  }, (t = CONFIG.Actor).typeLabels ?? (t.typeLabels = {}), CONFIG.Actor.typeLabels.pc = "Player Character", foundry.documents.collections.Actors.unregisterSheet("core", foundry.applications.sheets.ActorSheetV2), foundry.documents.collections.Actors.registerSheet("vacuum-of-the-void", Q, {
+  }, (t = CONFIG.Actor).typeLabels ?? (t.typeLabels = {}), CONFIG.Actor.typeLabels.pc = "Player Character", foundry.documents.collections.Actors.unregisterSheet("core", foundry.applications.sheets.ActorSheetV2), foundry.documents.collections.Actors.registerSheet("vacuum-of-the-void", X, {
     types: ["pc"],
     makeDefault: !0,
     label: "VOTV.PcSheet"
-  }), foundry.documents.collections.Items.registerSheet("vacuum-of-the-void", X, {
+  }), foundry.documents.collections.Items.registerSheet("vacuum-of-the-void", Q, {
     types: ["weapon"],
     makeDefault: !0,
     label: "Void Weapon"
@@ -1148,56 +1178,64 @@ Hooks.once("init", () => {
     types: ["ability"],
     makeDefault: !0,
     label: "Void Ability"
-  }), Hooks.on("updateActor", (a, o, l, u) => {
-    const d = a == null ? void 0 : a.id;
-    d && setTimeout(() => {
-      var n, c, p, b;
-      const r = (n = game.actors) == null ? void 0 : n.get(d);
-      if (r != null && r.apps) for (const g of r.apps) g != null && g.rendered && typeof g.render == "function" && g.render(!0);
-      const s = Object.values((ui == null ? void 0 : ui.windows) ?? {});
-      for (const g of s)
-        !(g != null && g.rendered) || typeof g.render != "function" || ((c = g.document) == null ? void 0 : c.id) !== d || ((p = g.document) == null ? void 0 : p.documentName) !== "Actor" || ((b = g.constructor) == null ? void 0 : b.name) !== "VoidPcSheet" || g.render(!0);
+  }), Hooks.on("updateActor", (r, o, l, c) => {
+    var L, y, w, k, q;
+    const d = r == null ? void 0 : r.id;
+    if (!d) return;
+    const n = document.activeElement, s = n && (n.tagName === "INPUT" && n.type !== "checkbox" && n.type !== "radio" || n.tagName === "TEXTAREA" || n.isContentEditable), a = [], u = (L = game.actors) == null ? void 0 : L.get(d);
+    u != null && u.apps && a.push(...u.apps);
+    const p = Object.values((ui == null ? void 0 : ui.windows) ?? {});
+    for (const S of p)
+      ((y = S.document) == null ? void 0 : y.id) !== d || ((w = S.document) == null ? void 0 : w.documentName) !== "Actor" || ((k = S.constructor) == null ? void 0 : k.name) !== "VoidPcSheet" || a.includes(S) || a.push(S);
+    if (s && a.some((S) => {
+      const C = (S == null ? void 0 : S.form) ?? (S == null ? void 0 : S.element);
+      return C && C.contains(n);
+    })) return;
+    const g = (q = game.votv) == null ? void 0 : q._lastPcSheetBlurSave, T = g && Date.now() - g.at < 250 ? g.appId : null;
+    setTimeout(() => {
+      for (const S of a)
+        !(S != null && S.rendered) || typeof S.render != "function" || S.id !== T && S.render(!0);
     }, 0);
   });
 });
 Hooks.on("ready", () => {
   document.body.addEventListener(
     "dragstart",
-    (T) => {
-      var a, o, l, u, d, r;
-      if (!((o = (a = T.target) == null ? void 0 : a.closest) != null && o.call(a, "#actors"))) return;
-      const i = (u = (l = T.target) == null ? void 0 : l.closest) == null ? void 0 : u.call(l, "[data-document-id]"), e = (d = i == null ? void 0 : i.getAttribute) == null ? void 0 : d.call(i, "data-document-id");
+    (_) => {
+      var r, o, l, c, d, n;
+      if (!((o = (r = _.target) == null ? void 0 : r.closest) != null && o.call(r, "#actors"))) return;
+      const i = (c = (l = _.target) == null ? void 0 : l.closest) == null ? void 0 : c.call(l, "[data-document-id]"), e = (d = i == null ? void 0 : i.getAttribute) == null ? void 0 : d.call(i, "data-document-id");
       if (!e) return;
       const t = e.includes(".") ? e.split(".").pop() : e;
-      t && ((r = game.actors) != null && r.get(t)) && (game.votv._dragSourceActorId = t);
+      t && ((n = game.actors) != null && n.get(t)) && (game.votv._dragSourceActorId = t);
     },
     !0
   );
 });
-Hooks.on("preCreateToken", (T, i, e) => {
-  var l, u;
-  const t = (l = game.votv) == null ? void 0 : l._dragSourceActorId, a = t ?? T.actorId ?? null;
+Hooks.on("preCreateToken", (_, i, e) => {
+  var l, c;
+  const t = (l = game.votv) == null ? void 0 : l._dragSourceActorId, r = t ?? _.actorId ?? null;
   t && (game.votv._dragSourceActorId = null);
-  const o = a ? (u = game.actors) == null ? void 0 : u.get(a) : null;
-  !o || o.type !== "pc" || T.updateSource({
+  const o = r ? (c = game.actors) == null ? void 0 : c.get(r) : null;
+  !o || o.type !== "pc" || _.updateSource({
     ...t ? { actorId: t } : {},
     actorLink: !0
   });
 });
-Hooks.on("preCreateScene", (T, i) => {
+Hooks.on("preCreateScene", (_, i) => {
   var e;
-  (e = i == null ? void 0 : i.background) != null && e.src || T.updateSource({
+  (e = i == null ? void 0 : i.background) != null && e.src || _.updateSource({
     width: 1920,
     height: 1080,
     "background.src": Ye,
     backgroundColor: "#000000"
   });
 });
-Hooks.on("renderChatMessageHTML", (T, i, e) => {
-  var o, l, u;
-  const t = (l = (o = T.flags) == null ? void 0 : o["vacuum-of-the-void"]) == null ? void 0 : l.resultType;
+Hooks.on("renderChatMessageHTML", (_, i, e) => {
+  var o, l, c;
+  const t = (l = (o = _.flags) == null ? void 0 : o["vacuum-of-the-void"]) == null ? void 0 : l.resultType;
   if (!t) return;
-  const a = (u = i == null ? void 0 : i.querySelector) == null ? void 0 : u.call(i, ".dice-roll");
-  a && a.classList.add(`votv-${t}`);
+  const r = (c = i == null ? void 0 : i.querySelector) == null ? void 0 : c.call(i, ".dice-roll");
+  r && r.classList.add(`votv-${t}`);
 });
 //# sourceMappingURL=vacuum-of-the-void.js.map

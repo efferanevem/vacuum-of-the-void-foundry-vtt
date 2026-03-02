@@ -35,6 +35,65 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
     return this.document;
   }
 
+  /** Mentjük a görgetést és a fókuszt render előtt, visszaállítjuk utána (ne dobja vissza a kurzort / lap tetejére). */
+  async render(force = false, options = {}) {
+    const lastBlur = game.votv?._lastPcSheetBlurSave;
+    if (lastBlur?.appId === this.id && (Date.now() - lastBlur.at) < 250) return this;
+    const rootBefore = this.form ?? this.element;
+    let saved = { scrollTop: null, focus: null };
+    if (rootBefore) {
+      const activeEl = document.activeElement;
+      const isOurs = rootBefore.contains(activeEl);
+      const isInputLike = activeEl && (
+        (activeEl.tagName === "INPUT" && activeEl.type !== "checkbox" && activeEl.type !== "radio") ||
+        activeEl.tagName === "TEXTAREA"
+      );
+      if (isOurs && isInputLike) {
+        saved.focus = {
+          name: activeEl.name || null,
+          id: activeEl.id || null,
+          selectionStart: "selectionStart" in activeEl ? activeEl.selectionStart : 0,
+          selectionEnd: "selectionEnd" in activeEl ? activeEl.selectionEnd : 0
+        };
+      }
+      const scrollElBefore =
+        rootBefore.closest?.(".votv-scroll") ??
+        rootBefore.querySelector?.(".votv-scroll") ??
+        this.element?.querySelector?.(".votv-scroll") ??
+        (rootBefore.scrollHeight > rootBefore.clientHeight ? rootBefore : null);
+      if (scrollElBefore) saved.scrollTop = scrollElBefore.scrollTop;
+    }
+    const out = await super.render(force, options);
+    const rootAfter = this.form ?? this.element;
+    const scrollTopToRestore = saved.scrollTop;
+    const focusToRestore = saved.focus;
+    if ((scrollTopToRestore != null || focusToRestore) && rootAfter) {
+      requestAnimationFrame(() => {
+        if (scrollTopToRestore != null) {
+          const scrollElAfter =
+            rootAfter.closest?.(".votv-scroll") ??
+            rootAfter.querySelector?.(".votv-scroll") ??
+            this.element?.querySelector?.(".votv-scroll") ??
+            (rootAfter.scrollHeight > rootAfter.clientHeight ? rootAfter : null);
+          if (scrollElAfter) scrollElAfter.scrollTop = scrollTopToRestore;
+        }
+        if (focusToRestore?.name != null || focusToRestore?.id != null) {
+          const el =
+            rootAfter.querySelector?.(focusToRestore.id ? `#${CSS.escape(focusToRestore.id)}` : null) ??
+            (focusToRestore.name ? rootAfter.querySelector?.(`[name="${CSS.escape(focusToRestore.name)}"]`) : null);
+          if (el && (el.tagName === "INPUT" || el.tagName === "TEXTAREA")) {
+            el.focus();
+            if (typeof el.selectionStart === "number") {
+              el.selectionStart = focusToRestore.selectionStart ?? 0;
+              el.selectionEnd = focusToRestore.selectionEnd ?? focusToRestore.selectionStart ?? 0;
+            }
+          }
+        }
+      });
+    }
+    return out;
+  }
+
   /**
    * Compute health status 0–3 from current HP and max HP, using thirds of max.
    * Max 15 → 11–15 Egészséges, 6–10 Sérült, 1–5 Kritikus, 0 Használhatatlan.
@@ -547,7 +606,7 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
       actionsTable.addEventListener("drop", ev => this._onInventoryAreaDrop(ev));
     }
 
-    // Auto-save form on change/input (submitOnChange fallback) – use document so we catch form events wherever the form is in DOM
+    // Mentés csak kikattintáskor (blur), ne gépelés közben – így nem ugrik a kurzor és a lap.
     const sheet = this;
     const doSubmit = (form) => {
       if (!form) return;
@@ -555,26 +614,23 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
       if (Object.keys(updateData).length === 0) return;
       sheet.actor.update(updateData).catch(err => console.warn("VoidPcSheet save failed", err));
     };
-    const isOurForm = (form) => form && (sheet.element?.contains?.(form) || (sheet.id && form.closest?.(`#${CSS.escape(sheet.id)}`)));
-    sheet._votvChange = (ev) => {
-      const form = ev.target?.form ?? ev.target?.closest?.("form");
+    const isOurForm = (form) =>
+      form && (sheet.element?.contains?.(form) || (sheet.id && form.closest?.(`#${CSS.escape(sheet.id)}`)));
+    sheet._votvBlur = (ev) => {
+      const target = ev.target;
+      if (!target || !target.form) return;
+      const tag = target.tagName;
+      if (tag !== "INPUT" && tag !== "TEXTAREA" && tag !== "SELECT") return;
+      const form = target.form;
       if (!isOurForm(form)) return;
+      if (game.votv) game.votv._lastPcSheetBlurSave = { appId: sheet.id, at: Date.now() };
       doSubmit(form);
     };
-    sheet._votvInput = (ev) => {
-      const form = ev.target?.form ?? ev.target?.closest?.("form");
-      if (!isOurForm(form)) return;
-      clearTimeout(sheet._votvInputDebounce);
-      sheet._votvInputDebounce = setTimeout(() => doSubmit(form), 300);
-    };
-    document.body.addEventListener("change", sheet._votvChange, true);
-    document.body.addEventListener("input", sheet._votvInput, true);
+    document.body.addEventListener("blur", sheet._votvBlur, true);
   }
 
   _tearDown(options) {
-    document.body.removeEventListener("change", this._votvChange, true);
-    document.body.removeEventListener("input", this._votvInput, true);
-    clearTimeout(this._votvInputDebounce);
+    document.body.removeEventListener("blur", this._votvBlur, true);
     return super._tearDown?.(options);
   }
 

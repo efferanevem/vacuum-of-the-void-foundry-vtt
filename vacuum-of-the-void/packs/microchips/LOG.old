@@ -1,5 +1,1 @@
-2026/03/01-20:23:55.367 52d0 Log #7: 0 ops saved to Table #8 OK
-2026/03/01-20:23:55.368 52d0 Archiving C:\Users\effer_\AppData\Local\FoundryVTT\Data\systems\vacuum-of-the-void\packs\microchips/000007.log: OK
-2026/03/01-20:23:55.368 52d0 Table #5: 17 entries OK
-2026/03/01-20:23:55.371 52d0 Archiving C:\Users\effer_\AppData\Local\FoundryVTT\Data\systems\vacuum-of-the-void\packs\microchips/MANIFEST-000006: OK
-2026/03/01-20:23:55.375 52d0 **** Repaired leveldb C:\Users\effer_\AppData\Local\FoundryVTT\Data\systems\vacuum-of-the-void\packs\microchips; recovered 1 files; 4980 bytes. Some data may have been lost. ****
+2026/03/01-20:23:55.383 52d0 Delete type=3 #1

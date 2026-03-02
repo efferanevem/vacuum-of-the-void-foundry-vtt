@@ -63,16 +63,35 @@ Hooks.once("init", () => {
     label: "Void Ability"
   });
 
+  // Ha egy actort frissítenek, a többi nyitott karakterlapja újrarajzolódjon. Ne újrarajzoljunk, ha bármelyik lapon input/textarea van fókuszban (kurzor + görgetés maradjon).
   Hooks.on("updateActor", (actor, _changed, _options, _userId) => {
     const actorId = actor?.id;
     if (!actorId) return;
+    const activeEl = document.activeElement;
+    const isInputLike = activeEl && (
+      (activeEl.tagName === "INPUT" && activeEl.type !== "checkbox" && activeEl.type !== "radio") ||
+      activeEl.tagName === "TEXTAREA" ||
+      activeEl.isContentEditable
+    );
+    const appsToConsider = [];
+    const doc = game.actors?.get(actorId);
+    if (doc?.apps) appsToConsider.push(...doc.apps);
+    const windows = Object.values(ui?.windows ?? {});
+    for (const app of windows) {
+      if (app.document?.id !== actorId || app.document?.documentName !== "Actor" || app.constructor?.name !== "VoidPcSheet") continue;
+      if (!appsToConsider.includes(app)) appsToConsider.push(app);
+    }
+    const anySheetHasFocusedInput = isInputLike && appsToConsider.some((app) => {
+      const root = app?.form ?? app?.element;
+      return root && root.contains(activeEl);
+    });
+    if (anySheetHasFocusedInput) return;
+    const lastBlur = game.votv?._lastPcSheetBlurSave;
+    const skipRenderAppId = lastBlur && (Date.now() - lastBlur.at) < 250 ? lastBlur.appId : null;
     setTimeout(() => {
-      const doc = game.actors?.get(actorId);
-      if (doc?.apps) for (const app of doc.apps) if (app?.rendered && typeof app.render === "function") app.render(true);
-      const windows = Object.values(ui?.windows ?? {});
-      for (const app of windows) {
+      for (const app of appsToConsider) {
         if (!app?.rendered || typeof app.render !== "function") continue;
-        if (app.document?.id !== actorId || app.document?.documentName !== "Actor" || app.constructor?.name !== "VoidPcSheet") continue;
+        if (app.id === skipRenderAppId) continue;
         app.render(true);
       }
     }, 0);

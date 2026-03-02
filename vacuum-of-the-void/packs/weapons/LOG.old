@@ -1,5 +1,1 @@
-2026/03/01-20:23:55.343 126c Log #11: 0 ops saved to Table #12 OK
-2026/03/01-20:23:55.343 126c Archiving C:\Users\effer_\AppData\Local\FoundryVTT\Data\systems\vacuum-of-the-void\packs\weapons/000011.log: OK
-2026/03/01-20:23:55.344 126c Table #5: 19 entries OK
-2026/03/01-20:23:55.347 126c Archiving C:\Users\effer_\AppData\Local\FoundryVTT\Data\systems\vacuum-of-the-void\packs\weapons/MANIFEST-000010: OK
-2026/03/01-20:23:55.351 126c **** Repaired leveldb C:\Users\effer_\AppData\Local\FoundryVTT\Data\systems\vacuum-of-the-void\packs\weapons; recovered 1 files; 3741 bytes. Some data may have been lost. ****
+2026/03/01-20:23:55.361 126c Delete type=3 #1
