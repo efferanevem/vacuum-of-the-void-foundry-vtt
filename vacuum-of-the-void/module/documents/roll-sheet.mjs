@@ -45,37 +45,119 @@ export class VoidRollSheet extends Application {
       ?? (this.element?.matches?.("form.votv.roll-sheet") ? this.element : null);
     if (!form || form._votvRollBound) return;
 
-    const slider = form.querySelector(".roll-sheet-slider");
-    const output = form.querySelector(".roll-sheet-advantage-value");
-    if (slider && output) {
-      slider.addEventListener("input", () => { output.value = slider.value; });
-    }
+    const advantageInput = form.querySelector("input[name='advantage']");
+    const advantageD6s = form.querySelectorAll(".roll-sheet-advantage-d6");
+    const updateAdvantageVisual = (value) => {
+      const v = Math.min(3, Math.max(-3, parseInt(value, 10) || 0));
+      if (advantageInput) advantageInput.value = String(v);
+      advantageD6s.forEach((el) => {
+        const elVal = parseInt(el.dataset.advantageValue ?? "0", 10);
+        el.classList.toggle("selected", elVal === v);
+      });
+    };
+    advantageD6s.forEach((el) => {
+      el.addEventListener("click", (ev) => {
+        ev.preventDefault();
+        updateAdvantageVisual(el.dataset.advantageValue ?? "0");
+        app._updateFormulaPreview(form);
+      });
+    });
+    updateAdvantageVisual(advantageInput?.value ?? "0");
 
+    const moraleWrap = form.querySelector(".roll-sheet-morale-wrap");
+    const moraleMax = Math.min(3, Math.max(0, parseInt(moraleWrap?.dataset?.moraleMax ?? "3", 10) || 0));
     const moraleInput = form.querySelector("input[name='moraleDice']");
     const moraleD8s = form.querySelectorAll(".roll-sheet-morale-d8");
     const updateMoraleVisual = (value) => {
-      const n = Math.min(3, Math.max(0, parseInt(value, 10) || 0));
+      let n = Math.min(3, Math.max(0, parseInt(value, 10) || 0));
+      n = Math.min(n, moraleMax);
       if (moraleInput) moraleInput.value = String(n);
       moraleD8s.forEach((el, i) => {
         el.classList.toggle("selected", i < n);
+        el.style.pointerEvents = i < moraleMax ? "" : "none";
+        el.style.opacity = i < moraleMax ? "" : "0.35";
       });
     };
     form.querySelectorAll(".roll-sheet-morale-reset, .roll-sheet-morale-d8").forEach((el) => {
       el.addEventListener("click", (ev) => {
         ev.preventDefault();
+        if (el.classList.contains("roll-sheet-morale-d8") && (parseInt(el.dataset.moraleValue ?? "0", 10) > moraleMax)) return;
         const val = el.dataset.moraleValue ?? "0";
         updateMoraleVisual(val);
+        app._updateFormulaPreview(form);
       });
     });
     updateMoraleVisual(moraleInput?.value ?? "0");
 
+    const constInput = form.querySelector("input[name='constantBonus']");
+    if (constInput) constInput.addEventListener("input", () => app._updateFormulaPreview(form));
+    if (constInput) constInput.addEventListener("change", () => app._updateFormulaPreview(form));
+
+    app._updateFormulaPreview(form);
+
     form._votvRollBound = true;
     form.addEventListener("click", (ev) => {
+      if (ev.target?.closest?.(".roll-sheet-close")) {
+        ev.preventDefault();
+        app.close();
+        return;
+      }
       if (!ev.target?.closest?.(".roll-sheet-do-roll")) return;
       ev.preventDefault();
       ev.stopPropagation();
       app._doRoll(form);
     });
+  }
+
+  _updateFormulaPreview(form) {
+    const preview = form?.querySelector(".roll-sheet-formula-preview");
+    if (!preview) return;
+    const advantage = parseInt(form.querySelector("input[name='advantage']")?.value ?? "0", 10) || 0;
+    const morale = parseInt(form.querySelector("input[name='moraleDice']")?.value ?? "0", 10) || 0;
+    const constantBonus = parseInt(form.querySelector("input[name='constantBonus']")?.value ?? "0", 10) || 0;
+    const baseMod = parseInt(form.dataset?.baseMod ?? "0", 10) || 0;
+    const injuryMod = parseInt(form.dataset?.injuryMod ?? "0", 10) || 0;
+    const constantsSum = baseMod + injuryMod + constantBonus;
+
+    const parts = [];
+    parts.push(document.createElement("span"));
+    parts[0].textContent = "Összesítve: 3 ";
+    const d6Img = document.createElement("img");
+    d6Img.src = "systems/vacuum-of-the-void/assets/d6.svg";
+    d6Img.alt = "d6";
+    d6Img.className = "roll-sheet-preview-die";
+    parts[0].appendChild(d6Img);
+
+    if (advantage !== 0) {
+      const advSpan = document.createElement("span");
+      advSpan.textContent = advantage > 0 ? ` + ${advantage} ` : ` − ${Math.abs(advantage)} `;
+      const advImg = document.createElement("img");
+      advImg.src = advantage > 0
+        ? "systems/vacuum-of-the-void/assets/advantage_d6.svg"
+        : "systems/vacuum-of-the-void/assets/disadvantage_d6.svg";
+      advImg.alt = advantage > 0 ? "előny d6" : "hátrány d6";
+      advImg.className = "roll-sheet-preview-die";
+      advSpan.appendChild(advImg);
+      parts.push(advSpan);
+    }
+    if (morale > 0) {
+      const morSpan = document.createElement("span");
+      morSpan.textContent = ` + ${morale} `;
+      const d8Img = document.createElement("img");
+      d8Img.src = "systems/vacuum-of-the-void/assets/moral_d8.svg";
+      d8Img.alt = "d8";
+      d8Img.className = "roll-sheet-preview-die";
+      morSpan.appendChild(d8Img);
+      parts.push(morSpan);
+    }
+    if (constantsSum !== 0) {
+      const constSpan = document.createElement("span");
+      constSpan.textContent = constantsSum > 0 ? ` + ${constantsSum}` : ` − ${Math.abs(constantsSum)}`;
+      parts.push(constSpan);
+    }
+
+    preview.innerHTML = "";
+    preview.append(...parts);
   }
 
   getData(options = {}) {
@@ -91,7 +173,9 @@ export class VoidRollSheet extends Application {
       skillLabel: this._label,
       formulaText,
       moraleCurrent,
-      advantageValue: 0
+      advantageValue: 0,
+      baseModifier: this._baseModifier,
+      injuryModifier: this._injuryModifier
     };
   }
 

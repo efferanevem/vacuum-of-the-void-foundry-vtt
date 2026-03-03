@@ -1,4 +1,4 @@
-<form class="votv roll-sheet" autocomplete="off" data-votv-roll-sheet="{{appId}}">
+<form class="votv roll-sheet" autocomplete="off" data-votv-roll-sheet="{{appId}}" data-base-mod="{{baseModifier}}" data-injury-mod="{{injuryModifier}}">
   <header class="roll-sheet-header">
     <h3 class="roll-sheet-title">{{skillLabel}}</h3>
     <p class="roll-sheet-formula">{{formulaText}}</p>
@@ -6,7 +6,7 @@
 
   <div class="roll-sheet-row roll-sheet-row-morale">
     <label>Morálkockák (Σ {{moraleCurrent}} db)</label>
-    <div class="roll-sheet-morale-wrap">
+    <div class="roll-sheet-morale-wrap" data-morale-max="{{moraleCurrent}}">
       <div class="roll-sheet-morale-icons">
         <img class="roll-sheet-morale-d8" src="systems/vacuum-of-the-void/assets/moral_d8.svg" data-morale-value="1" alt="1" title="1 morál" />
         <img class="roll-sheet-morale-d8" src="systems/vacuum-of-the-void/assets/moral_d8.svg" data-morale-value="2" alt="2" title="2 morál" />
@@ -19,24 +19,33 @@
     </div>
   </div>
 
-  <div class="roll-sheet-row">
-    <label>Előnyök / hátrányok</label>
-    <div class="roll-sheet-slider-wrap">
-      <span class="roll-sheet-slider-label">-3</span>
-      <input type="range" name="advantage" id="roll-sheet-advantage" class="roll-sheet-slider" min="-3" max="3" value="{{advantageValue}}" step="1" />
-      <span class="roll-sheet-slider-label">+3</span>
+  <div class="roll-sheet-row roll-sheet-row-advantage">
+    <label>Előnyök / Hátrányok</label>
+    <div class="roll-sheet-advantage-wrap">
+      <div class="roll-sheet-advantage-icons">
+        <img class="roll-sheet-advantage-d6" src="systems/vacuum-of-the-void/assets/disadvantage_d6.svg" data-advantage-value="-3" alt="-3" title="-3d6 hátrány" />
+        <img class="roll-sheet-advantage-d6" src="systems/vacuum-of-the-void/assets/disadvantage_d6.svg" data-advantage-value="-2" alt="-2" title="-2d6 hátrány" />
+        <img class="roll-sheet-advantage-d6" src="systems/vacuum-of-the-void/assets/disadvantage_d6.svg" data-advantage-value="-1" alt="-1" title="-1d6 hátrány" />
+        <img class="roll-sheet-advantage-d6 roll-sheet-advantage-d6-neutral" src="systems/vacuum-of-the-void/assets/d6.svg" data-advantage-value="0" alt="0" title="Sem előny, sem hátrány" />
+        <img class="roll-sheet-advantage-d6" src="systems/vacuum-of-the-void/assets/advantage_d6.svg" data-advantage-value="1" alt="+1" title="+1d6 előny" />
+        <img class="roll-sheet-advantage-d6" src="systems/vacuum-of-the-void/assets/advantage_d6.svg" data-advantage-value="2" alt="+2" title="+2d6 előny" />
+        <img class="roll-sheet-advantage-d6" src="systems/vacuum-of-the-void/assets/advantage_d6.svg" data-advantage-value="3" alt="+3" title="+3d6 előny" />
+      </div>
+      <input type="hidden" name="advantage" value="0" />
     </div>
-    <output class="roll-sheet-advantage-value" for="roll-sheet-advantage">{{advantageValue}}</output>
   </div>
 
-  <div class="roll-sheet-row">
-    <label>Konstans bónusz</label>
-    <input type="number" name="constantBonus" class="roll-sheet-constant" value="0" min="-99" max="99" />
+  <div class="roll-sheet-row roll-sheet-row-constant">
+    <label>Egyéb Bónusz:</label>
+    <div class="roll-sheet-constant-wrap">
+      <input type="number" name="constantBonus" class="roll-sheet-constant" value="0" min="-99" max="99" />
+    </div>
   </div>
+
+  <div class="roll-sheet-formula-preview" aria-live="polite"></div>
 
   <footer class="roll-sheet-footer">
-    <button type="button" class="roll-sheet-do-roll">
-      Dobás
-    </button>
+    <button type="button" class="roll-sheet-close">Bezárás</button>
+    <button type="button" class="roll-sheet-do-roll">Dobás</button>
   </footer>
 </form>

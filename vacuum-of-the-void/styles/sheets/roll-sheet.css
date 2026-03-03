@@ -5,19 +5,24 @@
   border: 1px solid var(--votv-border-muted);
   border-radius: var(--votv-radius);
   box-shadow: var(--votv-shadow-soft);
+  height: auto !important;
+  min-height: 0;
 }
 
 .vacuum-of-the-void.roll-sheet .window-content {
-  padding: 12px;
+  padding: 10px 12px;
   background: linear-gradient(145deg, var(--votv-bg), var(--votv-bg-alt));
   border-radius: var(--votv-radius);
   color: var(--votv-text-main);
+  overflow: visible;
+  max-height: none;
+  height: auto;
 }
 
 .votv.roll-sheet {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 10px;
   font-family: var(--font-body);
   font-size: var(--votv-font-body);
   color: var(--votv-text-main);
@@ -25,13 +30,13 @@
 
 .votv.roll-sheet .roll-sheet-header {
   text-align: center;
-  padding-bottom: 8px;
+  padding-bottom: 6px;
   border-bottom: 1px solid var(--votv-border-muted);
 }
 
 .votv.roll-sheet .roll-sheet-title {
-  margin: 0 0 4px 0;
-  font-size: 1.1rem;
+  margin: 0 0 2px 0;
+  font-size: 1.05rem;
   color: var(--votv-text-main);
 }
 
@@ -110,7 +115,7 @@
   object-fit: contain;
   cursor: pointer;
   opacity: 0.5;
-  transition: opacity 0.15s ease;
+  transition: opacity 0.15s ease, box-shadow 0.2s ease;
 }
 
 .votv.roll-sheet .roll-sheet-morale-d8:hover {
@@ -119,76 +124,48 @@
 
 .votv.roll-sheet .roll-sheet-morale-d8.selected {
   opacity: 1;
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.5), 0 0 12px rgba(255, 255, 255, 0.25);
 }
 
-.votv.roll-sheet .roll-sheet-hint {
-  font-size: 0.85rem;
-  color: var(--votv-text-muted);
-}
-
-.votv.roll-sheet .roll-sheet-slider-wrap {
+.votv.roll-sheet .roll-sheet-advantage-wrap {
+  flex: 1;
   display: flex;
   align-items: center;
-  gap: 8px;
-  flex: 1 1 auto;
-  min-width: 180px;
+  min-width: 0;
 }
 
-.votv.roll-sheet .roll-sheet-slider {
-  flex: 1 1 auto;
-  min-width: 100px;
-  accent-color: var(--votv-border-accent);
-  height: 8px;
-  -webkit-appearance: none;
-  appearance: none;
-  background: transparent;
+.votv.roll-sheet .roll-sheet-advantage-icons {
+  display: flex;
+  align-items: center;
+  gap: 2px;
 }
 
-.votv.roll-sheet .roll-sheet-slider::-webkit-slider-runnable-track {
-  height: 8px;
-  background: rgba(3, 6, 10, 0.95);
-  border: 1px solid var(--votv-border-muted);
-  border-radius: 4px;
-}
-
-.votv.roll-sheet .roll-sheet-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 18px;
-  height: 18px;
-  margin-top: -5px;
-  background: var(--votv-border-accent);
-  border: 1px solid var(--votv-border-accent);
-  border-radius: 50%;
+.votv.roll-sheet .roll-sheet-advantage-d6 {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
   cursor: pointer;
-  box-shadow: 0 0 8px rgba(43, 255, 136, 0.4);
+  opacity: 0.5;
+  transition: opacity 0.15s ease, box-shadow 0.2s ease;
 }
 
-.votv.roll-sheet .roll-sheet-slider::-moz-range-track {
-  height: 8px;
-  background: rgba(3, 6, 10, 0.95);
-  border: 1px solid var(--votv-border-muted);
-  border-radius: 4px;
+.votv.roll-sheet .roll-sheet-advantage-d6:hover {
+  opacity: 0.85;
 }
 
-.votv.roll-sheet .roll-sheet-slider::-moz-range-thumb {
-  width: 18px;
-  height: 18px;
-  background: var(--votv-border-accent);
-  border: 1px solid var(--votv-border-accent);
-  border-radius: 50%;
-  cursor: pointer;
-  box-shadow: 0 0 8px rgba(43, 255, 136, 0.4);
+.votv.roll-sheet .roll-sheet-advantage-d6.selected {
+  opacity: 1;
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.5), 0 0 12px rgba(255, 255, 255, 0.25);
 }
 
-.votv.roll-sheet .roll-sheet-advantage-value {
-  flex: 0 0 24px;
-  text-align: center;
-  font-weight: 600;
-  color: var(--votv-text-main);
+.votv.roll-sheet .roll-sheet-row-constant .roll-sheet-constant-wrap {
+  flex: 1;
+  min-width: 0;
 }
 
 .votv.roll-sheet .roll-sheet-constant {
-  width: 70px;
+  width: 100%;
+  box-sizing: border-box;
   padding: 4px 8px;
   text-align: center;
   background-color: rgba(3, 6, 10, 0.9);
@@ -203,17 +180,56 @@
   outline: none;
 }
 
+.votv.roll-sheet .roll-sheet-formula-preview {
+  margin-top: 6px;
+  padding: 4px 0;
+  border-top: 1px solid var(--votv-border-muted);
+  text-align: center;
+  font-size: 0.88rem;
+  color: var(--votv-text-muted);
+  line-height: 1.4;
+}
+
+.votv.roll-sheet .roll-sheet-formula-preview span {
+  display: inline;
+}
+
+.votv.roll-sheet .roll-sheet-formula-preview .roll-sheet-preview-die {
+  display: inline;
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
+  object-fit: contain;
+  margin: 0 1px;
+}
+
 .votv.roll-sheet .roll-sheet-footer {
-  margin-top: 8px;
-  padding-top: 12px;
+  margin-top: 4px;
+  padding-top: 8px;
   border-top: 1px solid var(--votv-border-muted);
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.votv.roll-sheet .roll-sheet-close {
+  padding: 4px 10px;
+  font-size: 0.9rem;
+  font-family: var(--font-body);
+  color: var(--votv-text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  border-radius: var(--votv-radius);
+}
+
+.votv.roll-sheet .roll-sheet-close:hover {
+  color: var(--votv-text-main);
 }
 
 .votv.roll-sheet .roll-sheet-do-roll {
-  padding: 8px 24px;
-  font-size: 1rem;
+  padding: 6px 20px;
+  font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
   font-family: var(--font-body);
