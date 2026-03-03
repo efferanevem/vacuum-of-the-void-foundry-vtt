@@ -40,7 +40,7 @@ body.system-vacuum-of-the-void #chat-log {
 }
 
 /* Base sheet window: min-widths and shared window content */
-.vacuum-of-the-void.sheet.actor.pc {
+.vacuum-of-the-void.sheet.actor.Karakter {
   min-width: 1000px;
 }
 

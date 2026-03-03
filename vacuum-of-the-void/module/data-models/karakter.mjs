@@ -1,7 +1,7 @@
 const { NumberField, SchemaField } = foundry.data.fields;
 import { BaseActorDataModel } from "./base-actor.mjs";
 
-export class PcDataModel extends BaseActorDataModel {
+export class KarakterDataModel extends BaseActorDataModel {
   static defineSchema() {
     return {
       ...super.defineSchema(),

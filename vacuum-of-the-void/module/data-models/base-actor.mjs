@@ -161,20 +161,38 @@ export class BaseActorDataModel extends foundry.abstract.TypeDataModel {
           slot1: new SchemaField({
             itemId: new StringField({ required: false, blank: true, initial: "" }),
             name: new StringField({ required: false, blank: true, initial: "" }),
-            active: new BooleanField({ required: false, initial: true })
+            active: new BooleanField({ required: false, initial: false })
           }),
           slot2: new SchemaField({
             itemId: new StringField({ required: false, blank: true, initial: "" }),
             name: new StringField({ required: false, blank: true, initial: "" }),
-            active: new BooleanField({ required: false, initial: true })
+            active: new BooleanField({ required: false, initial: false })
           }),
           slot3: new SchemaField({
             itemId: new StringField({ required: false, blank: true, initial: "" }),
             name: new StringField({ required: false, blank: true, initial: "" }),
-            active: new BooleanField({ required: false, initial: true })
+            active: new BooleanField({ required: false, initial: false })
           })
         }),
-        equipment: new StringField({ required: false, blank: true, initial: "" })
+        equipment: new StringField({ required: false, blank: true, initial: "" }),
+        armor: new ArrayField(
+          new SchemaField({
+            name: new StringField({ required: false, blank: true, initial: "" }),
+            protectionBonus: new StringField({ required: false, blank: true, initial: "" }),
+            speedPenalty: new StringField({ required: false, blank: true, initial: "" }),
+            level: new StringField({ required: false, blank: true, initial: "" }),
+            other: new StringField({ required: false, blank: true, initial: "" })
+          }),
+          { required: false, initial: [] }
+        ),
+        generalItems: new ArrayField(
+          new SchemaField({
+            name: new StringField({ required: false, blank: true, initial: "" }),
+            quantity: new NumberField({ required: false, integer: true, min: 0, initial: 1 }),
+            description: new StringField({ required: false, blank: true, initial: "" })
+          }),
+          { required: false, initial: [] }
+        )
       }),
       abilities: new SchemaField({
         faji: new SchemaField({

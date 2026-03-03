@@ -1,7 +1,7 @@
 /* PC (actor) sheet – layout, panels, weapon slots, microchip slots, actions table */
 
 /* Layout & typography */
-.votv.pc-sheet {
+.votv.karakter-sheet {
   font-family: var(--font-body);
   font-size: var(--votv-font-body);
   padding: 10px 14px;
@@ -19,14 +19,14 @@
   overflow: auto;
 }
 
-.votv.pc-sheet .pc-header label {
+.votv.karakter-sheet .karakter-header label {
   font-size: var(--votv-font-label-small);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--votv-text-muted);
 }
 
-.votv.pc-sheet .pc-panel {
+.votv.karakter-sheet .karakter-panel {
   font-size: var(--votv-font-body);
   border: 1px solid var(--votv-border-muted);
   padding: 10px 12px;
@@ -35,15 +35,15 @@
   box-shadow: inset 0 0 0 1px rgba(1, 3, 6, 0.7);
 }
 
-.votv.pc-sheet .pc-panel label {
+.votv.karakter-sheet .karakter-panel label {
   font-size: var(--votv-font-body);
   text-transform: none;
   letter-spacing: 0.02em;
   color: var(--votv-text-main);
 }
 
-.votv.pc-sheet input[type="text"],
-.votv.pc-sheet input[type="number"] {
+.votv.karakter-sheet input[type="text"],
+.votv.karakter-sheet input[type="number"] {
   width: 100%;
   box-sizing: border-box;
   font-size: var(--votv-font-body);
@@ -54,7 +54,7 @@
   border-radius: 2px;
 }
 
-.votv.pc-sheet textarea {
+.votv.karakter-sheet textarea {
   width: 100%;
   min-height: 60px;
   box-sizing: border-box;
@@ -67,42 +67,42 @@
   border-radius: 2px;
 }
 
-.votv.pc-sheet input:focus,
-.votv.pc-sheet textarea:focus {
+.votv.karakter-sheet input:focus,
+.votv.karakter-sheet textarea:focus {
   outline: none;
 }
 
-.votv.pc-sheet input:focus-visible,
-.votv.pc-sheet textarea:focus-visible {
+.votv.karakter-sheet input:focus-visible,
+.votv.karakter-sheet textarea:focus-visible {
   border-color: var(--votv-focus-ring);
   box-shadow: 0 0 0 1px rgba(43, 255, 136, 0.4);
 }
 
-.votv.pc-sheet .pc-header {
+.votv.karakter-sheet .karakter-header {
   display: flex;
   flex-direction: column;
   gap: 4px;
   margin-bottom: 8px;
 }
 
-.votv.pc-sheet .pc-header-row {
+.votv.karakter-sheet .karakter-header-row {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: 4px;
   width: 100%;
 }
 
-.votv.pc-sheet .pc-header-row:first-child {
+.votv.karakter-sheet .karakter-header-row:first-child {
   grid-template-columns: 1fr minmax(2.5em, 0.25fr) 1.75fr 1fr;
 }
 
-.votv.pc-sheet .pc-header-field.pc-header-level input {
+.votv.karakter-sheet .karakter-header-field.karakter-header-level input {
   width: 100%;
   min-width: 0;
   text-align: center;
 }
 
-.votv.pc-sheet .pc-header-field {
+.votv.karakter-sheet .karakter-header-field {
   border: 1px solid var(--votv-border-muted);
   padding: 3px 6px;
   background: var(--votv-panel-bg-soft);
@@ -110,20 +110,20 @@
   box-shadow: inset 0 0 0 1px rgba(1, 3, 6, 0.6);
 }
 
-.votv.pc-sheet .pc-header-field input {
+.votv.karakter-sheet .karakter-header-field input {
   border: none;
   background: transparent;
   padding: 0;
 }
 
-.votv.pc-sheet .pc-main {
+.votv.karakter-sheet .karakter-main {
   display: grid;
   grid-template-columns: 1.1fr 1fr 1.4fr;
   grid-template-rows: auto auto auto;
   gap: 8px;
 }
 
-.votv.pc-sheet h2 {
+.votv.karakter-sheet h2 {
   margin: 0 0 6px;
   font-size: var(--votv-font-label);
   text-transform: uppercase;
@@ -132,21 +132,21 @@
   position: relative;
 }
 
-.votv.pc-sheet h2::before {
+.votv.karakter-sheet h2::before {
   content: "> ";
   color: rgba(43, 255, 136, 0.9);
   margin-right: 2px;
 }
 
-.votv.pc-sheet .pc-column {
+.votv.karakter-sheet .karakter-column {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
 /* Left/right columns: health and skills panels match height of center (portrait + resources) */
-.votv.pc-sheet .pc-column.pc-left .pc-panel.pc-health,
-.votv.pc-sheet .pc-column.pc-right .pc-panel.pc-skills {
+.votv.karakter-sheet .karakter-column.karakter-left .karakter-panel.karakter-health,
+.votv.karakter-sheet .karakter-column.karakter-right .karakter-panel.karakter-skills {
   flex: 1 1 auto;
   min-height: 0;
   display: flex;
@@ -154,39 +154,39 @@
 }
 
 /* Health panel: distribute content to fill space */
-.votv.pc-sheet .pc-column.pc-left .pc-panel.pc-health > h2 {
+.votv.karakter-sheet .karakter-column.karakter-left .karakter-panel.karakter-health > h2 {
   flex: 0 0 auto;
 }
-.votv.pc-sheet .pc-column.pc-left .pc-panel.pc-health .pc-health-table-wrap {
+.votv.karakter-sheet .karakter-column.karakter-left .karakter-panel.karakter-health .karakter-health-table-wrap {
   flex: 1 1 auto;
   min-height: 0;
 }
-.votv.pc-sheet .pc-column.pc-left .pc-panel.pc-health .pc-health-status-title,
-.votv.pc-sheet .pc-column.pc-left .pc-panel.pc-health .pc-health-status-head,
-.votv.pc-sheet .pc-column.pc-left .pc-panel.pc-health .pc-health-status-sublabels {
+.votv.karakter-sheet .karakter-column.karakter-left .karakter-panel.karakter-health .karakter-health-status-title,
+.votv.karakter-sheet .karakter-column.karakter-left .karakter-panel.karakter-health .karakter-health-status-head,
+.votv.karakter-sheet .karakter-column.karakter-left .karakter-panel.karakter-health .karakter-health-status-sublabels {
   flex: 0 0 auto;
 }
-.votv.pc-sheet .pc-column.pc-left .pc-panel.pc-health .pc-health-status-rows {
+.votv.karakter-sheet .karakter-column.karakter-left .karakter-panel.karakter-health .karakter-health-status-rows {
   flex: 1 1 auto;
   min-height: 0;
   justify-content: space-evenly;
 }
 
 /* Skills panel: grid fills space, skill rows distributed evenly */
-.votv.pc-sheet .pc-column.pc-right .pc-panel.pc-skills > h2 {
+.votv.karakter-sheet .karakter-column.karakter-right .karakter-panel.karakter-skills > h2 {
   flex: 0 0 auto;
 }
-.votv.pc-sheet .pc-column.pc-right .pc-panel.pc-skills .pc-skills-grid {
+.votv.karakter-sheet .karakter-column.karakter-right .karakter-panel.karakter-skills .karakter-skills-grid {
   flex: 1 1 auto;
   min-height: 0;
   align-items: stretch;
 }
-.votv.pc-sheet .pc-column.pc-right .pc-panel.pc-skills .pc-skills-column {
+.votv.karakter-sheet .karakter-column.karakter-right .karakter-panel.karakter-skills .karakter-skills-column {
   justify-content: space-evenly;
 }
 
 /* Cards: portrait, resources, skills, combat */
-.votv.pc-sheet .pc-panel.pc-portrait {
+.votv.karakter-sheet .karakter-panel.karakter-portrait {
   position: relative;
   width: 100%;
   overflow: hidden;
@@ -198,7 +198,7 @@
   aspect-ratio: 1;
 }
 
-.votv.pc-sheet .pc-portrait-img {
+.votv.karakter-sheet .karakter-portrait-img {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -208,11 +208,11 @@
   cursor: pointer;
 }
 
-.votv.pc-sheet .pc-portrait-img:hover {
+.votv.karakter-sheet .karakter-portrait-img:hover {
   opacity: 0.9;
 }
 
-.votv.pc-sheet .pc-portrait-death-skull {
+.votv.karakter-sheet .karakter-portrait-death-skull {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -223,7 +223,7 @@
   opacity: 0.8;
 }
 
-.votv.pc-sheet .pc-resource {
+.votv.karakter-sheet .karakter-resource {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -231,119 +231,119 @@
   margin-bottom: 6px;
 }
 
-.votv.pc-sheet .pc-resource label {
+.votv.karakter-sheet .karakter-resource label {
   flex: 0 0 auto;
   min-width: 3.8em;
 }
 
-.votv.pc-sheet .pc-resource input[type="number"] {
+.votv.karakter-sheet .karakter-resource input[type="number"] {
   width: 2.8em;
   min-width: 0;
   text-align: center;
 }
 
-.votv.pc-sheet .pc-resource span {
+.votv.karakter-sheet .karakter-resource span {
   flex: 0 0 auto;
   opacity: 0.7;
 }
 
-.votv.pc-sheet .pc-resource-money {
+.votv.karakter-sheet .karakter-resource-money {
   margin-bottom: 8px;
 }
 
-.votv.pc-sheet .pc-resource-money .pc-resource-input-money {
+.votv.karakter-sheet .karakter-resource-money .karakter-resource-input-money {
   width: 6em;
   min-width: 4em;
   flex: 1 1 auto;
 }
 
-.votv.pc-sheet .pc-resource-suffix {
+.votv.karakter-sheet .karakter-resource-suffix {
   opacity: 0.85;
   font-size: 0.95em;
 }
 
-.votv.pc-sheet .pc-resource-morale-suffix {
+.votv.karakter-sheet .karakter-resource-morale-suffix {
   display: inline-flex;
   align-items: center;
   gap: 5px;
   margin-left: 4px;
 }
 
-.votv.pc-sheet .pc-resource-d8-icon {
+.votv.karakter-sheet .karakter-resource-d8-icon {
   width: 1.6em;
   height: 1.6em;
   vertical-align: middle;
   object-fit: contain;
 }
 
-.votv.pc-sheet .pc-roll-morale-d8 {
+.votv.karakter-sheet .karakter-roll-morale-d8 {
   cursor: pointer;
 }
 
-.votv.pc-sheet .pc-panel.pc-resources {
+.votv.karakter-sheet .karakter-panel.karakter-resources {
   padding-left: 6px;
 }
 
-.votv.pc-sheet .pc-resources-row {
+.votv.karakter-sheet .karakter-resources-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 6px;
   margin-bottom: 6px;
 }
 
-.votv.pc-sheet .pc-resources-row .pc-resource {
+.votv.karakter-sheet .karakter-resources-row .karakter-resource {
   min-width: 0;
   margin-bottom: 0;
 }
 
-.votv.pc-sheet .pc-resource-morale {
+.votv.karakter-sheet .karakter-resource-morale {
   gap: 0;
   margin-left: -16px;
 }
 
-.votv.pc-sheet .pc-resource-morale label {
+.votv.karakter-sheet .karakter-resource-morale label {
   min-width: 2.9em;
   margin-right: 0;
 }
 
-.votv.pc-sheet .pc-resource-stress input.pc-stress-over-10 {
+.votv.karakter-sheet .karakter-resource-stress input.karakter-stress-over-10 {
   background: rgba(180, 40, 40, 0.4);
   box-shadow: inset 0 0 0 1px rgba(180, 40, 40, 0.6);
 }
 
-.votv.pc-sheet .pc-resource-money label,
-.votv.pc-sheet .pc-resource-stress label,
-.votv.pc-sheet .pc-resource-defense label,
-.votv.pc-sheet .pc-resource-speed label {
+.votv.karakter-sheet .karakter-resource-money label,
+.votv.karakter-sheet .karakter-resource-stress label,
+.votv.karakter-sheet .karakter-resource-defense label,
+.votv.karakter-sheet .karakter-resource-speed label {
   min-width: 4.6em;
 }
 
-.votv.pc-sheet .pc-resource-speed-unit {
+.votv.karakter-sheet .karakter-resource-speed-unit {
   flex: 0 0 auto;
   opacity: 0.85;
   padding-left: 4px;
   font-size: 0.95em;
 }
 
-.votv.pc-sheet .pc-resource-plus {
+.votv.karakter-sheet .karakter-resource-plus {
   flex: 0 0 auto;
   opacity: 0.8;
   padding: 0 2px;
 }
 
-.votv.pc-sheet .pc-resource-triple input[type="number"] {
+.votv.karakter-sheet .karakter-resource-triple input[type="number"] {
   width: 3.2em;
   min-width: 3em;
 }
 
-.votv.pc-sheet .pc-resource-triple input[type="number"]:disabled {
+.votv.karakter-sheet .karakter-resource-triple input[type="number"]:disabled {
   background: rgba(60, 60, 70, 0.5);
   cursor: not-allowed;
   color: var(--color-text-dark-primary, #bbb);
 }
 
 /* Kapott sebesség: csak kijelzés (effektív érték, Lábak alapján), input helyett span */
-.votv.pc-sheet .pc-given-speed-effective {
+.votv.karakter-sheet .karakter-given-speed-effective {
   display: inline-block;
   width: 3.2em;
   min-width: 3em;
@@ -358,7 +358,7 @@
 }
 
 /* Kapott védelem: ugyanolyan readonly kijelzés, mint a kapott sebesség */
-.votv.pc-sheet .pc-given-defense-effective {
+.votv.karakter-sheet .karakter-given-defense-effective {
   display: inline-block;
   width: 3.2em;
   min-width: 3em;
@@ -373,18 +373,18 @@
 }
 
 /* Sebesség Kapott: lábak egészségi állapota szerinti színezés (opacity 25%) */
-.votv.pc-sheet .pc-resource-speed.pc-resource-triple[data-legs-health="0"] .pc-given-speed-effective,
-.votv.pc-sheet .pc-resource-speed.pc-resource-triple[data-legs-health="0"] input {
+.votv.karakter-sheet .karakter-resource-speed.karakter-resource-triple[data-legs-health="0"] .karakter-given-speed-effective,
+.votv.karakter-sheet .karakter-resource-speed.karakter-resource-triple[data-legs-health="0"] input {
   background: rgba(70, 22, 22, 0.4);
 }
-.votv.pc-sheet .pc-resource-speed.pc-resource-triple[data-legs-health="1"] .pc-given-speed-effective {
+.votv.karakter-sheet .karakter-resource-speed.karakter-resource-triple[data-legs-health="1"] .karakter-given-speed-effective {
   background: rgba(192, 57, 43, 0.25);
 }
-.votv.pc-sheet .pc-resource-speed.pc-resource-triple[data-legs-health="2"] .pc-given-speed-effective {
+.votv.karakter-sheet .karakter-resource-speed.karakter-resource-triple[data-legs-health="2"] .karakter-given-speed-effective {
   background: rgba(214, 137, 16, 0.25);
 }
 
-.votv.pc-sheet .pc-resource-triple-sublabels {
+.votv.karakter-sheet .karakter-resource-triple-sublabels {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -398,99 +398,107 @@
   opacity: 0.75;
 }
 
-.votv.pc-sheet .pc-resource-triple-sublabels-spacer {
+.votv.karakter-sheet .karakter-resource-triple-sublabels-spacer {
   flex: 0 0 4.6em;
   min-width: 0;
 }
 
-.votv.pc-sheet .pc-resource-triple-sublabels-cell {
+.votv.karakter-sheet .karakter-resource-triple-sublabels-cell {
   flex: 1 1 0;
   min-width: 4em;
   text-align: left;
 }
 
-.votv.pc-sheet .pc-resource-triple-sublabels-cell:nth-child(2) {
+.votv.karakter-sheet .karakter-resource-triple-sublabels-cell:nth-child(2) {
   padding-left: 15px;
 }
 
-.votv.pc-sheet .pc-resource-triple-sublabels-cell:nth-child(3) {
+.votv.karakter-sheet .karakter-resource-triple-sublabels-cell:nth-child(3) {
   padding-left: 0;
   margin-left: -9px;
 }
 
-.votv.pc-sheet .pc-resource-triple-sublabels-cell:nth-child(4) {
+.votv.karakter-sheet .karakter-resource-triple-sublabels-cell:nth-child(4) {
   padding-left: 5px;
   padding-right: 5px;
   transform: translateX(4px);
 }
 
-.votv.pc-sheet .pc-current-hp {
+.votv.karakter-sheet .karakter-current-hp {
   margin-bottom: 8px;
 }
 
-.votv.pc-sheet .pc-current-hp h3 {
+.votv.karakter-sheet .karakter-current-hp h3 {
   margin: 0 0 4px 0;
   font-size: 0.9em;
   font-weight: 600;
 }
 
-.votv.pc-sheet .pc-current-hp input[type="number"] {
+.votv.karakter-sheet .karakter-current-hp input[type="number"] {
   width: 100%;
   box-sizing: border-box;
 }
 
-.votv.pc-sheet .pc-health-table-wrap {
+.votv.karakter-sheet .karakter-health-table-wrap {
   margin-bottom: 12px;
 }
 
-.votv.pc-sheet .pc-health-table {
+.votv.karakter-sheet .karakter-health-table {
   width: 100%;
   table-layout: fixed;
   border-collapse: collapse;
 }
 
-.votv.pc-sheet .pc-health-col-label {
+.votv.karakter-sheet .karakter-health-col-label {
   width: auto;
 }
 
-.votv.pc-sheet .pc-health-col-hit {
+.votv.karakter-sheet .karakter-health-col-hit {
   width: 5.5em;
 }
 
-.votv.pc-sheet .pc-health-col-num {
+.votv.karakter-sheet .karakter-health-col-num {
   width: 3.5em;
 }
 
-.votv.pc-sheet .pc-health-col-slash {
+.votv.karakter-sheet .karakter-health-col-slash {
   width: 1.2em;
 }
 
-.votv.pc-sheet .pc-health-table th,
-.votv.pc-sheet .pc-health-table td {
+.votv.karakter-sheet .karakter-health-table th,
+.votv.karakter-sheet .karakter-health-table td {
   padding: 4px 4px;
   text-align: left;
   border-bottom: 1px solid var(--votv-border-muted, rgba(0,0,0,0.1));
 }
 
-.votv.pc-sheet .pc-health-th-hit {
+/* Health header row (label + Találati szám / Teljes / Aktuális) kap háttérszínt, a többi sor átlátszó marad. */
+.votv.karakter-sheet .karakter-health-table thead tr {
+  background: var(--votv-panel-bg-soft);
+}
+.votv.karakter-sheet .karakter-health-table tbody tr {
+  background: transparent;
+}
+
+.votv.karakter-sheet .karakter-health-th-hit {
   text-align: center !important;
   font-weight: 600;
   font-size: 0.85em;
 }
 
-.votv.pc-sheet .pc-health-th-num {
+.votv.karakter-sheet .karakter-health-th-num {
   text-align: center;
   font-weight: 600;
   font-size: 0.85em;
 }
 
-.votv.pc-sheet .pc-health-cell-hit {
+.votv.karakter-sheet .karakter-health-cell-hit {
   text-align: center !important;
   font-size: 0.9em;
 }
 
-.votv.pc-sheet .pc-health-th-slash,
-.votv.pc-sheet .pc-health-cell-slash {
+.votv.karakter-sheet .karakter-health-th-slash,
+.votv.karakter-sheet .karakter-health-cell-slash {
   text-align: center;
   font-weight: 400;
   color: var(--color-text-dark-secondary, #666);
@@ -498,16 +506,16 @@
   padding-right: 0;
 }
 
-.votv.pc-sheet .pc-health-label {
+.votv.karakter-sheet .karakter-health-label {
   font-size: 0.9em;
 }
 
-.votv.pc-sheet .pc-health-row td:nth-child(3),
-.votv.pc-sheet .pc-health-row td:nth-child(5) {
+.votv.karakter-sheet .karakter-health-row td:nth-child(3),
+.votv.karakter-sheet .karakter-health-row td:nth-child(5) {
   text-align: center;
 }
 
-.votv.pc-sheet .pc-health-table input[type="number"] {
+.votv.karakter-sheet .karakter-health-table input[type="number"] {
   width: 100%;
   max-width: 100%;
   margin: 0;
@@ -516,13 +524,13 @@
 }
 
 /* ---- Egészségi állapot: 0–3 Használhatatlan → Egészséges ---- */
-.votv.pc-sheet .pc-health-status-title {
+.votv.karakter-sheet .karakter-health-status-title {
   margin: 0 0 10px 0;
   font-size: 0.95em;
   font-weight: 600;
 }
 
-.votv.pc-sheet .pc-health-status-head {
+.votv.karakter-sheet .karakter-health-status-head {
   display: grid;
   grid-template-columns: 2.5em 1fr 1fr 1fr 1fr;
   gap: 0 2px;
@@ -534,15 +542,15 @@
   opacity: 0.75;
 }
 
-.votv.pc-sheet .pc-health-status-head-spacer {
+.votv.karakter-sheet .karakter-health-status-head-spacer {
   min-width: 0;
 }
 
-.votv.pc-sheet .pc-health-status-state {
+.votv.karakter-sheet .karakter-health-status-state {
   text-align: center;
 }
 
-.votv.pc-sheet .pc-health-status-sublabels {
+.votv.karakter-sheet .karakter-health-status-sublabels {
   display: grid;
   grid-template-columns: 2.5em 1fr 1fr 1fr 1fr;
   gap: 0 2px;
@@ -554,36 +562,36 @@
   opacity: 0.75;
 }
 
-.votv.pc-sheet .pc-health-status-penalty {
+.votv.karakter-sheet .karakter-health-status-penalty {
   text-align: center;
 }
 
-.votv.pc-sheet .pc-health-status-rows {
+.votv.karakter-sheet .karakter-health-status-rows {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
-.votv.pc-sheet .pc-health-status-row {
+.votv.karakter-sheet .karakter-health-status-row {
   display: grid;
   grid-template-columns: auto 1fr;
   align-items: center;
   gap: 8px;
 }
 
-.votv.pc-sheet .pc-health-status-row label {
+.votv.karakter-sheet .karakter-health-status-row label {
   flex: 0 0 auto;
   min-width: 2.5em;
   font-size: 0.9em;
 }
 
-.votv.pc-sheet .pc-health-status-slider {
+.votv.karakter-sheet .karakter-health-status-slider {
   flex: 1 1 auto;
   min-width: 0;
   accent-color: var(--color-primary, #6b8cce);
 }
 
-.votv.pc-sheet .pc-health-status-readonly {
+.votv.karakter-sheet .karakter-health-status-readonly {
   display: flex;
   flex: 1 1 auto;
   min-width: 0;
@@ -592,7 +600,7 @@
   pointer-events: none;
 }
 
-.votv.pc-sheet .pc-health-status-dot {
+.votv.karakter-sheet .karakter-health-status-dot {
   flex: 1 1 0;
   min-width: 0;
   height: 8px;
@@ -601,20 +609,20 @@
   transition: background 0.15s ease;
 }
 
-.votv.pc-sheet .pc-health-status-readonly[data-status="0"] .pc-health-status-dot[data-value="0"] {
+.votv.karakter-sheet .karakter-health-status-readonly[data-status="0"] .karakter-health-status-dot[data-value="0"] {
   background: #5c1a1a;
 }
-.votv.pc-sheet .pc-health-status-readonly[data-status="1"] .pc-health-status-dot[data-value="1"] {
+.votv.karakter-sheet .karakter-health-status-readonly[data-status="1"] .karakter-health-status-dot[data-value="1"] {
   background: #c0392b;
 }
-.votv.pc-sheet .pc-health-status-readonly[data-status="2"] .pc-health-status-dot[data-value="2"] {
+.votv.karakter-sheet .karakter-health-status-readonly[data-status="2"] .karakter-health-status-dot[data-value="2"] {
   background: #d68910;
 }
-.votv.pc-sheet .pc-health-status-readonly[data-status="3"] .pc-health-status-dot[data-value="3"] {
+.votv.karakter-sheet .karakter-health-status-readonly[data-status="3"] .karakter-health-status-dot[data-value="3"] {
   background: #1e8449;
 }
 
-.votv.pc-sheet .pc-current-health-row {
+.votv.karakter-sheet .karakter-current-health-row {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -623,18 +631,18 @@
   margin-bottom: 4px;
 }
 
-.votv.pc-sheet .pc-current-health-row label {
+.votv.karakter-sheet .karakter-current-health-row label {
   flex: 0 0 auto;
 }
 
-.votv.pc-sheet .pc-current-health-row input[type="number"] {
+.votv.karakter-sheet .karakter-current-health-row input[type="number"] {
   width: 2.8em;
   min-width: 0;
   text-align: center;
   flex: 0 0 auto;
 }
 
-.votv.pc-sheet .pc-hit-location {
+.votv.karakter-sheet .karakter-hit-location {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -642,37 +650,37 @@
   margin-bottom: 4px;
 }
 
-.votv.pc-sheet .pc-hit-location label {
+.votv.karakter-sheet .karakter-hit-location label {
   flex: 0 0 auto;
   min-width: 4em;
 }
 
-.votv.pc-sheet .pc-hit-location input[type="number"] {
+.votv.karakter-sheet .karakter-hit-location input[type="number"] {
   width: 2.5em;
   flex: 0 0 auto;
   min-width: 0;
   text-align: center;
 }
 
-.votv.pc-sheet .pc-skills-grid {
+.votv.karakter-sheet .karakter-skills-grid {
   display: flex;
   gap: 4px 8px;
   align-items: flex-start;
 }
 
-.votv.pc-sheet .pc-skills-column {
+.votv.karakter-sheet .karakter-skills-column {
   flex: 1 1 0;
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
-.votv.pc-sheet .pc-skills-column:first-child {
+.votv.karakter-sheet .karakter-skills-column:first-child {
   border-right: 1px solid var(--votv-border-muted);
   padding-right: 8px;
 }
 
-.votv.pc-sheet .pc-skill {
+.votv.karakter-sheet .karakter-skill {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -680,11 +688,11 @@
   padding-left: 5px;
 }
 
-.votv.pc-sheet .pc-skill label {
+.votv.karakter-sheet .karakter-skill label {
   flex: 0 1 auto;
 }
 
-.votv.pc-sheet .pc-skill input[type="number"] {
+.votv.karakter-sheet .karakter-skill input[type="number"] {
   width: 2.6em;
   min-width: 2.6em;
   max-width: 2.6em;
@@ -692,66 +700,66 @@
   flex-shrink: 0;
 }
 
-.votv.pc-sheet .pc-skill-label,
-.votv.pc-sheet .pc-weapon-label {
+.votv.karakter-sheet .karakter-skill-label,
+.votv.karakter-sheet .karakter-weapon-label {
   cursor: pointer;
 }
 
 /* Jártasságok: háttér színezés a testrész egészségi állapota alapján (opacity 25%) */
-.votv.pc-sheet .pc-skill[data-health-status="0"] {
+.votv.karakter-sheet .karakter-skill[data-health-status="0"] {
   background: rgba(70, 22, 22, 0.4);
   pointer-events: none;
   cursor: not-allowed;
   border-radius: 2px;
 }
-.votv.pc-sheet .pc-skill[data-health-status="0"] .pc-skill-label {
+.votv.karakter-sheet .karakter-skill[data-health-status="0"] .karakter-skill-label {
   opacity: 0.5;
 }
-.votv.pc-sheet .pc-skill[data-health-status="1"] {
+.votv.karakter-sheet .karakter-skill[data-health-status="1"] {
   background: rgba(192, 57, 43, 0.25);
   border-radius: 2px;
 }
-.votv.pc-sheet .pc-skill[data-health-status="2"] {
+.votv.karakter-sheet .karakter-skill[data-health-status="2"] {
   background: rgba(214, 137, 16, 0.25);
   border-radius: 2px;
 }
-.votv.pc-sheet .pc-skill[data-health-status="3"] {
+.votv.karakter-sheet .karakter-skill[data-health-status="3"] {
   /* Egészséges: nincs háttér színezés */
 }
 
-.votv.pc-sheet .pc-defense-speed {
+.votv.karakter-sheet .karakter-defense-speed {
   display: flex;
   gap: 8px;
   margin-bottom: 6px;
 }
 
-.votv.pc-sheet .pc-defense-speed > div {
+.votv.karakter-sheet .karakter-defense-speed > div {
   flex: 1 1 0;
 }
 
 /* Képességek (abilities) grid */
-.votv.pc-sheet .pc-abilities-grid {
+.votv.karakter-sheet .karakter-abilities-grid {
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
 
-.votv.pc-sheet .pc-abilities-row {
+.votv.karakter-sheet .karakter-abilities-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 6px;
 }
 
-.votv.pc-sheet .pc-abilities-row-top .pc-ability-slot {
+.votv.karakter-sheet .karakter-abilities-row-top .karakter-ability-slot {
   min-height: 44px;
 }
 
-.votv.pc-sheet .pc-abilities-row-bottom .pc-ability-area {
+.votv.karakter-sheet .karakter-abilities-row-bottom .karakter-ability-area {
   min-height: 40px;
 }
 
-.votv.pc-sheet .pc-ability-slot,
-.votv.pc-sheet .pc-ability-area {
+.votv.karakter-sheet .karakter-ability-slot,
+.votv.karakter-sheet .karakter-ability-area {
   border: 1px dashed var(--votv-border-muted);
   border-radius: var(--votv-radius);
   background: rgba(3, 6, 10, 0.5);
@@ -763,8 +771,8 @@
   position: relative;
 }
 
-.votv.pc-sheet .pc-ability-slot-header,
-.votv.pc-sheet .pc-ability-area-header {
+.votv.karakter-sheet .karakter-ability-slot-header,
+.votv.karakter-sheet .karakter-ability-area-header {
   font-size: var(--votv-font-label-small);
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -774,14 +782,14 @@
   justify-content: space-between;
 }
 
-.votv.pc-sheet .pc-ability-slot-content {
+.votv.karakter-sheet .karakter-ability-slot-content {
   display: flex;
   align-items: center;
   gap: 4px;
 }
 
-.votv.pc-sheet .pc-ability-slot-thumb,
-.votv.pc-sheet .pc-ability-pill-thumb {
+.votv.karakter-sheet .karakter-ability-slot-thumb,
+.votv.karakter-sheet .karakter-ability-pill-thumb {
   width: 32px;
   height: 32px;
   object-fit: contain;
@@ -790,8 +798,8 @@
   flex-shrink: 0;
 }
 
-.votv.pc-sheet .pc-ability-slot-name,
-.votv.pc-sheet .pc-ability-pill-name {
+.votv.karakter-sheet .karakter-ability-slot-name,
+.votv.karakter-sheet .karakter-ability-pill-name {
   flex: 1 1 auto;
   min-width: 0;
   white-space: nowrap;
@@ -799,15 +807,15 @@
   text-overflow: ellipsis;
 }
 
-.votv.pc-sheet .pc-ability-slot-placeholder,
-.votv.pc-sheet .pc-ability-area-placeholder {
+.votv.karakter-sheet .karakter-ability-slot-placeholder,
+.votv.karakter-sheet .karakter-ability-area-placeholder {
   font-size: var(--votv-font-body);
   color: var(--votv-text-muted);
   opacity: 0.8;
 }
 
-.votv.pc-sheet .pc-ability-slot-clear,
-.votv.pc-sheet .pc-ability-pill-remove {
+.votv.karakter-sheet .karakter-ability-slot-clear,
+.votv.karakter-sheet .karakter-ability-pill-remove {
   border-radius: 2px;
   padding: 2px 3px;
   font-size: 11px;
@@ -818,19 +826,19 @@
   flex-shrink: 0;
 }
 
-.votv.pc-sheet .pc-ability-slot-clear:hover,
-.votv.pc-sheet .pc-ability-pill-remove:hover {
+.votv.karakter-sheet .karakter-ability-slot-clear:hover,
+.votv.karakter-sheet .karakter-ability-pill-remove:hover {
   border-color: var(--votv-border-accent);
   color: var(--votv-border-accent);
 }
 
-.votv.pc-sheet .pc-ability-slot-clear {
+.votv.karakter-sheet .karakter-ability-slot-clear {
   position: static;
   min-width: 18px;
   height: 22px;
 }
 
-.votv.pc-sheet .pc-ability-slot-header .pc-ability-slot-clear {
+.votv.karakter-sheet .karakter-ability-slot-header .karakter-ability-slot-clear {
   flex: 0 0 auto;
   width: 18px;
   margin-left: 6px;
@@ -839,16 +847,16 @@
   justify-content: center;
 }
 
-.votv.pc-sheet .pc-ability-slot-header .pc-ability-slot-clear:hover {
+.votv.karakter-sheet .karakter-ability-slot-header .karakter-ability-slot-clear:hover {
   color: var(--votv-border-accent);
 }
 
-.votv.pc-sheet .pc-ability-slot-name {
+.votv.karakter-sheet .karakter-ability-slot-name {
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 
-.votv.pc-sheet .pc-ability-pill {
+.votv.karakter-sheet .karakter-ability-pill {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -862,7 +870,7 @@
   padding: 6px 4px;
 }
 
-.votv.pc-sheet .pc-ability-main {
+.votv.karakter-sheet .karakter-ability-main {
   display: flex;
   align-items: center;
   gap: 4px;
@@ -870,7 +878,7 @@
   min-width: 0;
 }
 
-.votv.pc-sheet .pc-ability-actions {
+.votv.karakter-sheet .karakter-ability-actions {
   display: flex;
   align-items: center;
   gap: 4px;
@@ -878,19 +886,19 @@
   justify-content: flex-end;
 }
 
-.votv.pc-sheet .pc-ability-pill-remove {
+.votv.karakter-sheet .karakter-ability-pill-remove {
   position: static;
 }
 
-.votv.pc-sheet .pc-ability-area-list {
+.votv.karakter-sheet .karakter-ability-area-list {
   display: flex;
   flex-direction: column;
   gap: 4px;
   margin-top: 2px;
 }
 
-.votv.pc-sheet .pc-ability-toggle,
-.votv.pc-sheet .pc-ability-chat {
+.votv.karakter-sheet .karakter-ability-toggle,
+.votv.karakter-sheet .karakter-ability-chat {
   border-radius: 2px;
   padding: 2px 4px;
   font-size: 11px;
@@ -900,7 +908,7 @@
   color: var(--votv-text-muted);
 }
 
-.votv.pc-sheet .pc-ability-chat {
+.votv.karakter-sheet .karakter-ability-chat {
   min-width: 26px;
   height: 22px;
   display: flex;
@@ -908,7 +916,7 @@
   justify-content: center;
 }
 
-.votv.pc-sheet .pc-ability-pill-remove {
+.votv.karakter-sheet .karakter-ability-pill-remove {
   min-width: 18px;
   height: 22px;
   display: flex;
@@ -916,55 +924,55 @@
   justify-content: center;
 }
 
-.votv.pc-sheet .pc-ability-toggle:hover,
-.votv.pc-sheet .pc-ability-chat:hover {
+.votv.karakter-sheet .karakter-ability-toggle:hover,
+.votv.karakter-sheet .karakter-ability-chat:hover {
   border-color: var(--votv-border-accent);
   color: var(--votv-border-accent);
 }
 
-.votv.pc-sheet .pc-ability-pill-name {
+.votv.karakter-sheet .karakter-ability-pill-name {
   cursor: pointer;
 }
 
-.votv.pc-sheet .pc-ability-open {
+.votv.karakter-sheet .karakter-ability-open {
   cursor: pointer;
 }
 
-.votv.pc-sheet .pc-ability-details {
+.votv.karakter-sheet .karakter-ability-details {
   display: none;
   margin-top: 4px;
   font-size: var(--votv-font-body);
   color: var(--votv-text-muted);
 }
 
-.votv.pc-sheet .pc-ability-pill.pc-ability-expanded .pc-ability-details,
-.votv.pc-sheet .pc-ability-slot.pc-ability-expanded .pc-ability-details {
+.votv.karakter-sheet .karakter-ability-pill.karakter-ability-expanded .karakter-ability-details,
+.votv.karakter-sheet .karakter-ability-slot.karakter-ability-expanded .karakter-ability-details {
   display: block;
 }
 
-.votv.pc-sheet .pc-ability-detail-line {
+.votv.karakter-sheet .karakter-ability-detail-line {
   margin-bottom: 2px;
 }
 
-.votv.pc-sheet .pc-ability-detail-text {
+.votv.karakter-sheet .karakter-ability-detail-text {
   white-space: pre-wrap;
 }
 
-.votv.pc-sheet .pc-ability-slot-drag-over,
-.votv.pc-sheet .pc-ability-area-drag-over {
+.votv.karakter-sheet .karakter-ability-slot-drag-over,
+.votv.karakter-sheet .karakter-ability-area-drag-over {
   border-color: var(--votv-border-accent);
   background: rgba(43, 255, 136, 0.08);
 }
 
 /* Fegyverek: weapon slots */
-.votv.pc-sheet .pc-weapon-slots {
+.votv.karakter-sheet .karakter-weapon-slots {
   display: flex;
   flex-direction: column;
   gap: 6px;
   margin-top: 6px;
 }
 
-.votv.pc-sheet .pc-weapon-slots-header {
+.votv.karakter-sheet .karakter-weapon-slots-header {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -977,27 +985,27 @@
   color: var(--votv-text-muted);
 }
 
-.votv.pc-sheet .pc-weapon-slots-header .pc-weapon-slot-num {
+.votv.karakter-sheet .karakter-weapon-slots-header .karakter-weapon-slot-num {
   flex: 0 0 20px;
 }
 
-.votv.pc-sheet .pc-weapon-slot-header-name {
+.votv.karakter-sheet .karakter-weapon-slot-header-name {
   flex: 1 1 0;
   min-width: 0;
 }
 
-.votv.pc-sheet .pc-weapon-slot-header-bonus {
+.votv.karakter-sheet .karakter-weapon-slot-header-bonus {
   flex: 0 0 52px;
   text-align: center;
 }
 
-.votv.pc-sheet .pc-weapon-slot-header-damage {
+.votv.karakter-sheet .karakter-weapon-slot-header-damage {
   flex: 0 0 64px;
   text-align: left;
   white-space: nowrap;
 }
 
-.votv.pc-sheet .pc-weapon-slot {
+.votv.karakter-sheet .karakter-weapon-slot {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -1009,12 +1017,12 @@
   transition: border-color 0.15s ease, background 0.15s ease;
 }
 
-.votv.pc-sheet .pc-weapon-slot.pc-weapon-slot-drag-over {
+.votv.karakter-sheet .karakter-weapon-slot.karakter-weapon-slot-drag-over {
   border-color: var(--votv-border-accent);
   background: rgba(43, 255, 136, 0.08);
 }
 
-.votv.pc-sheet .pc-weapon-slot-num-wrap {
+.votv.karakter-sheet .karakter-weapon-slot-num-wrap {
   flex: 0 0 24px;
   display: flex;
   align-items: center;
@@ -1023,7 +1031,7 @@
   min-height: 28px;
 }
 
-.votv.pc-sheet .pc-weapon-slot-num-value {
+.votv.karakter-sheet .karakter-weapon-slot-num-value {
   font-size: var(--votv-font-label-small);
   font-weight: 600;
   text-align: center;
@@ -1032,11 +1040,11 @@
   letter-spacing: 0.05em;
 }
 
-.votv.pc-sheet .pc-weapon-slot-num-wrap:hover .pc-weapon-slot-num-value {
+.votv.karakter-sheet .karakter-weapon-slot-num-wrap:hover .karakter-weapon-slot-num-value {
   visibility: hidden;
 }
 
-.votv.pc-sheet .pc-weapon-slot-num-remove {
+.votv.karakter-sheet .karakter-weapon-slot-num-remove {
   position: absolute;
   display: none;
   align-items: center;
@@ -1054,17 +1062,17 @@
   transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
 }
 
-.votv.pc-sheet .pc-weapon-slot-num-wrap:hover .pc-weapon-slot-num-remove {
+.votv.karakter-sheet .karakter-weapon-slot-num-wrap:hover .karakter-weapon-slot-num-remove {
   display: flex;
 }
 
-.votv.pc-sheet .pc-weapon-slot-num-remove:hover {
+.votv.karakter-sheet .karakter-weapon-slot-num-remove:hover {
   color: var(--votv-header-accent);
   border-color: var(--votv-border-accent);
   background: rgba(43, 255, 136, 0.1);
 }
 
-.votv.pc-sheet .pc-weapon-slot-select-wrap {
+.votv.karakter-sheet .karakter-weapon-slot-select-wrap {
   flex: 1 1 0;
   min-width: 0;
   position: relative;
@@ -1072,7 +1080,7 @@
   align-items: stretch;
 }
 
-.votv.pc-sheet .pc-weapon-slot-display {
+.votv.karakter-sheet .karakter-weapon-slot-display {
   width: 100%;
   display: flex;
   align-items: center;
@@ -1091,17 +1099,17 @@
   min-height: 28px;
 }
 
-.votv.pc-sheet .pc-weapon-slot-display:hover {
+.votv.karakter-sheet .karakter-weapon-slot-display:hover {
   border-color: rgba(43, 255, 136, 0.5);
 }
 
-.votv.pc-sheet .pc-weapon-slot-display:focus {
+.votv.karakter-sheet .karakter-weapon-slot-display:focus {
   outline: none;
   border-color: var(--votv-focus-ring);
   box-shadow: 0 0 0 1px rgba(43, 255, 136, 0.35);
 }
 
-.votv.pc-sheet .pc-weapon-slot-thumb {
+.votv.karakter-sheet .karakter-weapon-slot-thumb {
   width: 28px;
   height: 28px;
   object-fit: contain;
@@ -1110,7 +1118,7 @@
   flex-shrink: 0;
 }
 
-.votv.pc-sheet .pc-weapon-slot-display-text {
+.votv.karakter-sheet .karakter-weapon-slot-display-text {
   flex: 1 1 auto;
   min-width: 0;
   overflow: hidden;
@@ -1119,18 +1127,18 @@
   text-align: left;
 }
 
-.votv.pc-sheet .pc-weapon-slot-chevron {
+.votv.karakter-sheet .karakter-weapon-slot-chevron {
   flex-shrink: 0;
   color: var(--votv-text-muted);
   font-size: 10px;
   transition: transform 0.15s ease;
 }
 
-.votv.pc-sheet .pc-weapon-slot-select-wrap.pc-weapon-slot-open .pc-weapon-slot-chevron {
+.votv.karakter-sheet .karakter-weapon-slot-select-wrap.karakter-weapon-slot-open .karakter-weapon-slot-chevron {
   transform: rotate(180deg);
 }
 
-.votv.pc-sheet .pc-weapon-slot-options {
+.votv.karakter-sheet .karakter-weapon-slot-options {
   position: absolute;
   left: 0;
   right: 0;
@@ -1148,21 +1156,21 @@
   display: none;
 }
 
-.votv.pc-sheet .pc-weapon-slot-select-wrap.pc-weapon-slot-open .pc-weapon-slot-options {
+.votv.karakter-sheet .karakter-weapon-slot-select-wrap.karakter-weapon-slot-open .karakter-weapon-slot-options {
   display: block;
 }
 
-.votv.pc-sheet .pc-weapon-slot-bonus {
+.votv.karakter-sheet .karakter-weapon-slot-bonus {
   flex: 0 0 52px;
 }
 
-.votv.pc-sheet .pc-weapon-slot-bonus input {
+.votv.karakter-sheet .karakter-weapon-slot-bonus input {
   width: 100%;
   font-size: var(--votv-font-body);
   text-align: center;
 }
 
-.votv.pc-sheet .pc-weapon-slot-damage {
+.votv.karakter-sheet .karakter-weapon-slot-damage {
   flex: 0 0 64px;
   font-size: var(--votv-font-body);
   color: var(--votv-text-muted);
@@ -1170,7 +1178,7 @@
   white-space: nowrap;
 }
 
-.votv.pc-sheet .pc-weapon-slot-option {
+.votv.karakter-sheet .karakter-weapon-slot-option {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -1185,7 +1193,7 @@
   transition: background 0.1s ease, border-color 0.1s ease;
 }
 
-.votv.pc-sheet .pc-weapon-slot-option-thumb {
+.votv.karakter-sheet .karakter-weapon-slot-option-thumb {
   width: 24px;
   height: 24px;
   object-fit: contain;
@@ -1194,73 +1202,73 @@
   flex-shrink: 0;
 }
 
-.votv.pc-sheet .pc-weapon-slot-option:first-child .pc-weapon-slot-option-thumb {
+.votv.karakter-sheet .karakter-weapon-slot-option:first-child .karakter-weapon-slot-option-thumb {
   display: none;
 }
 
-.votv.pc-sheet .pc-weapon-slot-option-text {
+.votv.karakter-sheet .karakter-weapon-slot-option-text {
   flex: 1 1 auto;
   min-width: 0;
 }
 
-.votv.pc-sheet .pc-weapon-slot-option:hover {
+.votv.karakter-sheet .karakter-weapon-slot-option:hover {
   background: rgba(43, 255, 136, 0.12);
   border-left-color: var(--votv-border-accent);
 }
 
-.votv.pc-sheet .pc-weapon-slot-option:first-child {
+.votv.karakter-sheet .karakter-weapon-slot-option:first-child {
   color: var(--votv-text-muted);
 }
 
 /* removed weapon-slot-add styles (no longer used) */
 
 /* Actions table */
-.votv.pc-sheet .pc-actions-block {
+.votv.karakter-sheet .karakter-actions-block {
   margin-top: 4px;
 }
 
-.votv.pc-sheet .pc-actions-title {
+.votv.karakter-sheet .karakter-actions-title {
   margin-bottom: 6px;
 }
 
-.votv.pc-sheet .pc-actions-table {
+.votv.karakter-sheet .karakter-actions-table {
   width: 100%;
   border-collapse: collapse;
   font-size: var(--votv-font-body);
 }
 
-.votv.pc-sheet .pc-actions-table.pc-actions-table-drag-over {
+.votv.karakter-sheet .karakter-actions-table.karakter-actions-table-drag-over {
   box-shadow: 0 0 0 1px rgba(43, 255, 136, 0.35);
 }
 
-.votv.pc-sheet .pc-actions-table.pc-actions-table-drag-over tbody tr td {
+.votv.karakter-sheet .karakter-actions-table.karakter-actions-table-drag-over tbody tr td {
   background: rgba(43, 255, 136, 0.06) !important;
 }
 
-.votv.pc-sheet .pc-actions-row {
+.votv.karakter-sheet .karakter-actions-row {
   transition: background 0.15s ease, transform 0.12s ease, box-shadow 0.12s ease;
 }
 
-.votv.pc-sheet .pc-actions-row-drag-over {
+.votv.karakter-sheet .karakter-actions-row-drag-over {
   background: rgba(43, 255, 136, 0.06);
   transform: translateY(-1px);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 
-.votv.pc-sheet .pc-actions-table thead {
+.votv.karakter-sheet .karakter-actions-table thead {
   background: var(--votv-panel-bg-soft);
   border: 1px solid var(--votv-border-muted);
   box-shadow: inset 0 0 0 1px rgba(1, 3, 6, 0.5);
 }
 
-.votv.pc-sheet .pc-actions-th-drag {
+.votv.karakter-sheet .karakter-actions-th-drag {
   width: 28px;
   min-width: 28px;
   padding: 4px 6px !important;
   border-right: 1px solid var(--votv-border-muted);
 }
 
-.votv.pc-sheet .pc-actions-cell-drag {
+.votv.karakter-sheet .karakter-actions-cell-drag {
   width: 28px;
   min-width: 28px;
   padding: 4px 6px !important;
@@ -1268,7 +1276,7 @@
   border-right: 1px solid var(--votv-border-muted);
 }
 
-.votv.pc-sheet .pc-actions-drag-handle {
+.votv.karakter-sheet .karakter-actions-drag-handle {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1283,16 +1291,16 @@
   transition: color 0.15s ease, background 0.15s ease;
 }
 
-.votv.pc-sheet .pc-actions-drag-handle:hover {
+.votv.karakter-sheet .karakter-actions-drag-handle:hover {
   color: var(--votv-header-accent);
   background: rgba(43, 255, 136, 0.08);
 }
 
-.votv.pc-sheet .pc-actions-drag-handle:active {
+.votv.karakter-sheet .karakter-actions-drag-handle:active {
   cursor: grabbing;
 }
 
-.votv.pc-sheet .pc-actions-table th {
+.votv.karakter-sheet .karakter-actions-table th {
   padding: 8px 10px;
   text-align: left;
   font-size: var(--votv-font-label);
@@ -1303,15 +1311,15 @@
   border-right: 1px solid var(--votv-border-muted);
 }
 
-.votv.pc-sheet .pc-actions-table th:last-child {
+.votv.karakter-sheet .karakter-actions-table th:last-child {
   border-right: none;
 }
 
-.votv.pc-sheet .pc-actions-table tbody tr {
+.votv.karakter-sheet .karakter-actions-table tbody tr {
   border-bottom: 1px solid var(--votv-border-muted);
 }
 
-.votv.pc-sheet .pc-actions-table td {
+.votv.karakter-sheet .karakter-actions-table td {
   padding: 6px 10px;
   vertical-align: middle;
   border-right: 1px solid var(--votv-border-muted);
@@ -1319,34 +1327,34 @@
 }
 
 /* Remove any even/odd striping – all rows flat by default */
-.votv.pc-sheet .pc-actions-table tbody tr td {
+.votv.karakter-sheet .karakter-actions-table tbody tr td {
   background: transparent;
 }
-.votv.pc-sheet .pc-actions-table tbody tr:nth-child(odd) td,
-.votv.pc-sheet .pc-actions-table tbody tr:nth-child(even) td {
+.votv.karakter-sheet .karakter-actions-table tbody tr:nth-child(odd) td,
+.votv.karakter-sheet .karakter-actions-table tbody tr:nth-child(even) td {
   background: transparent !important;
 }
 
 /* Hover only: highlight the row under the cursor */
-.votv.pc-sheet .pc-actions-table tbody tr:hover td {
+.votv.karakter-sheet .karakter-actions-table tbody tr:hover td {
   background: rgba(43, 255, 136, 0.06) !important;
 }
-.votv.pc-sheet .pc-actions-table tbody tr:hover td:first-child {
+.votv.karakter-sheet .karakter-actions-table tbody tr:hover td:first-child {
   box-shadow: inset 2px 0 0 0 var(--votv-border-accent);
 }
 
-.votv.pc-sheet .pc-actions-table td:last-child {
+.votv.karakter-sheet .karakter-actions-table td:last-child {
   border-right: none;
 }
 
-.votv.pc-sheet .pc-actions-cell-name {
+.votv.karakter-sheet .karakter-actions-cell-name {
   display: flex;
   align-items: center;
   gap: 6px;
   min-width: 0;
 }
 
-.votv.pc-sheet .pc-actions-icon {
+.votv.karakter-sheet .karakter-actions-icon {
   width: 32px;
   height: 32px;
   object-fit: contain;
@@ -1356,8 +1364,8 @@
   cursor: pointer;
 }
 
-.votv.pc-sheet .pc-actions-cell-name .pc-weapon-label,
-.votv.pc-sheet .pc-actions-cell-name .pc-actions-item-name {
+.votv.karakter-sheet .karakter-actions-cell-name .karakter-weapon-label,
+.votv.karakter-sheet .karakter-actions-cell-name .karakter-actions-item-name {
   flex: 1 1 auto;
   min-width: 0;
   white-space: nowrap;
@@ -1366,14 +1374,14 @@
   cursor: pointer;
 }
 
-.votv.pc-sheet .pc-actions-chevron {
+.votv.karakter-sheet .karakter-actions-chevron {
   flex-shrink: 0;
   color: var(--votv-text-muted);
   font-size: 10px;
   cursor: default;
 }
 
-.votv.pc-sheet .pc-equipped-badge {
+.votv.karakter-sheet .karakter-equipped-badge {
   flex-shrink: 0;
   font-size: 10px;
   line-height: 1;
@@ -1382,15 +1390,15 @@
   justify-content: center;
 }
 
-.votv.pc-sheet .pc-equipped-badge.pc-equipped-weapon {
+.votv.karakter-sheet .karakter-equipped-badge.karakter-equipped-weapon {
   color: var(--votv-accent);
 }
 
-.votv.pc-sheet .pc-equipped-badge.pc-equipped-microchip {
+.votv.karakter-sheet .karakter-equipped-badge.karakter-equipped-microchip {
   color: rgba(43, 255, 136, 0.9);
 }
 
-.votv.pc-sheet .pc-actions-cell-hit input {
+.votv.karakter-sheet .karakter-actions-cell-hit input {
   width: 100%;
   max-width: 4em;
   font-size: var(--votv-font-body);
@@ -1398,7 +1406,7 @@
   text-align: center;
 }
 
-.votv.pc-sheet .pc-weapon-equip-wrap {
+.votv.karakter-sheet .karakter-weapon-equip-wrap {
   display: inline-flex;
   align-items: center;
   gap: 4px;
@@ -1407,15 +1415,15 @@
   color: var(--votv-text-muted);
 }
 
-.votv.pc-sheet .pc-actions-cell-damage,
-.votv.pc-sheet .pc-actions-cell-range {
+.votv.karakter-sheet .karakter-actions-cell-damage,
+.votv.karakter-sheet .karakter-actions-cell-range {
   font-size: var(--votv-font-body);
   color: var(--votv-text-muted);
   white-space: nowrap;
 }
 
 /* Equipped weapon attack/damage buttons in Fegyverek card */
-.votv.pc-sheet .pc-weapon-slot-damage {
+.votv.karakter-sheet .karakter-weapon-slot-damage {
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -1424,8 +1432,8 @@
   white-space: nowrap;
 }
 
-.votv.pc-sheet .pc-weapon-attack,
-.votv.pc-sheet .pc-weapon-damage {
+.votv.karakter-sheet .karakter-weapon-attack,
+.votv.karakter-sheet .karakter-weapon-damage {
   border-radius: 2px;
   padding: 2px 6px;
   font-size: 10px;
@@ -1436,35 +1444,35 @@
   white-space: nowrap;
 }
 
-.votv.pc-sheet .pc-weapon-attack {
+.votv.karakter-sheet .karakter-weapon-attack {
   border-color: rgba(43, 255, 136, 0.6);
   color: rgba(43, 255, 136, 0.9);
 }
 
-.votv.pc-sheet .pc-weapon-damage {
+.votv.karakter-sheet .karakter-weapon-damage {
   border-color: rgba(66, 135, 245, 0.6);
   color: rgba(180, 210, 255, 0.9);
 }
 
-.votv.pc-sheet .pc-weapon-attack:disabled,
-.votv.pc-sheet .pc-weapon-damage:disabled {
+.votv.karakter-sheet .karakter-weapon-attack:disabled,
+.votv.karakter-sheet .karakter-weapon-damage:disabled {
   opacity: 0.4;
   cursor: default;
   border-color: var(--votv-border-muted);
   color: var(--votv-text-muted);
 }
 
-.votv.pc-sheet .pc-weapon-attack:not(:disabled):hover {
+.votv.karakter-sheet .karakter-weapon-attack:not(:disabled):hover {
   border-color: var(--votv-border-accent);
   box-shadow: 0 0 4px rgba(43, 255, 136, 0.35);
 }
 
-.votv.pc-sheet .pc-weapon-damage:not(:disabled):hover {
+.votv.karakter-sheet .karakter-weapon-damage:not(:disabled):hover {
   border-color: rgba(66, 135, 245, 0.9);
   box-shadow: 0 0 4px rgba(66, 135, 245, 0.35);
 }
 
-.votv.pc-sheet .pc-actions-cell-qty input {
+.votv.karakter-sheet .karakter-actions-cell-qty input {
   width: 100%;
   max-width: 3.5em;
   font-size: var(--votv-font-body);
@@ -1472,11 +1480,11 @@
   text-align: center;
 }
 
-.votv.pc-sheet .pc-actions-cell-delete {
+.votv.karakter-sheet .karakter-actions-cell-delete {
   text-align: center;
 }
 
-.votv.pc-sheet .pc-item-delete {
+.votv.karakter-sheet .karakter-item-delete {
   border: 1px solid var(--votv-border-muted);
   background: transparent;
   color: var(--votv-text-muted);
@@ -1486,40 +1494,44 @@
   font-size: 10px;
 }
 
-.votv.pc-sheet .pc-item-delete:hover {
+.votv.karakter-sheet .karakter-item-delete:hover {
   border-color: var(--votv-border-accent);
   color: var(--votv-border-accent);
 }
 
-.votv.pc-sheet .pc-actions-th-name { width: 34%; }
-.votv.pc-sheet .pc-actions-th-qty { width: 8%; }
-.votv.pc-sheet .pc-actions-th-hit { width: 18%; }
-.votv.pc-sheet .pc-actions-th-damage { width: 18%; }
-.votv.pc-sheet .pc-actions-th-range { width: 14%; }
-.votv.pc-sheet .pc-actions-th-delete { width: 8%; }
+.votv.karakter-sheet .karakter-actions-th-name { width: 34%; }
+.votv.karakter-sheet .karakter-actions-th-qty { width: 8%; }
+.votv.karakter-sheet .karakter-actions-th-hit { width: 18%; }
+.votv.karakter-sheet .karakter-actions-th-damage { width: 18%; }
+.votv.karakter-sheet .karakter-actions-th-range { width: 14%; }
+.votv.karakter-sheet .karakter-actions-th-delete { width: 8%; }
 
 /* Mikro-chipek */
-.votv.pc-sheet .pc-microchips {
+.votv.karakter-sheet .karakter-microchips {
   grid-column: 1 / -1;
 }
 
-.votv.pc-sheet .pc-abilities {
+.votv.karakter-sheet .karakter-abilities {
   grid-column: 1 / 3;
 }
 
-.votv.pc-sheet .pc-fegyverek {
+.votv.karakter-sheet .karakter-fegyverek {
   grid-column: 3 / 4;
 }
 
-.votv.pc-sheet .pc-microchip-slots {
+.votv.karakter-sheet .karakter-microchip-slots {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 10px;
   margin-top: 6px;
 }
 
-.votv.pc-sheet .pc-microchip-slot {
+.votv.karakter-sheet .karakter-microchip-slot {
   position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
   min-height: 44px;
   padding: 6px 8px;
   border: 1px dashed var(--votv-border-muted);
@@ -1528,30 +1540,28 @@
   transition: border-color 0.15s ease, background 0.15s ease;
 }
 
-.votv.pc-sheet .pc-microchip-slot.pc-microchip-slot-drag-over {
+.votv.karakter-sheet .karakter-microchip-slot.karakter-microchip-slot-drag-over {
   border-color: var(--votv-border-accent);
   background: rgba(43, 255, 136, 0.08);
 }
 
-.votv.pc-sheet .pc-microchip-slot-active {
-  position: absolute;
-  top: 6px;
-  right: 8px;
-  z-index: 2;
+.votv.karakter-sheet .karakter-microchip-slot-active {
+  flex-shrink: 0;
   width: auto;
   margin: 0;
   accent-color: var(--votv-border-accent);
   cursor: pointer;
 }
 
-.votv.pc-sheet .pc-microchip-slot-select-wrap {
+.votv.karakter-sheet .karakter-microchip-slot-select-wrap {
   position: relative;
   display: flex;
   align-items: stretch;
-  margin-top: 4px;
+  flex: 1 1 auto;
+  min-width: 0;
 }
 
-.votv.pc-sheet .pc-microchip-slot-display {
+.votv.karakter-sheet .karakter-microchip-slot-display {
   width: 100%;
   display: flex;
   align-items: center;
@@ -1570,27 +1580,27 @@
   min-height: 28px;
 }
 
-.votv.pc-sheet .pc-microchip-slot-display:hover {
+.votv.karakter-sheet .karakter-microchip-slot-display:hover {
   border-color: rgba(43, 255, 136, 0.5);
 }
 
-.votv.pc-sheet .pc-microchip-slot-display:focus {
+.votv.karakter-sheet .karakter-microchip-slot-display:focus {
   outline: none;
   border-color: var(--votv-focus-ring);
   box-shadow: 0 0 0 1px rgba(43, 255, 136, 0.35);
 }
 
-.votv.pc-sheet .pc-microchip-slot-display:disabled {
+.votv.karakter-sheet .karakter-microchip-slot-display:disabled {
   opacity: 0.6;
   cursor: not-allowed;
   pointer-events: none;
 }
 
-.votv.pc-sheet .pc-microchip-slot-display:disabled:hover {
+.votv.karakter-sheet .karakter-microchip-slot-display:disabled:hover {
   border-color: var(--votv-border-muted);
 }
 
-.votv.pc-sheet .pc-microchip-slot-thumb {
+.votv.karakter-sheet .karakter-microchip-slot-thumb {
   width: 28px;
   height: 28px;
   object-fit: contain;
@@ -1599,7 +1609,7 @@
   flex-shrink: 0;
 }
 
-.votv.pc-sheet .pc-microchip-slot-display-text {
+.votv.karakter-sheet .karakter-microchip-slot-display-text {
   flex: 1 1 auto;
   min-width: 0;
   white-space: normal;
@@ -1607,18 +1617,18 @@
   text-align: left;
 }
 
-.votv.pc-sheet .pc-microchip-slot-chevron {
+.votv.karakter-sheet .karakter-microchip-slot-chevron {
   flex-shrink: 0;
   color: var(--votv-text-muted);
   font-size: 10px;
   transition: transform 0.15s ease;
 }
 
-.votv.pc-sheet .pc-microchip-slot-select-wrap.pc-microchip-slot-open .pc-microchip-slot-chevron {
+.votv.karakter-sheet .karakter-microchip-slot-select-wrap.karakter-microchip-slot-open .karakter-microchip-slot-chevron {
   transform: rotate(180deg);
 }
 
-.votv.pc-sheet .pc-microchip-slot-options {
+.votv.karakter-sheet .karakter-microchip-slot-options {
   position: absolute;
   left: 0;
   right: 0;
@@ -1636,11 +1646,11 @@
   display: none;
 }
 
-.votv.pc-sheet .pc-microchip-slot-select-wrap.pc-microchip-slot-open .pc-microchip-slot-options {
+.votv.karakter-sheet .karakter-microchip-slot-select-wrap.karakter-microchip-slot-open .karakter-microchip-slot-options {
   display: block;
 }
 
-.votv.pc-sheet .pc-microchip-slot-option {
+.votv.karakter-sheet .karakter-microchip-slot-option {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -1655,7 +1665,7 @@
   transition: background 0.1s ease, border-color 0.1s ease;
 }
 
-.votv.pc-sheet .pc-microchip-slot-option-thumb {
+.votv.karakter-sheet .karakter-microchip-slot-option-thumb {
   width: 24px;
   height: 24px;
   object-fit: contain;
@@ -1664,46 +1674,220 @@
   flex-shrink: 0;
 }
 
-.votv.pc-sheet .pc-microchip-slot-option:first-child .pc-microchip-slot-option-thumb {
+.votv.karakter-sheet .karakter-microchip-slot-option:first-child .karakter-microchip-slot-option-thumb {
   display: none;
 }
 
-.votv.pc-sheet .pc-microchip-slot-option-text {
+.votv.karakter-sheet .karakter-microchip-slot-option-text {
   flex: 1 1 auto;
   min-width: 0;
 }
 
-.votv.pc-sheet .pc-microchip-slot-option:hover {
+.votv.karakter-sheet .karakter-microchip-slot-option:hover {
   background: rgba(43, 255, 136, 0.12);
   border-left-color: var(--votv-border-accent);
 }
 
-.votv.pc-sheet .pc-microchip-slot-option:first-child {
+.votv.karakter-sheet .karakter-microchip-slot-option:first-child {
   color: var(--votv-text-muted);
 }
 
-/* Equipment / inventory */
-.votv.pc-sheet .pc-equipment {
+/* Equipment / inventory – four tables: Fegyverek, Páncél, Mikro-Chip, Tárgyak */
+.votv.karakter-sheet .karakter-equipment {
   grid-column: 1 / -1;
 }
 
-.votv.pc-sheet .pc-inventory {
-  margin-top: 6px;
+.votv.karakter-sheet .karakter-equipment-table-title {
+  font-size: var(--votv-font-label);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--votv-text-muted);
+  margin: 14px 0 6px 0;
 }
 
-.votv.pc-sheet .pc-inventory-table {
+.votv.karakter-sheet .karakter-equipment-table-title:first-of-type {
+  margin-top: 4px;
+}
+
+.votv.karakter-sheet .karakter-equipment-block {
+  margin-bottom: 8px;
+}
+
+.votv.karakter-sheet .karakter-equipment-table {
   width: 100%;
   border-collapse: collapse;
   font-size: var(--votv-font-body);
 }
 
-.votv.pc-sheet .pc-inventory-table th,
-.votv.pc-sheet .pc-inventory-table td {
+.votv.karakter-sheet .karakter-equipment-table thead {
+  background: var(--votv-panel-bg-soft);
+  border: 1px solid var(--votv-border-muted);
+  box-shadow: inset 0 0 0 1px rgba(1, 3, 6, 0.5);
+}
+
+.votv.karakter-sheet .karakter-equipment-table th {
+  padding: 8px 10px;
+  text-align: left;
+  font-size: var(--votv-font-label);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--votv-text-muted);
+  border-right: 1px solid var(--votv-border-muted);
+}
+
+.votv.karakter-sheet .karakter-equipment-table th:last-child {
+  border-right: none;
+}
+
+.votv.karakter-sheet .karakter-equipment-table tbody tr {
+  border-bottom: 1px solid var(--votv-border-muted);
+}
+
+.votv.karakter-sheet .karakter-equipment-table td {
+  padding: 6px 10px;
+  vertical-align: middle;
+  border-right: 1px solid var(--votv-border-muted);
+  font-size: var(--votv-font-body);
+  background: transparent;
+}
+
+.votv.karakter-sheet .karakter-equipment-table tbody tr:hover td {
+  background: rgba(43, 255, 136, 0.06);
+}
+
+.votv.karakter-sheet .karakter-equipment-table td:last-child {
+  border-right: none;
+}
+
+.votv.karakter-sheet .karakter-equipment-th-drag,
+.votv.karakter-sheet .karakter-equipment-cell-drag {
+  width: 28px;
+  min-width: 28px;
+  padding: 4px 6px !important;
+  vertical-align: middle;
+  border-right: 1px solid var(--votv-border-muted);
+}
+
+.votv.karakter-sheet .karakter-equipment-drag-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 24px;
+  font-size: 0.7rem;
+  line-height: 1;
+  color: var(--votv-text-muted);
+  cursor: grab;
+  user-select: none;
+  border-radius: 2px;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+
+.votv.karakter-sheet .karakter-equipment-drag-handle:hover {
+  color: var(--votv-header-accent);
+  background: rgba(43, 255, 136, 0.08);
+}
+
+.votv.karakter-sheet .karakter-equipment-drag-handle:active {
+  cursor: grabbing;
+}
+
+.votv.karakter-sheet .karakter-equipment-cell-name {
+  min-width: 0;
+}
+
+.votv.karakter-sheet .karakter-equipment-cell-name input {
+  width: 100%;
+  max-width: 100%;
+}
+
+.votv.karakter-sheet .karakter-equipment-table .karakter-equipment-icon {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  border-radius: 2px;
+  border: 1px solid var(--votv-border-muted);
+  flex-shrink: 0;
+  margin-right: 6px;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+.votv.karakter-sheet .karakter-equipment-cell-name .karakter-weapon-label {
+  cursor: pointer;
+}
+
+.votv.karakter-sheet .karakter-equipment-cell-bonus input,
+.votv.karakter-sheet .karakter-equipment-cell-speed input,
+.votv.karakter-sheet .karakter-equipment-cell-level input,
+.votv.karakter-sheet .karakter-equipment-cell-other input,
+.votv.karakter-sheet .karakter-equipment-cell-desc input,
+.votv.karakter-sheet .karakter-equipment-cell-qty input {
+  width: 100%;
+  max-width: 6em;
+  min-width: 3em;
+}
+
+.votv.karakter-sheet .karakter-equipment-cell-delete {
+  width: 32px;
+  text-align: center;
+}
+
+.votv.karakter-sheet .karakter-equipment-delete {
+  padding: 2px 6px;
+  font-size: 12px;
+  line-height: 1;
+  color: var(--votv-text-muted);
+  background: transparent;
+  border: 1px solid var(--votv-border-muted);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+
+.votv.karakter-sheet .karakter-equipment-delete:hover {
+  color: var(--votv-accent);
+  border-color: var(--votv-border-accent);
+  background: rgba(43, 255, 136, 0.08);
+}
+
+.votv.karakter-sheet .karakter-equipment-add-row {
+  margin-top: 6px;
+  padding: 4px 10px;
+  font-size: var(--votv-font-label);
+  color: var(--votv-text-muted);
+  background: rgba(43, 255, 136, 0.06);
+  border: 1px solid var(--votv-border-muted);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: color 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+}
+
+.votv.karakter-sheet .karakter-equipment-add-row:hover {
+  color: var(--votv-header-accent);
+  border-color: var(--votv-border-accent);
+  background: rgba(43, 255, 136, 0.1);
+}
+
+.votv.karakter-sheet .karakter-inventory {
+  margin-top: 6px;
+}
+
+.votv.karakter-sheet .karakter-inventory-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--votv-font-body);
+}
+
+.votv.karakter-sheet .karakter-inventory-table th,
+.votv.karakter-sheet .karakter-inventory-table td {
   border-bottom: 1px solid var(--votv-border-muted);
   padding: 4px 6px;
 }
 
-.votv.pc-sheet .pc-inventory-table th {
+.votv.karakter-sheet .karakter-inventory-table th {
   text-align: left;
   font-size: var(--votv-font-label);
   color: var(--votv-text-muted);
@@ -1711,7 +1895,7 @@
   letter-spacing: 0.08em;
 }
 
-.votv.pc-sheet .pc-inventory-icon img {
+.votv.karakter-sheet .karakter-inventory-icon img {
   border-radius: 2px;
   border: 1px solid var(--votv-border-muted);
 }

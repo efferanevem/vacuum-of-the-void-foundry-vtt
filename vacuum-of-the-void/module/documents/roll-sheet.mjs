@@ -2,7 +2,7 @@
  * Roll sheet: skill roll with 3d6 + modifiers, optional morale dice, advantage/disadvantage, constant bonus.
  * Opened when clicking a skill label on the PC sheet.
  */
-import { VoidPcSheet } from "./pc-sheet.mjs";
+import { VoidKarakterSheet } from "./karakter-sheet.mjs";
 
 export class VoidRollSheet extends Application {
   static get defaultOptions() {
@@ -241,8 +241,8 @@ export class VoidRollSheet extends Application {
 export function openRollSheetForSkill(actor, skillKey, label) {
   if (!actor) return;
   const baseValue = Number(actor.system?.skills?.[skillKey] ?? 0) || 0;
-  const healthStatus = VoidPcSheet.BODY_PART_BY_SKILL[skillKey]
-    ? VoidPcSheet._getSkillHealthStatusStatic(actor, skillKey)
+  const healthStatus = VoidKarakterSheet.BODY_PART_BY_SKILL[skillKey]
+    ? VoidKarakterSheet._getSkillHealthStatusStatic(actor, skillKey)
     : undefined;
   let injuryModifier = 0;
   if (healthStatus === 1) injuryModifier = -6;

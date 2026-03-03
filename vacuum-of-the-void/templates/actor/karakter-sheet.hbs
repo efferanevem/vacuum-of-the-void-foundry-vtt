@@ -1,0 +1,612 @@
+<form class="votv karakter-sheet" autocomplete="off">
+  <header class="karakter-header">
+    <div class="karakter-header-row">
+      <div class="karakter-header-field karakter-header-name">
+        <label>Név</label>
+        <input type="text" name="name" value="{{actor.name}}" placeholder="Karakter neve" data-dtype="String" />
+      </div>
+      <div class="karakter-header-field karakter-header-level">
+        <label>Szint</label>
+        <input type="number" name="system.identity.level" value="{{system.identity.level}}" />
+      </div>
+      <div class="karakter-header-field karakter-header-languages">
+        <label>Nyelvek</label>
+        <input type="text" name="system.identity.languages" value="{{system.identity.languages}}" />
+      </div>
+      <div class="karakter-header-field karakter-header-player">
+        <label>Játékos</label>
+        <input type="text" name="system.identity.player" value="{{system.identity.player}}" />
+      </div>
+    </div>
+    <div class="karakter-header-row">
+      <div class="karakter-header-field karakter-header-species">
+        <label>Faj</label>
+        <input type="text" name="system.identity.species" value="{{system.identity.species}}" />
+      </div>
+      <div class="karakter-header-field karakter-header-assignment">
+        <label>Beosztás</label>
+        <input type="text" name="system.identity.assignment" value="{{system.identity.assignment}}" />
+      </div>
+      <div class="karakter-header-field karakter-header-subassignment">
+        <label>Albeosztás</label>
+        <input type="text" name="system.identity.subAssignment" value="{{system.identity.subAssignment}}" />
+      </div>
+      <div class="karakter-header-field karakter-header-background">
+        <label>Háttér</label>
+        <input type="text" name="system.identity.background" value="{{system.identity.background}}" />
+      </div>
+    </div>
+  </header>
+
+  <section class="karakter-main">
+    <section class="karakter-column karakter-left">
+      <section class="karakter-panel karakter-health">
+        <h2>Életerő</h2>
+        <div class="karakter-health-table-wrap">
+          <table class="karakter-health-table">
+            <colgroup>
+              <col class="karakter-health-col-label" />
+              <col class="karakter-health-col-hit" />
+              <col class="karakter-health-col-num" />
+              <col class="karakter-health-col-slash" />
+              <col class="karakter-health-col-num" />
+            </colgroup>
+            <thead>
+              <tr>
+                <th></th>
+                <th class="karakter-health-th-hit">Találati szám</th>
+                <th class="karakter-health-th-num">Teljes</th>
+                <th class="karakter-health-th-slash">/</th>
+                <th class="karakter-health-th-num">Aktuális</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="karakter-health-row">
+                <td class="karakter-health-label">Fej</td>
+                <td class="karakter-health-cell-hit">1</td>
+                <td><input type="number" name="system.resources.hitLocations.head.value" value="{{system.resources.hitLocations.head.value}}" min="0" /></td>
+                <td class="karakter-health-cell-slash">/</td>
+                <td><input type="number" name="system.resources.currentHealth.head" value="{{system.resources.currentHealth.head}}" min="0" /></td>
+              </tr>
+              <tr class="karakter-health-row">
+                <td class="karakter-health-label">Törzs</td>
+                <td class="karakter-health-cell-hit">2, 3, 4</td>
+                <td><input type="number" name="system.resources.hitLocations.torso.value" value="{{system.resources.hitLocations.torso.value}}" min="0" /></td>
+                <td class="karakter-health-cell-slash">/</td>
+                <td><input type="number" name="system.resources.currentHealth.torso" value="{{system.resources.currentHealth.torso}}" min="0" /></td>
+              </tr>
+              <tr class="karakter-health-row">
+                <td class="karakter-health-label">Karok</td>
+                <td class="karakter-health-cell-hit">5, 6</td>
+                <td><input type="number" name="system.resources.hitLocations.arms.value" value="{{system.resources.hitLocations.arms.value}}" min="0" /></td>
+                <td class="karakter-health-cell-slash">/</td>
+                <td><input type="number" name="system.resources.currentHealth.arms" value="{{system.resources.currentHealth.arms}}" min="0" /></td>
+              </tr>
+              <tr class="karakter-health-row">
+                <td class="karakter-health-label">Lábak</td>
+                <td class="karakter-health-cell-hit">7, 8</td>
+                <td><input type="number" name="system.resources.hitLocations.legs.value" value="{{system.resources.hitLocations.legs.value}}" min="0" /></td>
+                <td class="karakter-health-cell-slash">/</td>
+                <td><input type="number" name="system.resources.currentHealth.legs" value="{{system.resources.currentHealth.legs}}" min="0" /></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="karakter-health-status-title">Egészségi állapot</h3>
+        <div class="karakter-health-status-head">
+          <span class="karakter-health-status-head-spacer"></span>
+          <span class="karakter-health-status-state">Használhatatlan</span>
+          <span class="karakter-health-status-state">Kritikus</span>
+          <span class="karakter-health-status-state">Sérült</span>
+          <span class="karakter-health-status-state">Egészséges</span>
+        </div>
+        <div class="karakter-health-status-rows">
+          <div class="karakter-health-status-row">
+            <label>Fej</label>
+            <div class="karakter-health-status-readonly" data-status="{{computedHealthStatus.head}}" title="Az aktuális/teljes arány alapján (nem szerkeszthető)"><span class="karakter-health-status-dot" data-value="0"></span><span class="karakter-health-status-dot" data-value="1"></span><span class="karakter-health-status-dot" data-value="2"></span><span class="karakter-health-status-dot" data-value="3"></span></div>
+          </div>
+          <div class="karakter-health-status-row">
+            <label>Törzs</label>
+            <div class="karakter-health-status-readonly" data-status="{{computedHealthStatus.torso}}"><span class="karakter-health-status-dot" data-value="0"></span><span class="karakter-health-status-dot" data-value="1"></span><span class="karakter-health-status-dot" data-value="2"></span><span class="karakter-health-status-dot" data-value="3"></span></div>
+          </div>
+          <div class="karakter-health-status-row">
+            <label>Karok</label>
+            <div class="karakter-health-status-readonly" data-status="{{computedHealthStatus.arms}}"><span class="karakter-health-status-dot" data-value="0"></span><span class="karakter-health-status-dot" data-value="1"></span><span class="karakter-health-status-dot" data-value="2"></span><span class="karakter-health-status-dot" data-value="3"></span></div>
+          </div>
+          <div class="karakter-health-status-row">
+            <label>Lábak</label>
+            <div class="karakter-health-status-readonly" data-status="{{computedHealthStatus.legs}}"><span class="karakter-health-status-dot" data-value="0"></span><span class="karakter-health-status-dot" data-value="1"></span><span class="karakter-health-status-dot" data-value="2"></span><span class="karakter-health-status-dot" data-value="3"></span></div>
+          </div>
+        </div>
+        <div class="karakter-health-status-sublabels">
+          <span class="karakter-health-status-head-spacer"></span>
+          <span class="karakter-health-status-penalty">Nem dobhatsz.</span>
+          <span class="karakter-health-status-penalty">-6</span>
+          <span class="karakter-health-status-penalty">-3</span>
+          <span class="karakter-health-status-penalty">-0</span>
+        </div>
+      </section>
+
+    </section>
+
+    <section class="karakter-column karakter-center">
+      <section class="karakter-panel karakter-portrait">
+        <img class="karakter-portrait-img" src="{{actor.img}}" data-edit="img" alt="{{actor.name}}" title="{{actor.name}}" />
+        {{#if showDeathSkull}}
+          <img class="karakter-portrait-death-skull" src="systems/vacuum-of-the-void/assets/death_skull.svg" alt="" aria-hidden="true" />
+        {{/if}}
+      </section>
+      <section class="karakter-panel karakter-resources">
+        <div class="karakter-resource karakter-resource-money">
+          <label>Pénz</label>
+          <input type="number" name="system.resources.money" value="{{system.resources.money}}" class="karakter-resource-input-money" />
+          <span class="karakter-resource-suffix">cr</span>
+        </div>
+        <div class="karakter-resources-row">
+          <div class="karakter-resource karakter-resource-stress" data-stress-value="{{system.resources.stress.value}}">
+            <label>Stressz</label>
+            <input type="number" name="system.resources.stress.value" value="{{system.resources.stress.value}}" class="{{#if stressOver10}}karakter-stress-over-10{{/if}}" />
+          </div>
+          <div class="karakter-resource karakter-resource-morale">
+            <label>Morál</label>
+            <input type="number" name="system.resources.morale" value="{{system.resources.morale}}" />
+            <span class="karakter-resource-suffix karakter-resource-morale-suffix"><span>db</span> &nbsp;<img class="karakter-resource-d8-icon karakter-roll-morale-d8" src="systems/vacuum-of-the-void/assets/moral_d8.svg" alt="d8" title="Morál dobás (1d8) – 1 morál levonása" /></span>
+          </div>
+        </div>
+        <div class="karakter-resource karakter-resource-defense karakter-resource-triple">
+          <label>Védelem</label>
+          <input type="number" name="system.combat.defense" value="{{system.combat.defense}}" min="0" />
+          <span class="karakter-resource-plus">+</span>
+          <input type="number" name="system.combat.defenseBonus" value="{{system.combat.defenseBonus}}" min="0" />
+          <span class="karakter-resource-plus">+</span>
+          <span class="karakter-given-defense-effective" title="Kapott védelem">{{system.combat.givenProtection}}</span>
+        </div>
+        <div class="karakter-resource karakter-resource-speed karakter-resource-triple" data-legs-health="{{computedHealthStatus.legs}}">
+          <label>Sebesség</label>
+          <input type="number" name="system.combat.speed" value="{{system.combat.speed}}" min="0" />
+          <span class="karakter-resource-plus">+</span>
+          <input type="number" name="system.combat.speedBonus" value="{{system.combat.speedBonus}}" min="0" />
+          <span class="karakter-resource-plus">+</span>
+          <span class="karakter-given-speed-effective" title="Kapott sebesség (Lábak állapota alapján)">{{system.combat.givenSpeed}}</span>
+          <span class="karakter-resource-speed-unit">m</span>
+        </div>
+        <div class="karakter-resource-triple-sublabels">
+          <span class="karakter-resource-triple-sublabels-spacer"></span>
+          <span class="karakter-resource-triple-sublabels-cell">Alap</span>
+          <span class="karakter-resource-triple-sublabels-cell">Ideiglenes</span>
+          <span class="karakter-resource-triple-sublabels-cell">Kapott</span>
+        </div>
+      </section>
+    </section>
+
+    <section class="karakter-column karakter-right">
+      <section class="karakter-panel karakter-skills">
+        <h2>Jártasságok</h2>
+        <div class="karakter-skills-grid">
+          <div class="karakter-skills-column">
+            <div class="karakter-skill" {{#if skillHasHealthTint.deception}}data-health-status="{{skillHealthStatus.deception}}"{{/if}}><label class="karakter-skill-label" data-skill="deception">Átverés</label><input type="number" name="system.skills.deception" value="{{system.skills.deception}}" min="-99" max="999"{{{skillDisabled.deception}}}/></div>
+            <div class="karakter-skill" {{#if skillHasHealthTint.medicalCare}}data-health-status="{{skillHealthStatus.medicalCare}}"{{/if}}><label class="karakter-skill-label" data-skill="medicalCare">Betegellátás</label><input type="number" name="system.skills.medicalCare" value="{{system.skills.medicalCare}}" min="-99" max="999"{{{skillDisabled.medicalCare}}}/></div>
+            <div class="karakter-skill" {{#if skillHasHealthTint.endurance}}data-health-status="{{skillHealthStatus.endurance}}"{{/if}}><label class="karakter-skill-label" data-skill="endurance">Erőnlét</label><input type="number" name="system.skills.endurance" value="{{system.skills.endurance}}" min="-99" max="999"{{{skillDisabled.endurance}}}/></div>
+            <div class="karakter-skill" {{#if skillHasHealthTint.perception}}data-health-status="{{skillHealthStatus.perception}}"{{/if}}><label class="karakter-skill-label" data-skill="perception">Észlelés</label><input type="number" name="system.skills.perception" value="{{system.skills.perception}}" min="-99" max="999"{{{skillDisabled.perception}}}/></div>
+            <div class="karakter-skill" {{#if skillHasHealthTint.cooking}}data-health-status="{{skillHealthStatus.cooking}}"{{/if}}><label class="karakter-skill-label" data-skill="cooking">Főzés</label><input type="number" name="system.skills.cooking" value="{{system.skills.cooking}}" min="-99" max="999"{{{skillDisabled.cooking}}}/></div>
+            <div class="karakter-skill" {{#if skillHasHealthTint.quickThinking}}data-health-status="{{skillHealthStatus.quickThinking}}"{{/if}}><label class="karakter-skill-label" data-skill="quickThinking">Gyorsgondolkodás</label><input type="number" name="system.skills.quickThinking" value="{{system.skills.quickThinking}}" min="-99" max="999"{{{skillDisabled.quickThinking}}}/></div>
+            <div class="karakter-skill" {{#if skillHasHealthTint.combatTraining}}data-health-status="{{skillHealthStatus.combatTraining}}"{{/if}}><label class="karakter-skill-label" data-skill="combatTraining">Harcképzettség</label><input type="number" name="system.skills.combatTraining" value="{{system.skills.combatTraining}}" min="-99" max="999"{{{skillDisabled.combatTraining}}}/></div>
+            <div class="karakter-skill" {{#if skillHasHealthTint.vehicleOperation}}data-health-status="{{skillHealthStatus.vehicleOperation}}"{{/if}}><label class="karakter-skill-label" data-skill="vehicleOperation">Járműirányítás</label><input type="number" name="system.skills.vehicleOperation" value="{{system.skills.vehicleOperation}}" min="-99" max="999"{{{skillDisabled.vehicleOperation}}}/></div>
+            <div class="karakter-skill" {{#if skillHasHealthTint.grenadeUse}}data-health-status="{{skillHealthStatus.grenadeUse}}"{{/if}}><label class="karakter-skill-label" data-skill="grenadeUse">Kézifegyver Használat</label><input type="number" name="system.skills.grenadeUse" value="{{system.skills.grenadeUse}}" min="-99" max="999"{{{skillDisabled.grenadeUse}}}/></div>
+            <div class="karakter-skill" {{#if skillHasHealthTint.lexicalKnowledge}}data-health-status="{{skillHealthStatus.lexicalKnowledge}}"{{/if}}><label class="karakter-skill-label" data-skill="lexicalKnowledge">Lexikális Tudás</label><input type="number" name="system.skills.lexicalKnowledge" value="{{system.skills.lexicalKnowledge}}" min="-99" max="999"{{{skillDisabled.lexicalKnowledge}}}/></div>
+          </div>
+          <div class="karakter-skills-column">
+            <div class="karakter-skill" {{#if skillHasHealthTint.stealth}}data-health-status="{{skillHealthStatus.stealth}}"{{/if}}><label class="karakter-skill-label" data-skill="stealth">Lopakodás</label><input type="number" name="system.skills.stealth" value="{{system.skills.stealth}}" min="-99" max="999"{{{skillDisabled.stealth}}}/></div>
+            <div class="karakter-skill" {{#if skillHasHealthTint.firearms}}data-health-status="{{skillHealthStatus.firearms}}"{{/if}}><label class="karakter-skill-label" data-skill="firearms">Löveghasználat</label><input type="number" name="system.skills.firearms" value="{{system.skills.firearms}}" min="-99" max="999"{{{skillDisabled.firearms}}}/></div>
+            <div class="karakter-skill" {{#if skillHasHealthTint.intimidation}}data-health-status="{{skillHealthStatus.intimidation}}"{{/if}}><label class="karakter-skill-label" data-skill="intimidation">Megfélemlítés</label><input type="number" name="system.skills.intimidation" value="{{system.skills.intimidation}}" min="-99" max="999"{{{skillDisabled.intimidation}}}/></div>
+            <div class="karakter-skill" {{#if skillHasHealthTint.persuasion}}data-health-status="{{skillHealthStatus.persuasion}}"{{/if}}><label class="karakter-skill-label" data-skill="persuasion">Meggyőzés</label><input type="number" name="system.skills.persuasion" value="{{system.skills.persuasion}}" min="-99" max="999"{{{skillDisabled.persuasion}}}/></div>
+            <div class="karakter-skill" {{#if skillHasHealthTint.memory}}data-health-status="{{skillHealthStatus.memory}}"{{/if}}><label class="karakter-skill-label" data-skill="memory">Memória</label><input type="number" name="system.skills.memory" value="{{system.skills.memory}}" min="-99" max="999"{{{skillDisabled.memory}}}/></div>
+            <div class="karakter-skill" {{#if skillHasHealthTint.mentalStrength}}data-health-status="{{skillHealthStatus.mentalStrength}}"{{/if}}><label class="karakter-skill-label" data-skill="mentalStrength">Mentális Erősség</label><input type="number" name="system.skills.mentalStrength" value="{{system.skills.mentalStrength}}" min="-99" max="999"{{{skillDisabled.mentalStrength}}}/></div>
+            <div class="karakter-skill" {{#if skillHasHealthTint.languages}}data-health-status="{{skillHealthStatus.languages}}"{{/if}}><label class="karakter-skill-label" data-skill="languages">Nyelvek</label><input type="number" name="system.skills.languages" value="{{system.skills.languages}}" min="-99" max="999"{{{skillDisabled.languages}}}/></div>
+            <div class="karakter-skill" {{#if skillHasHealthTint.luck}}data-health-status="{{skillHealthStatus.luck}}"{{/if}}><label class="karakter-skill-label" data-skill="luck">Szerencse</label><input type="number" name="system.skills.luck" value="{{system.skills.luck}}" min="-99" max="999"{{{skillDisabled.luck}}}/></div>
+            <div class="karakter-skill" {{#if skillHasHealthTint.technicalKnowledge}}data-health-status="{{skillHealthStatus.technicalKnowledge}}"{{/if}}><label class="karakter-skill-label" data-skill="technicalKnowledge">Technikai Tudás</label><input type="number" name="system.skills.technicalKnowledge" value="{{system.skills.technicalKnowledge}}" min="-99" max="999"{{{skillDisabled.technicalKnowledge}}}/></div>
+            <div class="karakter-skill" {{#if skillHasHealthTint.music}}data-health-status="{{skillHealthStatus.music}}"{{/if}}><label class="karakter-skill-label" data-skill="music">Zene</label><input type="number" name="system.skills.music" value="{{system.skills.music}}" min="-99" max="999"{{{skillDisabled.music}}}/></div>
+          </div>
+        </div>
+      </section>
+
+    </section>
+
+    <section class="karakter-panel karakter-abilities">
+      <h2>Képességek</h2>
+      <div class="karakter-abilities-grid">
+        <div class="karakter-abilities-row karakter-abilities-row-top">
+          <div class="karakter-ability-area karakter-ability-slot-single" data-slot="faji" data-drop-zone="ability">
+            <div class="karakter-ability-area-header">Faji</div>
+            <div class="karakter-ability-area-list">
+              {{#if abilityFajiSlot.itemId}}
+                <div class="karakter-ability-pill" data-item-id="{{abilityFajiSlot.itemId}}">
+                  <div class="karakter-ability-main">
+                    {{#if abilityFajiSlot.img}}
+                      <img
+                        class="karakter-ability-pill-thumb karakter-ability-open"
+                        src="{{abilityFajiSlot.img}}"
+                        alt=""
+                        data-item-id="{{abilityFajiSlot.itemId}}"
+                      />
+                    {{/if}}
+                    <span class="karakter-ability-pill-name karakter-ability-open" data-item-id="{{abilityFajiSlot.itemId}}" title="{{abilityFajiSlot.displayName}}">
+                      {{abilityFajiSlot.displayName}}
+                    </span>
+                  </div>
+                  <div class="karakter-ability-actions">
+                    <button type="button" class="karakter-ability-chat" data-item-id="{{abilityFajiSlot.itemId}}" title="Chat-be küldés">
+                      <i class="fas fa-comment-dots"></i>
+                    </button>
+                    <button
+                      type="button"
+                      class="karakter-ability-slot-clear karakter-ability-pill-remove"
+                      data-slot="faji"
+                      data-area="faji"
+                      data-item-id="{{abilityFajiSlot.itemId}}"
+                      title="Alt+klikk: Eltávolítás"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                </div>
+              {{else}}
+                <div class="karakter-ability-area-placeholder">Húzz ide egy képességet</div>
+              {{/if}}
+            </div>
+          </div>
+
+          <div class="karakter-ability-area karakter-ability-slot-single" data-slot="hatter" data-drop-zone="ability">
+            <div class="karakter-ability-area-header">Háttér</div>
+            <div class="karakter-ability-area-list">
+              {{#if abilityHatterSlot.itemId}}
+                <div class="karakter-ability-pill" data-item-id="{{abilityHatterSlot.itemId}}">
+                  <div class="karakter-ability-main">
+                    {{#if abilityHatterSlot.img}}
+                      <img
+                        class="karakter-ability-pill-thumb karakter-ability-open"
+                        src="{{abilityHatterSlot.img}}"
+                        alt=""
+                        data-item-id="{{abilityHatterSlot.itemId}}"
+                      />
+                    {{/if}}
+                    <span class="karakter-ability-pill-name karakter-ability-open" data-item-id="{{abilityHatterSlot.itemId}}" title="{{abilityHatterSlot.displayName}}">
+                      {{abilityHatterSlot.displayName}}
+                    </span>
+                  </div>
+                  <div class="karakter-ability-actions">
+                    <button type="button" class="karakter-ability-chat" data-item-id="{{abilityHatterSlot.itemId}}" title="Chat-be küldés">
+                      <i class="fas fa-comment-dots"></i>
+                    </button>
+                    <button
+                      type="button"
+                      class="karakter-ability-slot-clear karakter-ability-pill-remove"
+                      data-slot="hatter"
+                      data-area="hatter"
+                      data-item-id="{{abilityHatterSlot.itemId}}"
+                      title="Alt+klikk: Eltávolítás"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                </div>
+              {{else}}
+                <div class="karakter-ability-area-placeholder">Húzz ide egy képességet</div>
+              {{/if}}
+            </div>
+          </div>
+        </div>
+        <div class="karakter-abilities-row karakter-abilities-row-bottom">
+          <div class="karakter-ability-area" data-area="passive" data-drop-zone="ability">
+            <div class="karakter-ability-area-header">Passzív</div>
+            <div class="karakter-ability-area-list">
+              {{#if abilityPassiveList.length}}
+                {{#each abilityPassiveList}}
+                  <div class="karakter-ability-pill" data-item-id="{{this.id}}">
+                    <div class="karakter-ability-main">
+                      {{#if this.img}}
+                        <img
+                          class="karakter-ability-pill-thumb karakter-ability-open"
+                          src="{{this.img}}"
+                          alt=""
+                          data-item-id="{{this.id}}"
+                        />
+                      {{/if}}
+                      <span class="karakter-ability-pill-name karakter-ability-open" data-item-id="{{this.id}}" title="{{this.name}}">
+                        {{this.name}}
+                      </span>
+                    </div>
+                    <div class="karakter-ability-actions">
+                      <button type="button" class="karakter-ability-chat" data-item-id="{{this.id}}" title="Chat-be küldés">
+                        <i class="fas fa-comment-dots"></i>
+                      </button>
+                      <button
+                        type="button"
+                        class="karakter-ability-pill-remove"
+                        data-area="passive"
+                        data-item-id="{{this.id}}"
+                        title="Alt+klikk: Eltávolítás"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  </div>
+                {{/each}}
+              {{else}}
+                <div class="karakter-ability-area-placeholder">Húzz ide képességeket</div>
+              {{/if}}
+            </div>
+          </div>
+          <div class="karakter-ability-area" data-area="active" data-drop-zone="ability">
+            <div class="karakter-ability-area-header">Aktív</div>
+            <div class="karakter-ability-area-list">
+              {{#if abilityActiveList.length}}
+                {{#each abilityActiveList}}
+                  <div class="karakter-ability-pill" data-item-id="{{this.id}}">
+                    <div class="karakter-ability-main">
+                      {{#if this.img}}
+                        <img
+                          class="karakter-ability-pill-thumb karakter-ability-open"
+                          src="{{this.img}}"
+                          alt=""
+                          data-item-id="{{this.id}}"
+                        />
+                      {{/if}}
+                      <span class="karakter-ability-pill-name karakter-ability-open" data-item-id="{{this.id}}" title="{{this.name}}">
+                        {{this.name}}
+                      </span>
+                    </div>
+                    <div class="karakter-ability-actions">
+                      <button type="button" class="karakter-ability-chat" data-item-id="{{this.id}}" title="Chat-be küldés">
+                        <i class="fas fa-comment-dots"></i>
+                      </button>
+                      <button
+                        type="button"
+                        class="karakter-ability-pill-remove"
+                        data-area="active"
+                        data-item-id="{{this.id}}"
+                        title="Alt+klikk: Eltávolítás"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  </div>
+                {{/each}}
+              {{else}}
+                <div class="karakter-ability-area-placeholder">Húzz ide képességeket</div>
+              {{/if}}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="karakter-panel karakter-fegyverek">
+      <h2>Fegyverek</h2>
+      <div class="karakter-weapon-slots">
+        {{#each weaponSlots}}
+          <div class="karakter-weapon-slot" data-slot="{{this.slotKey}}" data-drop-zone="weapon">
+            <div class="karakter-weapon-slot-select-wrap">
+              <div class="karakter-weapon-slot-display">
+                {{#if this.img}}
+                  <img class="karakter-weapon-slot-thumb" src="{{this.img}}" alt="" />
+                {{/if}}
+                <span class="karakter-weapon-slot-display-text">{{this.displayName}}</span>
+              </div>
+            </div>
+          </div>
+        {{/each}}
+      </div>
+    </section>
+
+    <section class="karakter-panel karakter-microchips">
+      <h2>Mikro-chipek</h2>
+      <div class="karakter-microchip-slots">
+        <div class="karakter-microchip-slot" data-slot="slot1" data-drop-zone="microchip">
+          <input type="checkbox" name="system.gear.microchips.slot1.active" {{checked system.gear.microchips.slot1.active}} title="Aktív" class="karakter-microchip-slot-active" data-slot="slot1" />
+          <div class="karakter-microchip-slot-select-wrap">
+            <button type="button" class="karakter-microchip-slot-display" data-slot="slot1" tabindex="0" {{#unless system.gear.microchips.slot1.active}}disabled{{/unless}}>
+              {{#if microchip1Img}}
+                <img class="karakter-microchip-slot-thumb" src="{{microchip1Img}}" alt="" />
+              {{/if}}
+              <span class="karakter-microchip-slot-display-text">{{microchip1DisplayName}}</span>
+              <span class="karakter-microchip-slot-chevron" aria-hidden="true">▾</span>
+            </button>
+            <ul class="karakter-microchip-slot-options" data-slot="slot1" role="listbox">
+              <li class="karakter-microchip-slot-option" data-item-id="" data-item-img="" data-item-name="— Nincs Mikro-Chip —" role="option"><span class="karakter-microchip-slot-option-text">— Nincs Mikro-Chip —</span></li>
+              {{#each microchipItemsSlot1}}
+                <li class="karakter-microchip-slot-option" data-item-id="{{this.id}}" data-item-img="{{this.img}}" data-item-name="{{this.name}}" role="option"><img class="karakter-microchip-slot-option-thumb" src="{{this.img}}" alt="" /><span class="karakter-microchip-slot-option-text">{{this.name}}</span></li>
+              {{/each}}
+            </ul>
+          </div>
+        </div>
+        <div class="karakter-microchip-slot" data-slot="slot2" data-drop-zone="microchip">
+          <input type="checkbox" name="system.gear.microchips.slot2.active" {{checked system.gear.microchips.slot2.active}} title="Aktív" class="karakter-microchip-slot-active" data-slot="slot2" />
+          <div class="karakter-microchip-slot-select-wrap">
+            <button type="button" class="karakter-microchip-slot-display" data-slot="slot2" tabindex="0" {{#unless system.gear.microchips.slot2.active}}disabled{{/unless}}>
+              {{#if microchip2Img}}
+                <img class="karakter-microchip-slot-thumb" src="{{microchip2Img}}" alt="" />
+              {{/if}}
+              <span class="karakter-microchip-slot-display-text">{{microchip2DisplayName}}</span>
+              <span class="karakter-microchip-slot-chevron" aria-hidden="true">▾</span>
+            </button>
+            <ul class="karakter-microchip-slot-options" data-slot="slot2" role="listbox">
+              <li class="karakter-microchip-slot-option" data-item-id="" data-item-img="" data-item-name="— Nincs Mikro-Chip —" role="option"><span class="karakter-microchip-slot-option-text">— Nincs Mikro-Chip —</span></li>
+              {{#each microchipItemsSlot2}}
+                <li class="karakter-microchip-slot-option" data-item-id="{{this.id}}" data-item-img="{{this.img}}" data-item-name="{{this.name}}" role="option"><img class="karakter-microchip-slot-option-thumb" src="{{this.img}}" alt="" /><span class="karakter-microchip-slot-option-text">{{this.name}}</span></li>
+              {{/each}}
+            </ul>
+          </div>
+        </div>
+        <div class="karakter-microchip-slot" data-slot="slot3" data-drop-zone="microchip">
+          <input type="checkbox" name="system.gear.microchips.slot3.active" {{checked system.gear.microchips.slot3.active}} title="Aktív" class="karakter-microchip-slot-active" data-slot="slot3" />
+          <div class="karakter-microchip-slot-select-wrap">
+            <button type="button" class="karakter-microchip-slot-display" data-slot="slot3" tabindex="0" {{#unless system.gear.microchips.slot3.active}}disabled{{/unless}}>
+              {{#if microchip3Img}}
+                <img class="karakter-microchip-slot-thumb" src="{{microchip3Img}}" alt="" />
+              {{/if}}
+              <span class="karakter-microchip-slot-display-text">{{microchip3DisplayName}}</span>
+              <span class="karakter-microchip-slot-chevron" aria-hidden="true">▾</span>
+            </button>
+            <ul class="karakter-microchip-slot-options" data-slot="slot3" role="listbox">
+              <li class="karakter-microchip-slot-option" data-item-id="" data-item-img="" data-item-name="— Nincs Mikro-Chip —" role="option"><span class="karakter-microchip-slot-option-text">— Nincs Mikro-Chip —</span></li>
+              {{#each microchipItemsSlot3}}
+                <li class="karakter-microchip-slot-option" data-item-id="{{this.id}}" data-item-img="{{this.img}}" data-item-name="{{this.name}}" role="option"><img class="karakter-microchip-slot-option-thumb" src="{{this.img}}" alt="" /><span class="karakter-microchip-slot-option-text">{{this.name}}</span></li>
+              {{/each}}
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="karakter-panel karakter-equipment">
+      <h2>Felszerelés</h2>
+
+      <h3 class="karakter-equipment-table-title">Fegyverek</h3>
+      <div class="karakter-equipment-block">
+        <table class="karakter-equipment-table karakter-equipment-weapons">
+          <thead>
+            <tr>
+              <th class="karakter-equipment-th-drag"></th>
+              <th class="karakter-equipment-th-name">Név</th>
+              <th class="karakter-equipment-th-bonus">Bónusz</th>
+              <th class="karakter-equipment-th-damage">Sebzés</th>
+              <th class="karakter-equipment-th-range">Hatótáv</th>
+              <th class="karakter-equipment-th-type">Típus</th>
+              <th class="karakter-equipment-th-ammo">Lőszer</th>
+              <th class="karakter-equipment-th-other">Egyéb</th>
+              <th class="karakter-equipment-th-delete"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each weaponsTable}}
+              <tr class="karakter-equipment-row" data-slot-key="{{this.slotKey}}" data-item-id="{{this.itemId}}">
+                <td class="karakter-equipment-cell-drag">
+                  <span class="karakter-equipment-drag-handle" data-slot-key="{{this.slotKey}}" draggable="true" title="Átrendezés">⋮⋮</span>
+                </td>
+                <td class="karakter-equipment-cell-name">
+                  {{#if this.img}}<img class="karakter-equipment-icon" src="{{this.img}}" alt="" data-item-id="{{this.itemId}}" />{{/if}}
+                  <span class="karakter-weapon-label karakter-inventory-item-name" data-weapon-slot="{{this.slotKey}}" data-item-id="{{this.itemId}}">{{this.name}}</span>
+                </td>
+                <td class="karakter-equipment-cell-bonus">
+                  <input type="text" name="system.weapons.{{this.slotKey}}.bonus" value="{{this.bonus}}" placeholder="0" data-dtype="String" />
+                </td>
+                <td class="karakter-equipment-cell-damage">{{this.damage}}</td>
+                <td class="karakter-equipment-cell-range">{{this.rangeStr}}</td>
+                <td class="karakter-equipment-cell-type">{{this.typeLabel}}</td>
+                <td class="karakter-equipment-cell-ammo">{{this.quantity}}</td>
+                <td class="karakter-equipment-cell-other">{{this.special}}</td>
+                <td class="karakter-equipment-cell-delete">
+                  <button type="button" class="karakter-equipment-delete karakter-weapon-unequip" data-slot-key="{{this.slotKey}}" title="Levétel">✕</button>
+                </td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="karakter-equipment-table-title">Páncél</h3>
+      <div class="karakter-equipment-block">
+        <table class="karakter-equipment-table karakter-equipment-armor">
+          <thead>
+            <tr>
+              <th class="karakter-equipment-th-drag"></th>
+              <th class="karakter-equipment-th-name">Név</th>
+              <th class="karakter-equipment-th-protection">Védelem Bónusz</th>
+              <th class="karakter-equipment-th-speed">Sebesség Levonás</th>
+              <th class="karakter-equipment-th-level">Szint</th>
+              <th class="karakter-equipment-th-other">Egyéb</th>
+              <th class="karakter-equipment-th-delete"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each armor}}
+              <tr class="karakter-equipment-row" data-armor-index="{{@index}}">
+                <td class="karakter-equipment-cell-drag">
+                  <span class="karakter-equipment-drag-handle" data-armor-index="{{@index}}" draggable="true" title="Átrendezés">⋮⋮</span>
+                </td>
+                <td class="karakter-equipment-cell-name"><input type="text" name="system.gear.armor.{{@index}}.name" value="{{this.name}}" placeholder="Név" /></td>
+                <td class="karakter-equipment-cell-bonus"><input type="text" name="system.gear.armor.{{@index}}.protectionBonus" value="{{this.protectionBonus}}" placeholder="0" /></td>
+                <td class="karakter-equipment-cell-speed"><input type="text" name="system.gear.armor.{{@index}}.speedPenalty" value="{{this.speedPenalty}}" placeholder="0" /></td>
+                <td class="karakter-equipment-cell-level"><input type="text" name="system.gear.armor.{{@index}}.level" value="{{this.level}}" placeholder="—" /></td>
+                <td class="karakter-equipment-cell-other"><input type="text" name="system.gear.armor.{{@index}}.other" value="{{this.other}}" placeholder="—" /></td>
+                <td class="karakter-equipment-cell-delete">
+                  <button type="button" class="karakter-equipment-delete karakter-armor-remove" data-armor-index="{{@index}}" title="Törlés">✕</button>
+                </td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+        <button type="button" class="karakter-equipment-add-row" data-gear-array="armor" title="Páncél hozzáadása">+ Páncél</button>
+      </div>
+
+      <h3 class="karakter-equipment-table-title">Mikro-Chip</h3>
+      <div class="karakter-equipment-block">
+        <table class="karakter-equipment-table karakter-equipment-microchips">
+          <thead>
+            <tr>
+              <th class="karakter-equipment-th-drag"></th>
+              <th class="karakter-equipment-th-name">Név</th>
+              <th class="karakter-equipment-th-type">Típus</th>
+              <th class="karakter-equipment-th-desc">Leírás</th>
+              <th class="karakter-equipment-th-delete"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each microchipsTable}}
+              <tr class="karakter-equipment-row" data-microchip-slot="{{this.slotKey}}" data-item-id="{{this.itemId}}">
+                <td class="karakter-equipment-cell-drag">
+                  <span class="karakter-equipment-drag-handle" data-microchip-slot="{{this.slotKey}}" draggable="true" title="Átrendezés">⋮⋮</span>
+                </td>
+                <td class="karakter-equipment-cell-name">{{this.name}}</td>
+                <td class="karakter-equipment-cell-type">{{this.typeLabel}}</td>
+                <td class="karakter-equipment-cell-desc">{{this.description}}</td>
+                <td class="karakter-equipment-cell-delete">
+                  <button type="button" class="karakter-equipment-delete karakter-microchip-clear" data-slot-key="{{this.slotKey}}" title="Levétel">✕</button>
+                </td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="karakter-equipment-table-title">Tárgyak</h3>
+      <div class="karakter-equipment-block">
+        <table class="karakter-equipment-table karakter-equipment-items">
+          <thead>
+            <tr>
+              <th class="karakter-equipment-th-drag"></th>
+              <th class="karakter-equipment-th-name">Név</th>
+              <th class="karakter-equipment-th-qty">Mennyiség</th>
+              <th class="karakter-equipment-th-desc">Leírás</th>
+              <th class="karakter-equipment-th-delete"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each generalItems}}
+              <tr class="karakter-equipment-row" data-item-index="{{@index}}">
+                <td class="karakter-equipment-cell-drag">
+                  <span class="karakter-equipment-drag-handle" data-item-index="{{@index}}" draggable="true" title="Átrendezés">⋮⋮</span>
+                </td>
+                <td class="karakter-equipment-cell-name"><input type="text" name="system.gear.generalItems.{{@index}}.name" value="{{this.name}}" placeholder="Név" /></td>
+                <td class="karakter-equipment-cell-qty"><input type="number" name="system.gear.generalItems.{{@index}}.quantity" value="{{this.quantity}}" min="0" /></td>
+                <td class="karakter-equipment-cell-desc"><input type="text" name="system.gear.generalItems.{{@index}}.description" value="{{this.description}}" placeholder="Leírás" /></td>
+                <td class="karakter-equipment-cell-delete">
+                  <button type="button" class="karakter-equipment-delete karakter-item-remove" data-item-index="{{@index}}" title="Törlés">✕</button>
+                </td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+        <button type="button" class="karakter-equipment-add-row" data-gear-array="generalItems" title="Tárgy hozzáadása">+ Tárgy</button>
+      </div>
+    </section>
+
+    <section class="karakter-panel karakter-notes">
+      <h2>Egyéb Információk</h2>
+      {{editor system.notes.biography target="system.notes.biography" button=true owner=owner editable=editable}}
+    </section>
+  </section>
+</form>
+

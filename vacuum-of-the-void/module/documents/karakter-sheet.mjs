@@ -1,13 +1,13 @@
-export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationMixin(
+export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplicationMixin(
   foundry.applications.sheets.ActorSheetV2
 ) {
   static PARTS = foundry.utils.mergeObject(super.PARTS ?? {}, {
-    content: { template: "systems/vacuum-of-the-void/templates/actor/pc-sheet.hbs" }
+    content: { template: "systems/vacuum-of-the-void/templates/actor/karakter-sheet.hbs" }
   });
 
   static DEFAULT_OPTIONS = foundry.utils.mergeObject(super.DEFAULT_OPTIONS, {
-    classes: ["vacuum-of-the-void", "sheet", "actor", "pc"],
-    template: "systems/vacuum-of-the-void/templates/actor/pc-sheet.hbs",
+    classes: ["vacuum-of-the-void", "sheet", "actor", "Karakter"],
+    template: "systems/vacuum-of-the-void/templates/actor/karakter-sheet.hbs",
     width: 1000,
     minWidth: 1000,
     height: 800,
@@ -35,10 +35,10 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
     return this.document;
   }
 
-  /** A lap fő görgethető tartója: form (.votv.pc-sheet) vagy .votv-scroll / .window-content. */
+  /** A lap fő görgethető tartója: form (.votv.karakter-sheet) vagy .votv-scroll / .window-content. */
   _getScrollContainers(root) {
     if (!root) return { form: null, windowContent: null };
-    const form = root.querySelector?.("form.votv.pc-sheet") ?? root.querySelector?.("form.votv") ?? null;
+    const form = root.querySelector?.("form.votv.karakter-sheet") ?? root.querySelector?.("form.votv") ?? null;
     const windowContent = root.querySelector?.(".votv-scroll") ?? root.querySelector?.(".window-content") ?? null;
     return { form, windowContent };
   }
@@ -66,7 +66,7 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
 
   /** Mentjük a görgetést és a fókuszt render előtt, visszaállítjuk utána (ne dobja vissza a lap tetejére). */
   async render(force = false, options = {}) {
-    const lastBlur = game.votv?._lastPcSheetBlurSave;
+    const lastBlur = game.votv?._lastKarakterSheetBlurSave;
     const skipRenderMs = 200;
     if (lastBlur?.appId === this.id && (Date.now() - lastBlur.at) < skipRenderMs) return this;
     const rootBefore = this.element;
@@ -152,13 +152,13 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
   /** Kapott sebesség kijelzés: lábak állapotától 0 / -6 (kritikus) / -3 (sérült) / tárolt givenSpeed. Nincs kivonás. */
   _writeEffectiveGivenSpeed(scope = null) {
     const root = scope ?? this.form ?? this.element;
-    let span = root?.querySelector?.(".pc-given-speed-effective");
-    if (!span && this.id) span = document.querySelector(`#${CSS.escape(this.id)} .pc-given-speed-effective`);
+    let span = root?.querySelector?.(".karakter-given-speed-effective");
+    if (!span && this.id) span = document.querySelector(`#${CSS.escape(this.id)} .karakter-given-speed-effective`);
     if (!span) return;
     const res = this.actor?.system?.resources ?? {};
     const legsTotal = res.hitLocations?.legs?.value ?? 0;
     const legsCurrent = res.currentHealth?.legs ?? 0;
-    const legsStatus = VoidPcSheet._healthStatusFromRatio(legsCurrent, legsTotal);
+    const legsStatus = VoidKarakterSheet._healthStatusFromRatio(legsCurrent, legsTotal);
     const raw = Number(this.actor?.system?.combat?.givenSpeed ?? 0) || 0;
     let effective;
     if (legsStatus === 0) effective = 0;
@@ -170,22 +170,22 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
 
   /** Return health status 0–3 for the body part linked to this skill, or undefined if not linked. */
   _getSkillHealthStatus(skillKey) {
-    const part = VoidPcSheet.BODY_PART_BY_SKILL[skillKey];
+    const part = VoidKarakterSheet.BODY_PART_BY_SKILL[skillKey];
     if (part == null) return undefined;
     const res = this.actor.system?.resources ?? {};
     const total = res.hitLocations?.[part]?.value ?? 0;
     const current = res.currentHealth?.[part] ?? 0;
-    return VoidPcSheet._healthStatusFromRatio(current, total);
+    return VoidKarakterSheet._healthStatusFromRatio(current, total);
   }
 
   /** Static: health status 0–3 for skill on an actor (used by roll sheet without sheet instance). */
   static _getSkillHealthStatusStatic(actor, skillKey) {
-    const part = VoidPcSheet.BODY_PART_BY_SKILL[skillKey];
+    const part = VoidKarakterSheet.BODY_PART_BY_SKILL[skillKey];
     if (part == null) return undefined;
     const res = actor?.system?.resources ?? {};
     const total = res.hitLocations?.[part]?.value ?? 0;
     const current = res.currentHealth?.[part] ?? 0;
-    return VoidPcSheet._healthStatusFromRatio(current, total);
+    return VoidKarakterSheet._healthStatusFromRatio(current, total);
   }
 
   async _prepareContext(options) {
@@ -203,7 +203,7 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
     for (const part of parts) {
       const total = hitLoc[part]?.value ?? 0;
       const current = curHealth[part] ?? 0;
-      context.computedHealthStatus[part] = VoidPcSheet._healthStatusFromRatio(current, total);
+      context.computedHealthStatus[part] = VoidKarakterSheet._healthStatusFromRatio(current, total);
     }
     // Halálkoponya a portréra: fej 0 HP, vagy egyszerre legalább 2 másik testrész (törzs/karok/lábak) 0 HP
     const headZero = (Number(curHealth.head) || 0) === 0;
@@ -224,7 +224,7 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
       { combat: { givenSpeed: effectiveGivenSpeed } },
       { inplace: false }
     );
-    const BODY_PART_BY_SKILL = VoidPcSheet.BODY_PART_BY_SKILL;
+    const BODY_PART_BY_SKILL = VoidKarakterSheet.BODY_PART_BY_SKILL;
     context.skillHealthStatus = {};
     context.skillDisabled = {};
     context.skillHasHealthTint = {};
@@ -322,8 +322,53 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
         damage: slotData.damage ?? ""
       };
     });
-    const microchipItems = (this.actor.items?.contents ?? []).filter(i => i.type === "microchip").map(i => ({ id: i.id, name: i.name, img: i.img }));
-    const emptyChipLabel = "— Nincs chip —";
+    // Felszerelés: Fegyverek táblázat (csak felszerelt fegyverek, teljes adatokkal)
+    const weaponTypeLabels = { light: "Könnyű", medium: "Közepes", heavy: "Nehéz", thrown: "Dobható" };
+    context.weaponsTable = equippedSlotKeys.map((slotKey) => {
+      const slotData = weapons[slotKey] ?? {};
+      const itemId = (slotData.itemId ?? "").trim();
+      const item = weaponDocs.find(w => w.id === itemId);
+      const sys = item?.system ?? {};
+      const rangeShort = sys.range?.short;
+      const rangeLong = sys.range?.long;
+      const rangeStr = rangeShort != null && rangeLong != null ? `${rangeShort} / ${rangeLong} m` : "";
+      const typeRaw = sys.type ?? "";
+      const typeLabel = (weaponTypeLabels[typeRaw] ?? typeRaw) || "—";
+      return {
+        slotKey,
+        itemId,
+        name: item?.name ?? slotData.name ?? emptyLabel,
+        img: item?.img ?? "",
+        bonus: String(slotData.bonus ?? "").trim() || "0",
+        damage: slotData.damage ?? sys.damage ?? "",
+        rangeStr: rangeStr || "—",
+        typeLabel,
+        quantity: Number(sys.quantity ?? 1) || 1,
+        special: (sys.special ?? "").trim() || "—"
+      };
+    });
+    // Felszerelés: Páncél és Tárgyak (adatmodellből)
+    context.armor = Array.isArray(this.actor.system?.gear?.armor) ? this.actor.system.gear.armor : [];
+    context.generalItems = Array.isArray(this.actor.system?.gear?.generalItems) ? this.actor.system.gear.generalItems : [];
+    const microchipDocs = (this.actor.items?.contents ?? []).filter(i => i.type === "microchip");
+    const microchipItems = microchipDocs.map(i => ({ id: i.id, name: i.name, img: i.img }));
+    // Felszerelés: Mikro-Chip táblázat (3 slot)
+    context.microchipsTable = ["1", "2", "3"].map((n) => {
+      const slotKey = `slot${n}`;
+      const slotData = microchips[slotKey] ?? {};
+      const itemId = (slotData.itemId ?? "").trim();
+      const item = microchipDocs.find(c => c.id === itemId);
+      const abilityType = item?.system?.abilityType ?? "";
+      const typeLabel = abilityType === "active" ? "Aktív" : abilityType === "passive" ? "Passzív" : (abilityType || "—");
+      return {
+        slotKey,
+        itemId,
+        name: item?.name ?? slotData.name ?? emptyChipLabel,
+        typeLabel,
+        description: (item?.system?.description ?? "").trim() || "—"
+      };
+    });
+    const emptyChipLabel = "— Nincs Mikro-Chip —";
     const otherSlotIds = (slotNum) => {
       const ids = [];
       if (slotNum !== 1) ids.push(microchipSlot1Id);
@@ -420,7 +465,7 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
       const input = ev ? ev.currentTarget : root.querySelector?.('input[name="system.resources.stress.value"]');
       if (!input) return;
       const val = Number(input.value) || 0;
-      input.classList.toggle("pc-stress-over-10", val > 10);
+      input.classList.toggle("karakter-stress-over-10", val > 10);
     };
     $html.on("input change", "input[name=\"system.resources.stress.value\"]", updateStressHighlight);
     const stressInput = root.querySelector?.('input[name="system.resources.stress.value"]');
@@ -432,7 +477,7 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
     setTimeout(() => this._writeEffectiveGivenSpeed(), 100);
 
     // Karakterkép: kattintásra Foundry fájlkezelő (FilePicker) megnyitása
-    $html.on("click", ".pc-portrait-img", (ev) => {
+    $html.on("click", ".karakter-portrait-img", (ev) => {
       ev.preventDefault();
       ev.stopPropagation();
       new FilePicker({
@@ -445,7 +490,7 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
     });
 
     // Skill rolls: click on skill label opens roll sheet (delegated)
-    $html.on("click", ".pc-skill-label", async (ev) => {
+    $html.on("click", ".karakter-skill-label", async (ev) => {
       ev.preventDefault();
       const element = ev.currentTarget;
       const skillKey = element.dataset.skill;
@@ -455,7 +500,7 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
     });
 
     // Morale d8: click on d8 icon – roll 1d8 (same style as skill), then subtract 1 from morale
-    $html.on("click", ".pc-roll-morale-d8", ev => {
+    $html.on("click", ".karakter-roll-morale-d8", ev => {
       ev.preventDefault();
       this._rollMorale();
     });
@@ -468,7 +513,7 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
       if (!item) return;
 
       // For weapons assigned to a slot, allow Alt+click on the name to roll instead of opening the sheet.
-      if (target.classList.contains("pc-weapon-label") && (ev.altKey || ev.shiftKey || ev.ctrlKey || ev.metaKey)) {
+      if (target.classList.contains("karakter-weapon-label") && (ev.altKey || ev.shiftKey || ev.ctrlKey || ev.metaKey)) {
         const slot = target.dataset.weaponSlot;
         if (slot) this._rollWeapon(slot);
         return;
@@ -477,18 +522,18 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
       item.sheet?.render(true);
     };
 
-    $html.on("click", ".pc-inventory-item-name", ev => {
+    $html.on("click", ".karakter-inventory-item-name", ev => {
       ev.preventDefault();
       openInventoryItem(ev.currentTarget, ev);
     });
 
-    $html.on("click", ".pc-inventory-item-icon", ev => {
+    $html.on("click", ".karakter-inventory-item-icon", ev => {
       ev.preventDefault();
       openInventoryItem(ev.currentTarget, ev);
     });
 
     // Inventory quantity per item (delegated)
-    $html.on("change", ".pc-item-qty", async ev => {
+    $html.on("change", ".karakter-item-qty", async ev => {
       const input = ev.currentTarget;
       const itemId = input.dataset.itemId;
       if (!itemId) return;
@@ -500,7 +545,7 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
     });
 
     // Remove inventory item from actor: Alt+click to delete (delegated)
-    $html.on("click", ".pc-item-delete", async ev => {
+    $html.on("click", ".karakter-item-delete", async ev => {
       ev.preventDefault();
       if (!ev.altKey) return;
       const btn = ev.currentTarget;
@@ -532,7 +577,7 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
     });
 
     // Equipped weapons: attack and damage from Fegyverek card (delegated)
-    $html.on("click", ".pc-weapon-attack", async ev => {
+    $html.on("click", ".karakter-weapon-attack", async ev => {
       ev.preventDefault();
       const btn = ev.currentTarget;
       const slot = (btn.dataset.slot ?? "").trim();
@@ -540,7 +585,7 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
       await this._rollWeapon(slot);
     });
 
-    $html.on("click", ".pc-weapon-damage", async ev => {
+    $html.on("click", ".karakter-weapon-damage", async ev => {
       ev.preventDefault();
       const btn = ev.currentTarget;
       const slot = (btn.dataset.slot ?? "").trim();
@@ -553,7 +598,7 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
     });
 
     // Weapons: equip / unequip via inventory checkboxes (delegated)
-    $html.on("change", ".pc-weapon-equip-toggle", async ev => {
+    $html.on("change", ".karakter-weapon-equip-toggle", async ev => {
       const checkbox = ev.currentTarget;
       const itemId = (checkbox.dataset.itemId ?? "").trim();
       if (!itemId) return;
@@ -598,35 +643,35 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
     });
 
     // Mikro-chipek: dropdown open/close and select (delegated)
-    $html.on("click", ".pc-microchip-slot-display", ev => {
+    $html.on("click", ".karakter-microchip-slot-display", ev => {
       ev.preventDefault();
       const btn = ev.currentTarget;
       if (btn.disabled) return;
-      const wrap = btn.closest(".pc-microchip-slot-select-wrap");
-      const wasOpen = wrap?.classList.contains("pc-microchip-slot-open");
-      $html.find(".pc-microchip-slot-select-wrap").removeClass("pc-microchip-slot-open");
-      if (!wasOpen && wrap) wrap.classList.add("pc-microchip-slot-open");
+      const wrap = btn.closest(".karakter-microchip-slot-select-wrap");
+      const wasOpen = wrap?.classList.contains("karakter-microchip-slot-open");
+      $html.find(".karakter-microchip-slot-select-wrap").removeClass("karakter-microchip-slot-open");
+      if (!wasOpen && wrap) wrap.classList.add("karakter-microchip-slot-open");
     });
 
-    $html.on("click", ".pc-microchip-slot-option", async ev => {
+    $html.on("click", ".karakter-microchip-slot-option", async ev => {
       ev.preventDefault();
       const li = ev.currentTarget;
-      const wrap = li.closest(".pc-microchip-slot-select-wrap");
-      const btn = wrap?.querySelector(".pc-microchip-slot-display");
+      const wrap = li.closest(".karakter-microchip-slot-select-wrap");
+      const btn = wrap?.querySelector(".karakter-microchip-slot-display");
       const slot = btn?.dataset.slot;
       if (!slot) return;
       const itemId = (li.dataset.itemId ?? "").trim();
-      const displayName = (li.dataset.itemName ?? li.textContent?.trim() ?? "").trim() || "— Nincs chip —";
+      const displayName = (li.dataset.itemName ?? li.textContent?.trim() ?? "").trim() || "— Nincs Mikro-Chip —";
       const itemImg = (li.dataset.itemImg ?? "").trim();
 
-      const displayEl = wrap?.querySelector(".pc-microchip-slot-display-text");
+      const displayEl = wrap?.querySelector(".karakter-microchip-slot-display-text");
       if (displayEl) displayEl.textContent = displayName;
 
-      let thumb = wrap?.querySelector(".pc-microchip-slot-thumb");
+      let thumb = wrap?.querySelector(".karakter-microchip-slot-thumb");
       if (itemImg) {
         if (!thumb) {
           thumb = document.createElement("img");
-          thumb.className = "pc-microchip-slot-thumb";
+          thumb.className = "karakter-microchip-slot-thumb";
           thumb.alt = "";
           btn?.insertBefore(thumb, displayEl);
         }
@@ -636,7 +681,7 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
         thumb.remove();
       }
 
-      wrap?.classList.remove("pc-microchip-slot-open");
+      wrap?.classList.remove("karakter-microchip-slot-open");
 
       const item = itemId ? this.actor.items.get(itemId) : null;
       const updates = {
@@ -648,12 +693,12 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
     });
 
     $(document).on("click.votv-microchip-dropdown", ev => {
-      if ($(ev.target).closest(".pc-microchip-slot-select-wrap").length) return;
-      $html.find(".pc-microchip-slot-select-wrap").removeClass("pc-microchip-slot-open");
+      if ($(ev.target).closest(".karakter-microchip-slot-select-wrap").length) return;
+      $html.find(".karakter-microchip-slot-select-wrap").removeClass("karakter-microchip-slot-open");
     });
 
     // Microchip slot active checkbox (delegated)
-    $html.on("change", ".pc-microchip-slot-active", ev => {
+    $html.on("change", ".karakter-microchip-slot-active", ev => {
       const slot = ev.currentTarget.dataset.slot;
       if (!slot) return;
       const checked = ev.currentTarget.checked;
@@ -661,35 +706,35 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
     });
 
     // Mikro-chipek: drag-and-drop microchip onto a slot
-    $html.find(".pc-microchip-slot").each((i, el) => {
+    $html.find(".karakter-microchip-slot").each((i, el) => {
       const slot = el.dataset.slot;
       el.addEventListener("dragover", ev => this._onMicrochipSlotDragOver(ev, slot));
-      el.addEventListener("dragleave", ev => ev.currentTarget?.classList.remove("pc-microchip-slot-drag-over"));
+      el.addEventListener("dragleave", ev => ev.currentTarget?.classList.remove("karakter-microchip-slot-drag-over"));
       el.addEventListener("drop", ev => this._onMicrochipSlotDrop(ev, slot));
     });
 
     // Képességek: dragover/dragleave csak vizuális; a droppot a Foundry _onDropItem kezeli (ugyanúgy mint inventory).
-    $html.find(".pc-ability-slot-single").each((i, el) => {
+    $html.find(".karakter-ability-slot-single").each((i, el) => {
       const slot = el.dataset.slot;
       if (!slot) return;
       el.addEventListener("dragover", ev => this._onAbilitySingleDragOver(ev, slot));
-      el.addEventListener("dragleave", ev => ev.currentTarget?.classList.remove("pc-ability-slot-drag-over"));
+      el.addEventListener("dragleave", ev => ev.currentTarget?.classList.remove("karakter-ability-slot-drag-over"));
       el.addEventListener("drop", ev => {
-        ev.currentTarget?.classList.remove("pc-ability-slot-drag-over");
+        ev.currentTarget?.classList.remove("karakter-ability-slot-drag-over");
       });
     });
-    $html.find(".pc-ability-area").each((i, el) => {
+    $html.find(".karakter-ability-area").each((i, el) => {
       const area = el.dataset.area;
       if (!area) return;
       el.addEventListener("dragover", ev => this._onAbilityAreaDragOver(ev, area));
-      el.addEventListener("dragleave", ev => ev.currentTarget?.classList.remove("pc-ability-area-drag-over"));
+      el.addEventListener("dragleave", ev => ev.currentTarget?.classList.remove("karakter-ability-area-drag-over"));
       el.addEventListener("drop", ev => {
-        ev.currentTarget?.classList.remove("pc-ability-area-drag-over");
+        ev.currentTarget?.classList.remove("karakter-ability-area-drag-over");
       });
     });
 
     // Képességek: Alt+click on clear/remove to delete (delegated)
-    $html.on("click", ".pc-ability-slot-clear", async ev => {
+    $html.on("click", ".karakter-ability-slot-clear", async ev => {
       ev.preventDefault();
       if (!ev.altKey) return;
       const slot = ev.currentTarget.dataset.slot;
@@ -699,7 +744,7 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
         [`system.abilities.${slot}.name`]: ""
       });
     });
-    $html.on("click", ".pc-ability-pill-remove", async ev => {
+    $html.on("click", ".karakter-ability-pill-remove", async ev => {
       ev.preventDefault();
       if (!ev.altKey) return;
       const area = ev.currentTarget.dataset.area;
@@ -711,7 +756,7 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
       await this.actor.update({ [`system.abilities.${area}.items`]: next });
     });
 
-    $html.on("click", ".pc-ability-open", ev => {
+    $html.on("click", ".karakter-ability-open", ev => {
       ev.preventDefault();
       const el = ev.currentTarget;
       const itemId = el.dataset.itemId;
@@ -720,7 +765,7 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
       item?.sheet?.render(true);
     });
 
-    $html.on("click", ".pc-ability-chat", async ev => {
+    $html.on("click", ".karakter-ability-chat", async ev => {
       ev.preventDefault();
       const btn = ev.currentTarget;
       const itemId = btn.dataset.itemId;
@@ -728,30 +773,64 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
       await this._postAbilityToChat(itemId);
     });
 
-    // Equipment / inventory: drag only from handle, reorder vertically
-    $html.find(".pc-actions-drag-handle").each((i, el) => {
-      const handle = el;
-      const row = handle.closest(".pc-actions-row");
-      const itemId = row?.dataset?.itemId ?? handle.dataset?.itemId;
-      if (!itemId) return;
-      handle.addEventListener("dragstart", ev => this._onInventoryDragHandleStart(ev, itemId, row));
-    });
-    $html.find(".pc-actions-row").each((i, el) => {
-      const row = el;
-      const itemId = row.dataset.itemId;
-      if (!itemId) return;
-      row.addEventListener("dragover", ev => this._onInventoryRowDragOver(ev, itemId));
-      row.addEventListener("dragleave", ev => this._onInventoryRowDragLeave(ev, itemId));
-      row.addEventListener("drop", ev => this._onInventoryRowDrop(ev, itemId));
+    // Felszerelés: fegyver levétele (slot ürítése)
+    $html.on("click", ".karakter-weapon-unequip", async ev => {
+      ev.preventDefault();
+      const slotKey = ev.currentTarget.dataset.slotKey;
+      if (!slotKey) return;
+      await this.actor.update({
+        [`system.weapons.${slotKey}.itemId`]: "",
+        [`system.weapons.${slotKey}.name`]: "",
+        [`system.weapons.${slotKey}.bonus`]: "",
+        [`system.weapons.${slotKey}.damage`]: ""
+      });
     });
 
-    // Inventory area: highlight the whole inventory table when dragging an Item over it.
-    const actionsTable = $html.find(".pc-actions-table")[0];
-    if (actionsTable) {
-      actionsTable.addEventListener("dragover", ev => this._onInventoryAreaDragOver(ev));
-      actionsTable.addEventListener("dragleave", ev => this._onInventoryAreaDragLeave(ev));
-      actionsTable.addEventListener("drop", ev => this._onInventoryAreaDrop(ev));
-    }
+    // Felszerelés: páncél sor törlése
+    $html.on("click", ".karakter-armor-remove", async ev => {
+      ev.preventDefault();
+      const idx = parseInt(ev.currentTarget.dataset.armorIndex, 10);
+      if (!Number.isFinite(idx) || idx < 0) return;
+      const armor = Array.isArray(this.actor.system?.gear?.armor) ? [...this.actor.system.gear.armor] : [];
+      armor.splice(idx, 1);
+      await this.actor.update({ "system.gear.armor": armor });
+    });
+
+    // Felszerelés: páncél / tárgy sor hozzáadása
+    $html.on("click", ".karakter-equipment-add-row", async ev => {
+      ev.preventDefault();
+      const arrayKey = ev.currentTarget.dataset.gearArray;
+      if (arrayKey === "armor") {
+        const armor = Array.isArray(this.actor.system?.gear?.armor) ? [...this.actor.system.gear.armor] : [];
+        armor.push({ name: "", protectionBonus: "", speedPenalty: "", level: "", other: "" });
+        await this.actor.update({ "system.gear.armor": armor });
+      } else if (arrayKey === "generalItems") {
+        const items = Array.isArray(this.actor.system?.gear?.generalItems) ? [...this.actor.system.gear.generalItems] : [];
+        items.push({ name: "", quantity: 1, description: "" });
+        await this.actor.update({ "system.gear.generalItems": items });
+      }
+    });
+
+    // Felszerelés: mikrochip slot ürítése
+    $html.on("click", ".karakter-microchip-clear", async ev => {
+      ev.preventDefault();
+      const slotKey = ev.currentTarget.dataset.slotKey;
+      if (!slotKey) return;
+      await this.actor.update({
+        [`system.gear.microchips.${slotKey}.itemId`]: "",
+        [`system.gear.microchips.${slotKey}.name`]: ""
+      });
+    });
+
+    // Felszerelés: tárgy sor törlése
+    $html.on("click", ".karakter-item-remove", async ev => {
+      ev.preventDefault();
+      const idx = parseInt(ev.currentTarget.dataset.itemIndex, 10);
+      if (!Number.isFinite(idx) || idx < 0) return;
+      const items = Array.isArray(this.actor.system?.gear?.generalItems) ? [...this.actor.system.gear.generalItems] : [];
+      items.splice(idx, 1);
+      await this.actor.update({ "system.gear.generalItems": items });
+    });
 
     // Mentés csak kikattintáskor (blur), ne gépelés közben – így nem ugrik a kurzor és a lap.
     const sheet = this;
@@ -764,7 +843,7 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
         updateData.system?.resources?.hitLocations != null;
       sheet.actor.update(updateData).then(() => {
         if (touchesHealth) setTimeout(() => sheet.render(true), 260);
-      }).catch(err => console.warn("VoidPcSheet save failed", err));
+      }).catch(err => console.warn("VoidKarakterSheet save failed", err));
     };
     const isOurForm = (form) =>
       form && (sheet.element?.contains?.(form) || (sheet.id && form.closest?.(`#${CSS.escape(sheet.id)}`)));
@@ -775,7 +854,7 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
       if (tag !== "INPUT" && tag !== "TEXTAREA" && tag !== "SELECT") return;
       const form = target.form;
       if (!isOurForm(form)) return;
-      if (game.votv) game.votv._lastPcSheetBlurSave = { appId: sheet.id, at: Date.now() };
+      if (game.votv) game.votv._lastKarakterSheetBlurSave = { appId: sheet.id, at: Date.now() };
       doSubmit(form);
     };
     document.body.addEventListener("blur", sheet._votvBlur, true);
@@ -808,15 +887,15 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
     for (const part of parts) {
       const total = hitLoc[part]?.value ?? 0;
       const current = curHealth[part] ?? 0;
-      foundry.utils.setProperty(updateData, `system.resources.healthStatus.${part}`, VoidPcSheet._healthStatusFromRatio(current, total));
+      foundry.utils.setProperty(updateData, `system.resources.healthStatus.${part}`, VoidKarakterSheet._healthStatusFromRatio(current, total));
     }
     return updateData;
   }
 
   async _onDropItem(event, data) {
     const target = event.target;
-    const slotEl = target?.closest?.(".pc-ability-slot-single");
-    const areaEl = target?.closest?.(".pc-ability-area");
+    const slotEl = target?.closest?.(".karakter-ability-slot-single");
+    const areaEl = target?.closest?.(".karakter-ability-area");
 
     // Elsőként próbáljuk abilityként értelmezni a droppot, függetlenül attól, hova húzták.
     if (data) {
@@ -914,12 +993,12 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
     }
     if (json?.type !== "Item") return;
     ev.preventDefault();
-    ev.currentTarget?.classList.add("pc-weapon-slot-drag-over");
+    ev.currentTarget?.classList.add("karakter-weapon-slot-drag-over");
   }
 
   async _onWeaponSlotDrop(ev, slot) {
     ev.preventDefault();
-    ev.currentTarget?.classList.remove("pc-weapon-slot-drag-over");
+    ev.currentTarget?.classList.remove("karakter-weapon-slot-drag-over");
     const data = ev.dataTransfer?.getData("text/plain") || ev.dataTransfer?.getData("application/json") || "";
     let json;
     try {
@@ -960,16 +1039,16 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
     if (!sourceId || sourceId === itemId) return;
     ev.preventDefault();
     if (ev.dataTransfer) ev.dataTransfer.dropEffect = "move";
-    ev.currentTarget?.classList.add("pc-actions-row-drag-over");
+    ev.currentTarget?.classList.add("karakter-actions-row-drag-over");
   }
 
   _onInventoryRowDragLeave(ev, _itemId) {
-    ev.currentTarget?.classList.remove("pc-actions-row-drag-over");
+    ev.currentTarget?.classList.remove("karakter-actions-row-drag-over");
   }
 
   async _onInventoryRowDrop(ev, targetId) {
     ev.preventDefault();
-    ev.currentTarget?.classList.remove("pc-actions-row-drag-over");
+    ev.currentTarget?.classList.remove("karakter-actions-row-drag-over");
     const sourceId = this._draggingInventoryItemId || ev.dataTransfer?.getData("text/plain");
     this._draggingInventoryItemId = null;
     if (!sourceId || !targetId || sourceId === targetId) return;
@@ -1014,15 +1093,15 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
     if (json && json.type !== "Item") return;
 
     ev.preventDefault();
-    ev.currentTarget?.classList.add("pc-actions-table-drag-over");
+    ev.currentTarget?.classList.add("karakter-actions-table-drag-over");
   }
 
   _onInventoryAreaDragLeave(ev) {
-    ev.currentTarget?.classList.remove("pc-actions-table-drag-over");
+    ev.currentTarget?.classList.remove("karakter-actions-table-drag-over");
   }
 
   _onInventoryAreaDrop(ev) {
-    ev.currentTarget?.classList.remove("pc-actions-table-drag-over");
+    ev.currentTarget?.classList.remove("karakter-actions-table-drag-over");
     // Do not prevent default here so Foundry's _onDropItem continues to handle
     // adding the item into the inventory when dropped on this table.
   }
@@ -1078,12 +1157,12 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
     const json = this._parseAbilityDrop(ev);
     if (!json) return;
     ev.preventDefault();
-    ev.currentTarget?.classList.add("pc-ability-slot-drag-over");
+    ev.currentTarget?.classList.add("karakter-ability-slot-drag-over");
   }
 
   async _onAbilitySingleDrop(ev, slot) {
     ev.preventDefault();
-    ev.currentTarget?.classList.remove("pc-ability-slot-drag-over");
+    ev.currentTarget?.classList.remove("karakter-ability-slot-drag-over");
     const json = this._parseAbilityDrop(ev);
     if (!json || !json.uuid) return;
     const doc = await fromUuid(json.uuid);
@@ -1104,12 +1183,12 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
     const json = this._parseAbilityDrop(ev);
     if (!json) return;
     ev.preventDefault();
-    ev.currentTarget?.classList.add("pc-ability-area-drag-over");
+    ev.currentTarget?.classList.add("karakter-ability-area-drag-over");
   }
 
   async _onAbilityAreaDrop(ev, area) {
     ev.preventDefault();
-    ev.currentTarget?.classList.remove("pc-ability-area-drag-over");
+    ev.currentTarget?.classList.remove("karakter-ability-area-drag-over");
     const json = this._parseAbilityDrop(ev);
     if (!json || !json.uuid) return;
     const doc = await fromUuid(json.uuid);
@@ -1140,12 +1219,12 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
     }
     if (json?.type !== "Item") return;
     ev.preventDefault();
-    ev.currentTarget?.classList.add("pc-microchip-slot-drag-over");
+    ev.currentTarget?.classList.add("karakter-microchip-slot-drag-over");
   }
 
   async _onMicrochipSlotDrop(ev, slot) {
     ev.preventDefault();
-    ev.currentTarget?.classList.remove("pc-microchip-slot-drag-over");
+    ev.currentTarget?.classList.remove("karakter-microchip-slot-drag-over");
     const data = ev.dataTransfer?.getData("text/plain") || ev.dataTransfer?.getData("application/json") || "";
     let json;
     try {

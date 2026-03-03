@@ -1,6 +1,6 @@
 {
-  "VOTV.PcSheet": "Player Character",
-  "TYPES.Actor.pc": "Player Character",
+  "VOTV.KarakterSheet": "Karakter",
+  "TYPES.Actor.Karakter": "Karakter",
   "VOTV.LabelName": "Name",
   "VOTV.LabelPlayer": "Player",
   "VOTV.LabelConcept": "Concept",

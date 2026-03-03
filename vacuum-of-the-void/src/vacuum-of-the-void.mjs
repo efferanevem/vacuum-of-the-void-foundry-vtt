@@ -1,5 +1,5 @@
-import { PcDataModel, WeaponDataModel, MicrochipDataModel, AbilityDataModel } from "../module/data-models/index.mjs";
-import { VoidPcSheet, VoidWeaponSheet, VoidMicrochipSheet, VoidAbilitySheet } from "../module/documents.mjs";
+import { KarakterDataModel, WeaponDataModel, MicrochipDataModel, AbilityDataModel } from "../module/data-models/index.mjs";
+import { VoidKarakterSheet, VoidWeaponSheet, VoidMicrochipSheet, VoidAbilitySheet } from "../module/documents.mjs";
 
 const VOTV_DEFAULT_SCENE_BG = "systems/vacuum-of-the-void/assets/void-bg.jpg";
 
@@ -17,9 +17,8 @@ Hooks.once("init", () => {
     _dragSourceActorId: null
   };
 
-  // Register PC data model
   CONFIG.Actor.dataModels ??= {};
-  CONFIG.Actor.dataModels.pc = PcDataModel;
+  CONFIG.Actor.dataModels.Karakter = KarakterDataModel;
 
   // Register item data models
   CONFIG.Item.dataModels ??= {};
@@ -29,21 +28,19 @@ Hooks.once("init", () => {
 
   // Trackable attributes for token bars
   CONFIG.Actor.trackableAttributes ??= {};
-  CONFIG.Actor.trackableAttributes.pc = {
+  CONFIG.Actor.trackableAttributes.Karakter = {
     bar: ["resources.health", "resources.stress"],
     value: []
   };
 
-  // Explicit type label so the UI shows \"Player Character\" instead of \"pc\"
   CONFIG.Actor.typeLabels ??= {};
-  CONFIG.Actor.typeLabels.pc = "Player Character";
+  CONFIG.Actor.typeLabels.Karakter = "Karakter";
 
-  // Register PC sheet
   foundry.documents.collections.Actors.unregisterSheet("core", foundry.applications.sheets.ActorSheetV2);
-  foundry.documents.collections.Actors.registerSheet("vacuum-of-the-void", VoidPcSheet, {
-    types: ["pc"],
+  foundry.documents.collections.Actors.registerSheet("vacuum-of-the-void", VoidKarakterSheet, {
+    types: ["Karakter"],
     makeDefault: true,
-    label: "VOTV.PcSheet"
+    label: "VOTV.KarakterSheet"
   });
 
   // Register item sheets
@@ -63,7 +60,7 @@ Hooks.once("init", () => {
     label: "Void Ability"
   });
 
-  // Ha egy actort frissítenek, a nyitott VoidPcSheet lapok újrarajzolódjanak. Ne újrarajzoljunk, ha
+  // Ha egy actort frissítenek, a nyitott VoidKarakterSheet lapok újrarajzolódjanak. Ne újrarajzoljunk, ha
   // bármelyik lapon input/textarea van fókuszban (kurzor + görgetés maradjon), és ne a lapot, ami
   // épp mentett (blur save), hogy ne tekerjen fel.
   const UPDATE_ACTOR_SKIP_RENDER_MS = 500;
@@ -81,7 +78,7 @@ Hooks.once("init", () => {
     if (doc?.apps) appsToConsider.push(...Array.from(doc.apps));
     const windows = Object.values(ui?.windows ?? {});
     for (const app of windows) {
-      if (app.document?.id !== actorId || app.document?.documentName !== "Actor" || app.constructor?.name !== "VoidPcSheet") continue;
+      if (app.document?.id !== actorId || app.document?.documentName !== "Actor" || app.constructor?.name !== "VoidKarakterSheet") continue;
       if (!appsToConsider.includes(app)) appsToConsider.push(app);
     }
     const anySheetHasFocusedInput = isInputLike && appsToConsider.some((app) => {
@@ -89,7 +86,7 @@ Hooks.once("init", () => {
       return root && root.contains(activeEl);
     });
     if (anySheetHasFocusedInput) return;
-    const lastBlur = game.votv?._lastPcSheetBlurSave;
+    const lastBlur = game.votv?._lastKarakterSheetBlurSave;
     const skipRenderAppId = lastBlur && (Date.now() - lastBlur.at) < UPDATE_ACTOR_SKIP_RENDER_MS ? lastBlur.appId : null;
     setTimeout(() => {
       for (const app of appsToConsider) {
@@ -121,7 +118,7 @@ Hooks.on("preCreateToken", (tokenDocument, _data, _options) => {
   const actorId = sourceId ?? tokenDocument.actorId ?? null;
   if (sourceId) game.votv._dragSourceActorId = null;
   const actor = actorId ? game.actors?.get(actorId) : null;
-  if (!actor || actor.type !== "pc") return;
+  if (!actor || actor.type !== "Karakter") return;
   tokenDocument.updateSource({
     ...(sourceId ? { actorId: sourceId } : {}),
     actorLink: true

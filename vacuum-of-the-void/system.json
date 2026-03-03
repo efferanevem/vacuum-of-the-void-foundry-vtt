@@ -13,7 +13,7 @@
     }
   ],
   "esmodules": [
-    "http://localhost:5173/src/vacuum-of-the-void.mjs"
+    "dist/vacuum-of-the-void.js"
   ],
   "styles": [
     "styles/main.css"
@@ -27,7 +27,7 @@
   ],
   "documentTypes": {
     "Actor": {
-      "pc": {}
+      "Karakter": {}
     },
     "Item": {
       "weapon": {},
