@@ -133,6 +133,9 @@
     <section class="pc-column pc-center">
       <section class="pc-panel pc-portrait">
         <img class="pc-portrait-img" src="{{actor.img}}" data-edit="img" alt="{{actor.name}}" title="{{actor.name}}" />
+        {{#if showDeathSkull}}
+          <img class="pc-portrait-death-skull" src="systems/vacuum-of-the-void/assets/death_skull.svg" alt="" aria-hidden="true" />
+        {{/if}}
       </section>
       <section class="pc-panel pc-resources">
         <div class="pc-resource pc-resource-money">
@@ -157,7 +160,7 @@
           <span class="pc-resource-plus">+</span>
           <input type="number" name="system.combat.defenseBonus" value="{{system.combat.defenseBonus}}" min="0" />
           <span class="pc-resource-plus">+</span>
-          <input type="number" name="system.combat.givenProtection" value="{{system.combat.givenProtection}}" min="0" disabled />
+          <span class="pc-given-defense-effective" title="Kapott védelem">{{system.combat.givenProtection}}</span>
         </div>
         <div class="pc-resource pc-resource-speed pc-resource-triple" data-legs-health="{{computedHealthStatus.legs}}">
           <label>Sebesség</label>
@@ -242,7 +245,7 @@
                       data-slot="faji"
                       data-area="faji"
                       data-item-id="{{abilityFajiSlot.itemId}}"
-                      title="Eltávolítás"
+                      title="Alt+klikk: Eltávolítás"
                     >
                       ✕
                     </button>
@@ -282,7 +285,7 @@
                       data-slot="hatter"
                       data-area="hatter"
                       data-item-id="{{abilityHatterSlot.itemId}}"
-                      title="Eltávolítás"
+                      title="Alt+klikk: Eltávolítás"
                     >
                       ✕
                     </button>
@@ -323,7 +326,7 @@
                         class="pc-ability-pill-remove"
                         data-area="passive"
                         data-item-id="{{this.id}}"
-                        title="Eltávolítás"
+                        title="Alt+klikk: Eltávolítás"
                       >
                         ✕
                       </button>
@@ -363,7 +366,7 @@
                         class="pc-ability-pill-remove"
                         data-area="active"
                         data-item-id="{{this.id}}"
-                        title="Eltávolítás"
+                        title="Alt+klikk: Eltávolítás"
                       >
                         ✕
                       </button>
@@ -537,7 +540,7 @@
                 <td class="pc-actions-cell-damage">{{#if this.damage}}{{this.damage}}{{else}}—{{/if}}</td>
                 <td class="pc-actions-cell-range">{{#if this.rangeStr}}{{this.rangeStr}}{{else}}—{{/if}}</td>
                 <td class="pc-actions-cell-delete">
-                  <button type="button" class="pc-item-delete" data-item-id="{{this.id}}" title="Eltávolítás">✕</button>
+                  <button type="button" class="pc-item-delete" data-item-id="{{this.id}}" title="Alt+klikk: Eltávolítás">✕</button>
                 </td>
               </tr>
             {{/each}}

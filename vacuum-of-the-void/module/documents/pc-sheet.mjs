@@ -205,6 +205,12 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
       const current = curHealth[part] ?? 0;
       context.computedHealthStatus[part] = VoidPcSheet._healthStatusFromRatio(current, total);
     }
+    // Halálkoponya a portréra: fej 0 HP, vagy egyszerre legalább 2 másik testrész (törzs/karok/lábak) 0 HP
+    const headZero = (Number(curHealth.head) || 0) === 0;
+    const otherParts = ["torso", "arms", "legs"];
+    const otherZeroCount = otherParts.filter((p) => (Number(curHealth[p]) || 0) === 0).length;
+    context.showDeathSkull = headZero || otherZeroCount >= 2;
+
     const legsStatus = context.computedHealthStatus.legs ?? 3;
     const rawGivenSpeed = Number(this.actor.system?.combat?.givenSpeed ?? 0) || 0;
     let effectiveGivenSpeed;
@@ -493,19 +499,19 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
       await item.update({ "system.quantity": qty });
     });
 
-    // Remove inventory item from actor (delegated)
+    // Remove inventory item from actor: Alt+click to delete (delegated)
     $html.on("click", ".pc-item-delete", async ev => {
       ev.preventDefault();
+      if (!ev.altKey) return;
       const btn = ev.currentTarget;
       const itemId = btn.dataset.itemId;
       if (!itemId) return;
 
-      const item = this.actor.items.get(itemId);
+      const actor = this.actor;
+      const item = actor.items.get(itemId);
       const updates = {};
-
-      // If a weapon is deleted while equipped, fully clear its slot and remove it from slotOrder.
       if (item?.type === "weapon") {
-        const weapons = this.actor.system.weapons ?? {};
+        const weapons = actor.system.weapons ?? {};
         const slotOrderRaw = (weapons.slotOrder ?? "").trim();
         const ALL_WEAPON_SLOTS = ["slot1", "slot2", "slot3", "slot4", "slot5", "slot6", "slot7", "slot8", "slot9", "slot10"];
         const slotKeys = slotOrderRaw
@@ -521,12 +527,8 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
           updates[`system.weapons.${slotKey}.bonus`] = "";
         }
       }
-
-      if (Object.keys(updates).length) {
-        await this.actor.update(updates);
-      }
-
-      await this.actor.deleteEmbeddedDocuments("Item", [itemId]);
+      if (Object.keys(updates).length) await actor.update(updates);
+      await actor.deleteEmbeddedDocuments("Item", [itemId]);
     });
 
     // Equipped weapons: attack and damage from Fegyverek card (delegated)
@@ -686,9 +688,10 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
       });
     });
 
-    // Képességek: clear and remove buttons (delegated)
+    // Képességek: Alt+click on clear/remove to delete (delegated)
     $html.on("click", ".pc-ability-slot-clear", async ev => {
       ev.preventDefault();
+      if (!ev.altKey) return;
       const slot = ev.currentTarget.dataset.slot;
       if (!slot) return;
       await this.actor.update({
@@ -698,6 +701,7 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
     });
     $html.on("click", ".pc-ability-pill-remove", async ev => {
       ev.preventDefault();
+      if (!ev.altKey) return;
       const area = ev.currentTarget.dataset.area;
       const itemId = ev.currentTarget.dataset.itemId;
       if (!area || !itemId) return;
