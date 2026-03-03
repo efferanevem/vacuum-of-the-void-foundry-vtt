@@ -55,34 +55,70 @@
   color: var(--votv-text-main);
 }
 
-.votv.roll-sheet .roll-sheet-morale {
-  width: 60px;
+.votv.roll-sheet .roll-sheet-row-morale {
+  flex-wrap: nowrap;
+}
+
+.votv.roll-sheet .roll-sheet-morale-wrap {
+  flex: 1;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.votv.roll-sheet .roll-sheet-morale-wrap .roll-sheet-morale-reset {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.votv.roll-sheet .roll-sheet-morale-icons {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.votv.roll-sheet .roll-sheet-morale-reset {
+  width: 28px;
   height: 28px;
-  padding: 0 22px 0 8px;
-  box-sizing: border-box;
-  line-height: 26px;
-  background-color: rgba(3, 6, 10, 0.9);
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--votv-text-muted);
+  background: rgba(3, 6, 10, 0.6);
   border: 1px solid var(--votv-border-muted);
-  color: var(--votv-text-main);
-  border-radius: 2px;
-  font-size: var(--votv-font-body);
+  border-radius: 50%;
   cursor: pointer;
-  color-scheme: dark;
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%237a8b9c' d='M2 4l4 4 4-4'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 6px center;
-  vertical-align: middle;
+  opacity: 0.5;
+  transition: opacity 0.15s ease;
 }
 
-.votv.roll-sheet .roll-sheet-morale:focus {
-  border-color: var(--votv-focus-ring);
-  outline: none;
+.votv.roll-sheet .roll-sheet-morale-reset-icon {
+  display: block;
 }
 
-.votv.roll-sheet .roll-sheet-morale option {
-  background: var(--votv-bg-alt);
+.votv.roll-sheet .roll-sheet-morale-reset:hover {
+  opacity: 0.85;
   color: var(--votv-text-main);
+}
+
+.votv.roll-sheet .roll-sheet-morale-d8 {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity 0.15s ease;
+}
+
+.votv.roll-sheet .roll-sheet-morale-d8:hover {
+  opacity: 0.85;
+}
+
+.votv.roll-sheet .roll-sheet-morale-d8.selected {
+  opacity: 1;
 }
 
 .votv.roll-sheet .roll-sheet-hint {

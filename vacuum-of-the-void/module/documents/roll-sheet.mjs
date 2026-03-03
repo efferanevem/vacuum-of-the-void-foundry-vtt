@@ -51,6 +51,24 @@ export class VoidRollSheet extends Application {
       slider.addEventListener("input", () => { output.value = slider.value; });
     }
 
+    const moraleInput = form.querySelector("input[name='moraleDice']");
+    const moraleD8s = form.querySelectorAll(".roll-sheet-morale-d8");
+    const updateMoraleVisual = (value) => {
+      const n = Math.min(3, Math.max(0, parseInt(value, 10) || 0));
+      if (moraleInput) moraleInput.value = String(n);
+      moraleD8s.forEach((el, i) => {
+        el.classList.toggle("selected", i < n);
+      });
+    };
+    form.querySelectorAll(".roll-sheet-morale-reset, .roll-sheet-morale-d8").forEach((el) => {
+      el.addEventListener("click", (ev) => {
+        ev.preventDefault();
+        const val = el.dataset.moraleValue ?? "0";
+        updateMoraleVisual(val);
+      });
+    });
+    updateMoraleVisual(moraleInput?.value ?? "0");
+
     form._votvRollBound = true;
     form.addEventListener("click", (ev) => {
       if (!ev.target?.closest?.(".roll-sheet-do-roll")) return;
@@ -63,21 +81,6 @@ export class VoidRollSheet extends Application {
   getData(options = {}) {
     const actor = this.actor;
     const moraleCurrent = Math.max(0, Number(actor?.system?.resources?.morale ?? 0) || 0);
-    const moraleMax = Math.min(3, moraleCurrent);
-
-    const moraleOptions = [];
-    for (let i = 0; i <= 3; i++) {
-      moraleOptions.push({
-        value: i,
-        label: String(i),
-        selected: i === 0,
-        disabled: i > moraleMax
-      });
-    }
-    // Select 0 by default; user can pick up to moraleMax
-    const defaultMorale = 0;
-    const sel = moraleOptions.find(o => Number(o.value) === defaultMorale && !o.disabled);
-    if (sel) sel.selected = true;
 
     const basePart = this._baseModifier !== 0 ? (this._baseModifier > 0 ? `+${this._baseModifier}` : String(this._baseModifier)) : "";
     const injuryPart = this._injuryModifier !== 0 ? (this._injuryModifier > 0 ? `+${this._injuryModifier}` : String(this._injuryModifier)) : "";
@@ -87,8 +90,6 @@ export class VoidRollSheet extends Application {
       appId: this.id ?? "votv-roll-sheet",
       skillLabel: this._label,
       formulaText,
-      moraleOptions,
-      moraleMax,
       moraleCurrent,
       advantageValue: 0
     };

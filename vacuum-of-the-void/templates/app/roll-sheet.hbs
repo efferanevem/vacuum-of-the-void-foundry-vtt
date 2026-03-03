@@ -4,14 +4,19 @@
     <p class="roll-sheet-formula">{{formulaText}}</p>
   </header>
 
-  <div class="roll-sheet-row">
-    <label>Morálkockák</label>
-    <select name="moraleDice" class="roll-sheet-morale">
-      {{#each moraleOptions}}
-        <option value="{{this.value}}" {{#if this.selected}}selected{{/if}} {{#if this.disabled}}disabled{{/if}}>{{this.label}}</option>
-      {{/each}}
-    </select>
-    <span class="roll-sheet-hint">(max {{moraleMax}}, rendelkezésre: {{moraleCurrent}})</span>
+  <div class="roll-sheet-row roll-sheet-row-morale">
+    <label>Morálkockák (Σ {{moraleCurrent}} db)</label>
+    <div class="roll-sheet-morale-wrap">
+      <div class="roll-sheet-morale-icons">
+        <img class="roll-sheet-morale-d8" src="systems/vacuum-of-the-void/assets/moral_d8.svg" data-morale-value="1" alt="1" title="1 morál" />
+        <img class="roll-sheet-morale-d8" src="systems/vacuum-of-the-void/assets/moral_d8.svg" data-morale-value="2" alt="2" title="2 morál" />
+        <img class="roll-sheet-morale-d8" src="systems/vacuum-of-the-void/assets/moral_d8.svg" data-morale-value="3" alt="3" title="3 morál" />
+      </div>
+      <input type="hidden" name="moraleDice" value="0" />
+      <button type="button" class="roll-sheet-morale-reset" data-morale-value="0" title="0 morál" aria-label="0 morál">
+        <svg class="roll-sheet-morale-reset-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="10" cy="10" r="8"/><path d="M6 6l8 8M14 6l-8 8"/></svg>
+      </button>
+    </div>
   </div>
 
   <div class="roll-sheet-row">
