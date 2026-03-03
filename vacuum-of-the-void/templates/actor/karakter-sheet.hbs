@@ -383,7 +383,7 @@
     </section>
 
     <section class="karakter-panel karakter-fegyverek">
-      <h2>Fegyverek</h2>
+      <h2>Használt Fegyverek</h2>
       <div class="karakter-weapon-slots">
         {{#each weaponSlots}}
           <div class="karakter-weapon-slot" data-slot="{{this.slotKey}}" data-drop-zone="weapon">
@@ -468,37 +468,42 @@
         <table class="karakter-equipment-table karakter-equipment-weapons">
           <thead>
             <tr>
-              <th class="karakter-equipment-th-drag"></th>
               <th class="karakter-equipment-th-name">Név</th>
+              <th class="karakter-equipment-th-type">Típus, Méret</th>
               <th class="karakter-equipment-th-bonus">Bónusz</th>
               <th class="karakter-equipment-th-damage">Sebzés</th>
               <th class="karakter-equipment-th-range">Hatótáv</th>
-              <th class="karakter-equipment-th-type">Típus</th>
               <th class="karakter-equipment-th-ammo">Lőszer</th>
-              <th class="karakter-equipment-th-other">Egyéb</th>
+              <th class="karakter-equipment-th-other">Speciális</th>
+              <th class="karakter-equipment-th-equipped"></th>
               <th class="karakter-equipment-th-delete"></th>
             </tr>
           </thead>
           <tbody>
             {{#each weaponsTable}}
               <tr class="karakter-equipment-row" data-slot-key="{{this.slotKey}}" data-item-id="{{this.itemId}}">
-                <td class="karakter-equipment-cell-drag">
-                  <span class="karakter-equipment-drag-handle" data-slot-key="{{this.slotKey}}" draggable="true" title="Átrendezés">⋮⋮</span>
-                </td>
                 <td class="karakter-equipment-cell-name">
                   {{#if this.img}}<img class="karakter-equipment-icon" src="{{this.img}}" alt="" data-item-id="{{this.itemId}}" />{{/if}}
+                  {{#if this.equipped}}<span class="karakter-weapon-equipped-dot" title="Felszerelve"></span>{{/if}}
                   <span class="karakter-weapon-label karakter-inventory-item-name" data-weapon-slot="{{this.slotKey}}" data-item-id="{{this.itemId}}">{{this.name}}</span>
                 </td>
-                <td class="karakter-equipment-cell-bonus">
-                  <input type="text" name="system.weapons.{{this.slotKey}}.bonus" value="{{this.bonus}}" placeholder="0" data-dtype="String" />
-                </td>
+                <td class="karakter-equipment-cell-type">{{this.typeAndSize}}</td>
+                <td class="karakter-equipment-cell-bonus">{{this.bonus}}</td>
                 <td class="karakter-equipment-cell-damage">{{this.damage}}</td>
                 <td class="karakter-equipment-cell-range">{{this.rangeStr}}</td>
-                <td class="karakter-equipment-cell-type">{{this.typeLabel}}</td>
-                <td class="karakter-equipment-cell-ammo">{{this.quantity}}</td>
+                <td class="karakter-equipment-cell-ammo">
+                  {{#if this.isProjectile}}
+                    <input type="text" class="karakter-weapon-quantity-input" data-item-id="{{this.itemId}}" value="{{this.quantity}}" placeholder="6" />
+                  {{else}}
+                    —
+                  {{/if}}
+                </td>
                 <td class="karakter-equipment-cell-other">{{this.special}}</td>
+                <td class="karakter-equipment-cell-equipped">
+                  <input type="checkbox" class="karakter-weapon-equipped-checkbox" data-item-id="{{this.itemId}}" {{checked this.equipped}} title="Felszerelve" />
+                </td>
                 <td class="karakter-equipment-cell-delete">
-                  <button type="button" class="karakter-equipment-delete karakter-weapon-unequip" data-slot-key="{{this.slotKey}}" title="Levétel">✕</button>
+                  <button type="button" class="karakter-equipment-delete karakter-weapon-delete" data-item-id="{{this.itemId}}" data-slot-key="{{this.slotKey}}" data-actor-id="{{this.actorId}}" title="Alt+klikk: Törlés az inventory-ból">✕</button>
                 </td>
               </tr>
             {{/each}}

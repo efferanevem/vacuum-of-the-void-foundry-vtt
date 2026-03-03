@@ -1798,6 +1798,71 @@
   min-width: 0;
 }
 
+/* Fegyver táblázat: Név oszlopban a név mellett a kép (flex, egymás mellett) */
+.votv.karakter-sheet .karakter-equipment-weapons .karakter-equipment-cell-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.votv.karakter-sheet .karakter-equipment-weapons .karakter-equipment-cell-name .karakter-weapon-label {
+  flex: 1;
+  min-width: 0;
+}
+
+.votv.karakter-sheet .karakter-equipment-weapons .karakter-equipment-cell-name .karakter-equipment-icon {
+  flex-shrink: 0;
+  margin-right: 0;
+}
+
+/* Fegyver táblázat: Lőszer oszlop keskeny */
+.votv.karakter-sheet .karakter-equipment-weapons .karakter-equipment-th-ammo {
+  width: 1%;
+  max-width: 4.5em;
+  min-width: 3.2em;
+}
+
+/* Felszerelt fegyver: zöld pont a név mellett */
+.votv.karakter-sheet .karakter-weapon-equipped-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  min-width: 8px;
+  border-radius: 50%;
+  background: var(--votv-accent, #2bff88);
+  margin-right: 6px;
+  flex-shrink: 0;
+}
+
+/* Fegyver táblázat: Felszerelt oszlop keskeny */
+.votv.karakter-sheet .karakter-equipment-weapons .karakter-equipment-th-equipped,
+.votv.karakter-sheet .karakter-equipment-weapons .karakter-equipment-cell-equipped {
+  width: 1%;
+  max-width: 2.5em;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.votv.karakter-sheet .karakter-equipment-weapons .karakter-equipment-cell-equipped input[type="checkbox"] {
+  margin: 0;
+  cursor: pointer;
+}
+
+.votv.karakter-sheet .karakter-equipment-weapons .karakter-equipment-cell-ammo {
+  width: 1%;
+  max-width: 4.5em;
+  min-width: 3.2em;
+  white-space: nowrap;
+}
+
+.votv.karakter-sheet .karakter-equipment-weapons .karakter-equipment-cell-ammo .karakter-weapon-quantity-input {
+  width: 100%;
+  max-width: 3em;
+  min-width: 2em;
+  padding: 2px 4px;
+  text-align: center;
+}
+
 .votv.karakter-sheet .karakter-equipment-cell-name input {
   width: 100%;
   max-width: 100%;

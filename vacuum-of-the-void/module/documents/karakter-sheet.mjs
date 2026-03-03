@@ -320,26 +320,49 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
         damage: slotData.damage ?? ""
       };
     });
-    // Felszerelés: Fegyverek táblázat (csak felszerelt fegyverek, teljes adatokkal)
+    // Felszerelés: Fegyverek táblázat – equipped az item.system.equipped (alapértelmezett false); ha nincs meg, slot alapján (régi adat).
     const weaponTypeLabels = { kinetic: "Kinetikus", projectile: "Lövedékes", blade: "Pengés", explosive: "Robbanó", other: "Egyéb" };
-    context.weaponsTable = equippedSlotKeys.map((slotKey) => {
-      const slotData = weapons[slotKey] ?? {};
-      const itemId = (slotData.itemId ?? "").trim();
-      const item = weaponDocs.find(w => w.id === itemId);
+    const weaponSizeLabels = { light: "Könnyű", medium: "Közepes", heavy: "Nehéz", thrown: "Dobható" };
+    context.weaponsTable = weaponDocs.map((item) => {
+      const itemId = item.id;
+      let slotKey = null;
+      let slotData = {};
+      for (const sk of slotKeys) {
+        if ((weapons[sk]?.itemId ?? "").trim() === itemId) {
+          slotKey = sk;
+          slotData = weapons[sk] ?? {};
+          break;
+        }
+      }
+      const equippedFromSlot = !!slotKey;
+      const equipped = (item.system?.equipped !== undefined && item.system?.equipped !== null)
+        ? !!item.system.equipped
+        : equippedFromSlot;
       const sys = item?.system ?? {};
       const rangeStr = typeof sys.range === "string" ? (sys.range || "").trim() : "";
       const typeRaw = sys.type ?? "";
       const typeLabel = (weaponTypeLabels[typeRaw] ?? typeRaw) || "—";
+      const sizeRaw = sys.size ?? "";
+      const sizeLabel = (weaponSizeLabels[sizeRaw] ?? sizeRaw) || "";
+      const typeAndSize = [typeLabel, sizeLabel].filter(Boolean).join(", ") || typeLabel || "—";
+      const isProjectile = typeLabel === "Lövedékes";
+      const quantityRaw = sys.quantity;
+      const quantityStr = quantityRaw != null ? String(quantityRaw).trim() : "1";
       return {
-        slotKey,
+        slotKey: slotKey ?? "",
         itemId,
-        name: item?.name ?? slotData.name ?? emptyLabel,
+        actorId: this.actor.id,
+        name: item?.name ?? emptyLabel,
         img: item?.img ?? "",
-        bonus: String(slotData.bonus ?? "").trim() || "0",
+        bonus: String(slotData.bonus ?? "").trim() || (equipped ? "0" : "—"),
         damage: slotData.damage ?? sys.damage ?? "",
         rangeStr: rangeStr || "—",
         typeLabel,
-        quantity: Number(sys.quantity ?? 1) || 1,
+        typeAndSize,
+        quantity: quantityStr,
+        quantityDisplay: isProjectile ? quantityStr : "—",
+        isProjectile,
+        equipped,
         special: (sys.special ?? "").trim() || "—"
       };
     });
@@ -450,7 +473,7 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
   _attachFrameListeners(html) {
     super._attachFrameListeners(html);
     // ApplicationV2: content lives in the form; use form as root so listeners attach to the right DOM
-    const root = this.form ?? this.element;
+    const root = this.form ?? html?.querySelector?.("form.votv.karakter-sheet") ?? html ?? this.element;
     const $html = $(root);
     $(document).off("click.votv-weapon-dropdown");
     $(document).off("click.votv-microchip-dropdown");
@@ -593,11 +616,13 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
       await this._rollWeaponDamage(itemId);
     });
 
-    // Weapons: equip / unequip via inventory checkboxes (delegated)
+    // Weapons: equip / unequip via inventory checkboxes (delegated) – item.system.equipped szinkron
     $html.on("change", ".karakter-weapon-equip-toggle", async ev => {
       const checkbox = ev.currentTarget;
       const itemId = (checkbox.dataset.itemId ?? "").trim();
       if (!itemId) return;
+      const item = this.actor.items.get(itemId);
+      if (!item || item.type !== "Fegyver") return;
       const weapons = this.actor.system.weapons ?? {};
       const slotOrderRaw = (weapons.slotOrder ?? "").trim();
       const ALL_WEAPON_SLOTS = ["slot1", "slot2", "slot3", "slot4", "slot5", "slot6", "slot7", "slot8", "slot9", "slot10"];
@@ -617,25 +642,24 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
           targetSlot = nextKey;
           slotKeys.push(nextKey);
         }
-        const item = this.actor.items.get(itemId);
-        const updates = {
+        await this.actor.update({
           "system.weapons.slotOrder": slotKeys.join(","),
           [`system.weapons.${targetSlot}.itemId`]: itemId,
           [`system.weapons.${targetSlot}.name`]: item?.name ?? "",
           [`system.weapons.${targetSlot}.damage`]: item?.system?.damage ?? "",
           [`system.weapons.${targetSlot}.bonus`]: item?.system?.bonus ?? ""
-        };
-        await this.actor.update(updates);
+        });
+        await item.update({ "system.equipped": true });
       } else if (currentSlotKey) {
         const newKeys = slotKeys.filter(k => k !== currentSlotKey);
-        const updates = {
-          "system.weapons.slotOrder": newKeys.join(",")
-        };
-        updates[`system.weapons.${currentSlotKey}.itemId`] = "";
-        updates[`system.weapons.${currentSlotKey}.name`] = "";
-        updates[`system.weapons.${currentSlotKey}.damage`] = "";
-        updates[`system.weapons.${currentSlotKey}.bonus`] = "";
-        await this.actor.update(updates);
+        await this.actor.update({
+          "system.weapons.slotOrder": newKeys.join(","),
+          [`system.weapons.${currentSlotKey}.itemId`]: "",
+          [`system.weapons.${currentSlotKey}.name`]: "",
+          [`system.weapons.${currentSlotKey}.damage`]: "",
+          [`system.weapons.${currentSlotKey}.bonus`]: ""
+        });
+        await item.update({ "system.equipped": false });
       }
     });
 
@@ -770,17 +794,94 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
       await this._postAbilityToChat(itemId);
     });
 
-    // Felszerelés: fegyver levétele (slot ürítése)
-    $html.on("click", ".karakter-weapon-unequip", async ev => {
+    // Felszerelés: lőszer módosítása lövedékes fegyvernél – a fegyver item system.quantity (string) frissítése
+    $html.on("change", ".karakter-weapon-quantity-input", async ev => {
+      const input = ev.currentTarget;
+      const itemId = (input.dataset.itemId ?? "").trim();
+      if (!itemId) return;
+      const item = this.actor.items.get(itemId);
+      if (!item || item.type !== "Fegyver") return;
+      const val = (input.value ?? "").trim();
+      await item.update({ "system.quantity": val });
+    });
+
+    // Felszerelés: Felszerelt checkbox – item.system.equipped + slot szinkron (fent megjelenik)
+    $html.on("change", ".karakter-weapon-equipped-checkbox", async ev => {
+      const checkbox = ev.currentTarget;
+      const itemId = (checkbox.dataset.itemId ?? "").trim();
+      if (!itemId) return;
+      const item = this.actor.items.get(itemId);
+      if (!item || item.type !== "Fegyver") return;
+      const weapons = this.actor.system.weapons ?? {};
+      const slotOrderRaw = (weapons.slotOrder ?? "").trim();
+      const ALL_WEAPON_SLOTS = ["slot1", "slot2", "slot3", "slot4", "slot5", "slot6", "slot7", "slot8", "slot9", "slot10"];
+      const slotKeys = slotOrderRaw ? slotOrderRaw.split(/\s*,\s*/).filter(s => ALL_WEAPON_SLOTS.includes(s)) : [];
+      const currentSlotKey = slotKeys.find(k => (weapons[k]?.itemId ?? "").trim() === itemId) ?? null;
+      const checked = checkbox.checked;
+
+      if (checked) {
+        if (currentSlotKey) return;
+        let targetSlot = slotKeys.find(k => !(weapons[k]?.itemId));
+        const usedSet = new Set(slotKeys);
+        if (!targetSlot) {
+          const nextKey = ALL_WEAPON_SLOTS.find(k => !usedSet.has(k));
+          if (!nextKey) return;
+          targetSlot = nextKey;
+          slotKeys.push(nextKey);
+        }
+        await this.actor.update({
+          "system.weapons.slotOrder": slotKeys.join(","),
+          [`system.weapons.${targetSlot}.itemId`]: itemId,
+          [`system.weapons.${targetSlot}.name`]: item.name ?? "",
+          [`system.weapons.${targetSlot}.damage`]: item.system?.damage ?? "",
+          [`system.weapons.${targetSlot}.bonus`]: item.system?.bonus ?? ""
+        });
+        await item.update({ "system.equipped": true });
+      } else if (currentSlotKey) {
+        const newKeys = slotKeys.filter(k => k !== currentSlotKey);
+        await this.actor.update({
+          "system.weapons.slotOrder": newKeys.join(","),
+          [`system.weapons.${currentSlotKey}.itemId`]: "",
+          [`system.weapons.${currentSlotKey}.name`]: "",
+          [`system.weapons.${currentSlotKey}.damage`]: "",
+          [`system.weapons.${currentSlotKey}.bonus`]: ""
+        });
+        await item.update({ "system.equipped": false });
+      }
+    });
+
+    // Felszerelés: fegyver törlése az inventory-ból – Alt+klikk (mint az inventory törlés)
+    $html.on("click", ".karakter-weapon-delete", async ev => {
       ev.preventDefault();
-      const slotKey = ev.currentTarget.dataset.slotKey;
-      if (!slotKey) return;
-      await this.actor.update({
-        [`system.weapons.${slotKey}.itemId`]: "",
-        [`system.weapons.${slotKey}.name`]: "",
-        [`system.weapons.${slotKey}.bonus`]: "",
-        [`system.weapons.${slotKey}.damage`]: ""
-      });
+      if (!ev.altKey) return;
+      const btn = ev.currentTarget;
+      const itemId = btn.dataset.itemId;
+      if (!itemId) return;
+
+      const actor = this.actor;
+      const item = actor.items.get(itemId);
+      const updates = {};
+
+      if (item?.type === "Fegyver") {
+        const weapons = actor.system.weapons ?? {};
+        const slotOrderRaw = (weapons.slotOrder ?? "").trim();
+        const ALL_WEAPON_SLOTS = ["slot1", "slot2", "slot3", "slot4", "slot5", "slot6", "slot7", "slot8", "slot9", "slot10"];
+        const slotKeys = slotOrderRaw
+          ? slotOrderRaw.split(/\s*,\s*/).filter(s => ALL_WEAPON_SLOTS.includes(s))
+          : [];
+        const slotKey = slotKeys.find(k => (weapons[k]?.itemId ?? "").trim() === itemId);
+        if (slotKey) {
+          const newKeys = slotKeys.filter(k => k !== slotKey);
+          updates["system.weapons.slotOrder"] = newKeys.join(",");
+          updates[`system.weapons.${slotKey}.itemId`] = "";
+          updates[`system.weapons.${slotKey}.name`] = "";
+          updates[`system.weapons.${slotKey}.damage`] = "";
+          updates[`system.weapons.${slotKey}.bonus`] = "";
+        }
+      }
+
+      if (Object.keys(updates).length) await actor.update(updates);
+      await actor.deleteEmbeddedDocuments("Item", [itemId]);
     });
 
     // Felszerelés: páncél sor törlése
@@ -976,6 +1077,61 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
       }
     }
 
+    // Ha nem ability, de Fegyver Itemet húztak a lapra, vegyük fel az inventory-ba (ha még nincs).
+    // Alapértelmezetten NE legyen felszerelve – felülírjuk bármit, ami slotba tenné.
+    if (data) {
+      let uuid =
+        data.uuid ??
+        data.documentUuid ??
+        data.data?.uuid ??
+        (typeof data === "string" ? data : null);
+
+      if (!uuid && typeof data === "object") {
+        for (const v of Object.values(data)) {
+          if (typeof v === "string" && v.includes(".") && v.startsWith("Item.")) {
+            uuid = v;
+            break;
+          }
+        }
+      }
+
+      if (uuid) {
+        const doc = await fromUuid(uuid);
+        if (doc && doc.documentName === "Item" && doc.type === "Fegyver") {
+          const actor = this.actor;
+          const isNewToActor = doc.parent?.id !== actor.id;
+          let itemId = doc.id;
+          if (isNewToActor) {
+            const itemData = foundry.utils.mergeObject(doc.toObject(), { system: { ...(doc.toObject().system ?? {}), equipped: false } });
+            const created = await actor.createEmbeddedDocuments("Item", [itemData]);
+            itemId = created[0]?.id ?? itemId;
+          }
+          // Ha most vettük fel (külső dropp): kötelezően vegyük ki minden slotból – equipped checkbox legyen false by default.
+          if (isNewToActor) {
+            const weapons = actor.system?.weapons ?? {};
+            const slotOrderRaw = (weapons.slotOrder ?? "").trim();
+            const ALL_WEAPON_SLOTS = ["slot1", "slot2", "slot3", "slot4", "slot5", "slot6", "slot7", "slot8", "slot9", "slot10"];
+            const slotKeys = slotOrderRaw ? slotOrderRaw.split(/\s*,\s*/).filter(s => ALL_WEAPON_SLOTS.includes(s)) : [];
+            const slotsWithThisItem = slotKeys.filter(k => (weapons[k]?.itemId ?? "").trim() === itemId);
+            if (slotsWithThisItem.length > 0) {
+              const newKeys = slotKeys.filter(k => !slotsWithThisItem.includes(k));
+              const update = {
+                "system.weapons.slotOrder": newKeys.join(",")
+              };
+              for (const sk of slotsWithThisItem) {
+                update[`system.weapons.${sk}.itemId`] = "";
+                update[`system.weapons.${sk}.name`] = "";
+                update[`system.weapons.${sk}.damage`] = "";
+                update[`system.weapons.${sk}.bonus`] = "";
+              }
+              await actor.update(update);
+            }
+          }
+          return;
+        }
+      }
+    }
+
     // Ha nem ability dropp, menjen a Foundry alap logikáján.
     return super._onDropItem(event, data);
   }
@@ -995,6 +1151,7 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
 
   async _onWeaponSlotDrop(ev, slot) {
     ev.preventDefault();
+    ev.stopPropagation();
     ev.currentTarget?.classList.remove("karakter-weapon-slot-drag-over");
     const data = ev.dataTransfer?.getData("text/plain") || ev.dataTransfer?.getData("application/json") || "";
     let json;
@@ -1006,18 +1163,20 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
     if (json?.type !== "Item" || !json?.uuid) return;
     const doc = await fromUuid(json.uuid);
     if (!doc || doc.type !== "Fegyver") return;
-    let itemId = doc.id;
+    // Ha a fegyver még nincs a karakteren (compendiumról / máshonnan húzták), csak adjuk hozzá, ne felszereljük (equipped = false).
     if (doc.parent?.id !== this.actor.id) {
-      const created = await this.actor.createEmbeddedDocuments("Item", [doc.toObject()]);
-      itemId = created[0]?.id ?? itemId;
+      const itemData = foundry.utils.mergeObject(doc.toObject(), { system: { ...(doc.toObject().system ?? {}), equipped: false } });
+      await this.actor.createEmbeddedDocuments("Item", [itemData]);
+      return;
     }
-    const updates = {
+    const itemId = doc.id;
+    await this.actor.update({
       [`system.weapons.${slot}.itemId`]: itemId,
       [`system.weapons.${slot}.name`]: doc.name,
       [`system.weapons.${slot}.damage`]: doc.system?.damage ?? "",
       [`system.weapons.${slot}.bonus`]: doc.system?.bonus ?? ""
-    };
-    await this.actor.update(updates);
+    });
+    await doc.update({ "system.equipped": true });
   }
 
   _onInventoryDragHandleStart(ev, itemId, row) {

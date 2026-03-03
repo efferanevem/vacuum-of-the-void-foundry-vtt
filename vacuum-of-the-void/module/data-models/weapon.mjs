@@ -1,8 +1,10 @@
-const { NumberField, StringField } = foundry.data.fields;
+const { BooleanField, NumberField, StringField } = foundry.data.fields;
 
 export class WeaponDataModel extends foundry.abstract.TypeDataModel {
   static defineSchema() {
     return {
+      /** Felszerelve a karakteren (karakter lap checkbox; a fegyver lapon nem jelenik meg). */
+      equipped: new BooleanField({ required: false, initial: false }),
       type: new StringField({
         required: true,
         blank: false,
@@ -23,7 +25,7 @@ export class WeaponDataModel extends foundry.abstract.TypeDataModel {
       }),
       range: new StringField({ required: false, blank: true, initial: "" }),
       special: new StringField({ required: false, blank: true, initial: "" }),
-      quantity: new NumberField({ required: false, integer: true, min: 0, initial: 1 })
+      quantity: new StringField({ required: false, blank: true, initial: "1" })
     };
   }
 }

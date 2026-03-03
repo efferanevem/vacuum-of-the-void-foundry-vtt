@@ -44,9 +44,9 @@
       <div class="field">
         <label>Lőszer (db)</label>
         {{#if (eq system.type "projectile")}}
-          <input type="number" name="system.quantity" value="{{system.quantity}}" min="0" placeholder="0" />
+          <input type="text" name="system.quantity" value="{{system.quantity}}" placeholder="pl. 6 vagy ∞" />
         {{else}}
-          <input type="number" name="system.quantity" value="" min="0" readonly placeholder="-" />
+          <input type="text" name="system.quantity" value="" readonly placeholder="-" />
         {{/if}}
       </div>
     </div>
