@@ -178,6 +178,16 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
     return VoidPcSheet._healthStatusFromRatio(current, total);
   }
 
+  /** Static: health status 0–3 for skill on an actor (used by roll sheet without sheet instance). */
+  static _getSkillHealthStatusStatic(actor, skillKey) {
+    const part = VoidPcSheet.BODY_PART_BY_SKILL[skillKey];
+    if (part == null) return undefined;
+    const res = actor?.system?.resources ?? {};
+    const total = res.hitLocations?.[part]?.value ?? 0;
+    const current = res.currentHealth?.[part] ?? 0;
+    return VoidPcSheet._healthStatusFromRatio(current, total);
+  }
+
   async _prepareContext(options) {
     let context = await super._prepareContext(options);
     context = context ?? {};
@@ -428,13 +438,14 @@ export class VoidPcSheet extends foundry.applications.api.HandlebarsApplicationM
       }).browse();
     });
 
-    // Skill rolls: click on skill label (delegated)
-    $html.on("click", ".pc-skill-label", ev => {
+    // Skill rolls: click on skill label opens roll sheet (delegated)
+    $html.on("click", ".pc-skill-label", async (ev) => {
       ev.preventDefault();
       const element = ev.currentTarget;
       const skillKey = element.dataset.skill;
       const label = element.textContent?.trim() || skillKey;
-      this._rollSkill(skillKey, label);
+      const { openRollSheetForSkill } = await import("./roll-sheet.mjs");
+      openRollSheetForSkill(this.actor, skillKey, label);
     });
 
     // Morale d8: click on d8 icon – roll 1d8 (same style as skill), then subtract 1 from morale

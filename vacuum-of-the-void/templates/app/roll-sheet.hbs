@@ -1,0 +1,37 @@
+<form class="votv roll-sheet" autocomplete="off" data-votv-roll-sheet="{{appId}}">
+  <header class="roll-sheet-header">
+    <h3 class="roll-sheet-title">{{skillLabel}}</h3>
+    <p class="roll-sheet-formula">{{formulaText}}</p>
+  </header>
+
+  <div class="roll-sheet-row">
+    <label>Morálkockák</label>
+    <select name="moraleDice" class="roll-sheet-morale">
+      {{#each moraleOptions}}
+        <option value="{{this.value}}" {{#if this.selected}}selected{{/if}} {{#if this.disabled}}disabled{{/if}}>{{this.label}}</option>
+      {{/each}}
+    </select>
+    <span class="roll-sheet-hint">(max {{moraleMax}}, rendelkezésre: {{moraleCurrent}})</span>
+  </div>
+
+  <div class="roll-sheet-row">
+    <label>Előnyök / hátrányok</label>
+    <div class="roll-sheet-slider-wrap">
+      <span class="roll-sheet-slider-label">-3</span>
+      <input type="range" name="advantage" id="roll-sheet-advantage" class="roll-sheet-slider" min="-3" max="3" value="{{advantageValue}}" step="1" />
+      <span class="roll-sheet-slider-label">+3</span>
+    </div>
+    <output class="roll-sheet-advantage-value" for="roll-sheet-advantage">{{advantageValue}}</output>
+  </div>
+
+  <div class="roll-sheet-row">
+    <label>Konstans bónusz</label>
+    <input type="number" name="constantBonus" class="roll-sheet-constant" value="0" min="-99" max="99" />
+  </div>
+
+  <footer class="roll-sheet-footer">
+    <button type="button" class="roll-sheet-do-roll">
+      Dobás
+    </button>
+  </footer>
+</form>
