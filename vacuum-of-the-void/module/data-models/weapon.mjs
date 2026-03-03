@@ -1,4 +1,4 @@
-const { NumberField, SchemaField, StringField } = foundry.data.fields;
+const { NumberField, StringField } = foundry.data.fields;
 
 export class WeaponDataModel extends foundry.abstract.TypeDataModel {
   static defineSchema() {
@@ -6,22 +6,22 @@ export class WeaponDataModel extends foundry.abstract.TypeDataModel {
       type: new StringField({
         required: true,
         blank: false,
+        options: ["kinetic", "projectile", "blade", "explosive", "other"],
+        initial: "kinetic"
+      }),
+      size: new StringField({
+        required: true,
+        blank: false,
         options: ["light", "medium", "heavy", "thrown"],
         initial: "light"
       }),
+      bonus: new StringField({ required: false, blank: true, initial: "" }),
       damage: new StringField({
         required: false,
         blank: true,
         initial: ""
       }),
-      range: new SchemaField({
-        short: new NumberField({ required: false, integer: false, min: 0, initial: 0 }),
-        long: new NumberField({ required: false, integer: false, min: 0, initial: 0 })
-      }),
-      cost: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
-      maxUpgrade: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
-      upgradeCost: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
-      skillDifficulty: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
+      range: new StringField({ required: false, blank: true, initial: "" }),
       special: new StringField({ required: false, blank: true, initial: "" }),
       quantity: new NumberField({ required: false, integer: true, min: 0, initial: 1 })
     };

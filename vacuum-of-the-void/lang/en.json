@@ -1,6 +1,10 @@
 {
   "VOTV.KarakterSheet": "Karakter",
   "TYPES.Actor.Karakter": "Karakter",
+
+  "TYPES.Item.Fegyver": "Fegyver",
+  "VOTV.FegyverSheet": "Fegyver",
+
   "VOTV.LabelName": "Name",
   "VOTV.LabelPlayer": "Player",
   "VOTV.LabelConcept": "Concept",

@@ -2,12 +2,12 @@
   {
     "_id": "knife",
     "name": "Kés",
-    "type": "weapon",
+    "type": "Fegyver",
     "img": "icons/svg/sword.svg",
     "system": {
       "type": "light",
       "damage": "1d6",
-      "range": { "short": 1.5, "long": 0 },
+      "range": "1.5 m",
       "cost": 50,
       "maxUpgrade": 3,
       "upgradeCost": 25,
@@ -18,12 +18,12 @@
   {
     "_id": "pistol",
     "name": "Pisztoly",
-    "type": "weapon",
+    "type": "Fegyver",
     "img": "icons/svg/sword.svg",
     "system": {
       "type": "light",
       "damage": "1d4",
-      "range": { "short": 21, "long": 42 },
+      "range": "21/42 m",
       "cost": 150,
       "maxUpgrade": 2,
       "upgradeCost": 75,
@@ -34,12 +34,12 @@
   {
     "_id": "smg",
     "name": "Géppisztoly",
-    "type": "weapon",
+    "type": "Fegyver",
     "img": "icons/svg/sword.svg",
     "system": {
       "type": "light",
       "damage": "1d4+1",
-      "range": { "short": 15, "long": 30 },
+      "range": "15/30 m",
       "cost": 200,
       "maxUpgrade": 3,
       "upgradeCost": 100,
@@ -50,12 +50,12 @@
   {
     "_id": "revolver",
     "name": "Revolver",
-    "type": "weapon",
+    "type": "Fegyver",
     "img": "icons/svg/sword.svg",
     "system": {
       "type": "light",
       "damage": "1d4+3",
-      "range": { "short": 15, "long": 30 },
+      "range": "15/30 m",
       "cost": 250,
       "maxUpgrade": 3,
       "upgradeCost": 175,
@@ -66,12 +66,12 @@
   {
     "_id": "heat-blade",
     "name": "Hőpengé",
-    "type": "weapon",
+    "type": "Fegyver",
     "img": "icons/svg/sword.svg",
     "system": {
       "type": "medium",
       "damage": "2d4+2",
-      "range": { "short": 1.5, "long": 0 },
+      "range": "1.5 m",
       "cost": 200,
       "maxUpgrade": 4,
       "upgradeCost": 100,
@@ -82,12 +82,12 @@
   {
     "_id": "rifle-assault",
     "name": "Gépkarabély",
-    "type": "weapon",
+    "type": "Fegyver",
     "img": "icons/svg/sword.svg",
     "system": {
       "type": "medium",
       "damage": "2d4",
-      "range": { "short": 27, "long": 54 },
+      "range": "27/54 m",
       "cost": 450,
       "maxUpgrade": 4,
       "upgradeCost": 225,
@@ -98,12 +98,12 @@
   {
     "_id": "shotgun",
     "name": "Sörétes Puska",
-    "type": "weapon",
+    "type": "Fegyver",
     "img": "icons/svg/sword.svg",
     "system": {
       "type": "medium",
       "damage": "3d4+2",
-      "range": { "short": 4.5, "long": 0 },
+      "range": "4.5 m",
       "cost": 500,
       "maxUpgrade": 8,
       "upgradeCost": 250,
@@ -114,12 +114,12 @@
   {
     "_id": "rifle",
     "name": "Puska",
-    "type": "weapon",
+    "type": "Fegyver",
     "img": "icons/svg/sword.svg",
     "system": {
       "type": "medium",
       "damage": "1d4+2",
-      "range": { "short": 13.5, "long": 0 },
+      "range": "13.5 m",
       "cost": 500,
       "maxUpgrade": 8,
       "upgradeCost": 250,
@@ -130,12 +130,12 @@
   {
     "_id": "carbine",
     "name": "Karabély",
-    "type": "weapon",
+    "type": "Fegyver",
     "img": "icons/svg/sword.svg",
     "system": {
       "type": "medium",
       "damage": "2d6",
-      "range": { "short": 60, "long": 120 },
+      "range": "60/120 m",
       "cost": 600,
       "maxUpgrade": 6,
       "upgradeCost": 300,
@@ -146,12 +146,12 @@
   {
     "_id": "hmg",
     "name": "Géppuska",
-    "type": "weapon",
+    "type": "Fegyver",
     "img": "icons/svg/sword.svg",
     "system": {
       "type": "heavy",
       "damage": "4d4",
-      "range": { "short": 36, "long": 72 },
+      "range": "36/72 m",
       "cost": 900,
       "maxUpgrade": 8,
       "upgradeCost": 450,
@@ -162,12 +162,12 @@
   {
     "_id": "rotary-hmg",
     "name": "Forgó Nehézgépkarabély",
-    "type": "weapon",
+    "type": "Fegyver",
     "img": "icons/svg/sword.svg",
     "system": {
       "type": "heavy",
       "damage": "2d8+2",
-      "range": { "short": 27, "long": 54 },
+      "range": "27/54 m",
       "cost": 900,
       "maxUpgrade": 8,
       "upgradeCost": 450,
@@ -178,12 +178,12 @@
   {
     "_id": "sniper",
     "name": "Mesterlövészpuska",
-    "type": "weapon",
+    "type": "Fegyver",
     "img": "icons/svg/sword.svg",
     "system": {
       "type": "heavy",
       "damage": "3d6",
-      "range": { "short": 210, "long": 420 },
+      "range": "210/420 m",
       "cost": 1250,
       "maxUpgrade": 12,
       "upgradeCost": 625,
@@ -194,12 +194,12 @@
   {
     "_id": "rocket-launcher",
     "name": "Rakétavető",
-    "type": "weapon",
+    "type": "Fegyver",
     "img": "icons/svg/sword.svg",
     "system": {
       "type": "heavy",
       "damage": "3d10+5",
-      "range": { "short": 48, "long": 96 },
+      "range": "48/96 m",
       "cost": 1500,
       "maxUpgrade": 0,
       "upgradeCost": 0,
@@ -210,12 +210,12 @@
   {
     "_id": "grenade-kinetic",
     "name": "Kinetikus Gránát",
-    "type": "weapon",
+    "type": "Fegyver",
     "img": "icons/svg/sword.svg",
     "system": {
       "type": "thrown",
       "damage": "3d6",
-      "range": { "short": 13.5, "long": 0 },
+      "range": "13.5 m",
       "cost": 30,
       "maxUpgrade": 0,
       "upgradeCost": 0,
@@ -226,12 +226,12 @@
   {
     "_id": "grenade-flash",
     "name": "Villanógránát",
-    "type": "weapon",
+    "type": "Fegyver",
     "img": "icons/svg/sword.svg",
     "system": {
       "type": "thrown",
       "damage": "",
-      "range": { "short": 13.5, "long": 0 },
+      "range": "13.5 m",
       "cost": 25,
       "maxUpgrade": 0,
       "upgradeCost": 0,
@@ -242,12 +242,12 @@
   {
     "_id": "grenade-emp",
     "name": "EMP Gránát",
-    "type": "weapon",
+    "type": "Fegyver",
     "img": "icons/svg/sword.svg",
     "system": {
       "type": "thrown",
       "damage": "",
-      "range": { "short": 13.5, "long": 0 },
+      "range": "13.5 m",
       "cost": 50,
       "maxUpgrade": 0,
       "upgradeCost": 0,
@@ -258,12 +258,12 @@
   {
     "_id": "grenade-incendiary",
     "name": "Gyújtógránát",
-    "type": "weapon",
+    "type": "Fegyver",
     "img": "icons/svg/sword.svg",
     "system": {
       "type": "thrown",
       "damage": "2d4+2",
-      "range": { "short": 13.5, "long": 0 },
+      "range": "13.5 m",
       "cost": 75,
       "maxUpgrade": 0,
       "upgradeCost": 0,
@@ -274,12 +274,12 @@
   {
     "_id": "c4",
     "name": "C4",
-    "type": "weapon",
+    "type": "Fegyver",
     "img": "icons/svg/sword.svg",
     "system": {
       "type": "thrown",
       "damage": "3d12+6",
-      "range": { "short": 13.5, "long": 30 },
+      "range": "13.5/30 m",
       "cost": 100,
       "maxUpgrade": 0,
       "upgradeCost": 0,
@@ -290,12 +290,12 @@
   {
     "_id": "mine",
     "name": "Akna",
-    "type": "weapon",
+    "type": "Fegyver",
     "img": "icons/svg/sword.svg",
     "system": {
       "type": "thrown",
       "damage": "3d10+3",
-      "range": { "short": 1.5, "long": 0 },
+      "range": "1.5 m",
       "cost": 75,
       "maxUpgrade": 0,
       "upgradeCost": 0,

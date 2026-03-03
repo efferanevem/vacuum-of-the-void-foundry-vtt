@@ -3,49 +3,51 @@
     <img class="profile" src="{{item.img}}" data-edit="img" title="{{item.name}}" />
     <div class="header-fields">
       <h1 class="item-name">
-        <input name="name" type="text" value="{{item.name}}" placeholder="Weapon Name" />
+        <input name="name" type="text" value="{{item.name}}" placeholder="Fegyver neve" />
       </h1>
-      <div class="item-type">
-        <label>Típus</label>
-        <select name="system.type">
-          <option value="light" {{#if (eq system.type "light")}}selected{{/if}}>Könnyű</option>
-          <option value="medium" {{#if (eq system.type "medium")}}selected{{/if}}>Közepes</option>
-          <option value="heavy" {{#if (eq system.type "heavy")}}selected{{/if}}>Nehéz</option>
-          <option value="thrown" {{#if (eq system.type "thrown")}}selected{{/if}}>Dobható</option>
-        </select>
-      </div>
     </div>
   </header>
 
   <section class="sheet-body">
     <div class="weapon-grid">
       <div class="field">
+        <label>Típus</label>
+        <select name="system.type">
+          <option value="kinetic" {{#if (eq system.type "kinetic")}}selected{{/if}}>Kinetikus</option>
+          <option value="projectile" {{#if (eq system.type "projectile")}}selected{{/if}}>Lövedékes</option>
+          <option value="blade" {{#if (eq system.type "blade")}}selected{{/if}}>Pengés</option>
+          <option value="explosive" {{#if (eq system.type "explosive")}}selected{{/if}}>Robbanó</option>
+          <option value="other" {{#if (eq system.type "other")}}selected{{/if}}>Egyéb</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Méret</label>
+        <select name="system.size">
+          <option value="light" {{#if (eq system.size "light")}}selected{{/if}}>Könnyű</option>
+          <option value="medium" {{#if (eq system.size "medium")}}selected{{/if}}>Közepes</option>
+          <option value="heavy" {{#if (eq system.size "heavy")}}selected{{/if}}>Nehéz</option>
+          <option value="thrown" {{#if (eq system.size "thrown")}}selected{{/if}}>Dobható</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Bónusz</label>
+        <input type="text" name="system.bonus" value="{{system.bonus}}" placeholder="0" />
+      </div>
+      <div class="field">
         <label>Sebzés</label>
         <input type="text" name="system.damage" value="{{system.damage}}" placeholder="pl. 1d6+2" />
       </div>
       <div class="field">
-        <label>Hatótáv (rövid)</label>
-        <input type="number" step="0.5" name="system.range.short" value="{{system.range.short}}" />
+        <label>Hatótáv</label>
+        <input type="text" name="system.range" value="{{system.range}}" placeholder="27/54 m" />
       </div>
       <div class="field">
-        <label>Hatótáv (hosszú)</label>
-        <input type="number" step="0.5" name="system.range.long" value="{{system.range.long}}" />
-      </div>
-      <div class="field">
-        <label>Ár (cr)</label>
-        <input type="number" name="system.cost" value="{{system.cost}}" />
-      </div>
-      <div class="field">
-        <label>Max. Fejlesztés</label>
-        <input type="number" name="system.maxUpgrade" value="{{system.maxUpgrade}}" />
-      </div>
-      <div class="field">
-        <label>Fejlesztés ára</label>
-        <input type="number" name="system.upgradeCost" value="{{system.upgradeCost}}" />
-      </div>
-      <div class="field">
-        <label>Harcképzettség próba</label>
-        <input type="number" name="system.skillDifficulty" value="{{system.skillDifficulty}}" />
+        <label>Lőszer (db)</label>
+        {{#if (eq system.type "projectile")}}
+          <input type="number" name="system.quantity" value="{{system.quantity}}" min="0" placeholder="0" />
+        {{else}}
+          <input type="number" name="system.quantity" value="" min="0" readonly placeholder="-" />
+        {{/if}}
       </div>
     </div>
 

@@ -22,7 +22,7 @@ Hooks.once("init", () => {
 
   // Register item data models
   CONFIG.Item.dataModels ??= {};
-  CONFIG.Item.dataModels.weapon = WeaponDataModel;
+  CONFIG.Item.dataModels.Fegyver = WeaponDataModel;
   CONFIG.Item.dataModels.microchip = MicrochipDataModel;
   CONFIG.Item.dataModels.ability = AbilityDataModel;
 
@@ -36,6 +36,9 @@ Hooks.once("init", () => {
   CONFIG.Actor.typeLabels ??= {};
   CONFIG.Actor.typeLabels.Karakter = "Karakter";
 
+  CONFIG.Item.typeLabels ??= {};
+  CONFIG.Item.typeLabels.Fegyver = "Fegyver";
+
   foundry.documents.collections.Actors.unregisterSheet("core", foundry.applications.sheets.ActorSheetV2);
   foundry.documents.collections.Actors.registerSheet("vacuum-of-the-void", VoidKarakterSheet, {
     types: ["Karakter"],
@@ -45,9 +48,9 @@ Hooks.once("init", () => {
 
   // Register item sheets
   foundry.documents.collections.Items.registerSheet("vacuum-of-the-void", VoidWeaponSheet, {
-    types: ["weapon"],
+    types: ["Fegyver"],
     makeDefault: true,
-    label: "Void Weapon"
+    label: "VOTV.FegyverSheet"
   });
   foundry.documents.collections.Items.registerSheet("vacuum-of-the-void", VoidMicrochipSheet, {
     types: ["microchip"],

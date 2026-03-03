@@ -6,12 +6,12 @@ export class VoidWeaponSheet extends foundry.applications.api.HandlebarsApplicat
   });
 
   static DEFAULT_OPTIONS = foundry.utils.mergeObject(super.DEFAULT_OPTIONS, {
-    classes: ["vacuum-of-the-void", "sheet", "item", "weapon"],
+    classes: ["vacuum-of-the-void", "sheet", "item", "Fegyver"],
     template: "systems/vacuum-of-the-void/templates/item/weapon-sheet.hbs",
     width: 550,
     minWidth: 550,
     height: 400,
-    form: foundry.utils.mergeObject(super.DEFAULT_OPTIONS?.form ?? {}, { submitOnChange: true })
+    form: foundry.utils.mergeObject(super.DEFAULT_OPTIONS?.form ?? {}, { submitOnChange: false })
   });
 
   _initializeApplicationOptions(options) {
@@ -44,20 +44,11 @@ export class VoidWeaponSheet extends foundry.applications.api.HandlebarsApplicat
       if (!isOurForm(form)) return;
       doSubmit(form);
     };
-    sheet._votvInput = (ev) => {
-      const form = ev.target?.form ?? ev.target?.closest?.("form");
-      if (!isOurForm(form)) return;
-      clearTimeout(sheet._votvInputDebounce);
-      sheet._votvInputDebounce = setTimeout(() => doSubmit(form), 300);
-    };
     document.body.addEventListener("change", sheet._votvChange, true);
-    document.body.addEventListener("input", sheet._votvInput, true);
   }
 
   _tearDown(options) {
     document.body.removeEventListener("change", this._votvChange, true);
-    document.body.removeEventListener("input", this._votvInput, true);
-    clearTimeout(this._votvInputDebounce);
     return super._tearDown?.(options);
   }
 
@@ -66,6 +57,8 @@ export class VoidWeaponSheet extends foundry.applications.api.HandlebarsApplicat
     for (const el of form.elements) {
       if (!el.name || el.disabled) continue;
       if (el.type === "radio" && !el.checked) continue;
+      // Ne írjuk felül az img mezőt a formból (data-edit="img" kezelése külön van)
+      if (el.name === "img") continue;
       let value;
       if (el.type === "checkbox") value = el.checked;
       else if (el.type === "number") value = el.value === "" ? 0 : Number(el.value);
@@ -76,9 +69,14 @@ export class VoidWeaponSheet extends foundry.applications.api.HandlebarsApplicat
   }
 
   async _prepareContext(options) {
-    let context = await super._prepareContext(options);
-    context = context ?? {};
-    context.system = this.item.system;
+    const context = await super._prepareContext(options) ?? {};
+    context.item = this.document;
+    const sys = foundry.utils.deepClone(this.document.system ?? {});
+    // Hatótáv: a sablon mindig szöveget kapjon (ne [object Object]).
+    if (typeof sys.range !== "string" || sys.range === "[object Object]") {
+      sys.range = "";
+    }
+    context.system = sys;
     return context;
   }
 }

@@ -254,7 +254,7 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
     });
 
     const inventory = inventoryItems.map(item => {
-      const isWeapon = item.type === "weapon";
+      const isWeapon = item.type === "Fegyver";
       const isMicrochip = item.type === "microchip";
       let slotAssignment = 0;
       let slotBonus = "";
@@ -275,9 +275,7 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
         else if (microchipSlot3Id === item.id) microchipSlotKey = "slot3";
       }
       const damage = isWeapon && item.system?.damage ? item.system.damage : "";
-      const rangeShort = isWeapon && item.system?.range?.short != null ? item.system.range.short : null;
-      const rangeLong = isWeapon && item.system?.range?.long != null ? item.system.range.long : null;
-      const rangeStr = rangeShort != null && rangeLong != null ? `${rangeShort} / ${rangeLong} m` : "";
+      const rangeStr = isWeapon && typeof item.system?.range === "string" ? (item.system.range || "").trim() : "";
       const slotBonusNum = slotKey ? (Number(weapons[slotKey]?.bonus) || 0) : "";
       return {
         id: item.id,
@@ -297,7 +295,7 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
       };
     });
     context.actionsTable = inventory;
-    const weaponDocs = (this.actor.items?.contents ?? []).filter(i => i.type === "weapon");
+    const weaponDocs = (this.actor.items?.contents ?? []).filter(i => i.type === "Fegyver");
     const weaponItems = weaponDocs.map(i => ({ id: i.id, name: i.name, img: i.img }));
     context.weaponItems = weaponItems;
     const emptyLabel = "— Nincs fegyver —";
@@ -323,15 +321,13 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
       };
     });
     // Felszerelés: Fegyverek táblázat (csak felszerelt fegyverek, teljes adatokkal)
-    const weaponTypeLabels = { light: "Könnyű", medium: "Közepes", heavy: "Nehéz", thrown: "Dobható" };
+    const weaponTypeLabels = { kinetic: "Kinetikus", projectile: "Lövedékes", blade: "Pengés", explosive: "Robbanó", other: "Egyéb" };
     context.weaponsTable = equippedSlotKeys.map((slotKey) => {
       const slotData = weapons[slotKey] ?? {};
       const itemId = (slotData.itemId ?? "").trim();
       const item = weaponDocs.find(w => w.id === itemId);
       const sys = item?.system ?? {};
-      const rangeShort = sys.range?.short;
-      const rangeLong = sys.range?.long;
-      const rangeStr = rangeShort != null && rangeLong != null ? `${rangeShort} / ${rangeLong} m` : "";
+      const rangeStr = typeof sys.range === "string" ? (sys.range || "").trim() : "";
       const typeRaw = sys.type ?? "";
       const typeLabel = (weaponTypeLabels[typeRaw] ?? typeRaw) || "—";
       return {
@@ -555,7 +551,7 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
       const actor = this.actor;
       const item = actor.items.get(itemId);
       const updates = {};
-      if (item?.type === "weapon") {
+      if (item?.type === "Fegyver") {
         const weapons = actor.system.weapons ?? {};
         const slotOrderRaw = (weapons.slotOrder ?? "").trim();
         const ALL_WEAPON_SLOTS = ["slot1", "slot2", "slot3", "slot4", "slot5", "slot6", "slot7", "slot8", "slot9", "slot10"];
@@ -626,7 +622,8 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
           "system.weapons.slotOrder": slotKeys.join(","),
           [`system.weapons.${targetSlot}.itemId`]: itemId,
           [`system.weapons.${targetSlot}.name`]: item?.name ?? "",
-          [`system.weapons.${targetSlot}.damage`]: item?.system?.damage ?? ""
+          [`system.weapons.${targetSlot}.damage`]: item?.system?.damage ?? "",
+          [`system.weapons.${targetSlot}.bonus`]: item?.system?.bonus ?? ""
         };
         await this.actor.update(updates);
       } else if (currentSlotKey) {
@@ -1008,7 +1005,7 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
     }
     if (json?.type !== "Item" || !json?.uuid) return;
     const doc = await fromUuid(json.uuid);
-    if (!doc || doc.type !== "weapon") return;
+    if (!doc || doc.type !== "Fegyver") return;
     let itemId = doc.id;
     if (doc.parent?.id !== this.actor.id) {
       const created = await this.actor.createEmbeddedDocuments("Item", [doc.toObject()]);
@@ -1017,7 +1014,8 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
     const updates = {
       [`system.weapons.${slot}.itemId`]: itemId,
       [`system.weapons.${slot}.name`]: doc.name,
-      [`system.weapons.${slot}.damage`]: doc.system?.damage ?? ""
+      [`system.weapons.${slot}.damage`]: doc.system?.damage ?? "",
+      [`system.weapons.${slot}.bonus`]: doc.system?.bonus ?? ""
     };
     await this.actor.update(updates);
   }
@@ -1290,7 +1288,7 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
     const weapons = this.actor.system.weapons ?? {};
     const slotData = weapons[slot] ?? {};
     const skills = this.actor.system.skills ?? {};
-    const ownedWeapons = this.actor.items.filter(i => i.type === "weapon");
+    const ownedWeapons = this.actor.items.filter(i => i.type === "Fegyver");
     let item = null;
     if (slotData.itemId) {
       item = ownedWeapons.find(w => w.id === slotData.itemId) ?? null;
@@ -1299,9 +1297,9 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
     const name = (item && item.name) || slotData.name || `Fegyver (${slot})`;
     const weaponBonus = Number(slotData.bonus || 0) || 0;
 
-    // Use different skills based on weapon type: firearms vs thrown (grenades)
-    const weaponType = item?.system?.type || "light";
-    const skillKey = weaponType === "thrown" ? "grenadeUse" : "firearms";
+    // Robbanó (explosive) → Kézifegyver használat, egyéb → Löveghasználat
+    const weaponType = item?.system?.type || "kinetic";
+    const skillKey = weaponType === "explosive" ? "grenadeUse" : "firearms";
     const skillBonus = Number(skills[skillKey] || 0) || 0;
     const totalBonus = weaponBonus + skillBonus;
     const modifier = totalBonus !== 0 ? (totalBonus > 0 ? `+${totalBonus}` : `${totalBonus}`) : "";
@@ -1321,7 +1319,7 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
 
   async _rollWeaponDamage(itemId) {
     const item = this.actor.items.get(itemId);
-    if (!item || item.type !== "weapon") return;
+    if (!item || item.type !== "Fegyver") return;
     const damageFormula = (item.system?.damage ?? "").trim();
     if (!damageFormula) return;
 
