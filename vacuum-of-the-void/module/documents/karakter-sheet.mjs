@@ -947,6 +947,20 @@
       await this._postAbilityToChat(itemId);
     });
 
+    $html.on("click", ".karakter-item-chat", async ev => {
+      ev.preventDefault();
+      const btn = ev.currentTarget;
+      const itemId = btn.dataset.itemId;
+      if (!itemId) return;
+      const item = this.actor.items.get(itemId);
+      if (!item) return;
+      if (item.type === "Kepesseg" || item.type === "ability") {
+        await this._postAbilityToChat(itemId);
+      } else if (item.type === "MikroChip" || item.type === "Egyeb") {
+        await this._postItemToChat(itemId);
+      }
+    });
+
     // Lőszer mező: szélesség tartalomhoz (focus / input / blur mind ugyanazzal a logikával)
     $html.on("focus input blur", ".karakter-weapon-quantity-input", ev => {
       this._resizeWeaponQuantityInput(ev.currentTarget);
@@ -1452,6 +1466,30 @@
     const w = clone.scrollWidth;
     document.body.removeChild(clone);
     input.style.width = `${Math.max(minW, w)}px`;
+  }
+
+  async _postItemToChat(itemId) {
+    const item = this.actor.items.get(itemId);
+    if (!item || (item.type !== "MikroChip" && item.type !== "Egyeb")) return;
+    const description = (item.system?.description ?? "").trim();
+    let typeLabel;
+    if (item.type === "MikroChip") {
+      const abilityType = item.system?.abilityType ?? "passive";
+      typeLabel = (abilityType === "active" ? "Aktív" : "Passzív") + " Mikro-Chip";
+    } else {
+      typeLabel = "Egyéb Információ";
+    }
+    const descLine = description ? `<p>${description}</p>` : "";
+    const content = `
+      <h2>${item.name}</h2>
+      <p><strong>Típus:</strong> ${typeLabel}</p>
+      ${descLine}
+    `;
+    return ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      content,
+      flags: { "vacuum-of-the-void": { itemId: item.id, itemType: item.type } }
+    });
   }
 
   async _postAbilityToChat(itemId) {

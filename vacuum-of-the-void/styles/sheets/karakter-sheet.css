@@ -930,6 +930,36 @@
   color: var(--votv-border-accent);
 }
 
+/* Chat gomb (Mikro-Chip slotok, Mikro-Chip táblázat, Egyéb infó lista) – ugyanúgy néz ki mint a képesség chat */
+.votv.karakter-sheet .karakter-item-chat {
+  border-radius: 2px;
+  padding: 2px 4px;
+  font-size: 11px;
+  cursor: pointer;
+  border: 1px solid var(--votv-border-muted);
+  background: transparent;
+  color: var(--votv-text-muted);
+  min-width: 26px;
+  height: 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.votv.karakter-sheet .karakter-item-chat:hover {
+  border-color: var(--votv-border-accent);
+  color: var(--votv-border-accent);
+}
+
+.votv.karakter-sheet .karakter-equipment-cell-delete .karakter-item-chat {
+  margin-right: 4px;
+}
+
+.votv.karakter-sheet .karakter-notes-egyeb-row .karakter-item-chat {
+  margin-right: 4px;
+}
+
 .votv.karakter-sheet .karakter-ability-pill-name {
   cursor: pointer;
 }
@@ -1557,7 +1587,7 @@
   border-radius: var(--votv-radius);
   background: rgba(3, 6, 10, 0.5);
   transition: border-color 0.15s ease, background 0.15s ease;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .votv.karakter-sheet .karakter-microchip-slot.karakter-microchip-slot-drag-over {

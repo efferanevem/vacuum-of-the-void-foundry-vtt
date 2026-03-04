@@ -422,6 +422,7 @@
               {{/each}}
             </ul>
           </div>
+          {{#if microchip1ItemId}}<button type="button" class="karakter-item-chat" data-item-id="{{microchip1ItemId}}" title="Chat-be küldés"><i class="fas fa-comment-dots"></i></button>{{/if}}
         </div>
         <div class="karakter-microchip-slot" data-slot="slot2" data-drop-zone="microchip">
           <input type="checkbox" name="system.gear.microchips.slot2.active" {{checked system.gear.microchips.slot2.active}} title="Aktív" class="karakter-microchip-slot-active" data-slot="slot2" />
@@ -438,6 +439,7 @@
               {{/each}}
             </ul>
           </div>
+          {{#if microchip2ItemId}}<button type="button" class="karakter-item-chat" data-item-id="{{microchip2ItemId}}" title="Chat-be küldés"><i class="fas fa-comment-dots"></i></button>{{/if}}
         </div>
         <div class="karakter-microchip-slot" data-slot="slot3" data-drop-zone="microchip">
           <input type="checkbox" name="system.gear.microchips.slot3.active" {{checked system.gear.microchips.slot3.active}} title="Aktív" class="karakter-microchip-slot-active" data-slot="slot3" />
@@ -454,6 +456,7 @@
               {{/each}}
             </ul>
           </div>
+          {{#if microchip3ItemId}}<button type="button" class="karakter-item-chat" data-item-id="{{microchip3ItemId}}" title="Chat-be küldés"><i class="fas fa-comment-dots"></i></button>{{/if}}
         </div>
       </div>
     </section>
@@ -571,6 +574,7 @@
                 <td class="karakter-equipment-cell-kp">{{#if this.isActive}}{{this.kp}}{{else}}—{{/if}}</td>
                 <td class="karakter-equipment-cell-desc">{{this.description}}</td>
                 <td class="karakter-equipment-cell-delete">
+                  <button type="button" class="karakter-item-chat" data-item-id="{{this.itemId}}" title="Chat-be küldés"><i class="fas fa-comment-dots"></i></button>
                   <button type="button" class="karakter-equipment-delete karakter-microchip-delete" data-item-id="{{this.itemId}}" data-slot-key="{{this.slotKey}}" data-actor-id="{{this.actorId}}" title="Alt+klikk: Törlés az inventory-ból">✕</button>
                 </td>
               </tr>
@@ -626,6 +630,7 @@
                   <span class="karakter-inventory-item-name karakter-notes-egyeb-name" data-item-id="{{this.itemId}}">{{this.name}}</span>
                   {{#if this.description}}<p class="karakter-notes-egyeb-desc">{{this.description}}</p>{{/if}}
                 </div>
+                <button type="button" class="karakter-item-chat" data-item-id="{{this.itemId}}" title="Chat-be küldés"><i class="fas fa-comment-dots"></i></button>
                 <button type="button" class="karakter-equipment-delete karakter-item-delete" data-item-id="{{this.itemId}}" data-actor-id="{{this.actorId}}" title="Alt+klikk: Törlés">✕</button>
               </div>
             {{else}}
