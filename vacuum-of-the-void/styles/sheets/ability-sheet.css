@@ -1,49 +1,49 @@
 /* Ability item sheet – specific styles only */
 
-.vacuum-of-the-void.sheet.item.Képesség .sheet-header {
+.vacuum-of-the-void.sheet.item.kepesseg .sheet-header {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.vacuum-of-the-void.sheet.item.Képesség .sheet-header .profile {
+.vacuum-of-the-void.sheet.item.kepesseg .sheet-header .profile {
   width: 64px;
   height: 64px;
   object-fit: cover;
 }
 
-.vacuum-of-the-void.sheet.item.Képesség .header-fields {
+.vacuum-of-the-void.sheet.item.kepesseg .header-fields {
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
-.vacuum-of-the-void.sheet.item.Képesség .item-name input {
+.vacuum-of-the-void.sheet.item.kepesseg .item-name input {
   width: 100%;
 }
 
-.vacuum-of-the-void.sheet.item.Képesség .item-type {
+.vacuum-of-the-void.sheet.item.kepesseg .item-type {
   display: flex;
   flex-direction: row;
   align-items: center;
   gap: 6px;
 }
 
-.vacuum-of-the-void.sheet.item.Képesség .sheet-body {
+.vacuum-of-the-void.sheet.item.kepesseg .sheet-body {
   margin-top: 8px;
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.vacuum-of-the-void.sheet.item.Képesség .ability-grid {
+.vacuum-of-the-void.sheet.item.kepesseg .ability-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 8px;
 }
 
-.vacuum-of-the-void.sheet.item.Képesség .field label {
+.vacuum-of-the-void.sheet.item.kepesseg .field label {
   display: block;
   margin-bottom: 2px;
 }

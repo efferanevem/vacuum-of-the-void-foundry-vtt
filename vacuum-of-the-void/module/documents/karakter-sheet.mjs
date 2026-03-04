@@ -247,7 +247,7 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
     const microchipSlot3Id = (microchips.slot3?.itemId ?? "").trim();
 
     // Inventory table: show all items except abilities (those are managed via the Képességek grid)
-    const inventoryItems = this.actor.items.contents.filter(i => i.type !== "Képesség").slice().sort((a, b) => {
+    const inventoryItems = this.actor.items.contents.filter(i => i.type !== "Kepesseg" && i.type !== "ability").slice().sort((a, b) => {
       const sa = typeof a.sort === "number" ? a.sort : 0;
       const sb = typeof b.sort === "number" ? b.sort : 0;
       return sa - sb;
@@ -1010,11 +1010,7 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
   }
 
   async _onDropItem(event, data) {
-    const target = event.target;
-    const slotEl = target?.closest?.(".karakter-ability-slot-single");
-    const areaEl = target?.closest?.(".karakter-ability-area");
-
-    // Elsőként próbáljuk abilityként értelmezni a droppot, függetlenül attól, hova húzták.
+    // Képesség dropp: bárhova húzva a lapra, a típusa (kind) alapján kerül a megfelelő helyre.
     if (data) {
       let uuid =
         data.uuid ??
@@ -1033,42 +1029,18 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
 
       if (uuid) {
         const doc = await fromUuid(uuid);
-        if (doc && doc.documentName === "Item" && doc.type === "Képesség") {
-          // Győződjünk meg róla, hogy az ability az adott actornál is létezik.
+        if (doc && doc.documentName === "Item" && (doc.type === "Kepesseg" || doc.type === "ability")) {
           let itemId = doc.id;
           if (doc.parent?.id !== this.actor.id) {
-            const created = await this.actor.createEmbeddedDocuments("Item", [doc.toObject()]);
+            const itemData = foundry.utils.mergeObject(doc.toObject(), { type: "Kepesseg" });
+            const created = await this.actor.createEmbeddedDocuments("Item", [itemData]);
             itemId = created[0]?.id ?? itemId;
           }
 
           const kind = (doc.system?.kind ?? "passive").toString();
           const abilities = this.actor.system.abilities ?? {};
 
-          // Ha konkrét ability slot/area fölé húzták, azt részesítsük előnyben.
-          if (slotEl) {
-            const slot = slotEl.dataset.slot;
-            if (slot) {
-              await this.actor.update({
-                [`system.abilities.${slot}.itemId`]: itemId,
-                [`system.abilities.${slot}.name`]: doc.name
-              });
-              return;
-            }
-          } else if (areaEl) {
-            const area = areaEl.dataset.area;
-            if (area) {
-              const current = Array.isArray(abilities[area]?.items)
-                ? abilities[area].items.slice()
-                : Array.isArray(abilities[area])
-                ? abilities[area].slice()
-                : [];
-              if (!current.includes(itemId)) current.push(itemId);
-              await this.actor.update({ [`system.abilities.${area}.items`]: current });
-              return;
-            }
-          }
-
-          // Egyébként a képesség típusa alapján döntjük el a célhelyet.
+          // Mindig a képesség típusa alapján: Faji / Háttér → egy slot, Aktív / Passzív → lista.
           if (kind === "species") {
             await this.actor.update({
               "system.abilities.faji.itemId": itemId,
@@ -1306,7 +1278,7 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
 
   async _postAbilityToChat(itemId) {
     const item = this.actor.items.get(itemId);
-    if (!item || item.type !== "Képesség") return;
+    if (!item || (item.type !== "Kepesseg" && item.type !== "ability")) return;
     const kind = item.system?.kind ?? "passive";
     const kp = Number(item.system?.kp ?? 0) || 0;
     const description = (item.system?.description ?? "").trim();
@@ -1364,11 +1336,12 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
     const json = this._parseAbilityDrop(ev);
     if (!json || !json.uuid) return;
     const doc = await fromUuid(json.uuid);
-    if (!doc || doc.type !== "Képesség") return;
+    if (!doc || (doc.type !== "Kepesseg" && doc.type !== "ability")) return;
 
     let itemId = doc.id;
     if (doc.parent?.id !== this.actor.id) {
-      const created = await this.actor.createEmbeddedDocuments("Item", [doc.toObject()]);
+      const itemData = foundry.utils.mergeObject(doc.toObject(), { type: "Kepesseg" });
+      const created = await this.actor.createEmbeddedDocuments("Item", [itemData]);
       itemId = created[0]?.id ?? itemId;
     }
     await this.actor.update({
@@ -1390,11 +1363,12 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
     const json = this._parseAbilityDrop(ev);
     if (!json || !json.uuid) return;
     const doc = await fromUuid(json.uuid);
-    if (!doc || doc.type !== "Képesség") return;
+    if (!doc || (doc.type !== "Kepesseg" && doc.type !== "ability")) return;
 
     let itemId = doc.id;
     if (doc.parent?.id !== this.actor.id) {
-      const created = await this.actor.createEmbeddedDocuments("Item", [doc.toObject()]);
+      const itemData = foundry.utils.mergeObject(doc.toObject(), { type: "Kepesseg" });
+      const created = await this.actor.createEmbeddedDocuments("Item", [itemData]);
       itemId = created[0]?.id ?? itemId;
     }
     const abilities = this.actor.system.abilities ?? {};
