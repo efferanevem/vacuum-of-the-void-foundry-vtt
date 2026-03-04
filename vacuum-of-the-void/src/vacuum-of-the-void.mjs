@@ -24,7 +24,7 @@ Hooks.once("init", () => {
   CONFIG.Item.dataModels ??= {};
   CONFIG.Item.dataModels.Fegyver = WeaponDataModel;
   CONFIG.Item.dataModels.microchip = MicrochipDataModel;
-  CONFIG.Item.dataModels.ability = AbilityDataModel;
+  CONFIG.Item.dataModels["Képesség"] = AbilityDataModel;
 
   // Trackable attributes for token bars
   CONFIG.Actor.trackableAttributes ??= {};
@@ -38,7 +38,7 @@ Hooks.once("init", () => {
 
   CONFIG.Item.typeLabels ??= {};
   CONFIG.Item.typeLabels.Fegyver = "Fegyver";
-  CONFIG.Item.typeLabels.ability = "Képesség";
+  CONFIG.Item.typeLabels["Képesség"] = "Képesség";
 
   foundry.documents.collections.Actors.unregisterSheet("core", foundry.applications.sheets.ActorSheetV2);
   foundry.documents.collections.Actors.registerSheet("vacuum-of-the-void", VoidKarakterSheet, {
@@ -59,7 +59,7 @@ Hooks.once("init", () => {
     label: "Void Microchip"
   });
   foundry.documents.collections.Items.registerSheet("vacuum-of-the-void", VoidAbilitySheet, {
-    types: ["ability"],
+    types: ["Képesség"],
     makeDefault: true,
     label: "VOTV.KepessegSheet"
   });

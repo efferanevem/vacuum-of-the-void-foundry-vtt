@@ -6,7 +6,7 @@ export class VoidAbilitySheet extends foundry.applications.api.HandlebarsApplica
   });
 
   static DEFAULT_OPTIONS = foundry.utils.mergeObject(super.DEFAULT_OPTIONS, {
-    classes: ["vacuum-of-the-void", "sheet", "item", "ability"],
+    classes: ["vacuum-of-the-void", "sheet", "item", "Képesség"],
     template: "systems/vacuum-of-the-void/templates/item/ability-sheet.hbs",
     width: 500,
     minWidth: 500,

@@ -7,7 +7,7 @@
 
 .vacuum-of-the-void.sheet.item .votv-weapon-sheet,
 .vacuum-of-the-void.sheet.item .votv-microchip-sheet,
-.vacuum-of-the-void.sheet.item .votv-ability-sheet {
+.vacuum-of-the-void.sheet.item .votv-kepesseg-sheet {
   display: flex;
   flex-direction: column;
   gap: 10px;

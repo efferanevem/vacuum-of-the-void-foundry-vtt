@@ -247,7 +247,7 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
     const microchipSlot3Id = (microchips.slot3?.itemId ?? "").trim();
 
     // Inventory table: show all items except abilities (those are managed via the Képességek grid)
-    const inventoryItems = this.actor.items.contents.filter(i => i.type !== "ability").slice().sort((a, b) => {
+    const inventoryItems = this.actor.items.contents.filter(i => i.type !== "Képesség").slice().sort((a, b) => {
       const sa = typeof a.sort === "number" ? a.sort : 0;
       const sb = typeof b.sort === "number" ? b.sort : 0;
       return sa - sb;
@@ -1033,7 +1033,7 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
 
       if (uuid) {
         const doc = await fromUuid(uuid);
-        if (doc && doc.documentName === "Item" && doc.type === "ability") {
+        if (doc && doc.documentName === "Item" && doc.type === "Képesség") {
           // Győződjünk meg róla, hogy az ability az adott actornál is létezik.
           let itemId = doc.id;
           if (doc.parent?.id !== this.actor.id) {
@@ -1306,7 +1306,7 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
 
   async _postAbilityToChat(itemId) {
     const item = this.actor.items.get(itemId);
-    if (!item || item.type !== "ability") return;
+    if (!item || item.type !== "Képesség") return;
     const kind = item.system?.kind ?? "passive";
     const kp = Number(item.system?.kp ?? 0) || 0;
     const description = (item.system?.description ?? "").trim();
@@ -1364,7 +1364,7 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
     const json = this._parseAbilityDrop(ev);
     if (!json || !json.uuid) return;
     const doc = await fromUuid(json.uuid);
-    if (!doc || doc.type !== "ability") return;
+    if (!doc || doc.type !== "Képesség") return;
 
     let itemId = doc.id;
     if (doc.parent?.id !== this.actor.id) {
@@ -1390,7 +1390,7 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
     const json = this._parseAbilityDrop(ev);
     if (!json || !json.uuid) return;
     const doc = await fromUuid(json.uuid);
-    if (!doc || doc.type !== "ability") return;
+    if (!doc || doc.type !== "Képesség") return;
 
     let itemId = doc.id;
     if (doc.parent?.id !== this.actor.id) {
