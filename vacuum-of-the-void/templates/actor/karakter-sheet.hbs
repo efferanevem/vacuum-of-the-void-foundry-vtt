@@ -580,11 +580,10 @@
       </div>
 
       <h3 class="karakter-equipment-table-title">Tárgyak</h3>
-      <div class="karakter-equipment-block">
+      <div class="karakter-equipment-block" data-drop-zone="targy">
         <table class="karakter-equipment-table karakter-equipment-items">
           <thead>
             <tr>
-              <th class="karakter-equipment-th-drag"></th>
               <th class="karakter-equipment-th-name">Név</th>
               <th class="karakter-equipment-th-qty">Mennyiség</th>
               <th class="karakter-equipment-th-desc">Leírás</th>
@@ -592,22 +591,23 @@
             </tr>
           </thead>
           <tbody>
-            {{#each generalItems}}
-              <tr class="karakter-equipment-row" data-item-index="{{@index}}">
-                <td class="karakter-equipment-cell-drag">
-                  <span class="karakter-equipment-drag-handle" data-item-index="{{@index}}" draggable="true" title="Átrendezés">⋮⋮</span>
+            {{#each itemsTable}}
+              <tr class="karakter-equipment-row" data-item-id="{{this.itemId}}">
+                <td class="karakter-equipment-cell-name">
+                  {{#if this.img}}<img class="karakter-equipment-icon" src="{{this.img}}" alt="" data-item-id="{{this.itemId}}" />{{/if}}
+                  <span class="karakter-inventory-item-name" data-item-id="{{this.itemId}}">{{this.name}}</span>
                 </td>
-                <td class="karakter-equipment-cell-name"><input type="text" name="system.gear.generalItems.{{@index}}.name" value="{{this.name}}" placeholder="Név" /></td>
-                <td class="karakter-equipment-cell-qty"><input type="number" name="system.gear.generalItems.{{@index}}.quantity" value="{{this.quantity}}" min="0" /></td>
-                <td class="karakter-equipment-cell-desc"><input type="text" name="system.gear.generalItems.{{@index}}.description" value="{{this.description}}" placeholder="Leírás" /></td>
+                <td class="karakter-equipment-cell-qty">
+                  <input type="text" class="karakter-item-quantity-input" data-item-id="{{this.itemId}}" value="{{this.quantity}}" />
+                </td>
+                <td class="karakter-equipment-cell-desc">{{this.description}}</td>
                 <td class="karakter-equipment-cell-delete">
-                  <button type="button" class="karakter-equipment-delete karakter-item-remove" data-item-index="{{@index}}" title="Törlés">✕</button>
+                  <button type="button" class="karakter-equipment-delete karakter-item-delete" data-item-id="{{this.itemId}}" data-actor-id="{{this.actorId}}" title="Alt+klikk: Törlés az inventory-ból">✕</button>
                 </td>
               </tr>
             {{/each}}
           </tbody>
         </table>
-        <button type="button" class="karakter-equipment-add-row" data-gear-array="generalItems" title="Tárgy hozzáadása">+ Tárgy</button>
       </div>
     </section>
 

@@ -1741,6 +1741,33 @@
   white-space: nowrap;
 }
 
+/* Tárgyak táblázat: mint fegyver (név + mennyiség + leírás + törlés), nincs equipped; mennyiség mint lőszer */
+.votv.karakter-sheet .karakter-equipment-items .karakter-equipment-cell-name {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-bottom: 8px;
+}
+.votv.karakter-sheet .karakter-equipment-items .karakter-equipment-cell-name .karakter-inventory-item-name {
+  cursor: pointer;
+}
+.votv.karakter-sheet .karakter-equipment-items .karakter-equipment-th-qty {
+  width: 1%;
+  min-width: 7.5em;
+  white-space: nowrap;
+}
+.votv.karakter-sheet .karakter-equipment-items .karakter-equipment-cell-qty {
+  width: 1%;
+  min-width: 7.5em;
+  white-space: nowrap;
+}
+.votv.karakter-sheet .karakter-equipment-items .karakter-equipment-cell-qty .karakter-item-quantity-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 2px 4px;
+  text-align: center;
+}
+
 /* Equipment / inventory – four tables: Fegyverek, Páncél, Mikro-Chip, Tárgyak */
 .votv.karakter-sheet .karakter-equipment {
   grid-column: 1 / -1;

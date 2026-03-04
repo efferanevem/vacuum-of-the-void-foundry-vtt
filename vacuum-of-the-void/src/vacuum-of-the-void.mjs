@@ -1,5 +1,5 @@
-import { KarakterDataModel, WeaponDataModel, ShieldDataModel, MicrochipDataModel, AbilityDataModel } from "../module/data-models/index.mjs";
-import { VoidKarakterSheet, VoidWeaponSheet, VoidShieldSheet, VoidMicrochipSheet, VoidAbilitySheet } from "../module/documents.mjs";
+import { KarakterDataModel, WeaponDataModel, ShieldDataModel, MicrochipDataModel, AbilityDataModel, TargyDataModel } from "../module/data-models/index.mjs";
+import { VoidKarakterSheet, VoidWeaponSheet, VoidShieldSheet, VoidMicrochipSheet, VoidAbilitySheet, VoidTargySheet } from "../module/documents.mjs";
 
 const VOTV_DEFAULT_SCENE_BG = "systems/vacuum-of-the-void/assets/void-bg.jpg";
 
@@ -27,6 +27,7 @@ Hooks.once("init", () => {
   CONFIG.Item.dataModels.MikroChip = MicrochipDataModel;
   CONFIG.Item.dataModels.Kepesseg = AbilityDataModel;
   CONFIG.Item.dataModels.ability = AbilityDataModel;
+  CONFIG.Item.dataModels.Targy = TargyDataModel;
 
   // Trackable attributes for token bars
   CONFIG.Actor.trackableAttributes ??= {};
@@ -44,6 +45,7 @@ Hooks.once("init", () => {
   CONFIG.Item.typeLabels.MikroChip = "Mikro-Chip";
   CONFIG.Item.typeLabels.Kepesseg = "Képesség";
   CONFIG.Item.typeLabels.ability = "Képesség";
+  CONFIG.Item.typeLabels.Targy = "Tárgy";
 
   foundry.documents.collections.Actors.unregisterSheet("core", foundry.applications.sheets.ActorSheetV2);
   foundry.documents.collections.Actors.registerSheet("vacuum-of-the-void", VoidKarakterSheet, {
@@ -72,6 +74,11 @@ Hooks.once("init", () => {
     types: ["Kepesseg", "ability"],
     makeDefault: true,
     label: "VOTV.KepessegSheet"
+  });
+  foundry.documents.collections.Items.registerSheet("vacuum-of-the-void", VoidTargySheet, {
+    types: ["Targy"],
+    makeDefault: true,
+    label: "VOTV.TargySheet"
   });
 
   // Ha egy actort frissítenek, a nyitott VoidKarakterSheet lapok újrarajzolódjanak. Ne újrarajzoljunk, ha

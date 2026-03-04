@@ -4,3 +4,4 @@ export { WeaponDataModel } from "./weapon.mjs";
 export { ShieldDataModel } from "./shield.mjs";
 export { MicrochipDataModel } from "./microchip.mjs";
 export { AbilityDataModel } from "./ability.mjs";
+export { TargyDataModel } from "./targy.mjs";

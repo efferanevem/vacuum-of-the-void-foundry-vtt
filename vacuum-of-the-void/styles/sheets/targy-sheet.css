@@ -1,0 +1,36 @@
+/* Tárgy item sheet – ugyanaz a kialakítás mint a többi (pl. Mikro-Chip), csak a szükséges mezőkkel */
+
+.vacuum-of-the-void.sheet.item.Targy .sheet-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.vacuum-of-the-void.sheet.item.Targy .sheet-header .profile {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+}
+
+.vacuum-of-the-void.sheet.item.Targy .header-fields {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.vacuum-of-the-void.sheet.item.Targy .item-name input {
+  width: 100%;
+}
+
+.vacuum-of-the-void.sheet.item.Targy .sheet-body {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.vacuum-of-the-void.sheet.item.Targy .field label {
+  display: block;
+  margin-bottom: 2px;
+}

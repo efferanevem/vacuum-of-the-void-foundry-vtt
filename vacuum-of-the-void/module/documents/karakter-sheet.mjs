@@ -435,7 +435,22 @@
         equipped
       };
     });
-    context.generalItems = Array.isArray(this.actor.system?.gear?.generalItems) ? this.actor.system.gear.generalItems : [];
+    // Felszerelés: Tárgyak táblázat – Targy típusú itemek (mint fegyver, nincs equipped oszlop)
+    const targyDocs = (this.actor.items?.contents ?? []).filter(i => i.type === "Targy");
+    context.itemsTable = targyDocs.map((item) => {
+      const sys = item?.system ?? {};
+      const descRaw = (sys.description ?? "").trim();
+      const description = descRaw ? (descRaw.length > 60 ? descRaw.slice(0, 57) + "…" : descRaw) : "—";
+      const quantity = sys.quantity != null ? String(sys.quantity).trim() : "1";
+      return {
+        itemId: item.id,
+        actorId: this.actor.id,
+        name: item?.name ?? "—",
+        img: item?.img ?? "",
+        quantity,
+        description
+      };
+    });
     const microchipDocs = (this.actor.items?.contents ?? []).filter(i => i.type === "MikroChip");
     const microchipItems = microchipDocs.map(i => ({ id: i.id, name: i.name, img: i.img }));
     const emptyChipLabel = "— Nincs Mikro-Chip —";
@@ -1043,25 +1058,37 @@
       await this.actor.deleteEmbeddedDocuments("Item", [itemId]);
     });
 
-    // Felszerelés: tárgy sor hozzáadása (páncél nincs – itemekből jönnek)
-    $html.on("click", ".karakter-equipment-add-row", async ev => {
-      ev.preventDefault();
-      const arrayKey = ev.currentTarget.dataset.gearArray;
-      if (arrayKey === "generalItems") {
-        const items = Array.isArray(this.actor.system?.gear?.generalItems) ? [...this.actor.system.gear.generalItems] : [];
-        items.push({ name: "", quantity: 1, description: "" });
-        await this.actor.update({ "system.gear.generalItems": items });
-      }
+    // Tárgy: mennyiség mező – szélesség tartalomhoz (mint lőszer)
+    $html.on("focus input blur", ".karakter-item-quantity-input", ev => {
+      this._resizeWeaponQuantityInput(ev.currentTarget);
+    });
+    $html.find(".karakter-item-quantity-input").each((i, el) => {
+      this._resizeWeaponQuantityInput(el);
+    });
+    $html.on("change", ".karakter-item-quantity-input", async ev => {
+      const input = ev.currentTarget;
+      const itemId = (input.dataset.itemId ?? "").trim();
+      if (!itemId) return;
+      const item = this.actor.items.get(itemId);
+      if (!item || item.type !== "Targy") return;
+      const val = (input.value ?? "").trim();
+      await item.update({ "system.quantity": val });
+      setTimeout(() => {
+        const root = this.form ?? this.element;
+        const el = root?.querySelector(`.karakter-item-quantity-input[data-item-id="${itemId}"]`);
+        if (el) this._resizeWeaponQuantityInput(el);
+      }, 80);
     });
 
-    // Felszerelés: tárgy sor törlése
-    $html.on("click", ".karakter-item-remove", async ev => {
+    // Tárgy: törlés az inventory-ból (Alt+klikk)
+    $html.on("click", ".karakter-item-delete", async ev => {
       ev.preventDefault();
-      const idx = parseInt(ev.currentTarget.dataset.itemIndex, 10);
-      if (!Number.isFinite(idx) || idx < 0) return;
-      const items = Array.isArray(this.actor.system?.gear?.generalItems) ? [...this.actor.system.gear.generalItems] : [];
-      items.splice(idx, 1);
-      await this.actor.update({ "system.gear.generalItems": items });
+      if (!ev.altKey) return;
+      const itemId = ev.currentTarget.dataset.itemId;
+      if (!itemId) return;
+      const item = this.actor.items.get(itemId);
+      if (!item || item.type !== "Targy") return;
+      await this.actor.deleteEmbeddedDocuments("Item", [itemId]);
     });
 
     // Mentés csak kikattintáskor (blur), ne gépelés közben – így nem ugrik a kurzor és a lap.
@@ -1244,6 +1271,13 @@
           return;
         }
         if (doc && doc.documentName === "Item" && doc.type === "MikroChip") {
+          const actor = this.actor;
+          if (doc.parent?.id !== actor.id) {
+            await actor.createEmbeddedDocuments("Item", [doc.toObject()]);
+          }
+          return;
+        }
+        if (doc && doc.documentName === "Item" && doc.type === "Targy") {
           const actor = this.actor;
           if (doc.parent?.id !== actor.id) {
             await actor.createEmbeddedDocuments("Item", [doc.toObject()]);
