@@ -520,34 +520,37 @@
         <table class="karakter-equipment-table karakter-equipment-armor">
           <thead>
             <tr>
-              <th class="karakter-equipment-th-drag"></th>
               <th class="karakter-equipment-th-name">Név</th>
               <th class="karakter-equipment-th-protection">Védelem Bónusz</th>
               <th class="karakter-equipment-th-speed">Sebesség Levonás</th>
               <th class="karakter-equipment-th-level">Szint</th>
-              <th class="karakter-equipment-th-other">Egyéb</th>
+              <th class="karakter-equipment-th-other">Speciális</th>
+              <th class="karakter-equipment-th-equipped"></th>
               <th class="karakter-equipment-th-delete"></th>
             </tr>
           </thead>
           <tbody>
-            {{#each armor}}
-              <tr class="karakter-equipment-row" data-armor-index="{{@index}}">
-                <td class="karakter-equipment-cell-drag">
-                  <span class="karakter-equipment-drag-handle" data-armor-index="{{@index}}" draggable="true" title="Átrendezés">⋮⋮</span>
+            {{#each armorTable}}
+              <tr class="karakter-equipment-row" data-item-id="{{this.itemId}}">
+                <td class="karakter-equipment-cell-name">
+                  {{#if this.img}}<img class="karakter-equipment-icon karakter-inventory-item-icon" src="{{this.img}}" alt="" data-item-id="{{this.itemId}}" />{{/if}}
+                  {{#if this.equipped}}<span class="karakter-weapon-equipped-dot" title="Felszerelve"></span>{{/if}}
+                  <span class="karakter-armor-label karakter-inventory-item-name" data-item-id="{{this.itemId}}">{{this.name}}</span>
                 </td>
-                <td class="karakter-equipment-cell-name"><input type="text" name="system.gear.armor.{{@index}}.name" value="{{this.name}}" placeholder="Név" /></td>
-                <td class="karakter-equipment-cell-bonus"><input type="text" name="system.gear.armor.{{@index}}.protectionBonus" value="{{this.protectionBonus}}" placeholder="0" /></td>
-                <td class="karakter-equipment-cell-speed"><input type="text" name="system.gear.armor.{{@index}}.speedPenalty" value="{{this.speedPenalty}}" placeholder="0" /></td>
-                <td class="karakter-equipment-cell-level"><input type="text" name="system.gear.armor.{{@index}}.level" value="{{this.level}}" placeholder="—" /></td>
-                <td class="karakter-equipment-cell-other"><input type="text" name="system.gear.armor.{{@index}}.other" value="{{this.other}}" placeholder="—" /></td>
+                <td class="karakter-equipment-cell-bonus">{{this.protectionBonus}}</td>
+                <td class="karakter-equipment-cell-speed">{{this.speedPenalty}}</td>
+                <td class="karakter-equipment-cell-level">{{this.level}}</td>
+                <td class="karakter-equipment-cell-other">{{this.special}}</td>
+                <td class="karakter-equipment-cell-equipped">
+                  <input type="checkbox" class="karakter-armor-equipped-checkbox" data-item-id="{{this.itemId}}" {{checked this.equipped}} title="Felszerelve" />
+                </td>
                 <td class="karakter-equipment-cell-delete">
-                  <button type="button" class="karakter-equipment-delete karakter-armor-remove" data-armor-index="{{@index}}" title="Törlés">✕</button>
+                  <button type="button" class="karakter-equipment-delete karakter-armor-delete" data-item-id="{{this.itemId}}" data-actor-id="{{this.actorId}}" title="Alt+klikk: Törlés az inventory-ból">✕</button>
                 </td>
               </tr>
             {{/each}}
           </tbody>
         </table>
-        <button type="button" class="karakter-equipment-add-row" data-gear-array="armor" title="Páncél hozzáadása">+ Páncél</button>
       </div>
 
       <h3 class="karakter-equipment-table-title">Mikro-Chip</h3>

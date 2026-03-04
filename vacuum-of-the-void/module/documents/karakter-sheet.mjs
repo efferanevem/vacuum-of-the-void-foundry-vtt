@@ -1,4 +1,4 @@
-export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplicationMixin(
+               export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplicationMixin(
   foundry.applications.sheets.ActorSheetV2
 ) {
   static PARTS = foundry.utils.mergeObject(super.PARTS ?? {}, {
@@ -367,8 +367,23 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
         special: (sys.special ?? "").trim() || "—"
       };
     });
-    // Felszerelés: Páncél és Tárgyak (adatmodellből)
-    context.armor = Array.isArray(this.actor.system?.gear?.armor) ? this.actor.system.gear.armor : [];
+    // Felszerelés: Páncél táblázat – itemekből (type "Pancel")
+    const armorDocs = (this.actor.items?.contents ?? []).filter(i => i.type === "Pancel");
+    context.armorTable = armorDocs.map((item) => {
+      const sys = item?.system ?? {};
+      const equipped = (item.system?.equipped !== undefined && item.system?.equipped !== null) ? !!item.system.equipped : false;
+      return {
+        itemId: item.id,
+        actorId: this.actor.id,
+        name: item?.name ?? "—",
+        img: item?.img ?? "",
+        protectionBonus: (sys.protectionBonus ?? "").toString().trim() || "—",
+        speedPenalty: (sys.speedPenalty ?? "").toString().trim() || "—",
+        level: (sys.level ?? "").toString().trim() || "—",
+        special: (sys.special ?? sys.other ?? "").toString().trim() || "—",
+        equipped
+      };
+    });
     context.generalItems = Array.isArray(this.actor.system?.gear?.generalItems) ? this.actor.system.gear.generalItems : [];
     const microchipDocs = (this.actor.items?.contents ?? []).filter(i => i.type === "microchip");
     const microchipItems = microchipDocs.map(i => ({ id: i.id, name: i.name, img: i.img }));
@@ -825,6 +840,15 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
     });
 
     // Felszerelés: Felszerelt checkbox – item.system.equipped + slot szinkron (fent megjelenik)
+    $html.on("change", ".karakter-armor-equipped-checkbox", async ev => {
+      const checkbox = ev.currentTarget;
+      const itemId = (checkbox.dataset.itemId ?? "").trim();
+      if (!itemId) return;
+      const item = this.actor.items.get(itemId);
+      if (!item || item.type !== "Pancel") return;
+      await item.update({ "system.equipped": checkbox.checked });
+    });
+
     $html.on("change", ".karakter-weapon-equipped-checkbox", async ev => {
       const checkbox = ev.currentTarget;
       const itemId = (checkbox.dataset.itemId ?? "").trim();
@@ -903,25 +927,22 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
       await actor.deleteEmbeddedDocuments("Item", [itemId]);
     });
 
-    // Felszerelés: páncél sor törlése
-    $html.on("click", ".karakter-armor-remove", async ev => {
+    // Felszerelés: páncél törlése (Alt+klikk) – item törlése az inventory-ból
+    $html.on("click", ".karakter-armor-delete", async ev => {
       ev.preventDefault();
-      const idx = parseInt(ev.currentTarget.dataset.armorIndex, 10);
-      if (!Number.isFinite(idx) || idx < 0) return;
-      const armor = Array.isArray(this.actor.system?.gear?.armor) ? [...this.actor.system.gear.armor] : [];
-      armor.splice(idx, 1);
-      await this.actor.update({ "system.gear.armor": armor });
+      if (!ev.altKey) return;
+      const itemId = ev.currentTarget.dataset.itemId;
+      if (!itemId) return;
+      const item = this.actor.items.get(itemId);
+      if (!item || item.type !== "Pancel") return;
+      await this.actor.deleteEmbeddedDocuments("Item", [itemId]);
     });
 
-    // Felszerelés: páncél / tárgy sor hozzáadása
+    // Felszerelés: tárgy sor hozzáadása (páncél nincs – itemekből jönnek)
     $html.on("click", ".karakter-equipment-add-row", async ev => {
       ev.preventDefault();
       const arrayKey = ev.currentTarget.dataset.gearArray;
-      if (arrayKey === "armor") {
-        const armor = Array.isArray(this.actor.system?.gear?.armor) ? [...this.actor.system.gear.armor] : [];
-        armor.push({ name: "", protectionBonus: "", speedPenalty: "", level: "", other: "" });
-        await this.actor.update({ "system.gear.armor": armor });
-      } else if (arrayKey === "generalItems") {
+      if (arrayKey === "generalItems") {
         const items = Array.isArray(this.actor.system?.gear?.generalItems) ? [...this.actor.system.gear.generalItems] : [];
         items.push({ name: "", quantity: 1, description: "" });
         await this.actor.update({ "system.gear.generalItems": items });
@@ -1117,6 +1138,14 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
               }
               await actor.update(update);
             }
+          }
+          return;
+        }
+        if (doc && doc.documentName === "Item" && doc.type === "Pancel") {
+          const actor = this.actor;
+          if (doc.parent?.id !== actor.id) {
+            const itemData = foundry.utils.mergeObject(doc.toObject(), { system: { ...(doc.toObject().system ?? {}), equipped: false } });
+            await actor.createEmbeddedDocuments("Item", [itemData]);
           }
           return;
         }

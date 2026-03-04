@@ -1,5 +1,5 @@
-import { KarakterDataModel, WeaponDataModel, MicrochipDataModel, AbilityDataModel } from "../module/data-models/index.mjs";
-import { VoidKarakterSheet, VoidWeaponSheet, VoidMicrochipSheet, VoidAbilitySheet } from "../module/documents.mjs";
+import { KarakterDataModel, WeaponDataModel, ShieldDataModel, MicrochipDataModel, AbilityDataModel } from "../module/data-models/index.mjs";
+import { VoidKarakterSheet, VoidWeaponSheet, VoidShieldSheet, VoidMicrochipSheet, VoidAbilitySheet } from "../module/documents.mjs";
 
 const VOTV_DEFAULT_SCENE_BG = "systems/vacuum-of-the-void/assets/void-bg.jpg";
 
@@ -23,6 +23,7 @@ Hooks.once("init", () => {
   // Register item data models
   CONFIG.Item.dataModels ??= {};
   CONFIG.Item.dataModels.Fegyver = WeaponDataModel;
+  CONFIG.Item.dataModels.Pancel = ShieldDataModel;
   CONFIG.Item.dataModels.microchip = MicrochipDataModel;
   CONFIG.Item.dataModels.Kepesseg = AbilityDataModel;
   CONFIG.Item.dataModels.ability = AbilityDataModel;
@@ -39,6 +40,7 @@ Hooks.once("init", () => {
 
   CONFIG.Item.typeLabels ??= {};
   CONFIG.Item.typeLabels.Fegyver = "Fegyver";
+  CONFIG.Item.typeLabels.Pancel = "Páncél";
   CONFIG.Item.typeLabels.Kepesseg = "Képesség";
   CONFIG.Item.typeLabels.ability = "Képesség";
 
@@ -54,6 +56,11 @@ Hooks.once("init", () => {
     types: ["Fegyver"],
     makeDefault: true,
     label: "VOTV.FegyverSheet"
+  });
+  foundry.documents.collections.Items.registerSheet("vacuum-of-the-void", VoidShieldSheet, {
+    types: ["Pancel"],
+    makeDefault: true,
+    label: "VOTV.PancelSheet"
   });
   foundry.documents.collections.Items.registerSheet("vacuum-of-the-void", VoidMicrochipSheet, {
     types: ["microchip"],

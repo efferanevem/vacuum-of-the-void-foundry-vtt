@@ -1,0 +1,32 @@
+<form class="{{cssClass}} votv-shield-sheet" autocomplete="off">
+  <header class="sheet-header">
+    <img class="profile" src="{{item.img}}" data-edit="img" title="{{item.name}}" />
+    <div class="header-fields">
+      <h1 class="item-name">
+        <input name="name" type="text" value="{{item.name}}" placeholder="Páncél neve" />
+      </h1>
+    </div>
+  </header>
+
+  <section class="sheet-body">
+    <div class="shield-grid">
+      <div class="field">
+        <label>Védelem Bónusz</label>
+        <input type="text" name="system.protectionBonus" value="{{system.protectionBonus}}" placeholder="0" />
+      </div>
+      <div class="field">
+        <label>Sebesség Levonás</label>
+        <input type="text" name="system.speedPenalty" value="{{system.speedPenalty}}" placeholder="0" />
+      </div>
+      <div class="field">
+        <label>Szint</label>
+        <input type="text" name="system.level" value="{{system.level}}" placeholder="—" />
+      </div>
+    </div>
+
+    <div class="field">
+      <label>Speciális</label>
+      <textarea name="system.special">{{system.special}}</textarea>
+    </div>
+  </section>
+</form>

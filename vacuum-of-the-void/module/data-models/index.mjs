@@ -1,5 +1,6 @@
 export { BaseActorDataModel } from "./base-actor.mjs";
 export { KarakterDataModel } from "./karakter.mjs";
 export { WeaponDataModel } from "./weapon.mjs";
+export { ShieldDataModel } from "./shield.mjs";
 export { MicrochipDataModel } from "./microchip.mjs";
 export { AbilityDataModel } from "./ability.mjs";
