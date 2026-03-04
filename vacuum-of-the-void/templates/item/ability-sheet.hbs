@@ -19,10 +19,12 @@
 
   <section class="sheet-body">
     <div class="ability-grid">
+      {{#if (eq system.kind "active")}}
       <div class="field">
-        <label>KP</label>
+        <label>Küzdelmi Pont</label>
         <input type="number" name="system.kp" value="{{system.kp}}" min="0" />
       </div>
+      {{/if}}
     </div>
 
     <div class="field">

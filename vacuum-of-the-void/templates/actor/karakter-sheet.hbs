@@ -218,7 +218,7 @@
       <div class="karakter-abilities-grid">
         <div class="karakter-abilities-row karakter-abilities-row-top">
           <div class="karakter-ability-area karakter-ability-slot-single" data-slot="faji" data-drop-zone="ability">
-            <div class="karakter-ability-area-header">Faji</div>
+            <div class="karakter-ability-area-header">Faji Képesség</div>
             <div class="karakter-ability-area-list">
               {{#if abilityFajiSlot.itemId}}
                 <div class="karakter-ability-pill" data-item-id="{{abilityFajiSlot.itemId}}">
@@ -232,7 +232,7 @@
                       />
                     {{/if}}
                     <span class="karakter-ability-pill-name karakter-ability-open" data-item-id="{{abilityFajiSlot.itemId}}" title="{{abilityFajiSlot.displayName}}">
-                      {{abilityFajiSlot.displayName}}
+                      {{abilityFajiSlot.displayName}}{{#if abilityFajiSlot.kp}} ({{abilityFajiSlot.kp}} KP){{/if}}
                     </span>
                   </div>
                   <div class="karakter-ability-actions">
@@ -258,7 +258,7 @@
           </div>
 
           <div class="karakter-ability-area karakter-ability-slot-single" data-slot="hatter" data-drop-zone="ability">
-            <div class="karakter-ability-area-header">Háttér</div>
+            <div class="karakter-ability-area-header">Háttér Képesség</div>
             <div class="karakter-ability-area-list">
               {{#if abilityHatterSlot.itemId}}
                 <div class="karakter-ability-pill" data-item-id="{{abilityHatterSlot.itemId}}">
@@ -272,7 +272,7 @@
                       />
                     {{/if}}
                     <span class="karakter-ability-pill-name karakter-ability-open" data-item-id="{{abilityHatterSlot.itemId}}" title="{{abilityHatterSlot.displayName}}">
-                      {{abilityHatterSlot.displayName}}
+                      {{abilityHatterSlot.displayName}}{{#if abilityHatterSlot.kp}} ({{abilityHatterSlot.kp}} KP){{/if}}
                     </span>
                   </div>
                   <div class="karakter-ability-actions">
@@ -299,7 +299,7 @@
         </div>
         <div class="karakter-abilities-row karakter-abilities-row-bottom">
           <div class="karakter-ability-area" data-area="passive" data-drop-zone="ability">
-            <div class="karakter-ability-area-header">Passzív</div>
+            <div class="karakter-ability-area-header">Passzív Képességek</div>
             <div class="karakter-ability-area-list">
               {{#if abilityPassiveList.length}}
                 {{#each abilityPassiveList}}
@@ -314,7 +314,7 @@
                         />
                       {{/if}}
                       <span class="karakter-ability-pill-name karakter-ability-open" data-item-id="{{this.id}}" title="{{this.name}}">
-                        {{this.name}}
+                        {{this.name}}{{#if this.kp}} ({{this.kp}} KP){{/if}}
                       </span>
                     </div>
                     <div class="karakter-ability-actions">
@@ -339,7 +339,7 @@
             </div>
           </div>
           <div class="karakter-ability-area" data-area="active" data-drop-zone="ability">
-            <div class="karakter-ability-area-header">Aktív</div>
+            <div class="karakter-ability-area-header">Aktív Képességek</div>
             <div class="karakter-ability-area-list">
               {{#if abilityActiveList.length}}
                 {{#each abilityActiveList}}
@@ -354,7 +354,7 @@
                         />
                       {{/if}}
                       <span class="karakter-ability-pill-name karakter-ability-open" data-item-id="{{this.id}}" title="{{this.name}}">
-                        {{this.name}}
+                        {{this.name}}{{#if this.kp}} ({{this.kp}} KP){{/if}}
                       </span>
                     </div>
                     <div class="karakter-ability-actions">
@@ -463,7 +463,7 @@
 
     <section class="karakter-panel karakter-equipment">
       <h2>Felszerelés</h2>
-
+      <div class="karakter-equipment-spacer"></div>
       <h3 class="karakter-equipment-table-title">Fegyverek</h3>
       <div class="karakter-equipment-block">
         <table class="karakter-equipment-table karakter-equipment-weapons">
@@ -512,7 +512,7 @@
         </table>
       </div>
 
-      <h3 class="karakter-equipment-table-title">Páncél</h3>
+      <h3 class="karakter-equipment-table-title">Páncélok</h3>
       <div class="karakter-equipment-block">
         <table class="karakter-equipment-table karakter-equipment-armor">
           <thead>
@@ -550,7 +550,7 @@
         </table>
       </div>
 
-      <h3 class="karakter-equipment-table-title">Mikro-Chip</h3>
+      <h3 class="karakter-equipment-table-title">Mikro-Chip-ek</h3>
       <div class="karakter-equipment-block">
         <table class="karakter-equipment-table karakter-equipment-microchips">
           <thead>
@@ -574,7 +574,6 @@
                 <td class="karakter-equipment-cell-kp">{{#if this.isActive}}{{this.kp}}{{else}}—{{/if}}</td>
                 <td class="karakter-equipment-cell-desc">{{this.description}}</td>
                 <td class="karakter-equipment-cell-delete">
-                  <button type="button" class="karakter-item-chat" data-item-id="{{this.itemId}}" title="Chat-be küldés"><i class="fas fa-comment-dots"></i></button>
                   <button type="button" class="karakter-equipment-delete karakter-microchip-delete" data-item-id="{{this.itemId}}" data-slot-key="{{this.slotKey}}" data-actor-id="{{this.actorId}}" title="Alt+klikk: Törlés az inventory-ból">✕</button>
                 </td>
               </tr>
@@ -583,7 +582,7 @@
         </table>
       </div>
 
-      <h3 class="karakter-equipment-table-title">Tárgyak</h3>
+      <h3 class="karakter-equipment-table-title">Egyéb Felszerelés</h3>
       <div class="karakter-equipment-block" data-drop-zone="targy">
         <table class="karakter-equipment-table karakter-equipment-items">
           <thead>

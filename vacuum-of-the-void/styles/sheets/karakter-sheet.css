@@ -705,7 +705,11 @@
   cursor: pointer;
 }
 
-.votv.karakter-sheet .karakter-skill-label:hover,
+.votv.karakter-sheet .karakter-skill-label:hover {
+  color: #fff;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.7), 0 0 20px rgba(255, 255, 255, 0.4);
+}
+
 .votv.karakter-sheet .karakter-weapon-label:hover {
   color: var(--votv-border-accent);
 }
@@ -1820,9 +1824,14 @@
   text-align: center;
 }
 
-/* Equipment / inventory – four tables: Fegyverek, Páncél, Mikro-Chip, Tárgyak */
+/* Equipment / inventory – four tables: Fegyverek, Páncélok, Mikro-Chip-ek, Egyéb Felszerelés */
 .votv.karakter-sheet .karakter-equipment {
   grid-column: 1 / -1;
+}
+
+.votv.karakter-sheet .karakter-equipment-spacer {
+  height: 10px;
+  flex-shrink: 0;
 }
 
 .votv.karakter-sheet .karakter-equipment-table-title {

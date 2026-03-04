@@ -17,10 +17,12 @@
 
   <section class="sheet-body">
     <div class="microchip-grid">
+      {{#if (eq system.abilityType "active")}}
       <div class="field">
         <label>Küzdelmi Pont</label>
         <input type="number" name="system.replaceCost" value="{{system.replaceCost}}" min="0" />
       </div>
+      {{/if}}
     </div>
 
     <div class="field">
