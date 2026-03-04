@@ -705,6 +705,11 @@
   cursor: pointer;
 }
 
+.votv.karakter-sheet .karakter-skill-label:hover,
+.votv.karakter-sheet .karakter-weapon-label:hover {
+  color: var(--votv-border-accent);
+}
+
 .votv.karakter-sheet .karakter-inventory-item-name,
 .votv.karakter-sheet .karakter-armor-label,
 .votv.karakter-sheet .karakter-microchip-label {
@@ -974,6 +979,11 @@
 
 .votv.karakter-sheet .karakter-ability-pill-name {
   cursor: pointer;
+}
+
+.votv.karakter-sheet .karakter-ability-pill-name:hover,
+.votv.karakter-sheet .karakter-ability-open:hover {
+  color: var(--votv-border-accent);
 }
 
 .votv.karakter-sheet .karakter-ability-open {
