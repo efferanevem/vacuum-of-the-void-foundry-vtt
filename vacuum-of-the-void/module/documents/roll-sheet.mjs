@@ -18,13 +18,15 @@ export class VoidRollSheet extends Application {
   }
 
   constructor(options = {}) {
-    const { actor, skillKey, label, baseModifier, injuryModifier } = options;
+    const { actor, skillKey, label, baseModifier, injuryModifier, injuryPenalty } = options;
     super(options);
     this._actor = actor;
     this._skillKey = skillKey;
     this._label = label ?? skillKey;
     this._baseModifier = Number(baseModifier) || 0;
     this._injuryModifier = Number(injuryModifier) || 0;
+    /** Opcionális sérülés levonás (pl. fegyver dobásnál karok); megjelenik külön, beleszámít a dobásba. */
+    this._injuryPenalty = Number(injuryPenalty) || 0;
   }
 
   get actor() {
@@ -117,7 +119,8 @@ export class VoidRollSheet extends Application {
     const constantBonus = parseInt(form.querySelector("input[name='constantBonus']")?.value ?? "0", 10) || 0;
     const baseMod = parseInt(form.dataset?.baseMod ?? "0", 10) || 0;
     const injuryMod = parseInt(form.dataset?.injuryMod ?? "0", 10) || 0;
-    const constantsSum = baseMod + injuryMod + constantBonus;
+    const injuryPen = parseInt(form.dataset?.injuryPenalty ?? "0", 10) || 0;
+    const constantsSum = baseMod + injuryMod + injuryPen + constantBonus;
 
     const parts = [];
     parts.push(document.createElement("span"));
@@ -166,7 +169,8 @@ export class VoidRollSheet extends Application {
 
     const basePart = this._baseModifier !== 0 ? (this._baseModifier > 0 ? `+${this._baseModifier}` : String(this._baseModifier)) : "";
     const injuryPart = this._injuryModifier !== 0 ? (this._injuryModifier > 0 ? `+${this._injuryModifier}` : String(this._injuryModifier)) : "";
-    const formulaText = ["3d6", basePart, injuryPart].filter(Boolean).join(" ") || "3d6";
+    const injuryPenaltyPart = this._injuryPenalty !== 0 ? String(this._injuryPenalty) : "";
+    const formulaText = ["3d6", basePart, injuryPart, injuryPenaltyPart].filter(Boolean).join(" ") || "3d6";
 
     return {
       appId: this.id ?? "votv-roll-sheet",
@@ -175,7 +179,8 @@ export class VoidRollSheet extends Application {
       moraleCurrent,
       advantageValue: 0,
       baseModifier: this._baseModifier,
-      injuryModifier: this._injuryModifier
+      injuryModifier: this._injuryModifier,
+      injuryPenalty: this._injuryPenalty
     };
   }
 
@@ -201,7 +206,8 @@ export class VoidRollSheet extends Application {
 
     const baseMod = this._baseModifier;
     const injuryMod = this._injuryModifier;
-    const flatMod = baseMod + injuryMod + constantBonus;
+    const injuryPen = this._injuryPenalty || 0;
+    const flatMod = baseMod + injuryMod + injuryPen + constantBonus;
 
     const formula = [
       "3d6",
@@ -254,6 +260,38 @@ export function openRollSheetForSkill(actor, skillKey, label) {
     label: label || skillKey,
     baseModifier: baseValue,
     injuryModifier
+  });
+  sheet.render(true);
+}
+
+/**
+ * Open the roll sheet for a weapon attack (Dobás). Formula: Kézifegyver Használat + fegyver bónusz;
+ * sérülés (karok) levonás ugyanúgy mint a jártasságnál. A többi (morál, előny/hátrány, egyéb bónusz) állítható.
+ * @param {Actor} actor - PC actor
+ * @param {string} slotKey - e.g. "slot1"
+ */
+export function openRollSheetForWeapon(actor, slotKey) {
+  if (!actor || !slotKey) return;
+  const weapons = actor.system?.weapons ?? {};
+  const slotData = weapons[slotKey] ?? {};
+  const itemId = (slotData.itemId ?? "").trim();
+  const weaponItems = actor.items?.filter(i => i.type === "Fegyver") ?? [];
+  const item = itemId ? weaponItems.find(w => w.id === itemId) : null;
+  const weaponName = item?.name || slotData.name || `Fegyver (${slotKey})`;
+  const weaponBonus = Number(slotData.bonus ?? 0) || 0;
+  const grenadeUse = Number(actor.system?.skills?.grenadeUse ?? 0) || 0;
+  const healthStatus = VoidKarakterSheet._getSkillHealthStatusStatic(actor, "grenadeUse");
+  let injuryPenalty = 0;
+  if (healthStatus === 1) injuryPenalty = -6;
+  else if (healthStatus === 2) injuryPenalty = -3;
+  // Megjelenítés: "3d6 +10 +4" (Kézifegyver + bónusz külön), sérülés külön pl. " -3"; dobás = 10+4-3
+  const sheet = new VoidRollSheet({
+    actor,
+    skillKey: "grenadeUse",
+    label: weaponName,
+    baseModifier: grenadeUse,
+    injuryModifier: weaponBonus,
+    injuryPenalty
   });
   sheet.render(true);
 }

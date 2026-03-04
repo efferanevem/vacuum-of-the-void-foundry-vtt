@@ -1007,7 +1007,7 @@
 
 .votv.karakter-sheet .karakter-weapon-slot {
   display: flex;
-  align-items: center;
+  align-items: stretch;
   gap: 8px;
   min-height: 36px;
   padding: 4px 6px;
@@ -1072,6 +1072,24 @@
   background: rgba(43, 255, 136, 0.1);
 }
 
+/* Gombok magassága = a mellette lévő fegyver doboz (display) magassága */
+.votv.karakter-sheet .karakter-weapon-slot-actions {
+  display: flex;
+  align-items: stretch;
+  gap: 6px;
+  flex-shrink: 0;
+  align-self: stretch;
+  min-height: 40px;
+}
+
+.votv.karakter-sheet .karakter-weapon-slot-actions .karakter-weapon-attack,
+.votv.karakter-sheet .karakter-weapon-slot-actions .karakter-weapon-damage {
+  align-self: stretch;
+  height: 100%;
+  min-height: 40px;
+  box-sizing: border-box;
+}
+
 .votv.karakter-sheet .karakter-weapon-slot-select-wrap {
   flex: 1 1 0;
   min-width: 0;
@@ -1096,7 +1114,8 @@
   cursor: pointer;
   text-align: left;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
-  min-height: 28px;
+  min-height: 40px;
+  box-sizing: border-box;
 }
 
 .votv.karakter-sheet .karakter-weapon-slot-display:hover {
@@ -1450,8 +1469,8 @@
 }
 
 .votv.karakter-sheet .karakter-weapon-damage {
-  border-color: rgba(66, 135, 245, 0.6);
-  color: rgba(180, 210, 255, 0.9);
+  border-color: rgba(245, 100, 80, 0.7);
+  color: rgba(255, 160, 150, 0.95);
 }
 
 .votv.karakter-sheet .karakter-weapon-attack:disabled,
@@ -1468,8 +1487,8 @@
 }
 
 .votv.karakter-sheet .karakter-weapon-damage:not(:disabled):hover {
-  border-color: rgba(66, 135, 245, 0.9);
-  box-shadow: 0 0 4px rgba(66, 135, 245, 0.35);
+  border-color: rgba(245, 100, 80, 0.95);
+  box-shadow: 0 0 4px rgba(245, 100, 80, 0.35);
 }
 
 .votv.karakter-sheet .karakter-actions-cell-qty input {
@@ -1798,11 +1817,13 @@
   min-width: 0;
 }
 
-/* Fegyver táblázat: Név oszlopban a név mellett a kép (flex, egymás mellett) */
+/* Fegyver táblázat: Név oszlopban a név mellett a kép (flex, egymás mellett); extra padding alul, hogy a sor hover highlight az alsó pár pixelre is ráérjen */
 .votv.karakter-sheet .karakter-equipment-weapons .karakter-equipment-cell-name {
   display: flex;
   align-items: center;
   gap: 8px;
+  padding-bottom: 8px;
+  box-sizing: border-box;
 }
 
 .votv.karakter-sheet .karakter-equipment-weapons .karakter-equipment-cell-name .karakter-weapon-label {

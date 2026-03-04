@@ -395,6 +395,10 @@
                 <span class="karakter-weapon-slot-display-text">{{this.displayName}}</span>
               </div>
             </div>
+            <div class="karakter-weapon-slot-actions">
+              <button type="button" class="karakter-weapon-attack" data-slot="{{this.slotKey}}" title="Dobás (találat)">Dobás</button>
+              <button type="button" class="karakter-weapon-damage" data-slot="{{this.slotKey}}" data-item-id="{{this.itemId}}" title="Sebzés dobás">Sebzés</button>
+            </div>
           </div>
         {{/each}}
       </div>

@@ -313,6 +313,7 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
       const item = weaponItems.find(w => w.id === itemId);
       return {
         slotKey,
+        itemId,
         slotNum: idx + 1,
         displayName: item?.name || slotData.name || emptyLabel,
         img: item?.img || "",
@@ -477,6 +478,32 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
     const $html = $(root);
     $(document).off("click.votv-weapon-dropdown");
     $(document).off("click.votv-microchip-dropdown");
+
+    // Dobás / Sebzés gombok: működjenek akkor is, ha a lap nem szerkeszthető (csak megtekintés)
+    $html.on("click", ".karakter-weapon-attack", async ev => {
+      ev.preventDefault();
+      ev.stopPropagation();
+      const btn = ev.currentTarget;
+      const slot = (btn.dataset.slot ?? "").trim();
+      if (!slot) return;
+      const { openRollSheetForWeapon } = await import("./roll-sheet.mjs");
+      openRollSheetForWeapon(this.actor, slot);
+    });
+    $html.on("click", ".karakter-weapon-damage", async ev => {
+      ev.preventDefault();
+      ev.stopPropagation();
+      const btn = ev.currentTarget;
+      let itemId = (btn.dataset.itemId ?? "").trim();
+      if (!itemId) {
+        const slot = (btn.dataset.slot ?? "").trim();
+        if (!slot) return;
+        const slotData = (this.actor?.system?.weapons ?? {})[slot] ?? {};
+        itemId = (slotData.itemId ?? "").trim();
+      }
+      if (!itemId) return;
+      await this._rollWeaponDamage(itemId, btn.dataset.slot?.trim() ?? "");
+    });
+
     if (!this.isEditable) return;
 
     // Stressz > 10 esetén a textbox piros hátteret kap
@@ -593,27 +620,6 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
       }
       if (Object.keys(updates).length) await actor.update(updates);
       await actor.deleteEmbeddedDocuments("Item", [itemId]);
-    });
-
-    // Equipped weapons: attack and damage from Fegyverek card (delegated)
-    $html.on("click", ".karakter-weapon-attack", async ev => {
-      ev.preventDefault();
-      const btn = ev.currentTarget;
-      const slot = (btn.dataset.slot ?? "").trim();
-      if (!slot) return;
-      await this._rollWeapon(slot);
-    });
-
-    $html.on("click", ".karakter-weapon-damage", async ev => {
-      ev.preventDefault();
-      const btn = ev.currentTarget;
-      const slot = (btn.dataset.slot ?? "").trim();
-      if (!slot) return;
-      const weapons = this.actor.system.weapons ?? {};
-      const slotData = weapons[slot] ?? {};
-      const itemId = (slotData.itemId ?? "").trim();
-      if (!itemId) return;
-      await this._rollWeaponDamage(itemId);
     });
 
     // Weapons: equip / unequip via inventory checkboxes (delegated) – item.system.equipped szinkron
@@ -1511,17 +1517,26 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
     });
   }
 
-  async _rollWeaponDamage(itemId) {
-    const item = this.actor.items.get(itemId);
+  /** Sebzés gomb: csak a fegyver sebzés formuláját dobja (nincs panel, nincs bónusz). */
+  async _rollWeaponDamage(itemId, slotKey = "") {
+    const actor = this.actor;
+    if (!actor) return;
+    let item = actor.items.get?.(itemId) ?? actor.items.contents?.find?.(i => i.id === itemId);
     if (!item || item.type !== "Fegyver") return;
-    const damageFormula = (item.system?.damage ?? "").trim();
-    if (!damageFormula) return;
-
+    let damageFormula = (item.system?.damage ?? "").trim();
+    if (!damageFormula && slotKey) {
+      const slotData = (actor.system?.weapons ?? {})[slotKey] ?? {};
+      damageFormula = (slotData.damage ?? "").trim();
+    }
+    if (!damageFormula) {
+      ui.notifications?.warn?.(game.i18n?.localize?.("votv.weapon.no-damage") ?? "A fegyvernek nincs sebzés formulája.");
+      return;
+    }
     const roll = new Roll(damageFormula);
     await roll.evaluate({ async: true });
     const rollMode = game.settings.get("core", "rollMode") ?? CONST.DICE_ROLL_MODES.PUBLIC;
     return roll.toMessage({
-      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      speaker: ChatMessage.getSpeaker({ actor }),
       flavor: `${item.name} – sebzés`,
       flags: { "vacuum-of-the-void": {} },
       rollMode
