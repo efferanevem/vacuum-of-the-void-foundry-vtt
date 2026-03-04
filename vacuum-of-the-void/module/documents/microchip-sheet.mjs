@@ -6,7 +6,7 @@ export class VoidMicrochipSheet extends foundry.applications.api.HandlebarsAppli
   });
 
   static DEFAULT_OPTIONS = foundry.utils.mergeObject(super.DEFAULT_OPTIONS, {
-    classes: ["vacuum-of-the-void", "sheet", "item", "microchip"],
+    classes: ["vacuum-of-the-void", "sheet", "item", "MikroChip"],
     template: "systems/vacuum-of-the-void/templates/item/microchip-sheet.hbs",
     width: 500,
     minWidth: 500,
@@ -45,7 +45,9 @@ export class VoidMicrochipSheet extends foundry.applications.api.HandlebarsAppli
       doSubmit(form);
     };
     sheet._votvInput = (ev) => {
-      const form = ev.target?.form ?? ev.target?.closest?.("form");
+      const target = ev.target;
+      if (target?.name === "name") return;
+      const form = target?.form ?? target?.closest?.("form");
       if (!isOurForm(form)) return;
       clearTimeout(sheet._votvInputDebounce);
       sheet._votvInputDebounce = setTimeout(() => doSubmit(form), 300);
@@ -70,6 +72,7 @@ export class VoidMicrochipSheet extends foundry.applications.api.HandlebarsAppli
       if (el.type === "checkbox") value = el.checked;
       else if (el.type === "number") value = el.value === "" ? 0 : Number(el.value);
       else value = el.value ?? "";
+      if (el.name === "name" && typeof value === "string" && value.trim() === "") continue;
       foundry.utils.setProperty(updateData, el.name, value);
     }
     return updateData;
@@ -78,8 +81,8 @@ export class VoidMicrochipSheet extends foundry.applications.api.HandlebarsAppli
   async _prepareContext(options) {
     let context = await super._prepareContext(options);
     context = context ?? {};
+    context.item = this.item;
     context.system = this.item.system;
     return context;
   }
 }
-

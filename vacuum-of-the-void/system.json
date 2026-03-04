@@ -32,7 +32,7 @@
     "Item": {
       "Fegyver": {},
       "Pancel": {},
-      "microchip": {},
+      "MikroChip": {},
       "Kepesseg": {}
     }
   },
@@ -46,7 +46,7 @@
     },
     {
       "name": "microchips",
-      "label": "Mikro-chipek",
+      "label": "Mikro-Chip-ek",
       "type": "Item",
       "system": "vacuum-of-the-void",
       "path": "packs/microchips.db"

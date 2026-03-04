@@ -1,5 +1,5 @@
 /* Vacuum of the Void – main stylesheet
-   Order: variables → overrides → sheets (karakter, item-sheet common, weapon, microchip, ability) → chat */
+   Order: variables → overrides → sheets (karakter, item-sheet common, weapon, Mikro-Chip, ability) → chat */
 @import url("variables.css");
 @import url("overrides.css");
 @import url("sheets/karakter-sheet.css");

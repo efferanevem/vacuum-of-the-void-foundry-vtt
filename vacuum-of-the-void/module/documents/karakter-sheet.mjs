@@ -306,7 +306,7 @@
 
     const inventory = inventoryItems.map(item => {
       const isWeapon = item.type === "Fegyver";
-      const isMicrochip = item.type === "microchip";
+      const isMicrochip = item.type === "MikroChip";
       let slotAssignment = 0;
       let slotBonus = "";
       let slotKey = null;
@@ -436,7 +436,7 @@
       };
     });
     context.generalItems = Array.isArray(this.actor.system?.gear?.generalItems) ? this.actor.system.gear.generalItems : [];
-    const microchipDocs = (this.actor.items?.contents ?? []).filter(i => i.type === "microchip");
+    const microchipDocs = (this.actor.items?.contents ?? []).filter(i => i.type === "MikroChip");
     const microchipItems = microchipDocs.map(i => ({ id: i.id, name: i.name, img: i.img }));
     // Felszerelés: Mikro-Chip táblázat (3 slot)
     context.microchipsTable = ["1", "2", "3"].map((n) => {
@@ -806,7 +806,7 @@
       this.actor.update({ [`system.gear.microchips.${slot}.active`]: checked });
     });
 
-    // Mikro-chipek: drag-and-drop microchip onto a slot
+    // Mikro-Chip-ek: drag-and-drop MikroChip item a slotra
     $html.find(".karakter-microchip-slot").each((i, el) => {
       const slot = el.dataset.slot;
       el.addEventListener("dragover", ev => this._onMicrochipSlotDragOver(ev, slot));
@@ -1396,7 +1396,7 @@
   }
 
   _parseAbilityDrop(ev) {
-    // Inventory / microchip mintájára: a dataTransfer-ben lévő JSON drag adatot olvassuk ki.
+    // Inventory / MikroChip mintájára: a dataTransfer-ben lévő JSON drag adatot olvassuk ki.
     const raw =
       ev.dataTransfer?.getData("text/plain") ||
       ev.dataTransfer?.getData("application/json") ||
@@ -1496,7 +1496,7 @@
     }
     if (json?.type !== "Item" || !json?.uuid) return;
     const doc = await fromUuid(json.uuid);
-    if (!doc || doc.type !== "microchip") return;
+    if (!doc || doc.type !== "MikroChip") return;
     let itemId = doc.id;
     if (doc.parent?.id !== this.actor.id) {
       const created = await this.actor.createEmbeddedDocuments("Item", [doc.toObject()]);

@@ -24,7 +24,7 @@ Hooks.once("init", () => {
   CONFIG.Item.dataModels ??= {};
   CONFIG.Item.dataModels.Fegyver = WeaponDataModel;
   CONFIG.Item.dataModels.Pancel = ShieldDataModel;
-  CONFIG.Item.dataModels.microchip = MicrochipDataModel;
+  CONFIG.Item.dataModels.MikroChip = MicrochipDataModel;
   CONFIG.Item.dataModels.Kepesseg = AbilityDataModel;
   CONFIG.Item.dataModels.ability = AbilityDataModel;
 
@@ -41,6 +41,7 @@ Hooks.once("init", () => {
   CONFIG.Item.typeLabels ??= {};
   CONFIG.Item.typeLabels.Fegyver = "Fegyver";
   CONFIG.Item.typeLabels.Pancel = "Páncél";
+  CONFIG.Item.typeLabels.MikroChip = "Mikro-Chip";
   CONFIG.Item.typeLabels.Kepesseg = "Képesség";
   CONFIG.Item.typeLabels.ability = "Képesség";
 
@@ -63,9 +64,9 @@ Hooks.once("init", () => {
     label: "VOTV.PancelSheet"
   });
   foundry.documents.collections.Items.registerSheet("vacuum-of-the-void", VoidMicrochipSheet, {
-    types: ["microchip"],
+    types: ["MikroChip"],
     makeDefault: true,
-    label: "Void Microchip"
+    label: "VOTV.MikroChipSheet"
   });
   foundry.documents.collections.Items.registerSheet("vacuum-of-the-void", VoidAbilitySheet, {
     types: ["Kepesseg", "ability"],

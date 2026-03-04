@@ -1,12 +1,49 @@
-/* Microchip item sheet – specific styles only */
+/* Mikro-Chip item sheet – mintázva az ability lapról */
 
-.vacuum-of-the-void.sheet.item.microchip .microchip-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px 12px;
-  margin-bottom: 8px;
+.vacuum-of-the-void.sheet.item.MikroChip .sheet-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.vacuum-of-the-void.sheet.item.microchip .field textarea {
-  min-height: 100px;
+.vacuum-of-the-void.sheet.item.MikroChip .sheet-header .profile {
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+}
+
+.vacuum-of-the-void.sheet.item.MikroChip .header-fields {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.vacuum-of-the-void.sheet.item.MikroChip .item-name input {
+  width: 100%;
+}
+
+.vacuum-of-the-void.sheet.item.MikroChip .item-type {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 6px;
+}
+
+.vacuum-of-the-void.sheet.item.MikroChip .sheet-body {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.vacuum-of-the-void.sheet.item.MikroChip .microchip-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.vacuum-of-the-void.sheet.item.MikroChip .field label {
+  display: block;
+  margin-bottom: 2px;
 }
