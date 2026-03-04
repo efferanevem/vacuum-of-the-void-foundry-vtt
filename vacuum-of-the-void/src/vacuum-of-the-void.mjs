@@ -139,6 +139,33 @@ Hooks.on("ready", () => {
     },
     true
   );
+
+  // Create a default scene with void-bg if the world has no scenes (e.g. new world).
+  if (game.user?.isGM && game.scenes?.size === 0) {
+    (async () => {
+      try {
+        const SceneDoc = CONFIG.Scene?.documentClass ?? game.scenes?.documentClass;
+        if (!SceneDoc?.create) {
+          console.warn("Vacuum of the Void | Default scene: Scene document class has no create method");
+          return;
+        }
+        const data = {
+          name: "Vacuum of the Void",
+          width: 3840,
+          height: 2160,
+          background: { src: VOTV_DEFAULT_SCENE_BG },
+          backgroundColor: "#0f0f0f",
+          grid: { type: 0 }
+        };
+        const scene = await SceneDoc.create(data);
+        if (scene) {
+          console.log("Vacuum of the Void | Default scene created:", scene.id);
+        }
+      } catch (err) {
+        console.warn("Vacuum of the Void | Default scene creation failed:", err);
+      }
+    })();
+  }
 });
 
 Hooks.on("preCreateToken", (tokenDocument, _data, _options) => {
@@ -161,10 +188,11 @@ Hooks.on("preCreateScene", (scene, data) => {
   if (data?.background?.src) return;
 
   scene.updateSource({
-    width: 1920,
-    height: 1080,
+    width: 3840,
+    height: 2160,
     "background.src": VOTV_DEFAULT_SCENE_BG,
-    backgroundColor: "#000000"
+    backgroundColor: "#0f0f0f",
+    "grid.type": 0
   });
 });
 
