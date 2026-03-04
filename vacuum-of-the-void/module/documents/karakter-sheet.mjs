@@ -90,8 +90,14 @@
       }
     }
     const out = await super.render(force, options);
-    requestAnimationFrame(() => this._writeEffectiveGivenSpeed());
-    setTimeout(() => this._writeEffectiveGivenSpeed(), 150);
+    requestAnimationFrame(() => {
+      this._writeEffectiveGivenSpeed();
+      this._writeEffectiveGivenProtection();
+    });
+    setTimeout(() => {
+      this._writeEffectiveGivenSpeed();
+      this._writeEffectiveGivenProtection();
+    }, 150);
     const rootAfter = this.element;
     const formAfter = this.form ?? this.element;
     const scrollState = saved.scrollState;
@@ -149,7 +155,35 @@
     stealth: "legs"
   };
 
-  /** Kapott sebesség kijelzés: lábak állapotától 0 / -6 (kritikus) / -3 (sérült) / tárolt givenSpeed. Nincs kivonás. */
+  /** Összes felszerelt páncél sebesség levonásának összege (m). Negatív érték = levonás. Tizedesvessző (,) is elfogadott. */
+  _getTotalArmorSpeedPenalty() {
+    const armorItems = (this.actor?.items?.contents ?? []).filter(
+      (i) => i.type === "Pancel" && (i.system?.equipped === true)
+    );
+    let total = 0;
+    for (const item of armorItems) {
+      const raw = String(item.system?.speedPenalty ?? "").trim().replace(",", ".");
+      const v = Number(raw);
+      if (Number.isFinite(v)) total += v;
+    }
+    return total;
+  }
+
+  /** Összes felszerelt páncél védelmi bónuszának összege. Tizedesvessző (,) is elfogadott. */
+  _getTotalArmorProtectionBonus() {
+    const armorItems = (this.actor?.items?.contents ?? []).filter(
+      (i) => i.type === "Pancel" && (i.system?.equipped === true)
+    );
+    let total = 0;
+    for (const item of armorItems) {
+      const raw = String(item.system?.protectionBonus ?? "").trim().replace(",", ".");
+      const v = Number(raw);
+      if (Number.isFinite(v)) total += v;
+    }
+    return total;
+  }
+
+  /** Kapott sebesség kijelzés: lábak állapotától 0 / -6 (kritikus) / -3 (sérült) / tárolt givenSpeed, mínusz páncélok levonása. */
   _writeEffectiveGivenSpeed(scope = null) {
     const root = scope ?? this.form ?? this.element;
     let span = root?.querySelector?.(".karakter-given-speed-effective");
@@ -165,6 +199,19 @@
     else if (legsStatus === 1) effective = -6;
     else if (legsStatus === 2) effective = -3;
     else effective = raw;
+    const armorPenalty = this._getTotalArmorSpeedPenalty();
+    effective += armorPenalty;
+    span.textContent = String(effective);
+  }
+
+  /** Kapott védelem kijelzés: tárolt givenProtection + felszerelt páncélok védelmi bónusza. */
+  _writeEffectiveGivenProtection(scope = null) {
+    const root = scope ?? this.form ?? this.element;
+    let span = root?.querySelector?.(".karakter-given-defense-effective");
+    if (!span && this.id) span = document.querySelector(`#${CSS.escape(this.id)} .karakter-given-defense-effective`);
+    if (!span) return;
+    const raw = Number(this.actor?.system?.combat?.givenProtection ?? 0) || 0;
+    const effective = raw + this._getTotalArmorProtectionBonus();
     span.textContent = String(effective);
   }
 
@@ -218,10 +265,14 @@
     else if (legsStatus === 1) effectiveGivenSpeed = -6;   // kritikus
     else if (legsStatus === 2) effectiveGivenSpeed = -3;   // sérült
     else effectiveGivenSpeed = rawGivenSpeed;
+    const armorSpeedPenalty = this._getTotalArmorSpeedPenalty();
+    effectiveGivenSpeed += armorSpeedPenalty;
     context.effectiveGivenSpeed = effectiveGivenSpeed;
+    const rawGivenProtection = Number(this.actor.system?.combat?.givenProtection ?? 0) || 0;
+    const effectiveGivenProtection = rawGivenProtection + this._getTotalArmorProtectionBonus();
     context.system = foundry.utils.mergeObject(
       foundry.utils.duplicate(this.actor.system),
-      { combat: { givenSpeed: effectiveGivenSpeed } },
+      { combat: { givenSpeed: effectiveGivenSpeed, givenProtection: effectiveGivenProtection } },
       { inplace: false }
     );
     const BODY_PART_BY_SKILL = VoidKarakterSheet.BODY_PART_BY_SKILL;
@@ -534,8 +585,16 @@
 
     this._writeEffectiveGivenSpeed(html);
     this._writeEffectiveGivenSpeed(root);
-    requestAnimationFrame(() => this._writeEffectiveGivenSpeed());
-    setTimeout(() => this._writeEffectiveGivenSpeed(), 100);
+    this._writeEffectiveGivenProtection(html);
+    this._writeEffectiveGivenProtection(root);
+    requestAnimationFrame(() => {
+      this._writeEffectiveGivenSpeed();
+      this._writeEffectiveGivenProtection();
+    });
+    setTimeout(() => {
+      this._writeEffectiveGivenSpeed();
+      this._writeEffectiveGivenProtection();
+    }, 100);
 
     // Karakterkép: kattintásra Foundry fájlkezelő (FilePicker) megnyitása
     $html.on("click", ".karakter-portrait-img", (ev) => {
@@ -847,6 +906,8 @@
       const item = this.actor.items.get(itemId);
       if (!item || item.type !== "Pancel") return;
       await item.update({ "system.equipped": checkbox.checked });
+      this._writeEffectiveGivenSpeed();
+      this._writeEffectiveGivenProtection();
     });
 
     $html.on("change", ".karakter-weapon-equipped-checkbox", async ev => {
