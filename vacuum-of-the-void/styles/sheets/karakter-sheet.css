@@ -705,6 +705,18 @@
   cursor: pointer;
 }
 
+.votv.karakter-sheet .karakter-inventory-item-name,
+.votv.karakter-sheet .karakter-armor-label,
+.votv.karakter-sheet .karakter-microchip-label {
+  cursor: pointer;
+}
+
+.votv.karakter-sheet .karakter-inventory-item-name:hover,
+.votv.karakter-sheet .karakter-armor-label:hover,
+.votv.karakter-sheet .karakter-microchip-label:hover {
+  color: var(--votv-border-accent);
+}
+
 /* Jártasságok: háttér színezés a testrész egészségi állapota alapján (opacity 25%) */
 .votv.karakter-sheet .karakter-skill[data-health-status="0"] {
   background: rgba(70, 22, 22, 0.4);
