@@ -794,6 +794,14 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
       await this._postAbilityToChat(itemId);
     });
 
+    // Lőszer mező: szélesség tartalomhoz (focus / input / blur mind ugyanazzal a logikával)
+    $html.on("focus input blur", ".karakter-weapon-quantity-input", ev => {
+      this._resizeWeaponQuantityInput(ev.currentTarget);
+    });
+    $html.find(".karakter-weapon-quantity-input").each((i, el) => {
+      this._resizeWeaponQuantityInput(el);
+    });
+
     // Felszerelés: lőszer módosítása lövedékes fegyvernél – a fegyver item system.quantity (string) frissítése
     $html.on("change", ".karakter-weapon-quantity-input", async ev => {
       const input = ev.currentTarget;
@@ -803,6 +811,11 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
       if (!item || item.type !== "Fegyver") return;
       const val = (input.value ?? "").trim();
       await item.update({ "system.quantity": val });
+      setTimeout(() => {
+        const root = this.form ?? this.element;
+        const el = root?.querySelector(`.karakter-weapon-quantity-input[data-item-id="${itemId}"]`);
+        if (el) this._resizeWeaponQuantityInput(el);
+      }, 80);
     });
 
     // Felszerelés: Felszerelt checkbox – item.system.equipped + slot szinkron (fent megjelenik)
@@ -1261,6 +1274,28 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
     ev.currentTarget?.classList.remove("karakter-actions-table-drag-over");
     // Do not prevent default here so Foundry's _onDropItem continues to handle
     // adding the item into the inventory when dropped on this table.
+  }
+
+  /** Lőszer mező: mindig fit-content (CSS field-sizing + JS fallback az input klónjával). */
+  _resizeWeaponQuantityInput(input) {
+    if (!input || input.type !== "text") return;
+    const minW = 20;
+    if (!input.value || String(input.value).trim() === "") {
+      input.style.width = "";
+      return;
+    }
+    const clone = input.cloneNode(false);
+    clone.value = input.value;
+    clone.style.position = "absolute";
+    clone.style.left = "-9999px";
+    clone.style.top = "0";
+    clone.style.width = "1px";
+    clone.style.visibility = "hidden";
+    clone.removeAttribute("data-item-id");
+    document.body.appendChild(clone);
+    const w = clone.scrollWidth;
+    document.body.removeChild(clone);
+    input.style.width = `${Math.max(minW, w)}px`;
   }
 
   async _postAbilityToChat(itemId) {

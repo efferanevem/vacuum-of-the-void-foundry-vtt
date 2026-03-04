@@ -38,6 +38,7 @@ Hooks.once("init", () => {
 
   CONFIG.Item.typeLabels ??= {};
   CONFIG.Item.typeLabels.Fegyver = "Fegyver";
+  CONFIG.Item.typeLabels.ability = "Képesség";
 
   foundry.documents.collections.Actors.unregisterSheet("core", foundry.applications.sheets.ActorSheetV2);
   foundry.documents.collections.Actors.registerSheet("vacuum-of-the-void", VoidKarakterSheet, {
@@ -60,7 +61,7 @@ Hooks.once("init", () => {
   foundry.documents.collections.Items.registerSheet("vacuum-of-the-void", VoidAbilitySheet, {
     types: ["ability"],
     makeDefault: true,
-    label: "Void Ability"
+    label: "VOTV.KepessegSheet"
   });
 
   // Ha egy actort frissítenek, a nyitott VoidKarakterSheet lapok újrarajzolódjanak. Ne újrarajzoljunk, ha

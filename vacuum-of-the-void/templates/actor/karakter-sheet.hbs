@@ -383,7 +383,7 @@
     </section>
 
     <section class="karakter-panel karakter-fegyverek">
-      <h2>Használt Fegyverek</h2>
+      <h2>Fegyverek</h2>
       <div class="karakter-weapon-slots">
         {{#each weaponSlots}}
           <div class="karakter-weapon-slot" data-slot="{{this.slotKey}}" data-drop-zone="weapon">
@@ -493,7 +493,7 @@
                 <td class="karakter-equipment-cell-range">{{this.rangeStr}}</td>
                 <td class="karakter-equipment-cell-ammo">
                   {{#if this.isProjectile}}
-                    <input type="text" class="karakter-weapon-quantity-input" data-item-id="{{this.itemId}}" value="{{this.quantity}}" placeholder="6" />
+                    <input type="text" class="karakter-weapon-quantity-input" data-item-id="{{this.itemId}}" value="{{this.quantity}}" />
                   {{else}}
                     —
                   {{/if}}

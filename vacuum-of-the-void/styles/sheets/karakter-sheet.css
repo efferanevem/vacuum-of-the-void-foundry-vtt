@@ -1850,17 +1850,17 @@
 
 .votv.karakter-sheet .karakter-equipment-weapons .karakter-equipment-cell-ammo {
   width: 1%;
-  max-width: 4.5em;
   min-width: 3.2em;
   white-space: nowrap;
 }
 
 .votv.karakter-sheet .karakter-equipment-weapons .karakter-equipment-cell-ammo .karakter-weapon-quantity-input {
-  width: 100%;
-  max-width: 3em;
-  min-width: 2em;
+  width: auto;
+  min-width: 3em;
   padding: 2px 4px;
   text-align: center;
+  /* Tartalomhoz igazítja a mezőt, fókusz és blur esetén is ugyanúgy (Chromium). */
+  field-sizing: content;
 }
 
 .votv.karakter-sheet .karakter-equipment-cell-name input {

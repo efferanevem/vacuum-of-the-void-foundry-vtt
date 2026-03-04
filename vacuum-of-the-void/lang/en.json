@@ -5,6 +5,9 @@
   "TYPES.Item.Fegyver": "Fegyver",
   "VOTV.FegyverSheet": "Fegyver",
 
+  "TYPES.Item.ability": "Képesség",
+  "VOTV.KepessegSheet": "Képesség",
+
   "VOTV.LabelName": "Name",
   "VOTV.LabelPlayer": "Player",
   "VOTV.LabelConcept": "Concept",
