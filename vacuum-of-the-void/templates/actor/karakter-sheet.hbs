@@ -411,9 +411,7 @@
           <input type="checkbox" name="system.gear.microchips.slot1.active" {{checked system.gear.microchips.slot1.active}} title="Aktív" class="karakter-microchip-slot-active" data-slot="slot1" />
           <div class="karakter-microchip-slot-select-wrap">
             <button type="button" class="karakter-microchip-slot-display" data-slot="slot1" tabindex="0" {{#unless system.gear.microchips.slot1.active}}disabled{{/unless}}>
-              {{#if microchip1Img}}
-                <img class="karakter-microchip-slot-thumb" src="{{microchip1Img}}" alt="" />
-              {{/if}}
+              {{#if microchip1Img}}<img class="karakter-microchip-slot-thumb" src="{{microchip1Img}}" alt="" />{{/if}}
               <span class="karakter-microchip-slot-display-text">{{microchip1DisplayName}}</span>
               <span class="karakter-microchip-slot-chevron" aria-hidden="true">▾</span>
             </button>
@@ -429,9 +427,7 @@
           <input type="checkbox" name="system.gear.microchips.slot2.active" {{checked system.gear.microchips.slot2.active}} title="Aktív" class="karakter-microchip-slot-active" data-slot="slot2" />
           <div class="karakter-microchip-slot-select-wrap">
             <button type="button" class="karakter-microchip-slot-display" data-slot="slot2" tabindex="0" {{#unless system.gear.microchips.slot2.active}}disabled{{/unless}}>
-              {{#if microchip2Img}}
-                <img class="karakter-microchip-slot-thumb" src="{{microchip2Img}}" alt="" />
-              {{/if}}
+              {{#if microchip2Img}}<img class="karakter-microchip-slot-thumb" src="{{microchip2Img}}" alt="" />{{/if}}
               <span class="karakter-microchip-slot-display-text">{{microchip2DisplayName}}</span>
               <span class="karakter-microchip-slot-chevron" aria-hidden="true">▾</span>
             </button>
@@ -447,9 +443,7 @@
           <input type="checkbox" name="system.gear.microchips.slot3.active" {{checked system.gear.microchips.slot3.active}} title="Aktív" class="karakter-microchip-slot-active" data-slot="slot3" />
           <div class="karakter-microchip-slot-select-wrap">
             <button type="button" class="karakter-microchip-slot-display" data-slot="slot3" tabindex="0" {{#unless system.gear.microchips.slot3.active}}disabled{{/unless}}>
-              {{#if microchip3Img}}
-                <img class="karakter-microchip-slot-thumb" src="{{microchip3Img}}" alt="" />
-              {{/if}}
+              {{#if microchip3Img}}<img class="karakter-microchip-slot-thumb" src="{{microchip3Img}}" alt="" />{{/if}}
               <span class="karakter-microchip-slot-display-text">{{microchip3DisplayName}}</span>
               <span class="karakter-microchip-slot-chevron" aria-hidden="true">▾</span>
             </button>
@@ -558,24 +552,26 @@
         <table class="karakter-equipment-table karakter-equipment-microchips">
           <thead>
             <tr>
-              <th class="karakter-equipment-th-drag"></th>
               <th class="karakter-equipment-th-name">Név</th>
               <th class="karakter-equipment-th-type">Típus</th>
+              <th class="karakter-equipment-th-kp">KP</th>
               <th class="karakter-equipment-th-desc">Leírás</th>
               <th class="karakter-equipment-th-delete"></th>
             </tr>
           </thead>
           <tbody>
             {{#each microchipsTable}}
-              <tr class="karakter-equipment-row" data-microchip-slot="{{this.slotKey}}" data-item-id="{{this.itemId}}">
-                <td class="karakter-equipment-cell-drag">
-                  <span class="karakter-equipment-drag-handle" data-microchip-slot="{{this.slotKey}}" draggable="true" title="Átrendezés">⋮⋮</span>
+              <tr class="karakter-equipment-row" data-slot-key="{{this.slotKey}}" data-item-id="{{this.itemId}}">
+                <td class="karakter-equipment-cell-name">
+                  {{#if this.img}}<img class="karakter-equipment-icon karakter-inventory-item-icon" src="{{this.img}}" alt="" data-item-id="{{this.itemId}}" />{{/if}}
+                  {{#if this.equipped}}<span class="karakter-weapon-equipped-dot" title="Felszerelve"></span>{{/if}}
+                  <span class="karakter-microchip-label karakter-inventory-item-name" data-item-id="{{this.itemId}}">{{this.name}}</span>
                 </td>
-                <td class="karakter-equipment-cell-name">{{this.name}}</td>
                 <td class="karakter-equipment-cell-type">{{this.typeLabel}}</td>
+                <td class="karakter-equipment-cell-kp">{{#if this.isActive}}{{this.kp}}{{else}}—{{/if}}</td>
                 <td class="karakter-equipment-cell-desc">{{this.description}}</td>
                 <td class="karakter-equipment-cell-delete">
-                  <button type="button" class="karakter-equipment-delete karakter-microchip-clear" data-slot-key="{{this.slotKey}}" title="Levétel">✕</button>
+                  <button type="button" class="karakter-equipment-delete karakter-microchip-delete" data-item-id="{{this.itemId}}" data-slot-key="{{this.slotKey}}" data-actor-id="{{this.actorId}}" title="Alt+klikk: Törlés az inventory-ból">✕</button>
                 </td>
               </tr>
             {{/each}}

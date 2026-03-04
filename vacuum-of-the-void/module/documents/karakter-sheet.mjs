@@ -438,33 +438,31 @@
     context.generalItems = Array.isArray(this.actor.system?.gear?.generalItems) ? this.actor.system.gear.generalItems : [];
     const microchipDocs = (this.actor.items?.contents ?? []).filter(i => i.type === "MikroChip");
     const microchipItems = microchipDocs.map(i => ({ id: i.id, name: i.name, img: i.img }));
-    // Felszerelés: Mikro-Chip táblázat (3 slot)
-    context.microchipsTable = ["1", "2", "3"].map((n) => {
-      const slotKey = `slot${n}`;
-      const slotData = microchips[slotKey] ?? {};
-      const itemId = (slotData.itemId ?? "").trim();
-      const item = microchipDocs.find(c => c.id === itemId);
-      const abilityType = item?.system?.abilityType ?? "";
-      const typeLabel = abilityType === "active" ? "Aktív" : abilityType === "passive" ? "Passzív" : (abilityType || "—");
-      return {
-        slotKey,
-        itemId,
-        name: item?.name ?? slotData.name ?? emptyChipLabel,
-        typeLabel,
-        description: (item?.system?.description ?? "").trim() || "—"
-      };
-    });
     const emptyChipLabel = "— Nincs Mikro-Chip —";
+    const MICROCHIP_SLOTS = ["slot1", "slot2", "slot3"];
     const otherSlotIds = (slotNum) => {
       const ids = [];
-      if (slotNum !== 1) ids.push(microchipSlot1Id);
-      if (slotNum !== 2) ids.push(microchipSlot2Id);
-      if (slotNum !== 3) ids.push(microchipSlot3Id);
-      return ids;
+      if (slotNum !== 1) ids.push((microchips.slot1?.itemId ?? "").trim());
+      if (slotNum !== 2) ids.push((microchips.slot2?.itemId ?? "").trim());
+      if (slotNum !== 3) ids.push((microchips.slot3?.itemId ?? "").trim());
+      return ids.filter(Boolean);
     };
     context.microchipItemsSlot1 = microchipItems.filter(c => !otherSlotIds(1).includes(c.id));
     context.microchipItemsSlot2 = microchipItems.filter(c => !otherSlotIds(2).includes(c.id));
     context.microchipItemsSlot3 = microchipItems.filter(c => !otherSlotIds(3).includes(c.id));
+    // Mikro-Chip slotok: dropdown + kijelzés, mind a 3 slot
+    context.microchipSlots = MICROCHIP_SLOTS.map((slotKey) => {
+      const slotData = microchips[slotKey] ?? {};
+      const itemId = (slotData.itemId ?? "").trim();
+      const item = microchipDocs.find(c => c.id === itemId);
+      return {
+        slotKey,
+        itemId,
+        displayName: item?.name || slotData.name || emptyChipLabel,
+        img: item?.img || "",
+        active: slotData.active === true
+      };
+    });
     ["1", "2", "3"].forEach((n) => {
       const sk = `slot${n}`;
       const slotData = microchips[sk] ?? {};
@@ -473,8 +471,36 @@
       context[`microchip${n}ItemId`] = itemId;
       context[`microchip${n}DisplayName`] = item?.name || slotData.name || emptyChipLabel;
       context[`microchip${n}Img`] = item?.img || "";
-      // Chips should be disabled by default; only explicitly-true flags are active.
-      context[`microchip${n}Active`] = slotData.active === true;
+    });
+    // Felszerelés: Mikro-Chip táblázat – minden MikroChip item, equipped = slotba van (pont jelenik meg)
+    context.microchipsTable = microchipDocs.map((item) => {
+      const itemId = item.id;
+      let slotKey = null;
+      for (const sk of MICROCHIP_SLOTS) {
+        if ((microchips[sk]?.itemId ?? "").trim() === itemId) {
+          slotKey = sk;
+          break;
+        }
+      }
+      const equipped = !!slotKey;
+      const abilityType = item?.system?.abilityType ?? "";
+      const typeLabel = abilityType === "active" ? "Aktív" : abilityType === "passive" ? "Passzív" : (abilityType || "—");
+      const isActive = abilityType === "active";
+      const kp = Number(item?.system?.replaceCost) >= 0 ? Number(item.system.replaceCost) : 0;
+      const descRaw = (item?.system?.description ?? "").trim();
+      const description = descRaw ? (descRaw.length > 60 ? descRaw.slice(0, 57) + "…" : descRaw) : "—";
+      return {
+        itemId,
+        actorId: this.actor.id,
+        name: item?.name ?? "—",
+        img: item?.img ?? "",
+        typeLabel,
+        description,
+        kp,
+        isActive,
+        slotKey: slotKey ?? "",
+        equipped
+      };
     });
 
     // Képességek (abilities): Faji / Háttér single slots and Passzív / Aktív multi-areas
@@ -743,7 +769,7 @@
       }
     });
 
-    // Mikro-chipek: dropdown open/close and select (delegated)
+    // Mikro-Chip: dropdown megnyitás/bezárás és választás (select)
     $html.on("click", ".karakter-microchip-slot-display", ev => {
       ev.preventDefault();
       const btn = ev.currentTarget;
@@ -764,10 +790,8 @@
       const itemId = (li.dataset.itemId ?? "").trim();
       const displayName = (li.dataset.itemName ?? li.textContent?.trim() ?? "").trim() || "— Nincs Mikro-Chip —";
       const itemImg = (li.dataset.itemImg ?? "").trim();
-
       const displayEl = wrap?.querySelector(".karakter-microchip-slot-display-text");
       if (displayEl) displayEl.textContent = displayName;
-
       let thumb = wrap?.querySelector(".karakter-microchip-slot-thumb");
       if (itemImg) {
         if (!thumb) {
@@ -781,9 +805,7 @@
       } else if (thumb) {
         thumb.remove();
       }
-
       wrap?.classList.remove("karakter-microchip-slot-open");
-
       const item = itemId ? this.actor.items.get(itemId) : null;
       const updates = {
         [`system.gear.microchips.${slot}.itemId`]: itemId,
@@ -798,12 +820,34 @@
       $html.find(".karakter-microchip-slot-select-wrap").removeClass("karakter-microchip-slot-open");
     });
 
-    // Microchip slot active checkbox (delegated)
-    $html.on("change", ".karakter-microchip-slot-active", ev => {
+    // Mikro-Chip törlése (Alt+klikk) – mint fegyvernél
+    $html.on("click", ".karakter-microchip-delete", async ev => {
+      ev.preventDefault();
+      if (!ev.altKey) return;
+      const itemId = ev.currentTarget.dataset.itemId;
+      if (!itemId) return;
+      const item = this.actor.items.get(itemId);
+      if (!item || item.type !== "MikroChip") return;
+      const microchips = this.actor.system?.gear?.microchips ?? {};
+      const MICROCHIP_SLOTS = ["slot1", "slot2", "slot3"];
+      const slot = MICROCHIP_SLOTS.find(sk => (microchips[sk]?.itemId ?? "").trim() === itemId);
+      if (slot) {
+        await this.actor.update({
+          [`system.gear.microchips.${slot}.itemId`]: "",
+          [`system.gear.microchips.${slot}.name`]: "",
+          [`system.gear.microchips.${slot}.active`]: false
+        });
+      }
+      await this.actor.deleteEmbeddedDocuments("Item", [itemId]);
+    });
+
+    // Mikro-Chip slot aktív checkbox (delegated)
+    $html.on("change", ".karakter-microchip-slot-active", async ev => {
       const slot = ev.currentTarget.dataset.slot;
       if (!slot) return;
       const checked = ev.currentTarget.checked;
-      this.actor.update({ [`system.gear.microchips.${slot}.active`]: checked });
+      await this.actor.update({ [`system.gear.microchips.${slot}.active`]: checked });
+      this.render(true);
     });
 
     // Mikro-Chip-ek: drag-and-drop MikroChip item a slotra
@@ -1010,17 +1054,6 @@
       }
     });
 
-    // Felszerelés: mikrochip slot ürítése
-    $html.on("click", ".karakter-microchip-clear", async ev => {
-      ev.preventDefault();
-      const slotKey = ev.currentTarget.dataset.slotKey;
-      if (!slotKey) return;
-      await this.actor.update({
-        [`system.gear.microchips.${slotKey}.itemId`]: "",
-        [`system.gear.microchips.${slotKey}.name`]: ""
-      });
-    });
-
     // Felszerelés: tárgy sor törlése
     $html.on("click", ".karakter-item-remove", async ev => {
       ev.preventDefault();
@@ -1207,6 +1240,13 @@
           if (doc.parent?.id !== actor.id) {
             const itemData = foundry.utils.mergeObject(doc.toObject(), { system: { ...(doc.toObject().system ?? {}), equipped: false } });
             await actor.createEmbeddedDocuments("Item", [itemData]);
+          }
+          return;
+        }
+        if (doc && doc.documentName === "Item" && doc.type === "MikroChip") {
+          const actor = this.actor;
+          if (doc.parent?.id !== actor.id) {
+            await actor.createEmbeddedDocuments("Item", [doc.toObject()]);
           }
           return;
         }

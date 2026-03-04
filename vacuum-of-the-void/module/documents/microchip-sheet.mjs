@@ -11,7 +11,7 @@ export class VoidMicrochipSheet extends foundry.applications.api.HandlebarsAppli
     width: 500,
     minWidth: 500,
     height: 420,
-    form: foundry.utils.mergeObject(super.DEFAULT_OPTIONS?.form ?? {}, { submitOnChange: true })
+    form: foundry.utils.mergeObject(super.DEFAULT_OPTIONS?.form ?? {}, { submitOnChange: false })
   });
 
   _initializeApplicationOptions(options) {
@@ -44,22 +44,11 @@ export class VoidMicrochipSheet extends foundry.applications.api.HandlebarsAppli
       if (!isOurForm(form)) return;
       doSubmit(form);
     };
-    sheet._votvInput = (ev) => {
-      const target = ev.target;
-      if (target?.name === "name") return;
-      const form = target?.form ?? target?.closest?.("form");
-      if (!isOurForm(form)) return;
-      clearTimeout(sheet._votvInputDebounce);
-      sheet._votvInputDebounce = setTimeout(() => doSubmit(form), 300);
-    };
     document.body.addEventListener("change", sheet._votvChange, true);
-    document.body.addEventListener("input", sheet._votvInput, true);
   }
 
   _tearDown(options) {
     document.body.removeEventListener("change", this._votvChange, true);
-    document.body.removeEventListener("input", this._votvInput, true);
-    clearTimeout(this._votvInputDebounce);
     return super._tearDown?.(options);
   }
 

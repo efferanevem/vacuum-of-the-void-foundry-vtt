@@ -1551,12 +1551,13 @@
   flex-direction: row;
   align-items: center;
   gap: 8px;
-  min-height: 44px;
+  min-height: 52px;
   padding: 6px 8px;
   border: 1px dashed var(--votv-border-muted);
   border-radius: var(--votv-radius);
   background: rgba(3, 6, 10, 0.5);
   transition: border-color 0.15s ease, background 0.15s ease;
+  overflow: hidden;
 }
 
 .votv.karakter-sheet .karakter-microchip-slot.karakter-microchip-slot-drag-over {
@@ -1596,7 +1597,7 @@
   cursor: pointer;
   text-align: left;
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
-  min-height: 28px;
+  min-height: 40px;
 }
 
 .votv.karakter-sheet .karakter-microchip-slot-display:hover {
@@ -1709,6 +1710,35 @@
 
 .votv.karakter-sheet .karakter-microchip-slot-option:first-child {
   color: var(--votv-text-muted);
+}
+
+/* Mikro-Chip táblázat: Név cella (ikon + equipped pont + név) – mint fegyver */
+.votv.karakter-sheet .karakter-equipment-microchips .karakter-equipment-cell-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 8px;
+  box-sizing: border-box;
+}
+.votv.karakter-sheet .karakter-equipment-microchips .karakter-equipment-cell-name .karakter-microchip-label {
+  flex: 1;
+  min-width: 0;
+}
+.votv.karakter-sheet .karakter-equipment-microchips .karakter-equipment-cell-name .karakter-equipment-icon {
+  flex-shrink: 0;
+  margin-right: 0;
+}
+
+/* Mikro-Chip táblázat: KP oszlop keskeny, mint a fegyvernél a Lőszer */
+.votv.karakter-sheet .karakter-equipment-microchips .karakter-equipment-th-kp {
+  width: 1%;
+  max-width: 4.5em;
+  min-width: 3.2em;
+}
+.votv.karakter-sheet .karakter-equipment-microchips .karakter-equipment-cell-kp {
+  width: 1%;
+  min-width: 3.2em;
+  white-space: nowrap;
 }
 
 /* Equipment / inventory – four tables: Fegyverek, Páncél, Mikro-Chip, Tárgyak */
