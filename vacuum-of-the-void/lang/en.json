@@ -14,6 +14,12 @@
   "TYPES.Item.Kepesseg": "Képesség",
   "VOTV.KepessegSheet": "Képesség",
 
+  "TYPES.Item.Targy": "Tárgy",
+  "VOTV.TargySheet": "Tárgy",
+
+  "TYPES.Item.Egyeb": "Egyéb Információ",
+  "VOTV.EgyebSheet": "Egyéb Információ",
+
   "VOTV.LabelName": "Name",
   "VOTV.LabelPlayer": "Player",
   "VOTV.LabelConcept": "Concept",

@@ -1,36 +1,42 @@
-/* Tárgy item sheet – ugyanaz a kialakítás mint a többi (pl. Mikro-Chip), csak a szükséges mezőkkel */
+/* Tárgy és Egyeb item sheet – ugyanaz a kialakítás (fejléc + leírás) */
 
-.vacuum-of-the-void.sheet.item.Targy .sheet-header {
+.vacuum-of-the-void.sheet.item.Targy .sheet-header,
+.vacuum-of-the-void.sheet.item.Egyeb .sheet-header {
   display: flex;
   align-items: center;
   gap: 10px;
 }
 
-.vacuum-of-the-void.sheet.item.Targy .sheet-header .profile {
+.vacuum-of-the-void.sheet.item.Targy .sheet-header .profile,
+.vacuum-of-the-void.sheet.item.Egyeb .sheet-header .profile {
   width: 64px;
   height: 64px;
   object-fit: cover;
 }
 
-.vacuum-of-the-void.sheet.item.Targy .header-fields {
+.vacuum-of-the-void.sheet.item.Targy .header-fields,
+.vacuum-of-the-void.sheet.item.Egyeb .header-fields {
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 
-.vacuum-of-the-void.sheet.item.Targy .item-name input {
+.vacuum-of-the-void.sheet.item.Targy .item-name input,
+.vacuum-of-the-void.sheet.item.Egyeb .item-name input {
   width: 100%;
 }
 
-.vacuum-of-the-void.sheet.item.Targy .sheet-body {
+.vacuum-of-the-void.sheet.item.Targy .sheet-body,
+.vacuum-of-the-void.sheet.item.Egyeb .sheet-body {
   margin-top: 8px;
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.vacuum-of-the-void.sheet.item.Targy .field label {
+.vacuum-of-the-void.sheet.item.Targy .field label,
+.vacuum-of-the-void.sheet.item.Egyeb .field label {
   display: block;
   margin-bottom: 2px;
 }

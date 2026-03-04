@@ -613,7 +613,27 @@
 
     <section class="karakter-panel karakter-notes">
       <h2>Egyéb Információk</h2>
-      {{editor system.notes.biography target="system.notes.biography" button=true owner=owner editable=editable}}
+      <div class="karakter-notes-split">
+        <div class="karakter-notes-left">
+          <textarea name="system.notes.biography" data-dtype="String" rows="3" placeholder="Egyéb információk…">{{system.notes.biography}}</textarea>
+        </div>
+        <div class="karakter-notes-right" data-drop-zone="egyeb">
+          <div class="karakter-notes-egyeb-list">
+            {{#each egyebList}}
+              <div class="karakter-notes-egyeb-row" data-item-id="{{this.itemId}}">
+                {{#if this.img}}<img class="karakter-notes-egyeb-icon" src="{{this.img}}" alt="" data-item-id="{{this.itemId}}" />{{/if}}
+                <div class="karakter-notes-egyeb-main">
+                  <span class="karakter-inventory-item-name karakter-notes-egyeb-name" data-item-id="{{this.itemId}}">{{this.name}}</span>
+                  {{#if this.description}}<p class="karakter-notes-egyeb-desc">{{this.description}}</p>{{/if}}
+                </div>
+                <button type="button" class="karakter-equipment-delete karakter-item-delete" data-item-id="{{this.itemId}}" data-actor-id="{{this.actorId}}" title="Alt+klikk: Törlés">✕</button>
+              </div>
+            {{else}}
+              <p class="karakter-notes-egyeb-placeholder">Húzz ide Egyéb Információ típusú tételt</p>
+            {{/each}}
+          </div>
+        </div>
+      </div>
     </section>
   </section>
 </form>

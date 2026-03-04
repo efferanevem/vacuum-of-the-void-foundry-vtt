@@ -2070,6 +2070,123 @@
   letter-spacing: 0.08em;
 }
 
+/* Egyéb Információk: két oszlop, mindig egymagas, magasság auto */
+.votv.karakter-sheet .karakter-notes {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  height: auto;
+}
+
+.votv.karakter-sheet .karakter-notes > h2 {
+  flex: 0 0 auto;
+}
+
+.votv.karakter-sheet .karakter-notes-split {
+  display: flex;
+  gap: 10px;
+  align-items: stretch;
+  height: auto;
+}
+
+.votv.karakter-sheet .karakter-notes-left,
+.votv.karakter-sheet .karakter-notes-right {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--votv-border-muted);
+  border-radius: var(--votv-radius);
+  background: rgba(3, 6, 10, 0.5);
+  padding: 6px 8px;
+}
+
+.votv.karakter-sheet .karakter-notes-left textarea {
+  height: auto;
+  min-height: 2.5em;
+  resize: none;
+  field-sizing: content;
+  border: none;
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
+}
+
+.votv.karakter-sheet .karakter-notes-left textarea:focus,
+.votv.karakter-sheet .karakter-notes-left textarea:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+.votv.karakter-sheet .karakter-notes-left:focus-within {
+  border-color: var(--votv-focus-ring);
+  box-shadow: 0 0 0 1px rgba(43, 255, 136, 0.35);
+}
+
+.votv.karakter-sheet .karakter-notes-right {
+  min-height: 0;
+}
+
+/* Egyéb Információk jobb oldal: Egyeb típusú elemek listája + drop zone */
+.votv.karakter-sheet .karakter-notes-egyeb-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 2em;
+}
+
+.votv.karakter-sheet .karakter-notes-egyeb-placeholder {
+  margin: 0;
+  font-size: var(--votv-font-body);
+  color: var(--votv-text-muted);
+  opacity: 0.85;
+}
+
+.votv.karakter-sheet .karakter-notes-egyeb-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 4px 6px;
+  border: 1px solid var(--votv-border-muted);
+  border-radius: var(--votv-radius);
+  background: rgba(3, 6, 10, 0.5);
+}
+
+.votv.karakter-sheet .karakter-notes-egyeb-icon {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  border-radius: 2px;
+  border: 1px solid var(--votv-border-muted);
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.votv.karakter-sheet .karakter-notes-egyeb-main {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.votv.karakter-sheet .karakter-notes-egyeb-name {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.votv.karakter-sheet .karakter-notes-egyeb-desc {
+  margin: 0;
+  font-size: 0.9em;
+  color: var(--votv-text-muted);
+  line-height: 1.3;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.votv.karakter-sheet .karakter-notes-right.karakter-notes-egyeb-drag-over {
+  border-color: var(--votv-focus-ring);
+  background: rgba(43, 255, 136, 0.08);
+}
+
 .votv.karakter-sheet .karakter-inventory-icon img {
   border-radius: 2px;
   border: 1px solid var(--votv-border-muted);

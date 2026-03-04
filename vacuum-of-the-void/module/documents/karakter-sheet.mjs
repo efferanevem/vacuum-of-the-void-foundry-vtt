@@ -435,7 +435,7 @@
         equipped
       };
     });
-    // Felszerelés: Tárgyak táblázat – Targy típusú itemek (mint fegyver, nincs equipped oszlop)
+    // Felszerelés: Tárgyak táblázat – csak Targy típusú itemek (Egyeb a jobb oldali Egyéb infó panelbe kerül)
     const targyDocs = (this.actor.items?.contents ?? []).filter(i => i.type === "Targy");
     context.itemsTable = targyDocs.map((item) => {
       const sys = item?.system ?? {};
@@ -448,6 +448,20 @@
         name: item?.name ?? "—",
         img: item?.img ?? "",
         quantity,
+        description
+      };
+    });
+    // Egyéb Információk jobb oldal: csak Egyeb típusú itemek (drop zone + lista)
+    const egyebDocs = (this.actor.items?.contents ?? []).filter(i => i.type === "Egyeb");
+    context.egyebList = egyebDocs.map((item) => {
+      const sys = item?.system ?? {};
+      const descRaw = (sys.description ?? "").trim();
+      const description = descRaw ? (descRaw.length > 80 ? descRaw.slice(0, 77) + "…" : descRaw) : "";
+      return {
+        itemId: item.id,
+        actorId: this.actor.id,
+        name: item?.name ?? "—",
+        img: item?.img ?? "",
         description
       };
     });
@@ -1070,7 +1084,7 @@
       const itemId = (input.dataset.itemId ?? "").trim();
       if (!itemId) return;
       const item = this.actor.items.get(itemId);
-      if (!item || item.type !== "Targy") return;
+      if (!item || item.type !== "Targy") return; // Egyeb nincs mennyiség mező
       const val = (input.value ?? "").trim();
       await item.update({ "system.quantity": val });
       setTimeout(() => {
@@ -1087,7 +1101,7 @@
       const itemId = ev.currentTarget.dataset.itemId;
       if (!itemId) return;
       const item = this.actor.items.get(itemId);
-      if (!item || item.type !== "Targy") return;
+      if (!item || (item.type !== "Targy" && item.type !== "Egyeb")) return;
       await this.actor.deleteEmbeddedDocuments("Item", [itemId]);
     });
 
@@ -1277,7 +1291,7 @@
           }
           return;
         }
-        if (doc && doc.documentName === "Item" && doc.type === "Targy") {
+        if (doc && doc.documentName === "Item" && (doc.type === "Targy" || doc.type === "Egyeb")) {
           const actor = this.actor;
           if (doc.parent?.id !== actor.id) {
             await actor.createEmbeddedDocuments("Item", [doc.toObject()]);
