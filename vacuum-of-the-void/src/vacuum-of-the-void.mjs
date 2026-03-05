@@ -56,11 +56,11 @@ Hooks.once("init", () => {
     makeDefault: true,
     label: "VOTV.KarakterSheet"
   });
-  // foundry.documents.collections.Actors.registerSheet("vacuum-of-the-void", VoidNpcSheet, {
-  //   types: ["Npc"],
-  //   makeDefault: true,
-  //   label: "VOTV.NpcSheet"
-  // });
+  foundry.documents.collections.Actors.registerSheet("vacuum-of-the-void", VoidNpcSheet, {
+    types: ["Npc"],
+    makeDefault: true,
+    label: "VOTV.NpcSheet"
+  });
 
   // Register item sheets
   foundry.documents.collections.Items.registerSheet("vacuum-of-the-void", VoidWeaponSheet, {
