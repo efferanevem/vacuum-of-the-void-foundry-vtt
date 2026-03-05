@@ -1,5 +1,5 @@
 import { KarakterDataModel, WeaponDataModel, ShieldDataModel, MicrochipDataModel, AbilityDataModel, TargyDataModel, EgyebDataModel } from "../module/data-models/index.mjs";
-import { VoidKarakterSheet, VoidWeaponSheet, VoidShieldSheet, VoidMicrochipSheet, VoidAbilitySheet, VoidTargySheet, VoidEgyebSheet } from "../module/documents.mjs";
+import { VoidKarakterSheet, VoidNpcSheet, VoidWeaponSheet, VoidShieldSheet, VoidMicrochipSheet, VoidAbilitySheet, VoidTargySheet, VoidEgyebSheet } from "../module/documents.mjs";
 
 const VOTV_DEFAULT_SCENE_BG = "systems/vacuum-of-the-void/assets/void-bg.jpg";
 
@@ -39,6 +39,7 @@ Hooks.once("init", () => {
 
   CONFIG.Actor.typeLabels ??= {};
   CONFIG.Actor.typeLabels.Karakter = "Karakter";
+  CONFIG.Actor.typeLabels.Npc = "NPC";
 
   CONFIG.Item.typeLabels ??= {};
   CONFIG.Item.typeLabels.Fegyver = "Fegyver";
@@ -55,6 +56,11 @@ Hooks.once("init", () => {
     makeDefault: true,
     label: "VOTV.KarakterSheet"
   });
+  // foundry.documents.collections.Actors.registerSheet("vacuum-of-the-void", VoidNpcSheet, {
+  //   types: ["Npc"],
+  //   makeDefault: true,
+  //   label: "VOTV.NpcSheet"
+  // });
 
   // Register item sheets
   foundry.documents.collections.Items.registerSheet("vacuum-of-the-void", VoidWeaponSheet, {

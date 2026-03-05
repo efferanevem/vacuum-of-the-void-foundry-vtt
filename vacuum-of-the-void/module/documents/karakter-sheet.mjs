@@ -3,25 +3,33 @@ import { computeVotvCritInfo } from "../util/votv-result-type.mjs";
                export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplicationMixin(
   foundry.applications.sheets.ActorSheetV2
 ) {
-  static PARTS = foundry.utils.mergeObject(super.PARTS ?? {}, {
-    content: { template: "systems/vacuum-of-the-void/templates/actor/karakter-sheet.hbs" }
-  });
+  static PARTS = foundry.utils.mergeObject(
+    super.PARTS ?? {},
+    {
+      content: { template: "systems/vacuum-of-the-void/templates/actor/karakter-sheet.hbs" }
+    },
+    { inplace: false }
+  );
 
-  static DEFAULT_OPTIONS = foundry.utils.mergeObject(super.DEFAULT_OPTIONS, {
-    classes: ["vacuum-of-the-void", "sheet", "actor", "Karakter"],
-    template: "systems/vacuum-of-the-void/templates/actor/karakter-sheet.hbs",
-    width: 1000,
-    minWidth: 1000,
-    height: 800,
-    form: foundry.utils.mergeObject(super.DEFAULT_OPTIONS?.form ?? {}, { submitOnChange: false }),
-    window: foundry.utils.mergeObject(super.DEFAULT_OPTIONS?.window ?? {}, {
-      resizable: true,
-      contentClasses: [
-        ...(super.DEFAULT_OPTIONS?.window?.contentClasses ?? []),
-        "votv-scroll"
-      ]
-    })
-  });
+  static DEFAULT_OPTIONS = foundry.utils.mergeObject(
+    super.DEFAULT_OPTIONS,
+    {
+      classes: ["vacuum-of-the-void", "sheet", "actor", "Karakter"],
+      template: "systems/vacuum-of-the-void/templates/actor/karakter-sheet.hbs",
+      width: 1000,
+      minWidth: 1000,
+      height: 800,
+      form: foundry.utils.mergeObject(super.DEFAULT_OPTIONS?.form ?? {}, { submitOnChange: false }),
+      window: foundry.utils.mergeObject(super.DEFAULT_OPTIONS?.window ?? {}, {
+        resizable: true,
+        contentClasses: [
+          ...(super.DEFAULT_OPTIONS?.window?.contentClasses ?? []),
+          "votv-scroll"
+        ]
+      })
+    },
+    { inplace: false }
+  );
 
   _initializeApplicationOptions(options) {
     const result = super._initializeApplicationOptions(options);

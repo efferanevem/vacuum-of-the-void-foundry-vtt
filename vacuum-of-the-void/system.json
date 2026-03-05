@@ -27,7 +27,8 @@
   ],
   "documentTypes": {
     "Actor": {
-      "Karakter": {}
+      "Karakter": {},
+      "Npc": {}
     },
     "Item": {
       "Fegyver": {},

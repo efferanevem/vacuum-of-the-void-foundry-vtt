@@ -1,0 +1,903 @@
+<form class="votv npc-sheet" autocomplete="off">
+  <header class="npc-header">
+    <section class="karakter-panel npc-header-portrait">
+      <img
+        class="karakter-portrait-img"
+        src="{{actor.img}}"
+        data-edit="img"
+        alt="{{actor.name}}"
+        title="{{actor.name}}"
+      />
+      {{#if showDeathSkull}}
+        <img
+          class="karakter-portrait-death-skull"
+          src="systems/vacuum-of-the-void/assets/death_skull.svg"
+          alt=""
+          aria-hidden="true"
+        />
+      {{/if}}
+    </section>
+
+    <section class="karakter-panel npc-header-main">
+      <div class="npc-header-row">
+        <div class="npc-header-field npc-header-name">
+          <label>NĂ©v</label>
+          <input
+            type="text"
+            name="name"
+            value="{{actor.name}}"
+            placeholder="NPC neve"
+            data-dtype="String"
+          />
+        </div>
+        <div class="npc-header-field npc-header-size">
+          <label>MĂ©ret</label>
+          <input type="text" name="system.identity.size" value="{{system.identity.size}}" />
+        </div>
+      </div>
+
+      <div class="npc-header-row npc-header-row-stats">
+        <div class="npc-header-field">
+          <label>VĂ©delem</label>
+          <div class="npc-header-triple">
+            <input
+              type="number"
+              name="system.combat.defense"
+              value="{{system.combat.defense}}"
+              min="0"
+            />
+            <span class="npc-header-plus">+</span>
+            <input
+              type="number"
+              name="system.combat.defenseBonus"
+              value="{{system.combat.defenseBonus}}"
+              min="0"
+            />
+            <span class="npc-header-equal">=</span>
+            <span
+              class="karakter-given-defense-effective"
+              title="Kapott vĂ©delem"
+            >{{system.combat.givenProtection}}</span>
+          </div>
+        </div>
+
+        <div class="npc-header-field" data-legs-health="{{computedHealthStatus.legs}}">
+          <label>SebessĂ©g</label>
+          <div class="npc-header-triple">
+            <input
+              type="number"
+              name="system.combat.speed"
+              value="{{system.combat.speed}}"
+              min="0"
+            />
+            <span class="npc-header-plus">+</span>
+            <input
+              type="number"
+              name="system.combat.speedBonus"
+              value="{{system.combat.speedBonus}}"
+              min="0"
+            />
+            <span class="npc-header-equal">=</span>
+            <span
+              class="karakter-given-speed-effective"
+              title="Kapott sebessĂ©g"
+            >{{system.combat.givenSpeed}}</span>
+            <span class="npc-header-speed-unit">m</span>
+          </div>
+        </div>
+
+        <div class="npc-header-field npc-header-health">
+          <label>Ă‰leterĹ‘</label>
+          <div class="npc-header-health-boxes">
+            <input
+              type="number"
+              name="system.resources.health.max"
+              value="{{system.resources.health.max}}"
+              min="0"
+            />
+            <span class="npc-header-health-slash">/</span>
+            <input
+              type="number"
+              name="system.resources.health.value"
+              value="{{system.resources.health.value}}"
+              min="0"
+            />
+          </div>
+        </div>
+      </div>
+    </section>
+  </header>
+
+  <section class="npc-main">
+    <div class="npc-row-top">
+      <section class="karakter-panel npc-skills">
+        <h2>JĂˇrtassĂˇgok</h2>
+        <div class="karakter-skills-grid">
+          <div class="karakter-skills-column">
+            <div class="karakter-skill" {{#if skillHasHealthTint.deception}}data-health-status="{{skillHealthStatus.deception}}"{{/if}}>
+              <label class="karakter-skill-label" data-skill="deception">ĂtverĂ©s</label>
+              <input
+                type="number"
+                name="system.skills.deception"
+                value="{{system.skills.deception}}"
+                min="-99"
+                max="999"{{{skillDisabled.deception}}}
+              />
+            </div>
+            <div class="karakter-skill" {{#if skillHasHealthTint.medicalCare}}data-health-status="{{skillHealthStatus.medicalCare}}"{{/if}}>
+              <label class="karakter-skill-label" data-skill="medicalCare">BetegellĂˇtĂˇs</label>
+              <input
+                type="number"
+                name="system.skills.medicalCare"
+                value="{{system.skills.medicalCare}}"
+                min="-99"
+                max="999"{{{skillDisabled.medicalCare}}}
+              />
+            </div>
+            <div class="karakter-skill" {{#if skillHasHealthTint.endurance}}data-health-status="{{skillHealthStatus.endurance}}"{{/if}}>
+              <label class="karakter-skill-label" data-skill="endurance">ErĹ‘nlĂ©t</label>
+              <input
+                type="number"
+                name="system.skills.endurance"
+                value="{{system.skills.endurance}}"
+                min="-99"
+                max="999"{{{skillDisabled.endurance}}}
+              />
+            </div>
+            <div class="karakter-skill" {{#if skillHasHealthTint.perception}}data-health-status="{{skillHealthStatus.perception}}"{{/if}}>
+              <label class="karakter-skill-label" data-skill="perception">Ă‰szlelĂ©s</label>
+              <input
+                type="number"
+                name="system.skills.perception"
+                value="{{system.skills.perception}}"
+                min="-99"
+                max="999"{{{skillDisabled.perception}}}
+              />
+            </div>
+            <div class="karakter-skill" {{#if skillHasHealthTint.cooking}}data-health-status="{{skillHealthStatus.cooking}}"{{/if}}>
+              <label class="karakter-skill-label" data-skill="cooking">FĹ‘zĂ©s</label>
+              <input
+                type="number"
+                name="system.skills.cooking"
+                value="{{system.skills.cooking}}"
+                min="-99"
+                max="999"{{{skillDisabled.cooking}}}
+              />
+            </div>
+            <div class="karakter-skill" {{#if skillHasHealthTint.quickThinking}}data-health-status="{{skillHealthStatus.quickThinking}}"{{/if}}>
+              <label class="karakter-skill-label" data-skill="quickThinking">GyorsgondolkodĂˇs</label>
+              <input
+                type="number"
+                name="system.skills.quickThinking"
+                value="{{system.skills.quickThinking}}"
+                min="-99"
+                max="999"{{{skillDisabled.quickThinking}}}
+              />
+            </div>
+            <div class="karakter-skill" {{#if skillHasHealthTint.combatTraining}}data-health-status="{{skillHealthStatus.combatTraining}}"{{/if}}>
+              <label class="karakter-skill-label" data-skill="combatTraining">HarckĂ©pzettsĂ©g</label>
+              <input
+                type="number"
+                name="system.skills.combatTraining"
+                value="{{system.skills.combatTraining}}"
+                min="-99"
+                max="999"{{{skillDisabled.combatTraining}}}
+              />
+            </div>
+            <div class="karakter-skill" {{#if skillHasHealthTint.vehicleOperation}}data-health-status="{{skillHealthStatus.vehicleOperation}}"{{/if}}>
+              <label class="karakter-skill-label" data-skill="vehicleOperation">JĂˇrmĹ±irĂˇnyĂ­tĂˇs</label>
+              <input
+                type="number"
+                name="system.skills.vehicleOperation"
+                value="{{system.skills.vehicleOperation}}"
+                min="-99"
+                max="999"{{{skillDisabled.vehicleOperation}}}
+              />
+            </div>
+            <div class="karakter-skill" {{#if skillHasHealthTint.grenadeUse}}data-health-status="{{skillHealthStatus.grenadeUse}}"{{/if}}>
+              <label class="karakter-skill-label" data-skill="grenadeUse">KĂ©zifegyver HasznĂˇlat</label>
+              <input
+                type="number"
+                name="system.skills.grenadeUse"
+                value="{{system.skills.grenadeUse}}"
+                min="-99"
+                max="999"{{{skillDisabled.grenadeUse}}}
+              />
+            </div>
+            <div class="karakter-skill" {{#if skillHasHealthTint.lexicalKnowledge}}data-health-status="{{skillHealthStatus.lexicalKnowledge}}"{{/if}}>
+              <label class="karakter-skill-label" data-skill="lexicalKnowledge">LexikĂˇlis TudĂˇs</label>
+              <input
+                type="number"
+                name="system.skills.lexicalKnowledge"
+                value="{{system.skills.lexicalKnowledge}}"
+                min="-99"
+                max="999"{{{skillDisabled.lexicalKnowledge}}}
+              />
+            </div>
+          </div>
+          <div class="karakter-skills-column">
+            <div class="karakter-skill" {{#if skillHasHealthTint.stealth}}data-health-status="{{skillHealthStatus.stealth}}"{{/if}}>
+              <label class="karakter-skill-label" data-skill="stealth">LopakodĂˇs</label>
+              <input
+                type="number"
+                name="system.skills.stealth"
+                value="{{system.skills.stealth}}"
+                min="-99"
+                max="999"{{{skillDisabled.stealth}}}
+              />
+            </div>
+            <div class="karakter-skill" {{#if skillHasHealthTint.firearms}}data-health-status="{{skillHealthStatus.firearms}}"{{/if}}>
+              <label class="karakter-skill-label" data-skill="firearms">LĂ¶veghasznĂˇlat</label>
+              <input
+                type="number"
+                name="system.skills.firearms"
+                value="{{system.skills.firearms}}"
+                min="-99"
+                max="999"{{{skillDisabled.firearms}}}
+              />
+            </div>
+            <div class="karakter-skill" {{#if skillHasHealthTint.intimidation}}data-health-status="{{skillHealthStatus.intimidation}}"{{/if}}>
+              <label class="karakter-skill-label" data-skill="intimidation">MegfĂ©lemlĂ­tĂ©s</label>
+              <input
+                type="number"
+                name="system.skills.intimidation"
+                value="{{system.skills.intimidation}}"
+                min="-99"
+                max="999"{{{skillDisabled.intimidation}}}
+              />
+            </div>
+            <div class="karakter-skill" {{#if skillHasHealthTint.persuasion}}data-health-status="{{skillHealthStatus.persuasion}}"{{/if}}>
+              <label class="karakter-skill-label" data-skill="persuasion">MeggyĹ‘zĂ©s</label>
+              <input
+                type="number"
+                name="system.skills.persuasion"
+                value="{{system.skills.persuasion}}"
+                min="-99"
+                max="999"{{{skillDisabled.persuasion}}}
+              />
+            </div>
+            <div class="karakter-skill" {{#if skillHasHealthTint.memory}}data-health-status="{{skillHealthStatus.memory}}"{{/if}}>
+              <label class="karakter-skill-label" data-skill="memory">MemĂłria</label>
+              <input
+                type="number"
+                name="system.skills.memory"
+                value="{{system.skills.memory}}"
+                min="-99"
+                max="999"{{{skillDisabled.memory}}}
+              />
+            </div>
+            <div class="karakter-skill" {{#if skillHasHealthTint.mentalStrength}}data-health-status="{{skillHealthStatus.mentalStrength}}"{{/if}}>
+              <label class="karakter-skill-label" data-skill="mentalStrength">MentĂˇlis ErĹ‘ssĂ©g</label>
+              <input
+                type="number"
+                name="system.skills.mentalStrength"
+                value="{{system.skills.mentalStrength}}"
+                min="-99"
+                max="999"{{{skillDisabled.mentalStrength}}}
+              />
+            </div>
+            <div class="karakter-skill" {{#if skillHasHealthTint.languages}}data-health-status="{{skillHealthStatus.languages}}"{{/if}}>
+              <label class="karakter-skill-label" data-skill="languages">Nyelvek</label>
+              <input
+                type="number"
+                name="system.skills.languages"
+                value="{{system.skills.languages}}"
+                min="-99"
+                max="999"{{{skillDisabled.languages}}}
+              />
+            </div>
+            <div class="karakter-skill" {{#if skillHasHealthTint.luck}}data-health-status="{{skillHealthStatus.luck}}"{{/if}}>
+              <label class="karakter-skill-label" data-skill="luck">Szerencse</label>
+              <input
+                type="number"
+                name="system.skills.luck"
+                value="{{system.skills.luck}}"
+                min="-99"
+                max="999"{{{skillDisabled.luck}}}
+              />
+            </div>
+            <div class="karakter-skill" {{#if skillHasHealthTint.technicalKnowledge}}data-health-status="{{skillHealthStatus.technicalKnowledge}}"{{/if}}>
+              <label class="karakter-skill-label" data-skill="technicalKnowledge">Technikai TudĂˇs</label>
+              <input
+                type="number"
+                name="system.skills.technicalKnowledge"
+                value="{{system.skills.technicalKnowledge}}"
+                min="-99"
+                max="999"{{{skillDisabled.technicalKnowledge}}}
+              />
+            </div>
+            <div class="karakter-skill" {{#if skillHasHealthTint.music}}data-health-status="{{skillHealthStatus.music}}"{{/if}}>
+              <label class="karakter-skill-label" data-skill="music">Zene</label>
+              <input
+                type="number"
+                name="system.skills.music"
+                value="{{system.skills.music}}"
+                min="-99"
+                max="999"{{{skillDisabled.music}}}
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="karakter-panel npc-abilities">
+        <h2>KĂ©pessĂ©gek</h2>
+        <div class="karakter-abilities-grid">
+          <div class="karakter-abilities-row karakter-abilities-row-top">
+            <div class="karakter-ability-area karakter-ability-slot-single" data-slot="faji" data-drop-zone="ability">
+              <div class="karakter-ability-area-header">Faji KĂ©pessĂ©g</div>
+              <div class="karakter-ability-area-list">
+                {{#if abilityFajiSlot.itemId}}
+                  <div class="karakter-ability-pill" data-item-id="{{abilityFajiSlot.itemId}}">
+                    <div class="karakter-ability-main">
+                      {{#if abilityFajiSlot.img}}
+                        <img
+                          class="karakter-ability-pill-thumb karakter-ability-open"
+                          src="{{abilityFajiSlot.img}}"
+                          alt=""
+                          data-item-id="{{abilityFajiSlot.itemId}}"
+                        />
+                      {{/if}}
+                      <span
+                        class="karakter-ability-pill-name karakter-ability-open"
+                        data-item-id="{{abilityFajiSlot.itemId}}"
+                        title="{{abilityFajiSlot.displayName}}"
+                      >
+                        {{abilityFajiSlot.displayName}}{{#if abilityFajiSlot.kp}} ({{abilityFajiSlot.kp}} KP){{/if}}
+                      </span>
+                    </div>
+                    <div class="karakter-ability-actions">
+                      <button
+                        type="button"
+                        class="karakter-ability-chat"
+                        data-item-id="{{abilityFajiSlot.itemId}}"
+                        title="Chat-be kĂĽldĂ©s"
+                      >
+                        <i class="fas fa-comment-dots"></i>
+                      </button>
+                      <button
+                        type="button"
+                        class="karakter-ability-slot-clear karakter-ability-pill-remove"
+                        data-slot="faji"
+                        data-area="faji"
+                        data-item-id="{{abilityFajiSlot.itemId}}"
+                        title="Alt+klikk: EltĂˇvolĂ­tĂˇs"
+                      >
+                        âś•
+                      </button>
+                    </div>
+                  </div>
+                {{else}}
+                  <div class="karakter-ability-area-placeholder">HĂşzz ide egy kĂ©pessĂ©get</div>
+                {{/if}}
+              </div>
+            </div>
+
+            <div class="karakter-ability-area karakter-ability-slot-single" data-slot="hatter" data-drop-zone="ability">
+              <div class="karakter-ability-area-header">HĂˇttĂ©r KĂ©pessĂ©g</div>
+              <div class="karakter-ability-area-list">
+                {{#if abilityHatterSlot.itemId}}
+                  <div class="karakter-ability-pill" data-item-id="{{abilityHatterSlot.itemId}}">
+                    <div class="karakter-ability-main">
+                      {{#if abilityHatterSlot.img}}
+                        <img
+                          class="karakter-ability-pill-thumb karakter-ability-open"
+                          src="{{abilityHatterSlot.img}}"
+                          alt=""
+                          data-item-id="{{abilityHatterSlot.itemId}}"
+                        />
+                      {{/if}}
+                      <span
+                        class="karakter-ability-pill-name karakter-ability-open"
+                        data-item-id="{{abilityHatterSlot.itemId}}"
+                        title="{{abilityHatterSlot.displayName}}"
+                      >
+                        {{abilityHatterSlot.displayName}}{{#if abilityHatterSlot.kp}} ({{abilityHatterSlot.kp}} KP){{/if}}
+                      </span>
+                    </div>
+                    <div class="karakter-ability-actions">
+                      <button
+                        type="button"
+                        class="karakter-ability-chat"
+                        data-item-id="{{abilityHatterSlot.itemId}}"
+                        title="Chat-be kĂĽldĂ©s"
+                      >
+                        <i class="fas fa-comment-dots"></i>
+                      </button>
+                      <button
+                        type="button"
+                        class="karakter-ability-slot-clear karakter-ability-pill-remove"
+                        data-slot="hatter"
+                        data-area="hatter"
+                        data-item-id="{{abilityHatterSlot.itemId}}"
+                        title="Alt+klikk: EltĂˇvolĂ­tĂˇs"
+                      >
+                        âś•
+                      </button>
+                    </div>
+                  </div>
+                {{else}}
+                  <div class="karakter-ability-area-placeholder">HĂşzz ide egy kĂ©pessĂ©get</div>
+                {{/if}}
+              </div>
+            </div>
+          </div>
+
+          <div class="karakter-abilities-row karakter-abilities-row-bottom">
+            <div class="karakter-ability-area" data-area="passive" data-drop-zone="ability">
+              <div class="karakter-ability-area-header">PasszĂ­v KĂ©pessĂ©gek</div>
+              <div class="karakter-ability-area-list">
+                {{#if abilityPassiveList.length}}
+                  {{#each abilityPassiveList}}
+                    <div class="karakter-ability-pill" data-item-id="{{this.id}}">
+                      <div class="karakter-ability-main">
+                        {{#if this.img}}
+                          <img
+                            class="karakter-ability-pill-thumb karakter-ability-open"
+                            src="{{this.img}}"
+                            alt=""
+                            data-item-id="{{this.id}}"
+                          />
+                        {{/if}}
+                        <span
+                          class="karakter-ability-pill-name karakter-ability-open"
+                          data-item-id="{{this.id}}"
+                          title="{{this.name}}"
+                        >
+                          {{this.name}}{{#if this.kp}} ({{this.kp}} KP){{/if}}
+                        </span>
+                      </div>
+                      <div class="karakter-ability-actions">
+                        <button
+                          type="button"
+                          class="karakter-ability-chat"
+                          data-item-id="{{this.id}}"
+                          title="Chat-be kĂĽldĂ©s"
+                        >
+                          <i class="fas fa-comment-dots"></i>
+                        </button>
+                        <button
+                          type="button"
+                          class="karakter-ability-pill-remove"
+                          data-area="passive"
+                          data-item-id="{{this.id}}"
+                          title="Alt+klikk: EltĂˇvolĂ­tĂˇs"
+                        >
+                          âś•
+                        </button>
+                      </div>
+                    </div>
+                  {{/each}}
+                {{else}}
+                  <div class="karakter-ability-area-placeholder">HĂşzz ide kĂ©pessĂ©geket</div>
+                {{/if}}
+              </div>
+            </div>
+
+            <div class="karakter-ability-area" data-area="active" data-drop-zone="ability">
+              <div class="karakter-ability-area-header">AktĂ­v KĂ©pessĂ©gek</div>
+              <div class="karakter-ability-area-list">
+                {{#if abilityActiveList.length}}
+                  {{#each abilityActiveList}}
+                    <div class="karakter-ability-pill" data-item-id="{{this.id}}">
+                      <div class="karakter-ability-main">
+                        {{#if this.img}}
+                          <img
+                            class="karakter-ability-pill-thumb karakter-ability-open"
+                            src="{{this.img}}"
+                            alt=""
+                            data-item-id="{{this.id}}"
+                          />
+                        {{/if}}
+                        <span
+                          class="karakter-ability-pill-name karakter-ability-open"
+                          data-item-id="{{this.id}}"
+                          title="{{this.name}}"
+                        >
+                          {{this.name}}{{#if this.kp}} ({{this.kp}} KP){{/if}}
+                        </span>
+                      </div>
+                      <div class="karakter-ability-actions">
+                        <button
+                          type="button"
+                          class="karakter-ability-chat"
+                          data-item-id="{{this.id}}"
+                          title="Chat-be kĂĽldĂ©s"
+                        >
+                          <i class="fas fa-comment-dots"></i>
+                        </button>
+                        <button
+                          type="button"
+                          class="karakter-ability-pill-remove"
+                          data-area="active"
+                          data-item-id="{{this.id}}"
+                          title="Alt+klikk: EltĂˇvolĂ­tĂˇs"
+                        >
+                          âś•
+                        </button>
+                      </div>
+                    </div>
+                  {{/each}}
+                {{else}}
+                  <div class="karakter-ability-area-placeholder">HĂşzz ide kĂ©pessĂ©geket</div>
+                {{/if}}
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <section class="karakter-panel npc-attacks">
+      <h2>TĂˇmadĂˇsok</h2>
+      <div class="karakter-weapon-slots">
+        {{#each weaponSlots}}
+          <div class="karakter-weapon-slot" data-slot="{{this.slotKey}}" data-drop-zone="weapon">
+            <div class="karakter-weapon-slot-select-wrap">
+              <div class="karakter-weapon-slot-display">
+                {{#if this.img}}
+                  <img class="karakter-weapon-slot-thumb" src="{{this.img}}" alt="" />
+                {{/if}}
+                <span class="karakter-weapon-slot-display-text">{{this.displayName}}</span>
+              </div>
+            </div>
+            <div class="karakter-weapon-slot-actions">
+              <button
+                type="button"
+                class="karakter-weapon-attack"
+                data-slot="{{this.slotKey}}"
+                title="TĂˇmadĂˇs (talĂˇlat)"
+              >
+                TĂˇmadĂˇs
+              </button>
+              <button
+                type="button"
+                class="karakter-weapon-damage"
+                data-slot="{{this.slotKey}}"
+                data-item-id="{{this.itemId}}"
+                title="SebzĂ©s dobĂˇs"
+              >
+                SebzĂ©s
+              </button>
+            </div>
+          </div>
+        {{/each}}
+      </div>
+    </section>
+
+    <section class="karakter-panel npc-equipment">
+      <h2>FelszerelĂ©s</h2>
+      <div class="karakter-equipment-spacer"></div>
+
+      {{#if weaponsTable.length}}
+        <h3 class="karakter-equipment-table-title">Fegyverek</h3>
+        <div class="karakter-equipment-block">
+          <table class="karakter-equipment-table karakter-equipment-weapons">
+            <thead>
+              <tr>
+                <th class="karakter-equipment-th-name">NĂ©v</th>
+                <th class="karakter-equipment-th-type">TĂ­pus, MĂ©ret</th>
+                <th class="karakter-equipment-th-bonus">BĂłnusz</th>
+                <th class="karakter-equipment-th-damage">SebzĂ©s</th>
+                <th class="karakter-equipment-th-range">HatĂłtĂˇv</th>
+                <th class="karakter-equipment-th-ammo">LĹ‘szer/DB</th>
+                <th class="karakter-equipment-th-other">SpeciĂˇlis</th>
+                <th class="karakter-equipment-th-equipped"></th>
+                <th class="karakter-equipment-th-delete"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each weaponsTable}}
+                <tr
+                  class="karakter-equipment-row"
+                  data-slot-key="{{this.slotKey}}"
+                  data-item-id="{{this.itemId}}"
+                >
+                  <td class="karakter-equipment-cell-name">
+                    {{#if this.img}}
+                      <img
+                        class="karakter-equipment-icon"
+                        src="{{this.img}}"
+                        alt=""
+                        data-item-id="{{this.itemId}}"
+                      />
+                    {{/if}}
+                    {{#if this.equipped}}
+                      <span class="karakter-weapon-equipped-dot" title="Felszerelve"></span>
+                    {{/if}}
+                    <span
+                      class="karakter-weapon-label karakter-inventory-item-name"
+                      data-weapon-slot="{{this.slotKey}}"
+                      data-item-id="{{this.itemId}}"
+                    >{{this.name}}</span>
+                  </td>
+                  <td class="karakter-equipment-cell-type">{{this.typeAndSize}}</td>
+                  <td class="karakter-equipment-cell-bonus">{{this.bonus}}</td>
+                  <td class="karakter-equipment-cell-damage">{{this.damage}}</td>
+                  <td class="karakter-equipment-cell-range">{{this.rangeStr}}</td>
+                  <td class="karakter-equipment-cell-ammo">
+                    {{#if this.isProjectile}}
+                      <input
+                        type="text"
+                        class="karakter-weapon-quantity-input"
+                        data-item-id="{{this.itemId}}"
+                        value="{{this.quantity}}"
+                      />
+                    {{else}}
+                      â€”
+                    {{/if}}
+                  </td>
+                  <td class="karakter-equipment-cell-other">{{this.special}}</td>
+                  <td class="karakter-equipment-cell-equipped">
+                    <input
+                      type="checkbox"
+                      class="karakter-weapon-equipped-checkbox"
+                      data-item-id="{{this.itemId}}"
+                      {{checked this.equipped}}
+                      title="Felszerelve"
+                    />
+                  </td>
+                  <td class="karakter-equipment-cell-delete">
+                    <button
+                      type="button"
+                      class="karakter-equipment-delete karakter-weapon-delete"
+                      data-item-id="{{this.itemId}}"
+                      data-slot-key="{{this.slotKey}}"
+                      data-actor-id="{{this.actorId}}"
+                      title="Alt+klikk: TĂ¶rlĂ©s az inventory-bĂłl"
+                    >
+                      âś•
+                    </button>
+                  </td>
+                </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+      {{/if}}
+
+      {{#if armorTable.length}}
+        <h3 class="karakter-equipment-table-title">PĂˇncĂ©lok</h3>
+        <div class="karakter-equipment-block">
+          <table class="karakter-equipment-table karakter-equipment-armor">
+            <thead>
+              <tr>
+                <th class="karakter-equipment-th-name">NĂ©v</th>
+                <th class="karakter-equipment-th-protection">VĂ©delem BĂłnusz</th>
+                <th class="karakter-equipment-th-speed">SebessĂ©g LevonĂˇs (m)</th>
+                <th class="karakter-equipment-th-level">Szint</th>
+                <th class="karakter-equipment-th-other">SpeciĂˇlis</th>
+                <th class="karakter-equipment-th-equipped"></th>
+                <th class="karakter-equipment-th-delete"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each armorTable}}
+                <tr class="karakter-equipment-row" data-item-id="{{this.itemId}}">
+                  <td class="karakter-equipment-cell-name">
+                    {{#if this.img}}
+                      <img
+                        class="karakter-equipment-icon karakter-inventory-item-icon"
+                        src="{{this.img}}"
+                        alt=""
+                        data-item-id="{{this.itemId}}"
+                      />
+                    {{/if}}
+                    {{#if this.equipped}}
+                      <span class="karakter-weapon-equipped-dot" title="Felszerelve"></span>
+                    {{/if}}
+                    <span
+                      class="karakter-armor-label karakter-inventory-item-name"
+                      data-item-id="{{this.itemId}}"
+                    >{{this.name}}</span>
+                  </td>
+                  <td class="karakter-equipment-cell-bonus">{{this.protectionBonus}}</td>
+                  <td class="karakter-equipment-cell-speed">{{this.speedPenalty}}</td>
+                  <td class="karakter-equipment-cell-level">{{this.level}}</td>
+                  <td class="karakter-equipment-cell-other">{{this.special}}</td>
+                  <td class="karakter-equipment-cell-equipped">
+                    <input
+                      type="checkbox"
+                      class="karakter-armor-equipped-checkbox"
+                      data-item-id="{{this.itemId}}"
+                      {{checked this.equipped}}
+                      title="Felszerelve"
+                    />
+                  </td>
+                  <td class="karakter-equipment-cell-delete">
+                    <button
+                      type="button"
+                      class="karakter-equipment-delete karakter-armor-delete"
+                      data-item-id="{{this.itemId}}"
+                      data-actor-id="{{this.actorId}}"
+                      title="Alt+klikk: TĂ¶rlĂ©s az inventory-bĂłl"
+                    >
+                      âś•
+                    </button>
+                  </td>
+                </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+      {{/if}}
+
+      {{#if microchipsTable.length}}
+        <h3 class="karakter-equipment-table-title">Mikro-Chip-ek</h3>
+        <div class="karakter-equipment-block">
+          <table class="karakter-equipment-table karakter-equipment-microchips">
+            <thead>
+              <tr>
+                <th class="karakter-equipment-th-name">NĂ©v</th>
+                <th class="karakter-equipment-th-type">TĂ­pus</th>
+                <th class="karakter-equipment-th-kp">KP</th>
+                <th class="karakter-equipment-th-desc">LeĂ­rĂˇs</th>
+                <th class="karakter-equipment-th-delete"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each microchipsTable}}
+                <tr
+                  class="karakter-equipment-row"
+                  data-slot-key="{{this.slotKey}}"
+                  data-item-id="{{this.itemId}}"
+                >
+                  <td class="karakter-equipment-cell-name">
+                    {{#if this.img}}
+                      <img
+                        class="karakter-equipment-icon karakter-inventory-item-icon"
+                        src="{{this.img}}"
+                        alt=""
+                        data-item-id="{{this.itemId}}"
+                      />
+                    {{/if}}
+                    {{#if this.equipped}}
+                      <span class="karakter-weapon-equipped-dot" title="Felszerelve"></span>
+                    {{/if}}
+                    <span
+                      class="karakter-microchip-label karakter-inventory-item-name"
+                      data-item-id="{{this.itemId}}"
+                    >{{this.name}}</span>
+                  </td>
+                  <td class="karakter-equipment-cell-type">{{this.typeLabel}}</td>
+                  <td class="karakter-equipment-cell-kp">
+                    {{#if this.isActive}}{{this.kp}}{{else}}â€”{{/if}}
+                  </td>
+                  <td class="karakter-equipment-cell-desc">{{this.description}}</td>
+                  <td class="karakter-equipment-cell-delete">
+                    <button
+                      type="button"
+                      class="karakter-equipment-delete karakter-microchip-delete"
+                      data-item-id="{{this.itemId}}"
+                      data-slot-key="{{this.slotKey}}"
+                      data-actor-id="{{this.actorId}}"
+                      title="Alt+klikk: TĂ¶rlĂ©s az inventory-bĂłl"
+                    >
+                      âś•
+                    </button>
+                  </td>
+                </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+      {{/if}}
+
+      {{#if itemsTable.length}}
+        <h3 class="karakter-equipment-table-title">EgyĂ©b FelszerelĂ©s</h3>
+        <div class="karakter-equipment-block" data-drop-zone="targy">
+          <table class="karakter-equipment-table karakter-equipment-items">
+            <thead>
+              <tr>
+                <th class="karakter-equipment-th-name">NĂ©v</th>
+                <th class="karakter-equipment-th-qty">MennyisĂ©g</th>
+                <th class="karakter-equipment-th-desc">LeĂ­rĂˇs</th>
+                <th class="karakter-equipment-th-delete"></th>
+              </tr>
+            </thead>
+            <tbody>
+              {{#each itemsTable}}
+                <tr class="karakter-equipment-row" data-item-id="{{this.itemId}}">
+                  <td class="karakter-equipment-cell-name">
+                    {{#if this.img}}
+                      <img
+                        class="karakter-equipment-icon"
+                        src="{{this.img}}"
+                        alt=""
+                        data-item-id="{{this.itemId}}"
+                      />
+                    {{/if}}
+                    <span
+                      class="karakter-inventory-item-name"
+                      data-item-id="{{this.itemId}}"
+                    >{{this.name}}</span>
+                  </td>
+                  <td class="karakter-equipment-cell-qty">
+                    <input
+                      type="text"
+                      class="karakter-item-quantity-input"
+                      data-item-id="{{this.itemId}}"
+                      value="{{this.quantity}}"
+                    />
+                  </td>
+                  <td class="karakter-equipment-cell-desc">{{this.description}}</td>
+                  <td class="karakter-equipment-cell-delete">
+                    <button
+                      type="button"
+                      class="karakter-equipment-delete karakter-item-delete"
+                      data-item-id="{{this.itemId}}"
+                      data-actor-id="{{this.actorId}}"
+                      title="Alt+klikk: TĂ¶rlĂ©s az inventory-bĂłl"
+                    >
+                      âś•
+                    </button>
+                  </td>
+                </tr>
+              {{/each}}
+            </tbody>
+          </table>
+        </div>
+      {{/if}}
+    </section>
+
+    <section class="karakter-panel npc-notes">
+      <h2>EgyĂ©b InformĂˇciĂłk</h2>
+      <div class="karakter-notes-split">
+        <div class="karakter-notes-left">
+          <textarea
+            name="system.notes.biography"
+            data-dtype="String"
+            rows="3"
+            placeholder="EgyĂ©b informĂˇciĂłkâ€¦"
+          >{{system.notes.biography}}</textarea>
+        </div>
+        <div class="karakter-notes-right" data-drop-zone="egyeb">
+          <div class="karakter-notes-egyeb-list">
+            {{#each egyebList}}
+              <div class="karakter-notes-egyeb-row" data-item-id="{{this.itemId}}">
+                {{#if this.img}}
+                  <img
+                    class="karakter-notes-egyeb-icon"
+                    src="{{this.img}}"
+                    alt=""
+                    data-item-id="{{this.itemId}}"
+                  />
+                {{/if}}
+                <div class="karakter-notes-egyeb-main">
+                  <span
+                    class="karakter-inventory-item-name karakter-notes-egyeb-name"
+                    data-item-id="{{this.itemId}}"
+                  >{{this.name}}</span>
+                  {{#if this.description}}
+                    <p class="karakter-notes-egyeb-desc">{{this.description}}</p>
+                  {{/if}}
+                </div>
+                <button
+                  type="button"
+                  class="karakter-item-chat"
+                  data-item-id="{{this.itemId}}"
+                  title="Chat-be kĂĽldĂ©s"
+                >
+                  <i class="fas fa-comment-dots"></i>
+                </button>
+                <button
+                  type="button"
+                  class="karakter-equipment-delete karakter-item-delete"
+                  data-item-id="{{this.itemId}}"
+                  data-actor-id="{{this.actorId}}"
+                  title="Alt+klikk: TĂ¶rlĂ©s"
+                >
+                  âś•
+                </button>
+              </div>
+            {{else}}
+              <p class="karakter-notes-egyeb-placeholder">
+                Húzz ide Egyéb Információ típusú tételt
+              </p>
+            {{/each}}
+          </div>
+        </div>
+      </div>
+    </section>
+  </section>
+</form>
