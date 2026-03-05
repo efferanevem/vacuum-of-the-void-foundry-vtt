@@ -1,3 +1,5 @@
+import { computeVotvCritInfo } from "../util/votv-result-type.mjs";
+
 /**
  * Roll sheet: skill roll with 3d6 + modifiers, optional morale dice, advantage/disadvantage, constant bonus.
  * Opened when clicking a skill label on the PC sheet.
@@ -218,14 +220,13 @@ export class VoidRollSheet extends Application {
 
     const combinedRoll = new Roll(formula);
     await combinedRoll.evaluate({ async: true });
-    const total = combinedRoll.total;
-    const resultType = total >= 18 ? "critical" : total <= 3 ? "fumble" : null;
+    const { resultType, label: critLabel } = computeVotvCritInfo(combinedRoll);
     const rollMode = game.settings.get("core", "rollMode") ?? CONST.DICE_ROLL_MODES.PUBLIC;
 
     await combinedRoll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor }),
       flavor: this._label,
-      flags: { "vacuum-of-the-void": { resultType } },
+      flags: { "vacuum-of-the-void": { resultType, critLabel } },
       rollMode
     });
 

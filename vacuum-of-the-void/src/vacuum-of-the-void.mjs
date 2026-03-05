@@ -217,9 +217,31 @@ Hooks.on("preCreateScene", (scene, data) => {
 
 // Add crit/fumble class to dice-roll in chat so formula can be styled (neon green/red).
 Hooks.on("renderChatMessageHTML", (message, html, data) => {
-  const resultType = message.flags?.["vacuum-of-the-void"]?.resultType;
-  if (!resultType) return;
+  const flags = message.flags?.["vacuum-of-the-void"] ?? {};
+  const resultType = flags.resultType;
+  const critLabel = flags.critLabel;
+  if (!resultType && !critLabel) return;
+
   const rollEl = html?.querySelector?.(".dice-roll");
-  if (rollEl) rollEl.classList.add(`votv-${resultType}`);
+  if (!rollEl) return;
+
+  if (resultType) {
+    rollEl.classList.add(`votv-${resultType}`);
+  }
+
+  // Insert a separate line under the total with the crit/brutal text.
+  if (critLabel) {
+    const existing = rollEl.querySelector(".votv-crit-label");
+    if (existing) {
+      existing.textContent = critLabel;
+      return;
+    }
+    const totalEl = rollEl.querySelector(".dice-total");
+    const container = totalEl?.parentElement ?? rollEl;
+    const labelEl = document.createElement("div");
+    labelEl.className = `votv-crit-label votv-crit-label-${resultType || "neutral"}`;
+    labelEl.textContent = critLabel;
+    container.appendChild(labelEl);
+  }
 });
 

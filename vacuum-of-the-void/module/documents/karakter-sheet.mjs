@@ -1,3 +1,5 @@
+import { computeVotvCritInfo } from "../util/votv-result-type.mjs";
+
                export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplicationMixin(
   foundry.applications.sheets.ActorSheetV2
 ) {
@@ -1677,12 +1679,12 @@
 
     const roll = new Roll(formula);
     await roll.evaluate({ async: true });
-    const resultType = roll.total >= 18 ? "critical" : roll.total <= 3 ? "fumble" : null;
+    const { resultType, label: critLabel } = computeVotvCritInfo(roll);
     const rollMode = game.settings.get("core", "rollMode") ?? CONST.DICE_ROLL_MODES.PUBLIC;
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this.actor }),
       flavor: label,
-      flags: { "vacuum-of-the-void": { resultType } },
+      flags: { "vacuum-of-the-void": { resultType, critLabel } },
       rollMode
     });
   }
@@ -1727,12 +1729,12 @@
 
     const roll = new Roll(formula);
     await roll.evaluate({ async: true });
-    const resultType = roll.total >= 18 ? "critical" : roll.total <= 3 ? "fumble" : null;
+    const { resultType, label: critLabel } = computeVotvCritInfo(roll);
     const rollMode = game.settings.get("core", "rollMode") ?? CONST.DICE_ROLL_MODES.PUBLIC;
     return roll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor: this.actor }),
       flavor: `${name} – találat`,
-      flags: { "vacuum-of-the-void": { resultType } },
+      flags: { "vacuum-of-the-void": { resultType, critLabel } },
       rollMode
     });
   }
