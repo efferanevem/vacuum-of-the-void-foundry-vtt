@@ -41,7 +41,7 @@ body.system-vacuum-of-the-void #chat-log {
 
 /* Base sheet window: min-widths and shared window content */
 .vacuum-of-the-void.sheet.actor.Karakter {
-  min-width: 1000px;
+  width: 1000px !important;
 }
 
 /* Actor sheet: ensure window-content scrolls (fixes NPC sheet scroll) */
@@ -100,13 +100,11 @@ body.system-vacuum-of-the-void select:focus-visible {
 
 .vacuum-of-the-void.sheet .window-header {
   border-bottom: 1px solid var(--votv-border-muted);
-}
-
-.vacuum-of-the-void.sheet .window-header .title {
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  font-size: 11px;
-  color: var(--votv-header-accent);
+  overflow: hidden;
+  text-align: left;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--color-light-1, var(--votv-header-accent));
 }
 
 .vacuum-of-the-void.sheet .window-content h2,
