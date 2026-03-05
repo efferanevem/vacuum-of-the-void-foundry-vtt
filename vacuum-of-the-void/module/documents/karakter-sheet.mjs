@@ -1497,9 +1497,14 @@
     if (!item || (item.type !== "MikroChip" && item.type !== "Egyeb")) return;
     const description = (item.system?.description ?? "").trim();
     let typeLabel;
+    let kpLine = "";
     if (item.type === "MikroChip") {
       const abilityType = item.system?.abilityType ?? "passive";
       typeLabel = (abilityType === "active" ? "Aktív" : "Passzív") + " Mikro-Chip";
+      if (abilityType === "active") {
+        const kp = Number(item.system?.replaceCost ?? 0) || 0;
+        if (kp > 0) kpLine = `<p><strong>KP:</strong> ${kp}</p>`;
+      }
     } else {
       typeLabel = "Egyéb Információ";
     }
@@ -1507,6 +1512,7 @@
     const content = `
       <h2>${item.name}</h2>
       <p><strong>Típus:</strong> ${typeLabel}</p>
+      ${kpLine}
       ${descLine}
     `;
     return ChatMessage.create({
