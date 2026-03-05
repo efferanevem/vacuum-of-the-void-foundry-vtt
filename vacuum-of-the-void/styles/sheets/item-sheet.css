@@ -32,6 +32,13 @@
 .vacuum-of-the-void.sheet.item .sheet-header .profile {
   border-radius: var(--votv-radius);
   border: 1px solid var(--votv-border-muted);
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.vacuum-of-the-void.sheet.item .sheet-header .profile:hover {
+  border-color: var(--votv-focus-ring);
+  box-shadow: 0 0 0 1px rgba(43, 255, 136, 0.25);
 }
 
 /* Név mező – egységes kinézet minden item sheeten */

@@ -30,8 +30,28 @@ export class VoidAbilitySheet extends foundry.applications.api.HandlebarsApplica
 
   _attachFrameListeners(html) {
     super._attachFrameListeners(html);
-    if (!this.isEditable) return;
     const sheet = this;
+    sheet._votvProfileImgClick = (ev) => {
+      if (!sheet.isEditable) return;
+      if (!ev.target?.closest?.(".profile") && ev.target?.getAttribute?.("data-edit") !== "img") return;
+      ev.preventDefault();
+      ev.stopPropagation();
+      const FilePickerClass = foundry.applications?.apps?.FilePicker?.implementation ?? globalThis.FilePicker;
+      const fp = new FilePickerClass({
+        type: "image",
+        current: sheet.document.img || "",
+        callback: (path) => { if (path) sheet.document.update({ img: path }); }
+      });
+      fp.browse();
+    };
+    const root = html?.nodeType === 9 ? (html.body ?? html.documentElement) : html;
+    if (root?.addEventListener) {
+      root.addEventListener("click", sheet._votvProfileImgClick, true);
+      sheet._votvProfileClickRoot = root;
+    } else {
+      document.body.addEventListener("click", sheet._votvProfileImgClick, true);
+    }
+    if (!this.isEditable) return;
     const doSubmit = (form) => {
       if (!form) return;
       const updateData = sheet._getFormDataForUpdate(form);
@@ -61,6 +81,12 @@ export class VoidAbilitySheet extends foundry.applications.api.HandlebarsApplica
   _tearDown(options) {
     document.body.removeEventListener("change", this._votvChange, true);
     document.body.removeEventListener("input", this._votvInput, true);
+    if (this._votvProfileClickRoot) {
+      this._votvProfileClickRoot.removeEventListener("click", this._votvProfileImgClick, true);
+      this._votvProfileClickRoot = null;
+    } else {
+      document.body.removeEventListener("click", this._votvProfileImgClick, true);
+    }
     clearTimeout(this._votvInputDebounce);
     return super._tearDown?.(options);
   }

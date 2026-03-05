@@ -651,17 +651,19 @@
       this._writeEffectiveGivenProtection();
     }, 100);
 
-    // Karakterkép: kattintásra Foundry fájlkezelő (FilePicker) megnyitása
+    // Karakterkép: kattintásra Foundry fájlkezelő (FilePicker) megnyitása (user data / assets)
     $html.on("click", ".karakter-portrait-img", (ev) => {
       ev.preventDefault();
       ev.stopPropagation();
-      new FilePicker({
+      const FilePickerClass = foundry.applications?.apps?.FilePicker?.implementation ?? globalThis.FilePicker;
+      const fp = new FilePickerClass({
         type: "image",
         current: this.actor.img || "",
         callback: (path) => {
           if (path) this.actor.update({ img: path });
         }
-      }).browse();
+      });
+      fp.browse();
     });
 
     // Skill rolls: click on skill label opens roll sheet (delegated)
