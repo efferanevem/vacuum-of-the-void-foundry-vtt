@@ -124,6 +124,25 @@ Hooks.once("init", () => {
       }
     }, 0);
   });
+
+  // Ha egy Karakterhez tartozó Fegyver itemet frissítenek, és az be van rakva valamelyik slotba,
+  // tükrözzük az új adatokat a system.weapons.* slot mezőkbe is, hogy a felső Fegyverek szekció mindig naprakész legyen.
+  Hooks.on("updateItem", (item, _changed, _options, _userId) => {
+    const actor = item?.parent;
+    if (!actor || actor.documentName !== "Actor" || actor.type !== "Karakter") return;
+    if (item.type !== "Fegyver") return;
+    const weapons = actor.system?.weapons ?? {};
+    const updates = {};
+    for (const [key, slotData] of Object.entries(weapons)) {
+      if (!key.startsWith("slot")) continue;
+      const slotItemId = (slotData?.itemId ?? "").trim();
+      if (!slotItemId || slotItemId !== item.id) continue;
+      updates[`system.weapons.${key}.name`] = item.name ?? "";
+      updates[`system.weapons.${key}.damage`] = item.system?.damage ?? "";
+      updates[`system.weapons.${key}.bonus`] = item.system?.bonus ?? "";
+    }
+    if (Object.keys(updates).length) actor.update(updates);
+  });
 });
 
 Hooks.on("ready", () => {

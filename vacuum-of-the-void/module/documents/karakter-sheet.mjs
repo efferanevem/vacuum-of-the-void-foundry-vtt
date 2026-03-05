@@ -397,16 +397,19 @@
       const sizeRaw = sys.size ?? "";
       const sizeLabel = (weaponSizeLabels[sizeRaw] ?? sizeRaw) || "";
       const typeAndSize = [typeLabel, sizeLabel].filter(Boolean).join(", ") || typeLabel || "—";
-      const isProjectile = typeLabel === "Lövedékes";
+      const isProjectile = (typeRaw === "projectile") || (sizeRaw === "thrown");
       const quantityRaw = sys.quantity;
       const quantityStr = quantityRaw != null ? String(quantityRaw).trim() : "1";
+      const bonusRawSlot = String(slotData.bonus ?? "").trim();
+      const bonusRawItem = String(sys.bonus ?? "").trim();
+      const bonusStr = bonusRawSlot || bonusRawItem || "0";
       return {
         slotKey: slotKey ?? "",
         itemId,
         actorId: this.actor.id,
         name: item?.name ?? emptyLabel,
         img: item?.img ?? "",
-        bonus: String(slotData.bonus ?? "").trim() || (equipped ? "0" : "—"),
+        bonus: bonusStr,
         damage: slotData.damage ?? sys.damage ?? "",
         rangeStr: rangeStr || "—",
         typeLabel,
@@ -680,6 +683,22 @@
     $html.on("click", ".karakter-roll-morale-d8", ev => {
       ev.preventDefault();
       this._rollMorale();
+    });
+
+    // Fegyverek szekció: a felső fegyver slotban a fegyverre kattintva nyíljon meg a fegyver lapja.
+    $html.on("click", ".karakter-weapon-slot-display", ev => {
+      ev.preventDefault();
+      const display = ev.currentTarget;
+      const slotEl = display.closest(".karakter-weapon-slot");
+      const slot = slotEl?.dataset.slot;
+      if (!slot) return;
+      const weapons = this.actor.system?.weapons ?? {};
+      const itemId = (weapons[slot]?.itemId ?? "").trim();
+      if (!itemId) return;
+      const item =
+        this.actor.items.get?.(itemId) ??
+        this.actor.items.contents?.find?.(i => i.id === itemId);
+      item?.sheet?.render(true);
     });
 
     // Inventory: click weapon or item name/icon to open its sheet.
@@ -1143,6 +1162,9 @@
       if (tag !== "INPUT" && tag !== "TEXTAREA" && tag !== "SELECT") return;
       const form = target.form;
       if (!isOurForm(form)) return;
+      // Ha a fókusz ugyanazon karakterlapon belüli másik mezőre kerül át, ne indítsunk mentést.
+      const next = ev.relatedTarget;
+      if (next && (form.contains(next) || (sheet.id && next.closest?.(`#${CSS.escape(sheet.id)}`)))) return;
       if (game.votv) game.votv._lastKarakterSheetBlurSave = { appId: sheet.id, at: Date.now() };
       doSubmit(form);
     };

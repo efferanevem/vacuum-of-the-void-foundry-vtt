@@ -83,6 +83,23 @@
   color: var(--votv-text-muted);
 }
 
+/* Minden item sheeten a lenyíló select-ek ugyanazt a sötét, neonos stílust kapják, mint az inputok. */
+.vacuum-of-the-void.sheet.item select {
+  width: 100%;
+  box-sizing: border-box;
+  font-size: var(--votv-font-body);
+  padding: 4px 6px;
+  background-color: rgba(3, 6, 10, 0.9);
+  border: 1px solid var(--votv-border-muted);
+  color: var(--votv-text-main);
+  border-radius: 2px;
+}
+
+.vacuum-of-the-void.sheet.item select option {
+  background-color: rgba(3, 6, 10, 0.98);
+  color: var(--votv-text-main);
+}
+
 .vacuum-of-the-void.sheet.item .header-fields select {
   width: 100%;
   font-size: var(--votv-font-body);

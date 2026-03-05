@@ -41,14 +41,16 @@
         <label>Hatótáv</label>
         <input type="text" name="system.range" value="{{system.range}}" placeholder="pl. 27/54 m" />
       </div>
+      {{#if (or (eq system.type "projectile") (eq system.size "thrown"))}}
       <div class="field">
-        <label>Lőszer (db)</label>
+        <label>Lőszer/DB</label>
         {{#if (eq system.type "projectile")}}
           <input type="text" name="system.quantity" value="{{system.quantity}}" placeholder="pl. 6 vagy ∞" />
         {{else}}
-          <input type="text" name="system.quantity" value="" readonly placeholder="-" />
+          <input type="text" name="system.quantity" value="{{system.quantity}}" placeholder="pl. 3 db" />
         {{/if}}
       </div>
+      {{/if}}
     </div>
 
     <div class="field">
