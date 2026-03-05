@@ -44,6 +44,12 @@ body.system-vacuum-of-the-void #chat-log {
   min-width: 1000px;
 }
 
+/* Actor sheet: ensure window-content scrolls (fixes NPC sheet scroll) */
+.vacuum-of-the-void.sheet.actor .window-content {
+  overflow-y: auto;
+  min-height: 0;
+}
+
 .vacuum-of-the-void.sheet.item.Fegyver {
   min-width: 550px;
 }

@@ -15,6 +15,12 @@
   overflow-y: auto;
 }
 
+/* NPC sheet: let form grow with content so .window-content scrolls */
+.votv.karakter-sheet.npc-sheet {
+  height: auto;
+  min-height: 100%;
+}
+
 .votv-scroll {
   overflow: auto;
 }
@@ -2254,4 +2260,166 @@
 .votv.karakter-sheet .karakter-inventory-icon img {
   border-radius: 2px;
   border: 1px solid var(--votv-border-muted);
+}
+
+/* ---- NPC sheet: header (portrait + fields) and layout ---- */
+.votv.karakter-sheet.npc-sheet .npc-header-wrap {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.votv.karakter-sheet.npc-sheet .npc-header-portrait {
+  position: relative;
+  width: 120px;
+  min-width: 120px;
+  height: 120px;
+  min-height: 120px;
+  overflow: hidden;
+  border-radius: var(--votv-radius);
+  padding: 0;
+  aspect-ratio: 1;
+}
+
+.votv.karakter-sheet.npc-sheet .npc-header-portrait .karakter-portrait-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  cursor: pointer;
+}
+
+.votv.karakter-sheet.npc-sheet .npc-header-portrait .karakter-portrait-death-skull {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  transform: scale(0.8);
+  opacity: 0.8;
+}
+
+.votv.karakter-sheet.npc-sheet .npc-header-fields {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  justify-content: center;
+}
+
+.votv.karakter-sheet.npc-sheet .npc-header-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.votv.karakter-sheet.npc-sheet .npc-header-row-name {
+  display: grid;
+  grid-template-columns: 1fr minmax(4em, 0.4fr);
+  gap: 8px;
+}
+
+.votv.karakter-sheet.npc-sheet .npc-header-row-stats {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  gap: 10px;
+  align-items: center;
+}
+
+.votv.karakter-sheet.npc-sheet .npc-header-stat {
+  margin-bottom: 0;
+}
+
+.votv.karakter-sheet.npc-sheet .npc-header-defense input,
+.votv.karakter-sheet.npc-sheet .npc-header-speed input {
+  width: 3.5em;
+  min-width: 2.5em;
+  text-align: center;
+}
+
+.votv.karakter-sheet.npc-sheet .npc-header-health {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 0;
+}
+
+.votv.karakter-sheet.npc-sheet .npc-header-health .npc-health-max,
+.votv.karakter-sheet.npc-sheet .npc-header-health .npc-health-value {
+  width: 3.5em;
+  min-width: 2.5em;
+  text-align: center;
+}
+
+.votv.karakter-sheet.npc-sheet .npc-health-slash {
+  opacity: 0.8;
+  padding: 0 2px;
+}
+
+/* NPC main: single column – Jártasságok full width, then Képességek pool, then Támadások, Felszerelés, Egyéb infók */
+.votv.karakter-sheet.npc-sheet .npc-main {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto auto auto auto;
+  gap: 8px;
+}
+
+.votv.karakter-sheet.npc-sheet .npc-skills,
+.votv.karakter-sheet.npc-sheet .npc-attacks,
+.votv.karakter-sheet.npc-sheet .npc-equipment,
+.votv.karakter-sheet.npc-sheet .npc-notes {
+  grid-column: 1 / -1;
+}
+
+/* Képességek: egyetlen pool (egy drop zone, egy lista) */
+.votv.karakter-sheet.npc-sheet .npc-ability-pool .npc-ability-pool-area {
+  margin-top: 4px;
+}
+
+.votv.karakter-sheet.npc-sheet .npc-ability-pool .karakter-ability-area-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  align-items: flex-start;
+}
+
+.votv.karakter-sheet.npc-sheet .npc-ability-pool .karakter-ability-pill {
+  flex: 0 0 auto;
+  max-width: 100%;
+}
+
+.votv.karakter-sheet.npc-sheet .karakter-ability-area-list:has(.karakter-ability-pill) .npc-ability-pool-placeholder {
+  display: none;
+}
+
+/* Felszerelés: drop zone placeholder (only visible when no tables / empty) */
+.votv.karakter-sheet.npc-sheet .npc-equipment-drop-zone {
+  border: 1px dashed var(--votv-border-muted);
+  border-radius: var(--votv-radius);
+  background: rgba(3, 6, 10, 0.5);
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.votv.karakter-sheet.npc-sheet .npc-equipment-drop-zone:hover,
+.votv.karakter-sheet.npc-sheet .npc-equipment-drop-zone.npc-equipment-drag-over {
+  border-color: var(--votv-border-accent);
+  background: rgba(43, 255, 136, 0.08);
+}
+
+.votv.karakter-sheet.npc-sheet .npc-equipment-drop-placeholder {
+  margin: 0;
+  font-size: var(--votv-font-body);
+  color: var(--votv-text-muted);
+  opacity: 0.9;
 }
