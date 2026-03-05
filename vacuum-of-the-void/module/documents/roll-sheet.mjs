@@ -224,7 +224,7 @@ export class VoidRollSheet extends Application {
     const rollMode = game.settings.get("core", "rollMode") ?? CONST.DICE_ROLL_MODES.PUBLIC;
 
     await combinedRoll.toMessage({
-      speaker: ChatMessage.getSpeaker({ actor }),
+      speaker: ChatMessage.getSpeaker({ actor, alias: actor?.name ?? undefined }),
       flavor: this._label,
       flags: { "vacuum-of-the-void": { resultType, critLabel } },
       rollMode

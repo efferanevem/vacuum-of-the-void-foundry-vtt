@@ -49,33 +49,23 @@
   </header>
 
   <section class="karakter-main npc-main">
-    <section class="karakter-panel karakter-skills npc-skills">
-      <h2>Jártasságok</h2>
-      <div class="karakter-skills-grid">
-        <div class="karakter-skills-column">
-          <div class="karakter-skill" {{#if skillHasHealthTint.deception}}data-health-status="{{skillHealthStatus.deception}}"{{/if}}><label class="karakter-skill-label" data-skill="deception">Átverés</label><input type="number" name="system.skills.deception" value="{{system.skills.deception}}" min="-99" max="999"{{{skillDisabled.deception}}}/></div>
-          <div class="karakter-skill" {{#if skillHasHealthTint.medicalCare}}data-health-status="{{skillHealthStatus.medicalCare}}"{{/if}}><label class="karakter-skill-label" data-skill="medicalCare">Betegellátás</label><input type="number" name="system.skills.medicalCare" value="{{system.skills.medicalCare}}" min="-99" max="999"{{{skillDisabled.medicalCare}}}/></div>
-          <div class="karakter-skill" {{#if skillHasHealthTint.endurance}}data-health-status="{{skillHealthStatus.endurance}}"{{/if}}><label class="karakter-skill-label" data-skill="endurance">Erőnlét</label><input type="number" name="system.skills.endurance" value="{{system.skills.endurance}}" min="-99" max="999"{{{skillDisabled.endurance}}}/></div>
-          <div class="karakter-skill" {{#if skillHasHealthTint.perception}}data-health-status="{{skillHealthStatus.perception}}"{{/if}}><label class="karakter-skill-label" data-skill="perception">Észlelés</label><input type="number" name="system.skills.perception" value="{{system.skills.perception}}" min="-99" max="999"{{{skillDisabled.perception}}}/></div>
-          <div class="karakter-skill" {{#if skillHasHealthTint.cooking}}data-health-status="{{skillHealthStatus.cooking}}"{{/if}}><label class="karakter-skill-label" data-skill="cooking">Főzés</label><input type="number" name="system.skills.cooking" value="{{system.skills.cooking}}" min="-99" max="999"{{{skillDisabled.cooking}}}/></div>
-          <div class="karakter-skill" {{#if skillHasHealthTint.quickThinking}}data-health-status="{{skillHealthStatus.quickThinking}}"{{/if}}><label class="karakter-skill-label" data-skill="quickThinking">Gyorsgondolkodás</label><input type="number" name="system.skills.quickThinking" value="{{system.skills.quickThinking}}" min="-99" max="999"{{{skillDisabled.quickThinking}}}/></div>
-          <div class="karakter-skill" {{#if skillHasHealthTint.combatTraining}}data-health-status="{{skillHealthStatus.combatTraining}}"{{/if}}><label class="karakter-skill-label" data-skill="combatTraining">Harcképzettség</label><input type="number" name="system.skills.combatTraining" value="{{system.skills.combatTraining}}" min="-99" max="999"{{{skillDisabled.combatTraining}}}/></div>
-          <div class="karakter-skill" {{#if skillHasHealthTint.vehicleOperation}}data-health-status="{{skillHealthStatus.vehicleOperation}}"{{/if}}><label class="karakter-skill-label" data-skill="vehicleOperation">Járműirányítás</label><input type="number" name="system.skills.vehicleOperation" value="{{system.skills.vehicleOperation}}" min="-99" max="999"{{{skillDisabled.vehicleOperation}}}/></div>
-          <div class="karakter-skill" {{#if skillHasHealthTint.grenadeUse}}data-health-status="{{skillHealthStatus.grenadeUse}}"{{/if}}><label class="karakter-skill-label" data-skill="grenadeUse">Kézifegyver Használat</label><input type="number" name="system.skills.grenadeUse" value="{{system.skills.grenadeUse}}" min="-99" max="999"{{{skillDisabled.grenadeUse}}}/></div>
-          <div class="karakter-skill" {{#if skillHasHealthTint.lexicalKnowledge}}data-health-status="{{skillHealthStatus.lexicalKnowledge}}"{{/if}}><label class="karakter-skill-label" data-skill="lexicalKnowledge">Lexikális Tudás</label><input type="number" name="system.skills.lexicalKnowledge" value="{{system.skills.lexicalKnowledge}}" min="-99" max="999"{{{skillDisabled.lexicalKnowledge}}}/></div>
-        </div>
-        <div class="karakter-skills-column">
-          <div class="karakter-skill" {{#if skillHasHealthTint.stealth}}data-health-status="{{skillHealthStatus.stealth}}"{{/if}}><label class="karakter-skill-label" data-skill="stealth">Lopakodás</label><input type="number" name="system.skills.stealth" value="{{system.skills.stealth}}" min="-99" max="999"{{{skillDisabled.stealth}}}/></div>
-          <div class="karakter-skill" {{#if skillHasHealthTint.firearms}}data-health-status="{{skillHealthStatus.firearms}}"{{/if}}><label class="karakter-skill-label" data-skill="firearms">Löveghasználat</label><input type="number" name="system.skills.firearms" value="{{system.skills.firearms}}" min="-99" max="999"{{{skillDisabled.firearms}}}/></div>
-          <div class="karakter-skill" {{#if skillHasHealthTint.intimidation}}data-health-status="{{skillHealthStatus.intimidation}}"{{/if}}><label class="karakter-skill-label" data-skill="intimidation">Megfélemlítés</label><input type="number" name="system.skills.intimidation" value="{{system.skills.intimidation}}" min="-99" max="999"{{{skillDisabled.intimidation}}}/></div>
-          <div class="karakter-skill" {{#if skillHasHealthTint.persuasion}}data-health-status="{{skillHealthStatus.persuasion}}"{{/if}}><label class="karakter-skill-label" data-skill="persuasion">Meggyőzés</label><input type="number" name="system.skills.persuasion" value="{{system.skills.persuasion}}" min="-99" max="999"{{{skillDisabled.persuasion}}}/></div>
-          <div class="karakter-skill" {{#if skillHasHealthTint.memory}}data-health-status="{{skillHealthStatus.memory}}"{{/if}}><label class="karakter-skill-label" data-skill="memory">Memória</label><input type="number" name="system.skills.memory" value="{{system.skills.memory}}" min="-99" max="999"{{{skillDisabled.memory}}}/></div>
-          <div class="karakter-skill" {{#if skillHasHealthTint.mentalStrength}}data-health-status="{{skillHealthStatus.mentalStrength}}"{{/if}}><label class="karakter-skill-label" data-skill="mentalStrength">Mentális Erősség</label><input type="number" name="system.skills.mentalStrength" value="{{system.skills.mentalStrength}}" min="-99" max="999"{{{skillDisabled.mentalStrength}}}/></div>
-          <div class="karakter-skill" {{#if skillHasHealthTint.languages}}data-health-status="{{skillHealthStatus.languages}}"{{/if}}><label class="karakter-skill-label" data-skill="languages">Nyelvek</label><input type="number" name="system.skills.languages" value="{{system.skills.languages}}" min="-99" max="999"{{{skillDisabled.languages}}}/></div>
-          <div class="karakter-skill" {{#if skillHasHealthTint.luck}}data-health-status="{{skillHealthStatus.luck}}"{{/if}}><label class="karakter-skill-label" data-skill="luck">Szerencse</label><input type="number" name="system.skills.luck" value="{{system.skills.luck}}" min="-99" max="999"{{{skillDisabled.luck}}}/></div>
-          <div class="karakter-skill" {{#if skillHasHealthTint.technicalKnowledge}}data-health-status="{{skillHealthStatus.technicalKnowledge}}"{{/if}}><label class="karakter-skill-label" data-skill="technicalKnowledge">Technikai Tudás</label><input type="number" name="system.skills.technicalKnowledge" value="{{system.skills.technicalKnowledge}}" min="-99" max="999"{{{skillDisabled.technicalKnowledge}}}/></div>
-          <div class="karakter-skill" {{#if skillHasHealthTint.music}}data-health-status="{{skillHealthStatus.music}}"{{/if}}><label class="karakter-skill-label" data-skill="music">Zene</label><input type="number" name="system.skills.music" value="{{system.skills.music}}" min="-99" max="999"{{{skillDisabled.music}}}/></div>
-        </div>
+    <section class="karakter-panel karakter-fegyverek npc-attacks">
+      <h2>Támadások</h2>
+      <div class="karakter-weapon-slots">
+        {{#each weaponSlots}}
+          <div class="karakter-weapon-slot" data-slot="{{this.slotKey}}" data-item-id="{{this.itemId}}" data-drop-zone="weapon">
+            <div class="karakter-weapon-slot-select-wrap">
+              <div class="karakter-weapon-slot-display">
+                {{#if this.img}}<img class="karakter-weapon-slot-thumb" src="{{this.img}}" alt="" />{{/if}}
+                <span class="karakter-weapon-slot-display-text">{{this.displayName}}</span>
+              </div>
+            </div>
+            <div class="karakter-weapon-slot-actions">
+              <button type="button" class="karakter-weapon-attack" data-slot="{{this.slotKey}}" title="Támadás (találat)">Támadás</button>
+              <button type="button" class="karakter-weapon-damage" data-slot="{{this.slotKey}}" data-item-id="{{this.itemId}}" title="Sebzés dobás">Sebzés</button>
+            </div>
+          </div>
+        {{/each}}
       </div>
     </section>
 
@@ -136,31 +126,13 @@
       </div>
     </section>
 
-    <section class="karakter-panel karakter-fegyverek npc-attacks">
-      <h2>Támadások</h2>
-      <div class="karakter-weapon-slots">
-        {{#each weaponSlots}}
-          <div class="karakter-weapon-slot" data-slot="{{this.slotKey}}" data-drop-zone="weapon">
-            <div class="karakter-weapon-slot-select-wrap">
-              <div class="karakter-weapon-slot-display">
-                {{#if this.img}}<img class="karakter-weapon-slot-thumb" src="{{this.img}}" alt="" />{{/if}}
-                <span class="karakter-weapon-slot-display-text">{{this.displayName}}</span>
-              </div>
-            </div>
-            <div class="karakter-weapon-slot-actions">
-              <button type="button" class="karakter-weapon-attack" data-slot="{{this.slotKey}}" title="Támadás (találat)">Támadás</button>
-              <button type="button" class="karakter-weapon-damage" data-slot="{{this.slotKey}}" data-item-id="{{this.itemId}}" title="Sebzés dobás">Sebzés</button>
-            </div>
-          </div>
-        {{/each}}
-      </div>
-    </section>
-
     <section class="karakter-panel npc-equipment">
       <h2>Felszerelés</h2>
+      {{#if showEquipmentDropZone}}
       <div class="npc-equipment-drop-zone" data-drop-zone="targy">
         <p class="npc-equipment-drop-placeholder">Húzz ide bármilyen felszerelést (fegyver, páncél, mikro-chip, tárgy)</p>
       </div>
+      {{/if}}
 
       {{#if weaponsTable.length}}
         <h3 class="karakter-equipment-table-title">Fegyverek</h3>
@@ -169,13 +141,10 @@
             <thead>
               <tr>
                 <th class="karakter-equipment-th-name">Név</th>
-                <th class="karakter-equipment-th-type">Típus, Méret</th>
                 <th class="karakter-equipment-th-bonus">Bónusz</th>
                 <th class="karakter-equipment-th-damage">Sebzés</th>
                 <th class="karakter-equipment-th-range">Hatótáv</th>
-                <th class="karakter-equipment-th-ammo">Lőszer/DB</th>
                 <th class="karakter-equipment-th-other">Speciális</th>
-                <th class="karakter-equipment-th-equipped"></th>
                 <th class="karakter-equipment-th-delete"></th>
               </tr>
             </thead>
@@ -184,24 +153,12 @@
                 <tr class="karakter-equipment-row" data-slot-key="{{this.slotKey}}" data-item-id="{{this.itemId}}">
                   <td class="karakter-equipment-cell-name">
                     {{#if this.img}}<img class="karakter-equipment-icon" src="{{this.img}}" alt="" data-item-id="{{this.itemId}}" />{{/if}}
-                    {{#if this.equipped}}<span class="karakter-weapon-equipped-dot" title="Felszerelve"></span>{{/if}}
                     <span class="karakter-weapon-label karakter-inventory-item-name" data-weapon-slot="{{this.slotKey}}" data-item-id="{{this.itemId}}">{{this.name}}</span>
                   </td>
-                  <td class="karakter-equipment-cell-type">{{this.typeAndSize}}</td>
                   <td class="karakter-equipment-cell-bonus">{{this.bonus}}</td>
                   <td class="karakter-equipment-cell-damage">{{this.damage}}</td>
                   <td class="karakter-equipment-cell-range">{{this.rangeStr}}</td>
-                  <td class="karakter-equipment-cell-ammo">
-                    {{#if this.isProjectile}}
-                      <input type="text" class="karakter-weapon-quantity-input" data-item-id="{{this.itemId}}" value="{{this.quantity}}" />
-                    {{else}}
-                      —
-                    {{/if}}
-                  </td>
                   <td class="karakter-equipment-cell-other">{{this.special}}</td>
-                  <td class="karakter-equipment-cell-equipped">
-                    <input type="checkbox" class="karakter-weapon-equipped-checkbox" data-item-id="{{this.itemId}}" {{checked this.equipped}} title="Felszerelve" />
-                  </td>
                   <td class="karakter-equipment-cell-delete">
                     <button type="button" class="karakter-equipment-delete karakter-weapon-delete" data-item-id="{{this.itemId}}" data-slot-key="{{this.slotKey}}" data-actor-id="{{this.actorId}}" title="Alt+klikk: Törlés az inventory-ból">✕</button>
                   </td>
@@ -223,7 +180,6 @@
                 <th class="karakter-equipment-th-speed">Sebesség Levonás (m)</th>
                 <th class="karakter-equipment-th-level">Szint</th>
                 <th class="karakter-equipment-th-other">Speciális</th>
-                <th class="karakter-equipment-th-equipped"></th>
                 <th class="karakter-equipment-th-delete"></th>
               </tr>
             </thead>
@@ -232,16 +188,12 @@
                 <tr class="karakter-equipment-row" data-item-id="{{this.itemId}}">
                   <td class="karakter-equipment-cell-name">
                     {{#if this.img}}<img class="karakter-equipment-icon karakter-inventory-item-icon" src="{{this.img}}" alt="" data-item-id="{{this.itemId}}" />{{/if}}
-                    {{#if this.equipped}}<span class="karakter-weapon-equipped-dot" title="Felszerelve"></span>{{/if}}
                     <span class="karakter-armor-label karakter-inventory-item-name" data-item-id="{{this.itemId}}">{{this.name}}</span>
                   </td>
                   <td class="karakter-equipment-cell-bonus">{{this.protectionBonus}}</td>
                   <td class="karakter-equipment-cell-speed">{{this.speedPenalty}}</td>
                   <td class="karakter-equipment-cell-level">{{this.level}}</td>
                   <td class="karakter-equipment-cell-other">{{this.special}}</td>
-                  <td class="karakter-equipment-cell-equipped">
-                    <input type="checkbox" class="karakter-armor-equipped-checkbox" data-item-id="{{this.itemId}}" {{checked this.equipped}} title="Felszerelve" />
-                  </td>
                   <td class="karakter-equipment-cell-delete">
                     <button type="button" class="karakter-equipment-delete karakter-armor-delete" data-item-id="{{this.itemId}}" data-actor-id="{{this.actorId}}" title="Alt+klikk: Törlés az inventory-ból">✕</button>
                   </td>
@@ -270,7 +222,6 @@
                 <tr class="karakter-equipment-row" data-slot-key="{{this.slotKey}}" data-item-id="{{this.itemId}}">
                   <td class="karakter-equipment-cell-name">
                     {{#if this.img}}<img class="karakter-equipment-icon karakter-inventory-item-icon" src="{{this.img}}" alt="" data-item-id="{{this.itemId}}" />{{/if}}
-                    {{#if this.equipped}}<span class="karakter-weapon-equipped-dot" title="Felszerelve"></span>{{/if}}
                     <span class="karakter-microchip-label karakter-inventory-item-name" data-item-id="{{this.itemId}}">{{this.name}}</span>
                   </td>
                   <td class="karakter-equipment-cell-type">{{this.typeLabel}}</td>
@@ -318,6 +269,36 @@
           </table>
         </div>
       {{/if}}
+    </section>
+
+    <section class="karakter-panel karakter-skills npc-skills">
+      <h2>Jártasságok</h2>
+      <div class="karakter-skills-grid">
+        <div class="karakter-skills-column">
+          <div class="karakter-skill" {{#if skillHasHealthTint.deception}}data-health-status="{{skillHealthStatus.deception}}"{{/if}}><label class="karakter-skill-label" data-skill="deception">Átverés</label><input type="number" name="system.skills.deception" value="{{system.skills.deception}}" min="-99" max="999"{{{skillDisabled.deception}}}/></div>
+          <div class="karakter-skill" {{#if skillHasHealthTint.medicalCare}}data-health-status="{{skillHealthStatus.medicalCare}}"{{/if}}><label class="karakter-skill-label" data-skill="medicalCare">Betegellátás</label><input type="number" name="system.skills.medicalCare" value="{{system.skills.medicalCare}}" min="-99" max="999"{{{skillDisabled.medicalCare}}}/></div>
+          <div class="karakter-skill" {{#if skillHasHealthTint.endurance}}data-health-status="{{skillHealthStatus.endurance}}"{{/if}}><label class="karakter-skill-label" data-skill="endurance">Erőnlét</label><input type="number" name="system.skills.endurance" value="{{system.skills.endurance}}" min="-99" max="999"{{{skillDisabled.endurance}}}/></div>
+          <div class="karakter-skill" {{#if skillHasHealthTint.perception}}data-health-status="{{skillHealthStatus.perception}}"{{/if}}><label class="karakter-skill-label" data-skill="perception">Észlelés</label><input type="number" name="system.skills.perception" value="{{system.skills.perception}}" min="-99" max="999"{{{skillDisabled.perception}}}/></div>
+          <div class="karakter-skill" {{#if skillHasHealthTint.cooking}}data-health-status="{{skillHealthStatus.cooking}}"{{/if}}><label class="karakter-skill-label" data-skill="cooking">Főzés</label><input type="number" name="system.skills.cooking" value="{{system.skills.cooking}}" min="-99" max="999"{{{skillDisabled.cooking}}}/></div>
+          <div class="karakter-skill" {{#if skillHasHealthTint.quickThinking}}data-health-status="{{skillHealthStatus.quickThinking}}"{{/if}}><label class="karakter-skill-label" data-skill="quickThinking">Gyorsgondolkodás</label><input type="number" name="system.skills.quickThinking" value="{{system.skills.quickThinking}}" min="-99" max="999"{{{skillDisabled.quickThinking}}}/></div>
+          <div class="karakter-skill" {{#if skillHasHealthTint.combatTraining}}data-health-status="{{skillHealthStatus.combatTraining}}"{{/if}}><label class="karakter-skill-label" data-skill="combatTraining">Harcképzettség</label><input type="number" name="system.skills.combatTraining" value="{{system.skills.combatTraining}}" min="-99" max="999"{{{skillDisabled.combatTraining}}}/></div>
+          <div class="karakter-skill" {{#if skillHasHealthTint.vehicleOperation}}data-health-status="{{skillHealthStatus.vehicleOperation}}"{{/if}}><label class="karakter-skill-label" data-skill="vehicleOperation">Járműirányítás</label><input type="number" name="system.skills.vehicleOperation" value="{{system.skills.vehicleOperation}}" min="-99" max="999"{{{skillDisabled.vehicleOperation}}}/></div>
+          <div class="karakter-skill" {{#if skillHasHealthTint.grenadeUse}}data-health-status="{{skillHealthStatus.grenadeUse}}"{{/if}}><label class="karakter-skill-label" data-skill="grenadeUse">Kézifegyver Használat</label><input type="number" name="system.skills.grenadeUse" value="{{system.skills.grenadeUse}}" min="-99" max="999"{{{skillDisabled.grenadeUse}}}/></div>
+          <div class="karakter-skill" {{#if skillHasHealthTint.lexicalKnowledge}}data-health-status="{{skillHealthStatus.lexicalKnowledge}}"{{/if}}><label class="karakter-skill-label" data-skill="lexicalKnowledge">Lexikális Tudás</label><input type="number" name="system.skills.lexicalKnowledge" value="{{system.skills.lexicalKnowledge}}" min="-99" max="999"{{{skillDisabled.lexicalKnowledge}}}/></div>
+        </div>
+        <div class="karakter-skills-column">
+          <div class="karakter-skill" {{#if skillHasHealthTint.stealth}}data-health-status="{{skillHealthStatus.stealth}}"{{/if}}><label class="karakter-skill-label" data-skill="stealth">Lopakodás</label><input type="number" name="system.skills.stealth" value="{{system.skills.stealth}}" min="-99" max="999"{{{skillDisabled.stealth}}}/></div>
+          <div class="karakter-skill" {{#if skillHasHealthTint.firearms}}data-health-status="{{skillHealthStatus.firearms}}"{{/if}}><label class="karakter-skill-label" data-skill="firearms">Löveghasználat</label><input type="number" name="system.skills.firearms" value="{{system.skills.firearms}}" min="-99" max="999"{{{skillDisabled.firearms}}}/></div>
+          <div class="karakter-skill" {{#if skillHasHealthTint.intimidation}}data-health-status="{{skillHealthStatus.intimidation}}"{{/if}}><label class="karakter-skill-label" data-skill="intimidation">Megfélemlítés</label><input type="number" name="system.skills.intimidation" value="{{system.skills.intimidation}}" min="-99" max="999"{{{skillDisabled.intimidation}}}/></div>
+          <div class="karakter-skill" {{#if skillHasHealthTint.persuasion}}data-health-status="{{skillHealthStatus.persuasion}}"{{/if}}><label class="karakter-skill-label" data-skill="persuasion">Meggyőzés</label><input type="number" name="system.skills.persuasion" value="{{system.skills.persuasion}}" min="-99" max="999"{{{skillDisabled.persuasion}}}/></div>
+          <div class="karakter-skill" {{#if skillHasHealthTint.memory}}data-health-status="{{skillHealthStatus.memory}}"{{/if}}><label class="karakter-skill-label" data-skill="memory">Memória</label><input type="number" name="system.skills.memory" value="{{system.skills.memory}}" min="-99" max="999"{{{skillDisabled.memory}}}/></div>
+          <div class="karakter-skill" {{#if skillHasHealthTint.mentalStrength}}data-health-status="{{skillHealthStatus.mentalStrength}}"{{/if}}><label class="karakter-skill-label" data-skill="mentalStrength">Mentális Erősség</label><input type="number" name="system.skills.mentalStrength" value="{{system.skills.mentalStrength}}" min="-99" max="999"{{{skillDisabled.mentalStrength}}}/></div>
+          <div class="karakter-skill" {{#if skillHasHealthTint.languages}}data-health-status="{{skillHealthStatus.languages}}"{{/if}}><label class="karakter-skill-label" data-skill="languages">Nyelvek</label><input type="number" name="system.skills.languages" value="{{system.skills.languages}}" min="-99" max="999"{{{skillDisabled.languages}}}/></div>
+          <div class="karakter-skill" {{#if skillHasHealthTint.luck}}data-health-status="{{skillHealthStatus.luck}}"{{/if}}><label class="karakter-skill-label" data-skill="luck">Szerencse</label><input type="number" name="system.skills.luck" value="{{system.skills.luck}}" min="-99" max="999"{{{skillDisabled.luck}}}/></div>
+          <div class="karakter-skill" {{#if skillHasHealthTint.technicalKnowledge}}data-health-status="{{skillHealthStatus.technicalKnowledge}}"{{/if}}><label class="karakter-skill-label" data-skill="technicalKnowledge">Technikai Tudás</label><input type="number" name="system.skills.technicalKnowledge" value="{{system.skills.technicalKnowledge}}" min="-99" max="999"{{{skillDisabled.technicalKnowledge}}}/></div>
+          <div class="karakter-skill" {{#if skillHasHealthTint.music}}data-health-status="{{skillHealthStatus.music}}"{{/if}}><label class="karakter-skill-label" data-skill="music">Zene</label><input type="number" name="system.skills.music" value="{{system.skills.music}}" min="-99" max="999"{{{skillDisabled.music}}}/></div>
+        </div>
+      </div>
     </section>
 
     <section class="karakter-panel karakter-notes npc-notes">
