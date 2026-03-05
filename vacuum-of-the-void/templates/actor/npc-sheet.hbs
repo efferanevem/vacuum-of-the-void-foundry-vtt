@@ -25,24 +25,58 @@
         </div>
         <div class="karakter-header-field npc-header-size">
           <label>Méret</label>
-          <input type="text" name="system.identity.size" value="{{system.identity.size}}" />
+          <select name="system.identity.size">
+            {{#select sizeForSelect}}
+            <option value="Apró">Apró</option>
+            <option value="Kicsi">Kicsi</option>
+            <option value="Közepes">Közepes</option>
+            <option value="Nagy">Nagy</option>
+            <option value="Óriási">Óriási</option>
+            <option value="Jármű (Kicsi)">Jármű (Kicsi)</option>
+            <option value="Jármű (Közepes)">Jármű (Közepes)</option>
+            <option value="Jármű (Nagy)">Jármű (Nagy)</option>
+            <option value="Gigantikus (Kicsi)">Gigantikus (Kicsi)</option>
+            <option value="Gigantikus (Közepes)">Gigantikus (Közepes)</option>
+            <option value="Gigantikus (Nagy)">Gigantikus (Nagy)</option>
+            {{/select}}
+          </select>
         </div>
       </div>
-      <div class="npc-header-row npc-header-row-stats">
-        <div class="karakter-resource npc-header-stat npc-header-defense">
-          <label>Védelem</label>
+      <div class="npc-header-stats-block">
+        <div class="npc-header-stat-row-spacer"></div>
+        <div class="npc-header-stat-caption-row">
+          <span class="npc-header-stat-caption">Gyorsgondolkodás</span>
+          <span class="npc-header-stat-caption">KP</span>
+        </div>
+        <div class="npc-header-stat-row-left">
+          <label class="npc-header-stat-label">Életerő</label>
+          <input type="number" name="system.resources.health.value" value="{{system.resources.health.value}}" min="0" />
+          <span class="npc-header-stat-sep">/</span>
+          <input type="number" name="system.resources.health.max" value="{{system.resources.health.max}}" min="0" />
+        </div>
+        <div class="npc-header-stat-row">
+          <input type="text" class="npc-header-stat-extra" placeholder="—" />
+          <span class="npc-header-stat-sep">:</span>
+          <input type="text" class="npc-header-stat-extra" placeholder="—" />
+        </div>
+        <div class="npc-header-stat-row-left">
+          <label class="npc-header-stat-label">Védelem</label>
           <input type="number" name="system.combat.defense" value="{{system.combat.defense}}" min="0" />
         </div>
-        <div class="karakter-resource npc-header-stat npc-header-speed">
-          <label>Sebesség</label>
-          <input type="number" name="system.combat.speed" value="{{system.combat.speed}}" min="0" />
-          <span class="karakter-resource-speed-unit">m</span>
+        <div class="npc-header-stat-row">
+          <input type="text" class="npc-header-stat-extra" placeholder="—" />
+          <span class="npc-header-stat-sep">:</span>
+          <input type="text" class="npc-header-stat-extra" placeholder="—" />
         </div>
-        <div class="karakter-resource npc-header-health">
-          <label>Életerő</label>
-          <input type="number" name="system.resources.health.max" value="{{system.resources.health.max}}" min="0" class="npc-health-max" />
-          <span class="npc-health-slash">/</span>
-          <input type="number" name="system.resources.health.value" value="{{system.resources.health.value}}" min="0" class="npc-health-value" />
+        <div class="npc-header-stat-row-left">
+          <label class="npc-header-stat-label">Sebesség</label>
+          <input type="number" name="system.combat.speed" value="{{system.combat.speed}}" min="0" />
+          <span class="npc-header-stat-unit">m</span>
+        </div>
+        <div class="npc-header-stat-row">
+          <input type="text" class="npc-header-stat-extra" placeholder="—" />
+          <span class="npc-header-stat-sep">:</span>
+          <input type="text" class="npc-header-stat-extra" placeholder="—" />
         </div>
       </div>
     </div>

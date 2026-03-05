@@ -122,6 +122,7 @@ export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplication
     context.actor = context.actor ?? this.actor;
     context.system = context.system ?? this.actor?.system;
     context.showDeathSkull = false;
+    context.sizeForSelect = (context.system?.identity?.size ?? "").trim() || "Közepes";
 
     const actor = this.actor;
     const items = actor?.items?.contents ?? [];
