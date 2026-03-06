@@ -567,29 +567,44 @@ export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplication
     document.body.addEventListener("blur", sheet._votvNpcBlur, true);
 
     // Ha az aktor egy itemje (pl. fegyver) frissül a saját lapján, az NPC lap táblázata is frissüljön
+    // deleteItem: ha törlünk itemet (pl. felszerelést), a lap újrarenderelődjön – így a "Húzz ide..." drop zone megjelenik üres inventory esetén
     if (!sheet._votvNpcItemHookRegistered) {
       sheet._votvNpcItemUpdateHook = (item, _data, _options) => {
         if (sheet.actor && item?.parent?.id === sheet.actor.id) sheet.render(true);
       };
+      sheet._votvNpcItemDeleteHook = (document, _options, _userId) => {
+        if (sheet.actor && document?.parent?.id === sheet.actor.id) sheet.render(true);
+      };
       Hooks.on("updateItem", sheet._votvNpcItemUpdateHook);
+      Hooks.on("deleteItem", sheet._votvNpcItemDeleteHook);
       sheet._votvNpcItemHookRegistered = true;
     }
   }
 
-  _tearDown(options) {
-    document.body.removeEventListener("blur", this._votvNpcBlur, true);
-    if (this._votvNpcItemUpdateHook) {
-      Hooks.off("updateItem", this._votvNpcItemUpdateHook);
-      this._votvNpcItemUpdateHook = null;
-      this._votvNpcItemHookRegistered = false;
-    }
-    // Bezáráskor is mentsük a formot (blur nem mindig fut le, pl. X-re kattintáskor)
+  async _preClose(options) {
+    // Mentés bezárás előtt – _preClose fut a close elején, a form még elérhető (blur nem mindig fut X-re kattintáskor)
     const form = this.form ?? this.element?.querySelector?.("form.votv.npc-sheet");
     if (form && this.actor) {
       const updateData = this._getFormDataForUpdate(form);
       if (Object.keys(updateData).length > 0) {
-        this.actor.update(updateData).catch((err) => console.warn("VoidNpcSheet save on close failed", err));
+        await this.actor.update(updateData).catch((err) => console.warn("VoidNpcSheet save on preClose failed", err));
       }
+    }
+    return super._preClose?.(options);
+  }
+
+  _tearDown(options) {
+    document.body.removeEventListener("blur", this._votvNpcBlur, true);
+    if (this._votvNpcItemHookRegistered) {
+      if (this._votvNpcItemUpdateHook) {
+        Hooks.off("updateItem", this._votvNpcItemUpdateHook);
+        this._votvNpcItemUpdateHook = null;
+      }
+      if (this._votvNpcItemDeleteHook) {
+        Hooks.off("deleteItem", this._votvNpcItemDeleteHook);
+        this._votvNpcItemDeleteHook = null;
+      }
+      this._votvNpcItemHookRegistered = false;
     }
     return super._tearDown?.(options);
   }
@@ -770,9 +785,21 @@ export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplication
       if (!el.name || el.disabled) continue;
       if (el.type === "radio" && !el.checked) continue;
       let value;
-      if (el.type === "checkbox") value = el.checked;
-      else if (el.type === "number") value = el.value === "" ? 0 : Number(el.value);
-      else value = el.value ?? "";
+      if (el.type === "checkbox") {
+        value = el.checked;
+      } else if (el.type === "number") {
+        // Ha üres a szám mező, ne írjuk felül az aktuális értéket (ne nullázzunk ki mást véletlenül)
+        if (el.value === "") continue;
+        value = Number(el.value);
+      } else if (el.name === "system.resources.kp" || el.name === "system.resources.kp2" || el.name === "system.resources.kp3") {
+        // KP mezők: akkor is számként mentjük, ha szöveges inputból jön
+        const v = (el.value ?? "").trim();
+        if (v === "") continue;
+        value = Number(v) || 0;
+      } else {
+        // Minden más (pl. quickThinking2/3) szövegként mentődjön
+        value = el.value ?? "";
+      }
       if (value === undefined) continue;
       foundry.utils.setProperty(updateData, el.name, value);
     }

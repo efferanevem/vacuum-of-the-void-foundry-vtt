@@ -61,7 +61,11 @@ export class BaseActorDataModel extends foundry.abstract.TypeDataModel {
           max: new NumberField({ required: true, integer: true, min: 0, initial: 0 })
         }),
         money: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
-        morale: new NumberField({ required: false, integer: true, min: 0, initial: 0 })
+        morale: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
+        // NPC header – három külön KP mezőhöz használható (kp, kp2, kp3)
+        kp: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
+        kp2: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
+        kp3: new NumberField({ required: false, integer: true, min: 0, initial: 0 })
       }),
       combat: new SchemaField({
         defense: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
@@ -77,7 +81,12 @@ export class BaseActorDataModel extends foundry.abstract.TypeDataModel {
         endurance: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
         perception: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
         cooking: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
+        // Alap Gyorsgondolkodás jártasság (PC-k és egyéb referenciák használják)
         quickThinking: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
+        // NPC header mezők – itt szöveg is lehet, ezért StringField
+        quickThinking1: new StringField({ required: false, blank: true, initial: "" }),
+        quickThinking2: new StringField({ required: false, blank: true, initial: "" }),
+        quickThinking3: new StringField({ required: false, blank: true, initial: "" }),
         combatTraining: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
         vehicleOperation: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
         grenadeUse: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
