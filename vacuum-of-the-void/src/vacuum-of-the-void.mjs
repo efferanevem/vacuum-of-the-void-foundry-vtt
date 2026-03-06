@@ -1,4 +1,4 @@
-import { KarakterDataModel, WeaponDataModel, ShieldDataModel, MicrochipDataModel, AbilityDataModel, TargyDataModel, EgyebDataModel } from "../module/data-models/index.mjs";
+import { BaseActorDataModel, KarakterDataModel, WeaponDataModel, ShieldDataModel, MicrochipDataModel, AbilityDataModel, TargyDataModel, EgyebDataModel } from "../module/data-models/index.mjs";
 import { VoidKarakterSheet, VoidNpcSheet, VoidWeaponSheet, VoidShieldSheet, VoidMicrochipSheet, VoidAbilitySheet, VoidTargySheet, VoidEgyebSheet } from "../module/documents.mjs";
 
 const VOTV_DEFAULT_SCENE_BG = "systems/vacuum-of-the-void/assets/void-bg.jpg";
@@ -19,6 +19,7 @@ Hooks.once("init", () => {
 
   CONFIG.Actor.dataModels ??= {};
   CONFIG.Actor.dataModels.Karakter = KarakterDataModel;
+  CONFIG.Actor.dataModels.Npc = BaseActorDataModel;
 
   // Register item data models
   CONFIG.Item.dataModels ??= {};
@@ -160,6 +161,61 @@ Hooks.once("init", () => {
 });
 
 Hooks.on("ready", () => {
+  // Sebzés gomb: event delegation – minden adat az üzenet flagjeiből, így mindig működik (Karakter/NPC)
+  document.body.addEventListener("click", async (ev) => {
+    const btn = ev.target?.closest?.(".votv-weapon-damage-chat");
+    if (!btn || btn.disabled) return;
+    const msgId = (btn.dataset.messageId ?? "").trim();
+    if (!msgId) return;
+    const msg = game.messages?.get(msgId);
+    const weapon = msg?.flags?.["vacuum-of-the-void"]?.weapon;
+    if (!weapon) return;
+    // actorId vagy itemId hiányzik is lehet – slotData.damage-ból vagy flagben kapott formulából is tudunk dobni (pl. NPC token)
+    const actorId = weapon.actorId ?? msg?.speaker?.actor ?? "";
+    if (!actorId) return;
+    ev.preventDefault();
+    ev.stopPropagation();
+    // Fallback: speaker.actor, majd token actor (unlinked token NPC esetén game.actors.get lehet undefined)
+    let actor = game.actors?.get(weapon.actorId) ?? game.actors?.get(actorId);
+    if (!actor) {
+      const tokenActor = game.scenes?.contents?.flatMap((s) => s.tokens?.contents ?? [])
+        .map((t) => t.actor)
+        .find((a) => a && (a.id === actorId || a.id === weapon.actorId));
+      actor = tokenActor ?? null;
+    }
+    if (!actor) return;
+    const item = weapon.itemId
+      ? (actor.items?.get?.(weapon.itemId) ?? actor.items?.contents?.find?.(i => i.id === weapon.itemId))
+      : null;
+    // Elsőként próbáljuk a flagben eltárolt formulát, hogy ugyanazt dobjuk, mint ami a lap alapján számolódott.
+    let damageFormula = (weapon.damageFormula ?? "").trim();
+    if (!damageFormula) {
+      damageFormula = (item?.system?.damage ?? "").trim();
+    }
+    if (!damageFormula && weapon.slotKey) {
+      const slotData = (actor.system?.weapons ?? {})[weapon.slotKey] ?? {};
+      damageFormula = (slotData.damage ?? "").trim();
+    }
+    if (!damageFormula) {
+      ui.notifications?.warn?.(game.i18n?.localize?.("votv.weapon.no-damage") ?? "A fegyvernek nincs sebzés formulája.");
+      return;
+    }
+    const roll = new Roll(damageFormula);
+    await roll.evaluate({ async: true });
+    const rollMode = game.settings.get("core", "rollMode") ?? CONST.DICE_ROLL_MODES.PUBLIC;
+    const targetName = weapon.targetName || "";
+    const hitName = weapon.hitLocationName || "";
+    const weaponName = (item?.name ?? (weapon.slotKey ? ((actor.system?.weapons ?? {})[weapon.slotKey]?.name ?? "") : "")) || "Fegyver";
+    let flavor = targetName ? `${weaponName} – sebzés – ${targetName}` : `${weaponName} – sebzés`;
+    if (hitName) flavor += ` (${hitName})`;
+    await roll.toMessage({
+      speaker: ChatMessage.getSpeaker({ actor }),
+      flavor,
+      flags: { "vacuum-of-the-void": {} },
+      rollMode
+    });
+  }, true);
+
   document.body.addEventListener(
     "dragstart",
     (ev) => {
@@ -340,7 +396,9 @@ Hooks.on("renderChatMessageHTML", (message, html, data) => {
   const flags = message.flags?.["vacuum-of-the-void"] ?? {};
   const resultType = flags.resultType;
   const critLabel = flags.critLabel;
-  if (!resultType && !critLabel) return;
+  const weaponAttack = flags.weaponAttack;
+  const weaponInfo = flags.weapon;
+  if (!resultType && !critLabel && !weaponAttack) return;
 
   const rollEl = html?.querySelector?.(".dice-roll");
   if (!rollEl) return;
@@ -354,14 +412,56 @@ Hooks.on("renderChatMessageHTML", (message, html, data) => {
     const existing = rollEl.querySelector(".votv-crit-label");
     if (existing) {
       existing.textContent = critLabel;
-      return;
+    } else {
+      const totalEl = rollEl.querySelector(".dice-total");
+      const container = totalEl?.parentElement ?? rollEl;
+      const labelEl = document.createElement("div");
+      labelEl.className = `votv-crit-label votv-crit-label-${resultType || "neutral"}`;
+      labelEl.textContent = critLabel;
+      container.appendChild(labelEl);
     }
+  }
+
+  // Ha ez egy fegyver támadás üzenet, írjuk ki külön, hogy talált / nem talált,
+  // és adjunk hozzá egy "Sebzés" gombot, ami a fegyver sebzését dobja – csak találat esetén.
+  if (weaponAttack && weaponInfo && (weaponInfo.actorId || message.speaker?.actor)) {
     const totalEl = rollEl.querySelector(".dice-total");
     const container = totalEl?.parentElement ?? rollEl;
-    const labelEl = document.createElement("div");
-    labelEl.className = `votv-crit-label votv-crit-label-${resultType || "neutral"}`;
-    labelEl.textContent = critLabel;
-    container.appendChild(labelEl);
+
+    // Találat / nem talált sor
+    const existingOutcome = rollEl.querySelector(".votv-weapon-outcome");
+    if (!existingOutcome) {
+      const outcomeEl = document.createElement("div");
+      outcomeEl.className = "votv-weapon-outcome";
+      const isHit = !!weaponInfo.isHit;
+      const targetName = weaponInfo.targetName || "Célpont";
+      outcomeEl.textContent = isHit
+        ? `Találat – ${targetName}`
+        : `Nem talált – ${targetName}`;
+      container.appendChild(outcomeEl);
+    }
+
+    // Sebzés gomb – csak ha talált
+    if (weaponInfo.isHit) {
+      const existingBtn = rollEl.querySelector(".votv-weapon-damage-chat");
+      if (!existingBtn) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "votv-weapon-damage-chat";
+        const hitRoll = weaponInfo.hitLocationRoll;
+        const hitName = weaponInfo.hitLocationName;
+        btn.textContent = (hitRoll != null && hitName)
+          ? `Sebzés (Találati Hely ${hitRoll} - ${hitName})`
+          : "Sebzés";
+        btn.dataset.actorId = String(weaponInfo.actorId ?? message.speaker?.actor ?? "");
+        btn.dataset.itemId = String(weaponInfo.itemId ?? "");
+        btn.dataset.slotKey = String(weaponInfo.slotKey ?? "");
+        btn.dataset.targetName = String(weaponInfo.targetName ?? "");
+        btn.dataset.hitLocationName = String(weaponInfo.hitLocationName ?? "");
+        btn.dataset.messageId = String(message.id ?? "");
+        container.appendChild(btn);
+      }
+    }
   }
 });
 

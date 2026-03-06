@@ -1747,7 +1747,7 @@ import { computeVotvCritInfo } from "../util/votv-result-type.mjs";
     });
   }
 
-  /** Sebzés gomb: csak a fegyver sebzés formuláját dobja (nincs panel, nincs bónusz). */
+  /** Sebzés gomb: fegyver sebzés formuláját dobja. */
   async _rollWeaponDamage(itemId, slotKey = "") {
     const actor = this.actor;
     if (!actor) return;

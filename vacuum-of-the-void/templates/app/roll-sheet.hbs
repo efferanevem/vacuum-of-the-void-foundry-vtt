@@ -2,6 +2,9 @@
   <header class="roll-sheet-header">
     <h3 class="roll-sheet-title">{{skillLabel}}</h3>
     <p class="roll-sheet-formula">{{formulaText}}</p>
+    {{#if targetLabel}}
+      <p class="roll-sheet-target">Célpont: {{targetLabel}}</p>
+    {{/if}}
   </header>
 
   <div class="roll-sheet-row roll-sheet-row-morale">

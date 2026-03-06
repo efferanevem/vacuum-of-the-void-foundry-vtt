@@ -1,3 +1,5 @@
+import { computeVotvCritInfo } from "../util/votv-result-type.mjs";
+
 export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplicationMixin(
   foundry.applications.sheets.ActorSheetV2
 ) {
@@ -375,7 +377,7 @@ export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplication
       item?.sheet?.render(true);
     });
 
-    // Támadás gomb: dobás lap megnyitása (találat dobás)
+    // Támadás gomb: dobás lap megnyitása (ugyanúgy, mint a karakter lapon)
     $html.on("click", ".karakter-weapon-attack", async (ev) => {
       ev.preventDefault();
       ev.stopPropagation();
@@ -609,7 +611,48 @@ export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplication
     return super._tearDown?.(options);
   }
 
-  /** Sebzés gomb: a fegyver sebzés formuláját dobja és chatbe küldi. */
+  /**
+   * Támadás dobás NPC-nek – ugyanolyan képlet, mint a karakter lapon:
+   * 3d6 + (Kézifegyver Használat / Löveghasználat + fegyver bónusz)
+   * @param {string} slot - pl. "slot1"
+   */
+  async _rollWeapon(slot) {
+    const actor = this.actor;
+    if (!actor) return;
+    const weapons = actor.system?.weapons ?? {};
+    const slotData = weapons[slot] ?? {};
+    const skills = actor.system?.skills ?? {};
+    const ownedWeapons = actor.items?.filter(i => i.type === "Fegyver") ?? [];
+
+    let item = null;
+    if (slotData.itemId) {
+      item = ownedWeapons.find(w => w.id === slotData.itemId) ?? null;
+    }
+
+    const name = (item && item.name) || slotData.name || `Fegyver`;
+    const weaponBonus = Number(slotData.bonus || 0) || 0;
+
+    // Robbanó (explosive) → Kézifegyver használat, egyéb → Löveghasználat
+    const weaponType = item?.system?.type || "kinetic";
+    const skillKey = weaponType === "explosive" ? "grenadeUse" : "firearms";
+    const skillBonus = Number(skills[skillKey] || 0) || 0;
+    const totalBonus = weaponBonus + skillBonus;
+    const modifier = totalBonus !== 0 ? (totalBonus > 0 ? `+${totalBonus}` : `${totalBonus}`) : "";
+    const formula = `3d6${modifier}`;
+
+    const roll = new Roll(formula);
+    await roll.evaluate({ async: true });
+    const { resultType, label: critLabel } = computeVotvCritInfo(roll);
+    const rollMode = game.settings.get("core", "rollMode") ?? CONST.DICE_ROLL_MODES.PUBLIC;
+    return roll.toMessage({
+      speaker: ChatMessage.getSpeaker({ actor, alias: actor?.name ?? undefined }),
+      flavor: `${name} – találat`,
+      flags: { "vacuum-of-the-void": { resultType, critLabel } },
+      rollMode
+    });
+  }
+
+  /** Sebzés gomb: fegyver sebzés formuláját dobja. */
   async _rollWeaponDamage(itemId, slotKey = "") {
     const actor = this.actor;
     if (!actor) return;

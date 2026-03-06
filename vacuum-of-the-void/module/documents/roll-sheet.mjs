@@ -20,7 +20,18 @@ export class VoidRollSheet extends Application {
   }
 
   constructor(options = {}) {
-    const { actor, skillKey, label, baseModifier, injuryModifier, injuryPenalty } = options;
+    const {
+      actor,
+      skillKey,
+      label,
+      baseModifier,
+      injuryModifier,
+      injuryPenalty,
+      isWeaponAttack,
+      weaponSlotKey,
+      weaponItemId,
+      weaponDamageFormula
+    } = options;
     super(options);
     this._actor = actor;
     this._skillKey = skillKey;
@@ -29,6 +40,12 @@ export class VoidRollSheet extends Application {
     this._injuryModifier = Number(injuryModifier) || 0;
     /** Opcionális sérülés levonás (pl. fegyver dobásnál karok); megjelenik külön, beleszámít a dobásba. */
     this._injuryPenalty = Number(injuryPenalty) || 0;
+    /** Fegyver támadás esetén true, ilyenkor Védelem ellen dobunk és sebzés gombot adunk a chathez. */
+    this._isWeaponAttack = !!isWeaponAttack;
+    this._weaponSlotKey = weaponSlotKey || "";
+    this._weaponItemId = weaponItemId || "";
+    /** Fegyver sebzés formulája, ha ismert (chat sebzés gombhoz); ha nincs, a handler próbálja újraképezni az itemből/slotból. */
+    this._weaponDamageFormula = typeof weaponDamageFormula === "string" ? weaponDamageFormula.trim() : "";
   }
 
   get actor() {
@@ -174,6 +191,14 @@ export class VoidRollSheet extends Application {
     const injuryPenaltyPart = this._injuryPenalty !== 0 ? String(this._injuryPenalty) : "";
     const formulaText = ["3d6", basePart, injuryPart, injuryPenaltyPart].filter(Boolean).join(" ") || "3d6";
 
+    let targetLabel = "";
+    if (this._isWeaponAttack && game.user?.targets?.size) {
+      const targets = Array.from(game.user.targets);
+      const targetToken = targets[0];
+      const targetActor = targetToken?.actor ?? null;
+      targetLabel = targetActor?.name || targetToken?.name || "";
+    }
+
     return {
       appId: this.id ?? "votv-roll-sheet",
       skillLabel: this._label,
@@ -182,7 +207,8 @@ export class VoidRollSheet extends Application {
       advantageValue: 0,
       baseModifier: this._baseModifier,
       injuryModifier: this._injuryModifier,
-      injuryPenalty: this._injuryPenalty
+      injuryPenalty: this._injuryPenalty,
+      targetLabel
     };
   }
 
@@ -222,11 +248,70 @@ export class VoidRollSheet extends Application {
     await combinedRoll.evaluate({ async: true });
     const { resultType, label: critLabel } = computeVotvCritInfo(combinedRoll);
     const rollMode = game.settings.get("core", "rollMode") ?? CONST.DICE_ROLL_MODES.PUBLIC;
+    let flavor = this._label;
+    const flags = { resultType, critLabel };
+
+    // Ha fegyver támadás, és van kijelölt célpont, nézzük a Védelem értéket, és írjuk ki, hogy talált / nem talált.
+    if (this._isWeaponAttack && game.user?.targets?.size) {
+      const targets = Array.from(game.user.targets);
+      const targetToken = targets[0];
+      const targetActor = targetToken?.actor ?? null;
+      if (targetActor) {
+        const combat = targetActor.system?.combat ?? {};
+        const defenseBase = Number(combat.defense ?? 0) || 0;
+        const defenseBonus = Number(combat.defenseBonus ?? 0) || 0;
+        const rawGivenProtection = Number(combat.givenProtection ?? 0) || 0;
+        // Kapott védelem = givenProtection + felszerelt páncélok védelmi bónusza (ugyanúgy, mint a karakterlapon).
+        let armorBonus = 0;
+        if (targetActor.type === "Karakter") {
+          const armorItems = (targetActor.items?.contents ?? []).filter(
+            (i) => i.type === "Pancel" && (i.system?.equipped === true)
+          );
+          for (const item of armorItems) {
+            const raw = String(item.system?.protectionBonus ?? "").trim().replace(",", ".");
+            const v = Number(raw);
+            if (Number.isFinite(v)) armorBonus += v;
+          }
+        }
+        const defenseTotal = defenseBase + defenseBonus + rawGivenProtection + armorBonus;
+        const total = Number(combinedRoll.total ?? 0) || 0;
+        const isHit = total >= defenseTotal;
+        const targetName = targetActor.name ?? targetToken.name ?? "Célpont";
+        let hitLocationRoll = null;
+        let hitLocationName = null;
+        if (isHit && targetActor.type === "Karakter") {
+          try {
+            const d8 = new Roll("1d8");
+            await d8.evaluate({ async: true });
+            hitLocationRoll = Number(d8.total ?? 0) || 1;
+            if (hitLocationRoll === 1) hitLocationName = "Fej";
+            else if (hitLocationRoll >= 2 && hitLocationRoll <= 4) hitLocationName = "Törzs";
+            else if (hitLocationRoll === 5 || hitLocationRoll === 6) hitLocationName = "Karok";
+            else hitLocationName = "Lábak";
+          } catch (err) {
+            console.warn("VOTV hit location roll failed:", err);
+          }
+        }
+        flags.weaponAttack = true;
+        flags.weapon = {
+          actorId: actor.id ?? null,
+          itemId: this._weaponItemId || null,
+          slotKey: this._weaponSlotKey || null,
+          damageFormula: this._weaponDamageFormula || null,
+          targetActorId: targetActor.id ?? null,
+          targetName,
+          defense: defenseTotal,
+          isHit,
+          hitLocationRoll: hitLocationRoll ?? null,
+          hitLocationName: hitLocationName ?? null
+        };
+      }
+    }
 
     await combinedRoll.toMessage({
       speaker: ChatMessage.getSpeaker({ actor, alias: actor?.name ?? undefined }),
-      flavor: this._label,
-      flags: { "vacuum-of-the-void": { resultType, critLabel } },
+      flavor,
+      flags: { "vacuum-of-the-void": flags },
       rollMode
     });
 
@@ -266,33 +351,60 @@ export function openRollSheetForSkill(actor, skillKey, label) {
 }
 
 /**
- * Open the roll sheet for a weapon attack (Dobás). Formula: Kézifegyver Használat + fegyver bónusz;
- * sérülés (karok) levonás ugyanúgy mint a jártasságnál. A többi (morál, előny/hátrány, egyéb bónusz) állítható.
- * @param {Actor} actor - PC actor
+ * Open the roll sheet for a weapon attack (Dobás).
+ * Karakter lap támadásai mintájára számol: 3d6 + (Kézifegyver Használat / Löveghasználat + fegyver bónusz).
+ * @param {Actor} actor - Karakter vagy NPC actor
  * @param {string} slotKey - e.g. "slot1"
  */
 export function openRollSheetForWeapon(actor, slotKey) {
   if (!actor || !slotKey) return;
-  const weapons = actor.system?.weapons ?? {};
+
+  // Mindig az átadott actort használjuk (sheet this.actor) – így biztos, hogy a helyes adatokat olvassuk.
+  const dataActor = actor;
+  const weapons = dataActor.system?.weapons ?? {};
   const slotData = weapons[slotKey] ?? {};
+  const skills = dataActor.system?.skills ?? {};
+  const ownedWeapons = dataActor.items?.filter?.(i => i.type === "Fegyver") ?? [];
+
   const itemId = (slotData.itemId ?? "").trim();
-  const weaponItems = actor.items?.filter(i => i.type === "Fegyver") ?? [];
-  const item = itemId ? weaponItems.find(w => w.id === itemId) : null;
-  const weaponName = item?.name || slotData.name || `Fegyver (${slotKey})`;
-  const weaponBonus = Number(slotData.bonus ?? 0) || 0;
-  const grenadeUse = Number(actor.system?.skills?.grenadeUse ?? 0) || 0;
-  const healthStatus = VoidKarakterSheet._getSkillHealthStatusStatic(actor, "grenadeUse");
+  const item = itemId ? (ownedWeapons.find(w => w.id === itemId) ?? null) : null;
+
+  // Név: ugyanúgy, mint a karakter lapon (_rollWeapon)
+  const weaponName = (item?.name ?? slotData.name ?? "").trim() || "Fegyver";
+
+  // Bónusz: slotData.bonus elsődlegesen, ha üres, akkor item.system.bonus (NPC felszerelés táblázat mintája)
+  const weaponBonus = Number(slotData.bonus || item?.system?.bonus || 0) || 0;
+
+  // Robbanó (explosive) → Kézifegyver használat, egyéb → Löveghasználat (Karakter és NPC egyaránt)
+  const weaponType = item?.system?.type || "kinetic";
+  const skillKey = weaponType === "explosive" ? "grenadeUse" : "firearms";
+  const skillBonus = Number(skills[skillKey] || 0) || 0;
+
+  const totalBaseMod = weaponBonus + skillBonus;
+
+  // Sérülés levonás (karok) csak Karakter esetén – NPC-nél nincs automatikus kar sérülés logika.
   let injuryPenalty = 0;
-  if (healthStatus === 1) injuryPenalty = -6;
-  else if (healthStatus === 2) injuryPenalty = -3;
-  // Megjelenítés: "3d6 +10 +4" (Kézifegyver + bónusz külön), sérülés külön pl. " -3"; dobás = 10+4-3
+  if (actor.type === "Karakter") {
+    const healthStatus = VoidKarakterSheet._getSkillHealthStatusStatic(actor, skillKey);
+    if (healthStatus === 1) injuryPenalty = -6;
+    else if (healthStatus === 2) injuryPenalty = -3;
+  }
+
+  const damageFormulaFromItem = (item?.system?.damage ?? "").trim();
+  const damageFormulaFromSlot = (slotData.damage ?? "").trim();
+  const weaponDamageFormula = damageFormulaFromItem || damageFormulaFromSlot || "";
+
   const sheet = new VoidRollSheet({
     actor,
-    skillKey: "grenadeUse",
+    skillKey,
     label: weaponName,
-    baseModifier: grenadeUse,
-    injuryModifier: weaponBonus,
-    injuryPenalty
+    baseModifier: totalBaseMod,
+    injuryModifier: 0,
+    injuryPenalty,
+    isWeaponAttack: true,
+    weaponSlotKey: slotKey,
+    weaponItemId: item?.id ?? itemId,
+    weaponDamageFormula
   });
   sheet.render(true);
 }
