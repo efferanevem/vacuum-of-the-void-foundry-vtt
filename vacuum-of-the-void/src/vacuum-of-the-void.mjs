@@ -30,16 +30,24 @@ Hooks.once("init", () => {
   CONFIG.Item.dataModels.Targy = TargyDataModel;
   CONFIG.Item.dataModels.Egyeb = EgyebDataModel;
 
-  // Trackable attributes for token bars
+  // Trackable attributes for token bars – csak egy sáv (Életerő), mint az NPC lapon; bar2 ne jelenjen meg
   CONFIG.Actor.trackableAttributes ??= {};
   CONFIG.Actor.trackableAttributes.Karakter = {
-    bar: ["resources.health", "resources.stress"],
+    bar: ["resources.health"],
+    value: []
+  };
+  CONFIG.Actor.trackableAttributes.Npc = {
+    bar: ["", "resources.health"],
     value: []
   };
 
   CONFIG.Actor.typeLabels ??= {};
   CONFIG.Actor.typeLabels.Karakter = "Karakter";
   CONFIG.Actor.typeLabels.Npc = "NPC";
+
+  // Initiative: manuális beírás – formula kell, hogy az initiative oszlop megjelenjen
+  CONFIG.Combat.initiative ??= {};
+  CONFIG.Combat.initiative.formula = "1d20";
 
   CONFIG.Item.typeLabels ??= {};
   CONFIG.Item.typeLabels.Fegyver = "Fegyver";
@@ -191,6 +199,70 @@ Hooks.on("ready", () => {
       }
     })();
   }
+
+  // Karakter: meglévő actorok prototype tokenje + vásznon lévő tokenek – ne mutasson bárokat
+  (async () => {
+    const barHide = {
+      "bar1.attribute": "",
+      "bar2.attribute": "",
+      displayBars: foundry.CONST.TOKEN_DISPLAY_MODES.NONE
+    };
+    const actors = game.actors?.filter((a) => a.type === "Karakter") ?? [];
+    for (const actor of actors) {
+      try {
+        const pt = actor.prototypeToken;
+        const bar1 = pt?.bar1?.attribute ?? "";
+        const bar2 = pt?.bar2?.attribute ?? "";
+        if (bar1 || bar2) {
+          await actor.update({
+            "prototypeToken.bar1.attribute": "",
+            "prototypeToken.bar2.attribute": "",
+            "prototypeToken.displayBars": foundry.CONST.TOKEN_DISPLAY_MODES.NONE
+          });
+        }
+      } catch (err) {
+        console.warn("Vacuum of the Void | Prototype token update failed for", actor.name, err);
+      }
+    }
+    // Vásznon lévő Karakter tokenek frissítése (a prototype változás nem frissíti őket)
+    for (const scene of game.scenes ?? []) {
+      const charTokens = scene.tokens?.filter((t) => t.actor?.type === "Karakter") ?? [];
+      for (const token of charTokens) {
+        try {
+          await token.update(barHide);
+        } catch (err) {
+          console.warn("Vacuum of the Void | Token update failed for", token.name, err);
+        }
+      }
+    }
+
+    // NPC: health a bar2-ben (bar1 üres)
+    const npcBar2 = {
+      "bar1.attribute": "",
+      "bar2.attribute": "resources.health"
+    };
+    const npcActors = game.actors?.filter((a) => a.type === "Npc") ?? [];
+    for (const actor of npcActors) {
+      try {
+        await actor.update({
+          "prototypeToken.bar1.attribute": "",
+          "prototypeToken.bar2.attribute": "resources.health"
+        });
+      } catch (err) {
+        console.warn("Vacuum of the Void | NPC prototype update failed for", actor.name, err);
+      }
+    }
+    for (const scene of game.scenes ?? []) {
+      const npcTokens = scene.tokens?.filter((t) => t.actor?.type === "Npc") ?? [];
+      for (const token of npcTokens) {
+        try {
+          await token.update(npcBar2);
+        } catch (err) {
+          console.warn("Vacuum of the Void | NPC token update failed for", token.name, err);
+        }
+      }
+    }
+  })();
 });
 
 Hooks.on("preCreateToken", (tokenDocument, _data, _options) => {
@@ -198,11 +270,53 @@ Hooks.on("preCreateToken", (tokenDocument, _data, _options) => {
   const actorId = sourceId ?? tokenDocument.actorId ?? null;
   if (sourceId) game.votv._dragSourceActorId = null;
   const actor = actorId ? game.actors?.get(actorId) : null;
-  if (!actor || actor.type !== "Karakter") return;
-  tokenDocument.updateSource({
-    ...(sourceId ? { actorId: sourceId } : {}),
-    actorLink: true
+  if (!actor) return;
+  if (actor.type === "Karakter") {
+    tokenDocument.updateSource({
+      ...(sourceId ? { actorId: sourceId } : {}),
+      actorLink: true,
+      "bar1.attribute": "",
+      "bar2.attribute": "",
+      displayBars: foundry.CONST.TOKEN_DISPLAY_MODES.NONE
+    });
+    return;
+  }
+  if (actor.type === "Npc") {
+    tokenDocument.updateSource({
+      ...(sourceId ? { actorId: sourceId } : {}),
+      "bar1.attribute": "",
+      "bar2.attribute": "resources.health"
+    });
+  }
+});
+
+// Combatant: alapértelmezett initiative 0, hogy a mező megjelenjen és szerkeszthető legyen
+Hooks.on("preCreateCombatant", (combatant, _data, _options) => {
+  const init = combatant.initiative;
+  if (init === undefined || init === null || (typeof init === "number" && isNaN(init))) {
+    combatant.updateSource({ initiative: 0 });
+  }
+});
+
+// Combat Tracker: Roll Initiative gombok elrejtése
+Hooks.on("renderSidebarTab", (app, html, data) => {
+  if (app?.id !== "combat") return;
+  const root = html[0] ?? html;
+  if (!root?.querySelectorAll) return;
+  const sel = "[data-action='rollAll'], [data-action='rollNPCs'], [data-action='rollInitiative']";
+  root.querySelectorAll(sel).forEach((el) => {
+    el.style.display = "none";
   });
+});
+
+// Token HUD: Karakter tokeneknél add class a CSS-hez (barok elrejtése)
+Hooks.on("renderTokenHUD", (hud, html, data) => {
+  const token = hud?.object;
+  const actor = token?.document?.actor ?? token?.actor;
+  if (actor?.type === "Karakter") {
+    const el = html[0] ?? html;
+    if (el?.classList) el.classList.add("votv-karakter-token-hud");
+  }
 });
 
 // Set a default background image and color for newly created scenes.

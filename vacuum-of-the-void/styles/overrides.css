@@ -117,3 +117,27 @@ body.system-vacuum-of-the-void select:focus-visible {
 body.system-vacuum-of-the-void.game .app table tr:nth-child(even) {
   background-color: inherit;
 }
+
+/* Combat: Roll Initiative gombok elrejtése */
+body.system-vacuum-of-the-void #combat [data-action="rollAll"],
+body.system-vacuum-of-the-void #combat [data-action="rollNPCs"],
+body.system-vacuum-of-the-void #combat [data-action="rollInitiative"],
+body.system-vacuum-of-the-void #combat .combat-control[data-action="rollAll"],
+body.system-vacuum-of-the-void #combat .combat-control[data-action="rollNPCs"],
+body.system-vacuum-of-the-void #combat .combat-control[data-action="rollInitiative"],
+body.system-vacuum-of-the-void .combat-tracker [data-action="rollAll"],
+body.system-vacuum-of-the-void .combat-tracker [data-action="rollNPCs"],
+body.system-vacuum-of-the-void .combat-tracker [data-action="rollInitiative"] {
+  display: none !important;
+}
+
+/* Karakter token barok elrejtése – bar1 és bar2 */
+body.system-vacuum-of-the-void .object-hud.placeable-hud .attribute-bar,
+body.system-vacuum-of-the-void .object-hud.placeable-hud .bar,
+body.system-vacuum-of-the-void .placeable-hud .attribute-bar,
+body.system-vacuum-of-the-void .placeable-hud .bar,
+body.system-vacuum-of-the-void .placeable-hud [class*="bar"],
+body.system-vacuum-of-the-void .object-hud [class*="attribute"],
+body.system-vacuum-of-the-void .object-hud [class*="bar"] {
+  display: none !important;
+}

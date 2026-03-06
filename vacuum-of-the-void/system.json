@@ -9,7 +9,7 @@
   },
   "authors": [
     {
-      "name": "waveen"
+      "name": "effer_"
     }
   ],
   "esmodules": [
@@ -56,12 +56,9 @@
     }
   ],
   "grid": {
-    "distance": 1,
+    "distance": 1.5,
     "units": "m"
   },
-  "initiative": "3d6",
-  "primaryTokenAttribute": "resources.health",
-  "secondaryTokenAttribute": "resources.stress",
   "url": "https://example.com/vacuum-of-the-void",
   "manifest": "https://example.com/vacuum-of-the-void/system.json",
   "download": "https://example.com/vacuum-of-the-void/system.zip"
