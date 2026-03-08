@@ -31,7 +31,10 @@ export class VoidRollSheet extends Application {
       isInitiativeRoll,
       weaponSlotKey,
       weaponItemId,
-      weaponDamageFormula
+      weaponDamageFormula,
+      blockHeavyInHalfCover,
+      blockMediumHeavyInThreeQuarterCover,
+      blockNonThrownInFullCover
     } = options;
     super(options);
     this._actor = actor;
@@ -49,6 +52,12 @@ export class VoidRollSheet extends Application {
     this._weaponItemId = weaponItemId || "";
     /** Fegyver sebzés formulája, ha ismert (chat sebzés gombhoz); ha nincs, a handler próbálja újraképezni az itemből/slotból. */
     this._weaponDamageFormula = typeof weaponDamageFormula === "string" ? weaponDamageFormula.trim() : "";
+    /** Fél-fedezékben nehéz fegyverrel nem támadhatunk – a lapon üzenet, dobáskor blokkoljuk. */
+    this._blockHeavyInHalfCover = !!blockHeavyInHalfCover;
+    /** Háromnegyed-fedezékben közepes/nehéz fegyverrel nem támadhatunk – csak könnyű és dobható. */
+    this._blockMediumHeavyInThreeQuarterCover = !!blockMediumHeavyInThreeQuarterCover;
+    /** Teljes fedezékben csak dobható fegyverrel támadhatunk. */
+    this._blockNonThrownInFullCover = !!blockNonThrownInFullCover;
   }
 
   get actor() {
@@ -142,7 +151,7 @@ export class VoidRollSheet extends Application {
     const baseMod = parseInt(form.dataset?.baseMod ?? "0", 10) || 0;
     const injuryMod = parseInt(form.dataset?.injuryMod ?? "0", 10) || 0;
     const injuryPen = parseInt(form.dataset?.injuryPenalty ?? "0", 10) || 0;
-    const statusPenalty = (this.actor?.statuses?.has?.("diseased") || this.actor?.statuses?.has?.("poisoned")) ? -1 : 0;
+    const statusPenalty = (this.actor?.statuses?.has?.("diseased") ? -1 : 0) + (this.actor?.statuses?.has?.("poisoned") ? -1 : 0);
     const constantsSum = baseMod + injuryMod + injuryPen + constantBonus + statusPenalty;
 
     const parts = [];
@@ -205,26 +214,53 @@ export class VoidRollSheet extends Application {
       const targetToken = targets[0];
       const targetActor = targetToken?.actor ?? null;
       targetLabel = targetActor?.name || targetToken?.name || "";
-      // Kábult célpont → +1 előny; többlet előny/elvétel a játékos a sheeten módosítja (0, 2, …)
+      // Kábult / Eszméletlen / Megragadott: mindegyik +1 előny, stackelődnek (3 db = 3 előny)
       if (targetActor?.statuses?.has?.("stunned")) {
-        advantageFromTarget = 1;
+        advantageFromTarget += 1;
         advantageSources.push(game.i18n.localize("VOTV.RollSheet.AdvantageStunnedTarget"));
       }
-      // Kitérés a célponton → a támadó kap 1 hátrányt
+      if (targetActor?.statuses?.has?.("unconscious")) {
+        advantageFromTarget += 1;
+        advantageSources.push(game.i18n.localize("VOTV.StatusUnconscious"));
+      }
+      if (targetActor?.statuses?.has?.("grappled")) {
+        advantageFromTarget += 1;
+        advantageSources.push(game.i18n.localize("VOTV.StatusGrappled"));
+      }
+      // Kitérés a célponton → +1 hátrány (stackelődik a többi hátránnyal)
       if (targetActor?.statuses?.has?.("dodge")) {
         disadvantageFromTarget = 1;
         disadvantageSources.push(game.i18n.localize("VOTV.StatusDodge"));
       }
     }
-    if (actor?.statuses?.has?.("diseased")) disadvantageSources.push(game.i18n.localize("VOTV.StatusDiseased"));
-    if (actor?.statuses?.has?.("poisoned")) disadvantageSources.push(game.i18n.localize("VOTV.StatusPoisoned"));
+    let disadvantageTotal = disadvantageFromTarget;
+    // Beteg / Mérgezett: nem hátrány lépés, hanem -1 fix módosító a dobásra; a listában "Beteg (-1)" / "Mérgezett (-1)"
+    if (actor?.statuses?.has?.("diseased")) {
+      disadvantageSources.push(`${game.i18n.localize("VOTV.StatusDiseased")} (-1)`);
+    }
+    if (actor?.statuses?.has?.("poisoned")) {
+      disadvantageSources.push(`${game.i18n.localize("VOTV.StatusPoisoned")} (-1)`);
+    }
     const hasIntoxicatedDisadvantage = actor?.statuses?.has?.("intoxicated") &&
       this._skillKey !== "music" && this._skillKey !== "luck";
-    if (hasIntoxicatedDisadvantage) disadvantageSources.push(game.i18n.localize("VOTV.StatusIntoxicated"));
+    if (hasIntoxicatedDisadvantage) {
+      disadvantageTotal += 1;
+      disadvantageSources.push(game.i18n.localize("VOTV.StatusIntoxicated"));
+    }
 
-    // Előny/hátrány nettó: kábult +1, kitérés -1 (kioltják egymást), részeg -1 (kivéve Zene/Szerencse)
-    const advantageValue = Math.min(3, Math.max(-3,
-      advantageFromTarget - disadvantageFromTarget + (hasIntoxicatedDisadvantage ? -1 : 0)));
+    // Előny/hátrány stackelődnek: nettó = előnyök − hátrányok, cap −3 … +3
+    const advantageValue = Math.min(3, Math.max(-3, advantageFromTarget - disadvantageTotal));
+
+    const blockHeavyInHalfCoverMessage = this._blockHeavyInHalfCover
+      ? (game.i18n.localize("VOTV.RollSheet.NoHeavyWeaponInHalfCover") || "Fél-fedezékben nem támadhatsz nehéz fegyverekkel!")
+      : "";
+    const blockThreeQuarterCoverMessage = this._blockMediumHeavyInThreeQuarterCover
+      ? (game.i18n.localize("VOTV.RollSheet.NoMediumHeavyWeaponInThreeQuarterCover") || "Háromnegyed-fedezékben csak könnyű és dobható fegyverekkel támadhatsz!")
+      : "";
+    const blockFullCoverMessage = this._blockNonThrownInFullCover
+      ? (game.i18n.localize("VOTV.RollSheet.NoNonThrownWeaponInFullCover") || "Teljes-fedezékben csak dobható fegyverekkel támadhatsz!")
+      : "";
+    const blockRollWarningMessage = blockFullCoverMessage || blockThreeQuarterCoverMessage || blockHeavyInHalfCoverMessage;
 
     return {
       appId: this.id ?? "votv-roll-sheet",
@@ -234,6 +270,8 @@ export class VoidRollSheet extends Application {
       advantageValue,
       advantageSourcesText: advantageSources.length ? advantageSources.join(", ") : "",
       disadvantageSourcesText: disadvantageSources.length ? disadvantageSources.join(", ") : "",
+      blockRollWarningMessage,
+      disableRollButton: this._blockHeavyInHalfCover || this._blockMediumHeavyInThreeQuarterCover || this._blockNonThrownInFullCover,
       baseModifier: this._baseModifier,
       injuryModifier: this._injuryModifier,
       injuryPenalty: this._injuryPenalty,
@@ -279,6 +317,30 @@ export class VoidRollSheet extends Application {
   async _doRoll(form) {
     const actor = this.actor;
     if (!actor) return;
+    if (this._isWeaponAttack && this._weaponSlotKey) {
+      const weapons = actor.system?.weapons ?? {};
+      const slotData = weapons[this._weaponSlotKey] ?? {};
+      const itemId = (slotData.itemId ?? "").trim();
+      const item = itemId
+        ? (actor.items?.filter?.(i => i.type === "Fegyver") ?? []).find(w => w.id === itemId) ?? null
+        : null;
+      const weaponSize = (item?.system?.size ?? slotData.size ?? "").toString().toLowerCase();
+      if (actor.statuses?.has?.("fullcover") && weaponSize !== "thrown") {
+        const msg = game.i18n.localize("VOTV.RollSheet.NoNonThrownWeaponInFullCover") || "Teljes-fedezékben csak dobható fegyverekkel támadhatsz!";
+        ui.notifications?.warn?.(msg);
+        return;
+      }
+      if (actor.statuses?.has?.("threequarteredcover") && (weaponSize === "medium" || weaponSize === "heavy")) {
+        const msg = game.i18n.localize("VOTV.RollSheet.NoMediumHeavyWeaponInThreeQuarterCover") || "Háromnegyed-fedezékben csak könnyű és dobható fegyverekkel támadhatsz!";
+        ui.notifications?.warn?.(msg);
+        return;
+      }
+      if (actor.statuses?.has?.("halfcover") && weaponSize === "heavy") {
+        const msg = game.i18n.localize("VOTV.RollSheet.NoHeavyWeaponInHalfCover") || "Fél-fedezékben nem támadhatsz nehéz fegyverekkel!";
+        ui.notifications?.warn?.(msg);
+        return;
+      }
+    }
     try {
     const moraleDiceEl = form.querySelector("[name='moraleDice']");
     const advantageEl = form.querySelector("[name='advantage']");
@@ -294,8 +356,7 @@ export class VoidRollSheet extends Application {
     const baseMod = this._isWeaponAttack ? this._getCurrentWeaponBaseModifier() : this._baseModifier;
     const injuryMod = this._isWeaponAttack ? 0 : this._injuryModifier;
     const injuryPen = this._isWeaponAttack ? 0 : (this._injuryPenalty || 0);
-    const hasDiseasedOrPoisoned = actor.statuses?.has?.("diseased") || actor.statuses?.has?.("poisoned");
-    const statusPenalty = hasDiseasedOrPoisoned ? -1 : 0;
+    const statusPenalty = (actor.statuses?.has?.("diseased") ? -1 : 0) + (actor.statuses?.has?.("poisoned") ? -1 : 0);
     const flatMod = baseMod + injuryMod + injuryPen + constantBonus + statusPenalty;
 
     const formula = [
@@ -323,6 +384,8 @@ export class VoidRollSheet extends Application {
         const defenseBonus = Number(combat.defenseBonus ?? 0) || 0;
         const rawGivenProtection = Number(combat.givenProtection ?? 0) || 0;
         const lookaroundBonus = targetActor.statuses?.has?.("lookaround") ? 1 : 0;
+        const halfcoverBonus = targetActor.statuses?.has?.("halfcover") ? 3 : 0;
+        const threequartercoverBonus = targetActor.statuses?.has?.("threequarteredcover") ? 6 : 0;
         let armorBonus = 0;
         if (targetActor.type === "Karakter") {
           const armorItems = (targetActor.items?.contents ?? []).filter(
@@ -334,9 +397,11 @@ export class VoidRollSheet extends Application {
             if (Number.isFinite(v)) armorBonus += v;
           }
         }
-        const defenseTotal = defenseBase + defenseBonus + rawGivenProtection + armorBonus + lookaroundBonus;
+        const effectiveGivenProtection = rawGivenProtection + armorBonus + lookaroundBonus + halfcoverBonus + threequartercoverBonus;
+        const defenseTotal = defenseBase + defenseBonus + effectiveGivenProtection;
         const total = Number(combinedRoll.total ?? 0) || 0;
-        const isHit = total >= defenseTotal;
+        const targetInFullCover = targetActor.statuses?.has?.("fullcover") ?? false;
+        const isHit = !targetInFullCover && total >= defenseTotal;
         const targetName = targetActor.name ?? targetToken.name ?? "Célpont";
         let hitLocationRoll = null;
         let hitLocationName = null;
@@ -479,6 +544,17 @@ export function openRollSheetForWeapon(actor, slotKey) {
   const damageFormulaFromSlot = (slotData.damage ?? "").trim();
   const weaponDamageFormula = damageFormulaFromItem || damageFormulaFromSlot || "";
 
+  const weaponSize = (item?.system?.size ?? slotData.size ?? "").toString().toLowerCase();
+  const isHeavyWeapon = weaponSize === "heavy";
+  const isMediumWeapon = weaponSize === "medium";
+  const isThrownWeapon = weaponSize === "thrown";
+  const attackerInHalfCover = dataActor.statuses?.has?.("halfcover") ?? false;
+  const attackerInThreeQuarterCover = dataActor.statuses?.has?.("threequarteredcover") ?? false;
+  const attackerInFullCover = dataActor.statuses?.has?.("fullcover") ?? false;
+  const blockHeavyInHalfCover = isHeavyWeapon && attackerInHalfCover;
+  const blockMediumHeavyInThreeQuarterCover = attackerInThreeQuarterCover && (isMediumWeapon || isHeavyWeapon);
+  const blockNonThrownInFullCover = attackerInFullCover && !isThrownWeapon;
+
   const sheet = new VoidRollSheet({
     actor,
     skillKey,
@@ -489,7 +565,10 @@ export function openRollSheetForWeapon(actor, slotKey) {
     isWeaponAttack: true,
     weaponSlotKey: slotKey,
     weaponItemId: item?.id ?? itemId,
-    weaponDamageFormula
+    weaponDamageFormula,
+    blockHeavyInHalfCover,
+    blockMediumHeavyInThreeQuarterCover,
+    blockNonThrownInFullCover
   });
   sheet.render(true);
 }

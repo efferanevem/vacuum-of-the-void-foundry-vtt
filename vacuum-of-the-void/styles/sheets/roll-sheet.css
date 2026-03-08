@@ -128,18 +128,31 @@
 }
 
 .votv.roll-sheet .roll-sheet-advantage-sources {
-  margin: 0 0 6px 0;
-  padding-left: 0;
-  font-size: 0.85rem;
-  color: var(--votv-text-muted);
+  margin: 0 0 8px 0;
+  padding: 6px 8px;
+  font-size: 0.9rem;
+  border-radius: 4px;
+  border-left: 3px solid currentColor;
 }
 
 .votv.roll-sheet .roll-sheet-advantage-sources--elony {
   color: var(--votv-accent-positive, #7cb87c);
+  background: rgba(124, 184, 124, 0.12);
 }
 
 .votv.roll-sheet .roll-sheet-advantage-sources--hatrany {
   color: var(--votv-accent-negative, #c97a7a);
+  background: rgba(201, 122, 122, 0.12);
+}
+
+.votv.roll-sheet .roll-sheet-warning.roll-sheet-heavy-halfcover {
+  margin: 0 0 8px 0;
+  padding: 6px 8px;
+  font-size: 0.9rem;
+  color: var(--votv-accent-negative, #c97a7a);
+  background: rgba(201, 122, 122, 0.12);
+  border-radius: 4px;
+  border-left: 3px solid var(--votv-accent-negative, #c97a7a);
 }
 
 .votv.roll-sheet .roll-sheet-advantage-wrap {
@@ -258,4 +271,18 @@
 .votv.roll-sheet .roll-sheet-do-roll:hover {
   filter: brightness(1.1);
   box-shadow: 0 0 16px rgba(43, 255, 136, 0.35);
+}
+
+.votv.roll-sheet .roll-sheet-do-roll--disabled,
+.votv.roll-sheet .roll-sheet-do-roll:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  filter: none;
+  box-shadow: none;
+}
+
+.votv.roll-sheet .roll-sheet-do-roll--disabled:hover,
+.votv.roll-sheet .roll-sheet-do-roll:disabled:hover {
+  filter: none;
+  box-shadow: none;
 }

@@ -276,7 +276,7 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
     span.textContent = String(effective);
   }
 
-  /** Kapott védelem kijelzés: tárolt givenProtection + páncélok + Körültekintés státusz (+1). */
+  /** Kapott védelem kijelzés: tárolt givenProtection + páncélok + Körültekintés (+1) + Fél-fedezék (+3) + Háromnegyed-fedezék (+6). */
   _writeEffectiveGivenProtection(scope = null) {
     const root = scope ?? this.form ?? this.element;
     let span = root?.querySelector?.(".karakter-given-defense-effective");
@@ -284,7 +284,9 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
     if (!span) return;
     const raw = Number(this.actor?.system?.combat?.givenProtection ?? 0) || 0;
     const lookaroundBonus = this.actor?.statuses?.has?.("lookaround") ? 1 : 0;
-    const effective = raw + this._getTotalArmorProtectionBonus() + lookaroundBonus;
+    const halfcoverBonus = this.actor?.statuses?.has?.("halfcover") ? 3 : 0;
+    const threequartercoverBonus = this.actor?.statuses?.has?.("threequarteredcover") ? 6 : 0;
+    const effective = raw + this._getTotalArmorProtectionBonus() + lookaroundBonus + halfcoverBonus + threequartercoverBonus;
     span.textContent = String(effective);
   }
 
@@ -384,7 +386,9 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
     context.effectiveGivenSpeed = effectiveGivenSpeed;
     const rawGivenProtection = Number(this.actor.system?.combat?.givenProtection ?? 0) || 0;
     const lookaroundBonus = this.actor?.statuses?.has?.("lookaround") ? 1 : 0;
-    const effectiveGivenProtection = rawGivenProtection + this._getTotalArmorProtectionBonus() + lookaroundBonus;
+    const halfcoverBonus = this.actor?.statuses?.has?.("halfcover") ? 3 : 0;
+    const threequartercoverBonus = this.actor?.statuses?.has?.("threequarteredcover") ? 6 : 0;
+    const effectiveGivenProtection = rawGivenProtection + this._getTotalArmorProtectionBonus() + lookaroundBonus + halfcoverBonus + threequartercoverBonus;
     context.system = foundry.utils.mergeObject(
       foundry.utils.duplicate(this.actor.system),
       { combat: { givenSpeed: effectiveGivenSpeed, givenProtection: effectiveGivenProtection } },
@@ -499,6 +503,10 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
       const slotData = weapons[slotKey] ?? {};
       const itemId = (slotData.itemId ?? "").trim();
       const item = weaponItems.find(w => w.id === itemId);
+      const itemDoc = weaponDocs.find(w => w.id === itemId);
+      const sys = itemDoc?.system ?? {};
+      const isThrown = sys.size === "thrown";
+      const rangeStr = (typeof sys.range === "string" ? (sys.range || "").trim() : "") || "—";
       return {
         slotKey,
         itemId,
@@ -506,7 +514,9 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
         displayName: item?.name || slotData.name || emptyLabel,
         img: item?.img || "",
         bonus: Number(slotData.bonus) || 0,
-        damage: slotData.damage ?? ""
+        damage: slotData.damage ?? "",
+        isThrown,
+        rangeStr
       };
     });
     // Felszerelés: Fegyverek táblázat – equipped az item.system.equipped (alapértelmezett false); ha nincs meg, slot alapján (régi adat).

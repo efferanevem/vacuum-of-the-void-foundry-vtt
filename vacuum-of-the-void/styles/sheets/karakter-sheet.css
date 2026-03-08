@@ -1232,6 +1232,16 @@
   box-sizing: border-box;
 }
 
+.votv.karakter-sheet .karakter-weapon-slot-actions .karakter-weapon-range-display {
+  display: flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 0 8px;
+  font-size: 0.9rem;
+  color: var(--votv-text-muted, #666);
+  white-space: nowrap;
+}
+
 .votv.karakter-sheet .karakter-weapon-slot-select-wrap {
   flex: 1 1 0;
   min-width: 0;

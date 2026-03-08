@@ -37,12 +37,6 @@
       <input type="hidden" name="advantage" value="{{advantageValue}}" />
     </div>
   </div>
-  {{#if advantageSourcesText}}
-    <p class="roll-sheet-advantage-sources roll-sheet-advantage-sources--elony">Előnyök: {{advantageSourcesText}}</p>
-  {{/if}}
-  {{#if disadvantageSourcesText}}
-    <p class="roll-sheet-advantage-sources roll-sheet-advantage-sources--hatrany">Hátrányok: {{disadvantageSourcesText}}</p>
-  {{/if}}
 
   <div class="roll-sheet-row roll-sheet-row-constant">
     <label>Egyéb Bónusz:</label>
@@ -53,8 +47,18 @@
 
   <div class="roll-sheet-formula-preview" aria-live="polite"></div>
 
+  {{#if advantageSourcesText}}
+    <p class="roll-sheet-advantage-sources roll-sheet-advantage-sources--elony">Előnyök: {{advantageSourcesText}}</p>
+  {{/if}}
+  {{#if disadvantageSourcesText}}
+    <p class="roll-sheet-advantage-sources roll-sheet-advantage-sources--hatrany">Hátrányok: {{disadvantageSourcesText}}</p>
+  {{/if}}
+  {{#if blockRollWarningMessage}}
+    <p class="roll-sheet-warning roll-sheet-heavy-halfcover">{{blockRollWarningMessage}}</p>
+  {{/if}}
+
   <footer class="roll-sheet-footer">
     <button type="button" class="roll-sheet-close">Bezárás</button>
-    <button type="button" class="roll-sheet-do-roll">Dobás</button>
+    <button type="button" class="roll-sheet-do-roll{{#if disableRollButton}} roll-sheet-do-roll--disabled{{/if}}" {{#if disableRollButton}}disabled{{/if}}>Dobás</button>
   </footer>
 </form>

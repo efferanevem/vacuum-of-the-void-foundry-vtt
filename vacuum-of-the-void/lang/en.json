@@ -55,6 +55,9 @@
   "VOTV.StatusThreequarteredcover": "Háromnegyed-Fedezék",
   "VOTV.StatusFullcover": "Teljes Fedezék",
 
-  "VOTV.RollSheet.AdvantageStunnedTarget": "Kábult"
+  "VOTV.RollSheet.AdvantageStunnedTarget": "Kábult",
+  "VOTV.RollSheet.NoHeavyWeaponInHalfCover": "Fél-fedezékben nem támadhatsz nehéz fegyverekkel!",
+  "VOTV.RollSheet.NoMediumHeavyWeaponInThreeQuarterCover": "Háromnegyed-fedezékben csak könnyű és dobható fegyverekkel támadhatsz!",
+  "VOTV.RollSheet.NoNonThrownWeaponInFullCover": "Teljes-fedezékben csak dobható fegyverekkel támadhatsz!"
 }
 

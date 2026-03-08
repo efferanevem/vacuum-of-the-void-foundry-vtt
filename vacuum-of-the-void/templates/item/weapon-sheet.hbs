@@ -42,6 +42,19 @@
           <input type="text" name="system.damage" value="{{system.damage}}" placeholder="pl. 1d6+2" />
         </div>
       </div>
+      {{#if (eq system.size "thrown")}}
+      {{!-- Dobható: csak Hatótáv | DB, nincs Jártasság választó --}}
+      <div class="weapon-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px;">
+        <div class="field">
+          <label>Hatótáv</label>
+          <input type="text" name="system.range" value="{{system.range}}" placeholder="pl. 27/54 m" />
+        </div>
+        <div class="field">
+          <label>DB</label>
+          <input type="text" name="system.quantity" value="{{system.quantity}}" placeholder="pl. 3" data-dtype="String" />
+        </div>
+      </div>
+      {{else}}
       <div class="weapon-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px;">
         <div class="field">
           <label>Hatótáv</label>
@@ -56,17 +69,14 @@
           </select>
         </div>
       </div>
-      {{#if (or (eq system.type "projectile") (eq system.size "thrown"))}}
+      {{#if (eq system.type "projectile")}}
       <div class="weapon-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px;">
         <div class="field">
-          <label>Lőszer/DB</label>
-          {{#if (eq system.type "projectile")}}
-            <input type="text" name="system.quantity" value="{{system.quantity}}" placeholder="pl. 6 vagy ∞" />
-          {{else}}
-            <input type="text" name="system.quantity" value="{{system.quantity}}" placeholder="pl. 3 db" />
-          {{/if}}
+          <label>Lőszer</label>
+          <input type="text" name="system.quantity" value="{{system.quantity}}" placeholder="pl. 6 vagy ∞" />
         </div>
       </div>
+      {{/if}}
       {{/if}}
     </div>
 
