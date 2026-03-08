@@ -53,6 +53,8 @@
   "VOTV.StatusDodge": "Kitérés",
   "VOTV.StatusHalfcover": "Fél-Fedezék",
   "VOTV.StatusThreequarteredcover": "Háromnegyed-Fedezék",
-  "VOTV.StatusFullcover": "Teljes Fedezék"
+  "VOTV.StatusFullcover": "Teljes Fedezék",
+
+  "VOTV.RollSheet.AdvantageStunnedTarget": "Kábult"
 }
 

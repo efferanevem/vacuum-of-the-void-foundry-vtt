@@ -206,12 +206,61 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
     return total;
   }
 
-  /** Kapott sebesség kijelzés: lábak állapotától 0 / -6 (kritikus) / -3 (sérült) / tárolt givenSpeed, mínusz páncélok levonása. */
+  /** Static: páncél sebesség levonás összege egy actorról (összesített sebesség számításhoz). */
+  static _getTotalArmorSpeedPenaltyStatic(actor) {
+    const armorItems = (actor?.items?.contents ?? []).filter(
+      (i) => i.type === "Pancel" && (i.system?.equipped === true)
+    );
+    let total = 0;
+    for (const item of armorItems) {
+      const raw = String(item.system?.speedPenalty ?? "").trim().replace(",", ".");
+      const v = Number(raw);
+      if (Number.isFinite(v)) total += v;
+    }
+    return total;
+  }
+
+  /**
+   * Összesített sebesség számított értéke (státusz nélkül). Ha Mozgásképtelen van, ezt ne használd kijelzésre.
+   * @returns {number}
+   */
+  static getTotalSpeedRaw(actor) {
+    if (!actor?.system) return 0;
+    const res = actor.system.resources ?? {};
+    const legsTotal = res.hitLocations?.legs?.value ?? 0;
+    const legsCurrent = res.currentHealth?.legs ?? 0;
+    const legsStatus = VoidKarakterSheet._healthStatusFromRatio(legsCurrent, legsTotal);
+    if (legsStatus === 0) return 0;
+    const rawGivenSpeed = Number(actor.system?.combat?.givenSpeed ?? 0) || 0;
+    let effectiveGivenSpeed;
+    if (legsStatus === 1) effectiveGivenSpeed = -6;
+    else if (legsStatus === 2) effectiveGivenSpeed = -3;
+    else effectiveGivenSpeed = rawGivenSpeed;
+    effectiveGivenSpeed += VoidKarakterSheet._getTotalArmorSpeedPenaltyStatic(actor);
+    const speed = Number(actor.system?.combat?.speed ?? 0) || 0;
+    const speedBonus = Number(actor.system?.combat?.speedBonus ?? 0) || 0;
+    return speed + speedBonus + (Number.isFinite(effectiveGivenSpeed) ? effectiveGivenSpeed : 0);
+  }
+
+  /**
+   * Összesített sebesség (kijelzéshez): 0 ha Mozgásképtelen, különben getTotalSpeedRaw(actor).
+   * @returns {number}
+   */
+  static getTotalSpeed(actor) {
+    if (actor?.statuses?.has?.("immobilized")) return 0;
+    return VoidKarakterSheet.getTotalSpeedRaw(actor);
+  }
+
+  /** Kapott sebesség kijelzés: lábak állapotától 0 / -6 (kritikus) / -3 (sérült) / tárolt givenSpeed, mínusz páncélok levonása. Mozgásképtelen → 0. */
   _writeEffectiveGivenSpeed(scope = null) {
     const root = scope ?? this.form ?? this.element;
     let span = root?.querySelector?.(".karakter-given-speed-effective");
     if (!span && this.id) span = document.querySelector(`#${CSS.escape(this.id)} .karakter-given-speed-effective`);
     if (!span) return;
+    if (this.actor?.statuses?.has?.("immobilized")) {
+      span.textContent = "0";
+      return;
+    }
     const res = this.actor?.system?.resources ?? {};
     const legsTotal = res.hitLocations?.legs?.value ?? 0;
     const legsCurrent = res.currentHealth?.legs ?? 0;
@@ -261,6 +310,10 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
     const inpSpeed = sel('input[name="system.combat.speed"]');
     const inpBonus = sel('input[name="system.combat.speedBonus"]');
     if (!totalSpan) return;
+    if (this.actor?.statuses?.has?.("immobilized")) {
+      totalSpan.textContent = "0";
+      return;
+    }
     const res = this.actor?.system?.resources ?? {};
     const legsTotal = res.hitLocations?.legs?.value ?? 0;
     const legsCurrent = res.currentHealth?.legs ?? 0;
@@ -341,11 +394,22 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
       (Number(sysCombat.defenseBonus) || 0) +
       (Number(sysCombat.givenProtection) || 0);
     const givenSpeedNum = Number(sysCombat.givenSpeed);
-    const totalSpeedSum =
+    let totalSpeedSum =
       (Number(sysCombat.speed) || 0) +
       (Number(sysCombat.speedBonus) || 0) +
       (Number.isFinite(givenSpeedNum) ? givenSpeedNum : 0);
-    context.totalSpeed = legsStatus === 0 ? 0 : totalSpeedSum;
+    if (legsStatus === 0) totalSpeedSum = 0;
+    // Mozgásképtelen állapot → összesített sebesség 0 (és kapott sebesség kijelzés is 0)
+    if (this.actor?.statuses?.has?.("immobilized")) {
+      context.effectiveGivenSpeed = 0;
+      context.system = foundry.utils.mergeObject(
+        foundry.utils.duplicate(context.system ?? this.actor.system),
+        { combat: { givenSpeed: 0, givenProtection: context.system?.combat?.givenProtection } },
+        { inplace: false }
+      );
+      totalSpeedSum = 0;
+    }
+    context.totalSpeed = totalSpeedSum;
     const BODY_PART_BY_SKILL = VoidKarakterSheet.BODY_PART_BY_SKILL;
     context.skillHealthStatus = {};
     context.skillDisabled = {};

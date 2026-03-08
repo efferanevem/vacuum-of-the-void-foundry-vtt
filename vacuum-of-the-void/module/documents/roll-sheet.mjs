@@ -195,19 +195,30 @@ export class VoidRollSheet extends Application {
     const formulaText = ["3d6", basePart, injuryPart, injuryPenaltyPart].filter(Boolean).join(" ") || "3d6";
 
     let targetLabel = "";
+    let advantageFromTarget = 0;
+    const advantageSources = [];
+    const disadvantageSources = [];
     if (this._isWeaponAttack && game.user?.targets?.size) {
       const targets = Array.from(game.user.targets);
       const targetToken = targets[0];
       const targetActor = targetToken?.actor ?? null;
       targetLabel = targetActor?.name || targetToken?.name || "";
+      // Kábult célpont → +1 előny; többlet előny/elvétel a játékos a sheeten módosítja (0, 2, …)
+      if (targetActor?.statuses?.has?.("stunned")) {
+        advantageFromTarget = 1;
+        advantageSources.push(game.i18n.localize("VOTV.RollSheet.AdvantageStunnedTarget"));
+      }
     }
+    // Később: más előny/ hátrány források (pl. környezet, képesség) ide pusholhatók
 
     return {
       appId: this.id ?? "votv-roll-sheet",
       skillLabel: this._label,
       formulaText,
       moraleCurrent,
-      advantageValue: 0,
+      advantageValue: advantageFromTarget,
+      advantageSourcesText: advantageSources.length ? advantageSources.join(", ") : "",
+      disadvantageSourcesText: disadvantageSources.length ? disadvantageSources.join(", ") : "",
       baseModifier: this._baseModifier,
       injuryModifier: this._injuryModifier,
       injuryPenalty: this._injuryPenalty,

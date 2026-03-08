@@ -127,6 +127,21 @@
   box-shadow: 0 0 6px rgba(255, 255, 255, 0.5), 0 0 12px rgba(255, 255, 255, 0.25);
 }
 
+.votv.roll-sheet .roll-sheet-advantage-sources {
+  margin: 0 0 6px 0;
+  padding-left: 0;
+  font-size: 0.85rem;
+  color: var(--votv-text-muted);
+}
+
+.votv.roll-sheet .roll-sheet-advantage-sources--elony {
+  color: var(--votv-accent-positive, #7cb87c);
+}
+
+.votv.roll-sheet .roll-sheet-advantage-sources--hatrany {
+  color: var(--votv-accent-negative, #c97a7a);
+}
+
 .votv.roll-sheet .roll-sheet-advantage-wrap {
   flex: 1;
   display: flex;

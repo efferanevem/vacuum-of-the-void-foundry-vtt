@@ -142,6 +142,42 @@ Hooks.once("init", () => {
     label: "VOTV.EgyebSheet"
   });
 
+  // Karakter: összesített sebesség ≤ 0 → Mozgásképtelen automatikus; > 0 → eltávolítjuk az automatikus Mozgásképtelent.
+  // setTimeout + gyűjteményből olvasás: a merge/effect lista biztosan naprakész (pl. láb 0→1 után).
+  Hooks.on("updateActor", (actor, _changed, _options, _userId) => {
+    if (actor?.type !== "Karakter" || !actor?.id) return;
+    const actorId = actor.id;
+    setTimeout(() => {
+      const doc = game.actors?.get(actorId);
+      if (!doc || doc.type !== "Karakter") return;
+      const totalRaw = VoidKarakterSheet.getTotalSpeedRaw(doc);
+      const ourEffect = doc.effects?.find((e) => e.getFlag("vacuum-of-the-void", "immobilizedFromSpeed") === true);
+      if (totalRaw <= 0 && !ourEffect) {
+        const immobilizedIcon = CONFIG.statusEffects?.find((s) => s.id === "immobilized")?.img ?? "";
+        doc.createEmbeddedDocuments("ActiveEffect", [{
+          name: "Mozgásképtelen",
+          icon: immobilizedIcon,
+          statuses: ["immobilized"],
+          flags: { "vacuum-of-the-void": { immobilizedFromSpeed: true } },
+          origin: doc.uuid
+        }]).then(() => {
+          // Token overlay frissítése: az actort képviselő tokenek újrarajzolása
+          const placeables = canvas.tokens?.placeables ?? [];
+          for (const token of placeables) {
+            if (token?.document?.actorId === actorId && typeof token.draw === "function") token.draw();
+          }
+        }).catch((err) => console.warn("Vacuum of the Void | Immobilized effect create failed:", err));
+      } else if (totalRaw > 0 && ourEffect) {
+        ourEffect.delete().then(() => {
+          const placeables = canvas.tokens?.placeables ?? [];
+          for (const token of placeables) {
+            if (token?.document?.actorId === actorId && typeof token.draw === "function") token.draw();
+          }
+        }).catch((err) => console.warn("Vacuum of the Void | Immobilized effect delete failed:", err));
+      }
+    }, 0);
+  });
+
   // Ha egy actort frissítenek, a nyitott VoidKarakterSheet lapok újrarajzolódjanak. Ne újrarajzoljunk, ha
   // bármelyik lapon input/textarea van fókuszban (kurzor + görgetés maradjon), és ne a lapot, ami
   // épp mentett (blur save), hogy ne tekerjen fel.
@@ -292,6 +328,27 @@ Hooks.on("ready", () => {
     },
     true
   );
+
+  // Világ betöltése: Karakterek összesített sebessége alapján Mozgásképtelen szinkron
+  (async () => {
+    const characters = game.actors?.filter((a) => a.type === "Karakter") ?? [];
+    for (const actor of characters) {
+      const totalRaw = VoidKarakterSheet.getTotalSpeedRaw(actor);
+      const ourEffect = actor.effects?.find((e) => e.getFlag("vacuum-of-the-void", "immobilizedFromSpeed") === true);
+      if (totalRaw <= 0 && !ourEffect) {
+        const immobilizedIcon = CONFIG.statusEffects?.find((s) => s.id === "immobilized")?.img ?? "";
+        await actor.createEmbeddedDocuments("ActiveEffect", [{
+          name: "Mozgásképtelen",
+          icon: immobilizedIcon,
+          statuses: ["immobilized"],
+          flags: { "vacuum-of-the-void": { immobilizedFromSpeed: true } },
+          origin: actor.uuid
+        }]).catch(() => {});
+      } else if (totalRaw > 0 && ourEffect) {
+        await ourEffect.delete().catch(() => {});
+      }
+    }
+  })();
 
   // Create a default scene with void-bg if the world has no scenes (e.g. new world).
   if (game.user?.isGM && game.scenes?.size === 0) {

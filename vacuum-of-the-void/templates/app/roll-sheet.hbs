@@ -34,9 +34,15 @@
         <img class="roll-sheet-advantage-d6" src="systems/vacuum-of-the-void/assets/advantage_d6.svg" data-advantage-value="2" alt="+2" title="+2d6 előny" />
         <img class="roll-sheet-advantage-d6" src="systems/vacuum-of-the-void/assets/advantage_d6.svg" data-advantage-value="3" alt="+3" title="+3d6 előny" />
       </div>
-      <input type="hidden" name="advantage" value="0" />
+      <input type="hidden" name="advantage" value="{{advantageValue}}" />
     </div>
   </div>
+  {{#if advantageSourcesText}}
+    <p class="roll-sheet-advantage-sources roll-sheet-advantage-sources--elony">Előnyök: {{advantageSourcesText}}</p>
+  {{/if}}
+  {{#if disadvantageSourcesText}}
+    <p class="roll-sheet-advantage-sources roll-sheet-advantage-sources--hatrany">Hátrányok: {{disadvantageSourcesText}}</p>
+  {{/if}}
 
   <div class="roll-sheet-row roll-sheet-row-constant">
     <label>Egyéb Bónusz:</label>
