@@ -69,6 +69,35 @@ Hooks.once("init", () => {
   CONFIG.Item.typeLabels.Targy = "Tárgy";
   CONFIG.Item.typeLabels.Egyeb = "Egyéb Információ";
 
+  // Status effectek: tokenre kattintva / Active Effectsnél választhatók, mindegyiknek id + megjelenített név + ikon (img)
+  const VOTV_STATUS = "systems/vacuum-of-the-void/assets/status";
+  CONFIG.statusEffects = [
+    { id: "dead", name: "VOTV.StatusDead", img: `${VOTV_STATUS}/dead_icon.svg` },
+    { id: "unconscious", name: "VOTV.StatusUnconscious", img: `${VOTV_STATUS}/unconcious_icon.svg` },
+    { id: "sleeping", name: "VOTV.StatusSleeping", img: `${VOTV_STATUS}/sleeping_icon.svg` },
+    { id: "stunned", name: "VOTV.StatusStunned", img: `${VOTV_STATUS}/stunned_icon.svg` },
+    { id: "fallen", name: "VOTV.StatusFallen", img: `${VOTV_STATUS}/fallen_icon.svg` },
+    { id: "grappled", name: "VOTV.StatusGrappled", img: `${VOTV_STATUS}/grappled_icon.svg` },
+    { id: "immobilized", name: "VOTV.StatusImmobilized", img: `${VOTV_STATUS}/immobilized_icon.svg` },
+    { id: "blinded", name: "VOTV.StatusBlinded", img: `${VOTV_STATUS}/blinded_icon.svg` },
+    { id: "deafened", name: "VOTV.StatusDeafened", img: `${VOTV_STATUS}/deafened_icon.svg` },
+    { id: "frightened", name: "VOTV.StatusFrightened", img: `${VOTV_STATUS}/frightened_icon.svg` },
+    { id: "burning", name: "VOTV.StatusBurning", img: `${VOTV_STATUS}/burning_icon.svg` },
+    { id: "bleeding", name: "VOTV.StatusBleeding", img: `${VOTV_STATUS}/bleeding_icon.svg` },
+    { id: "diseased", name: "VOTV.StatusDiseased", img: `${VOTV_STATUS}/diseased_icon.svg` },
+    { id: "poisoned", name: "VOTV.StatusPoisoned", img: `${VOTV_STATUS}/poisoned_icon.svg` },
+    { id: "invisible", name: "VOTV.StatusInvisible", img: `${VOTV_STATUS}/invisible_icon.svg` },
+    { id: "drowning", name: "VOTV.StatusDrowning", img: `${VOTV_STATUS}/drowning_icon.svg` },
+    { id: "intoxicated", name: "VOTV.StatusIntoxicated", img: `${VOTV_STATUS}/intoxicated_icon.svg` },
+    { id: "hidden", name: "VOTV.StatusHidden", img: `${VOTV_STATUS}/hidden_icon.svg` },
+    { id: "ready", name: "VOTV.StatusReady", img: `${VOTV_STATUS}/ready_icon.svg` },
+    { id: "lookaround", name: "VOTV.StatusLookaround", img: `${VOTV_STATUS}/lookaraound_icon.svg` },
+    { id: "dodge", name: "VOTV.StatusDodge", img: `${VOTV_STATUS}/dodge_icon.svg` },
+    { id: "halfcover", name: "VOTV.StatusHalfcover", img: `${VOTV_STATUS}/halfcover_icon.svg` },
+    { id: "threequarteredcover", name: "VOTV.StatusThreequarteredcover", img: `${VOTV_STATUS}/threequarteredcover_icon.svg` },
+    { id: "fullcover", name: "VOTV.StatusFullcover", img: `${VOTV_STATUS}/fullcover_icon.svg` }
+  ];
+
   foundry.documents.collections.Actors.unregisterSheet("core", foundry.applications.sheets.ActorSheetV2);
   foundry.documents.collections.Actors.registerSheet("vacuum-of-the-void", VoidKarakterSheet, {
     types: ["Karakter"],
