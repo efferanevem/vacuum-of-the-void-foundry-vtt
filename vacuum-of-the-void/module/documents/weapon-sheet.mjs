@@ -1,3 +1,27 @@
+/** Összes jártasság a fegyver Jártasság legördülőhöz (value = system.skills kulcs, label = megjelenített név). */
+const VOTV_WEAPON_SKILL_OPTIONS = [
+  { value: "deception", label: "Átverés" },
+  { value: "medicalCare", label: "Betegellátás" },
+  { value: "endurance", label: "Erőnlét" },
+  { value: "perception", label: "Észlelés" },
+  { value: "cooking", label: "Főzés" },
+  { value: "quickThinking", label: "Gyorsgondolkodás" },
+  { value: "combatTraining", label: "Harcképzettség" },
+  { value: "vehicleOperation", label: "Járműirányítás" },
+  { value: "grenadeUse", label: "Kézifegyver Használat" },
+  { value: "lexicalKnowledge", label: "Lexikális Tudás" },
+  { value: "stealth", label: "Lopakodás" },
+  { value: "firearms", label: "Löveghasználat" },
+  { value: "intimidation", label: "Megfélemlítés" },
+  { value: "persuasion", label: "Meggyőzés" },
+  { value: "memory", label: "Memória" },
+  { value: "mentalStrength", label: "Mentális Erősség" },
+  { value: "languages", label: "Nyelvek" },
+  { value: "luck", label: "Szerencse" },
+  { value: "technicalKnowledge", label: "Technikai Tudás" },
+  { value: "music", label: "Zene" }
+];
+
 export class VoidWeaponSheet extends foundry.applications.api.HandlebarsApplicationMixin(
   foundry.applications.sheets.ItemSheetV2
 ) {
@@ -102,7 +126,12 @@ export class VoidWeaponSheet extends foundry.applications.api.HandlebarsApplicat
     if (typeof sys.range !== "string" || sys.range === "[object Object]") {
       sys.range = "";
     }
+    // Jártasság: ha nincs beállítva, alapértelmezett Kézifegyver Használat
+    if (sys.skillKey === undefined || sys.skillKey === null || String(sys.skillKey).trim() === "") {
+      sys.skillKey = "grenadeUse";
+    }
     context.system = sys;
+    context.skillOptions = VOTV_WEAPON_SKILL_OPTIONS;
     return context;
   }
 }

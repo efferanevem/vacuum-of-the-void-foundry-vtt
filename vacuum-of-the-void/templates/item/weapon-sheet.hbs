@@ -9,53 +9,71 @@
   </header>
 
   <section class="sheet-body">
+    <div class="weapon-sheet-fields">
     <div class="weapon-grid">
-      <div class="field">
-        <label>Típus</label>
-        <select name="system.type">
-          <option value="kinetic" {{#if (eq system.type "kinetic")}}selected{{/if}}>Kinetikus</option>
-          <option value="projectile" {{#if (eq system.type "projectile")}}selected{{/if}}>Lövedékes</option>
-          <option value="blade" {{#if (eq system.type "blade")}}selected{{/if}}>Pengés</option>
-          <option value="explosive" {{#if (eq system.type "explosive")}}selected{{/if}}>Robbanó</option>
-          <option value="other" {{#if (eq system.type "other")}}selected{{/if}}>Egyéb</option>
-        </select>
+      <div class="weapon-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px;">
+        <div class="field">
+          <label>Típus</label>
+          <select name="system.type">
+            <option value="kinetic" {{#if (eq system.type "kinetic")}}selected{{/if}}>Kinetikus</option>
+            <option value="projectile" {{#if (eq system.type "projectile")}}selected{{/if}}>Lövedékes</option>
+            <option value="blade" {{#if (eq system.type "blade")}}selected{{/if}}>Pengés</option>
+            <option value="explosive" {{#if (eq system.type "explosive")}}selected{{/if}}>Robbanó</option>
+            <option value="other" {{#if (eq system.type "other")}}selected{{/if}}>Egyéb</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Méret</label>
+          <select name="system.size">
+            <option value="light" {{#if (eq system.size "light")}}selected{{/if}}>Könnyű</option>
+            <option value="medium" {{#if (eq system.size "medium")}}selected{{/if}}>Közepes</option>
+            <option value="heavy" {{#if (eq system.size "heavy")}}selected{{/if}}>Nehéz</option>
+            <option value="thrown" {{#if (eq system.size "thrown")}}selected{{/if}}>Dobható</option>
+          </select>
+        </div>
       </div>
-      <div class="field">
-        <label>Méret</label>
-        <select name="system.size">
-          <option value="light" {{#if (eq system.size "light")}}selected{{/if}}>Könnyű</option>
-          <option value="medium" {{#if (eq system.size "medium")}}selected{{/if}}>Közepes</option>
-          <option value="heavy" {{#if (eq system.size "heavy")}}selected{{/if}}>Nehéz</option>
-          <option value="thrown" {{#if (eq system.size "thrown")}}selected{{/if}}>Dobható</option>
-        </select>
+      <div class="weapon-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px;">
+        <div class="field">
+          <label>Bónusz</label>
+          <input type="text" name="system.bonus" value="{{system.bonus}}" placeholder="pl. +3" />
+        </div>
+        <div class="field">
+          <label>Sebzés</label>
+          <input type="text" name="system.damage" value="{{system.damage}}" placeholder="pl. 1d6+2" />
+        </div>
       </div>
-      <div class="field">
-        <label>Bónusz</label>
-        <input type="text" name="system.bonus" value="{{system.bonus}}" placeholder="pl. +3" />
-      </div>
-      <div class="field">
-        <label>Sebzés</label>
-        <input type="text" name="system.damage" value="{{system.damage}}" placeholder="pl. 1d6+2" />
-      </div>
-      <div class="field">
-        <label>Hatótáv</label>
-        <input type="text" name="system.range" value="{{system.range}}" placeholder="pl. 27/54 m" />
+      <div class="weapon-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px;">
+        <div class="field">
+          <label>Hatótáv</label>
+          <input type="text" name="system.range" value="{{system.range}}" placeholder="pl. 27/54 m" />
+        </div>
+        <div class="field">
+          <label>Jártasság</label>
+          <select name="system.skillKey">
+            {{#each skillOptions}}
+              <option value="{{this.value}}" {{#if (eq ../system.skillKey this.value)}}selected{{/if}}>{{this.label}}</option>
+            {{/each}}
+          </select>
+        </div>
       </div>
       {{#if (or (eq system.type "projectile") (eq system.size "thrown"))}}
-      <div class="field">
-        <label>Lőszer/DB</label>
-        {{#if (eq system.type "projectile")}}
-          <input type="text" name="system.quantity" value="{{system.quantity}}" placeholder="pl. 6 vagy ∞" />
-        {{else}}
-          <input type="text" name="system.quantity" value="{{system.quantity}}" placeholder="pl. 3 db" />
-        {{/if}}
+      <div class="weapon-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px;">
+        <div class="field">
+          <label>Lőszer/DB</label>
+          {{#if (eq system.type "projectile")}}
+            <input type="text" name="system.quantity" value="{{system.quantity}}" placeholder="pl. 6 vagy ∞" />
+          {{else}}
+            <input type="text" name="system.quantity" value="{{system.quantity}}" placeholder="pl. 3 db" />
+          {{/if}}
+        </div>
       </div>
       {{/if}}
     </div>
 
-    <div class="field">
+    <div class="field weapon-sheet-special">
       <label>Speciális</label>
       <textarea name="system.special">{{system.special}}</textarea>
+    </div>
     </div>
   </section>
 </form>

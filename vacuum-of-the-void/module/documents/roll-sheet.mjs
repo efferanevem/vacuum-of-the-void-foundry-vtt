@@ -375,9 +375,12 @@ export function openRollSheetForWeapon(actor, slotKey) {
   // Bónusz: slotData.bonus elsődlegesen, ha üres, akkor item.system.bonus (NPC felszerelés táblázat mintája)
   const weaponBonus = Number(slotData.bonus || item?.system?.bonus || 0) || 0;
 
-  // Robbanó (explosive) → Kézifegyver használat, egyéb → Löveghasználat (Karakter és NPC egyaránt)
+  // Fegyver Jártasság mezője (alapértelmezett: explosive → Kézifegyver, egyéb → Löveghasználat)
   const weaponType = item?.system?.type || "kinetic";
-  const skillKey = weaponType === "explosive" ? "grenadeUse" : "firearms";
+  const rawSkill = (item?.system?.skillKey ?? "").trim();
+  const skillKey = rawSkill && skills[rawSkill] !== undefined
+    ? rawSkill
+    : (weaponType === "explosive" ? "grenadeUse" : "firearms");
   const skillBonus = Number(skills[skillKey] || 0) || 0;
 
   const totalBaseMod = weaponBonus + skillBonus;

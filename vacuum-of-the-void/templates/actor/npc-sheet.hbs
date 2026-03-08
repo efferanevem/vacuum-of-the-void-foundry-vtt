@@ -83,6 +83,7 @@
   </header>
 
   <section class="karakter-main npc-main">
+    {{#if weaponSlots.length}}
     <section class="karakter-panel karakter-fegyverek npc-attacks">
       <h2>Támadások</h2>
       <div class="karakter-weapon-slots">
@@ -102,6 +103,7 @@
         {{/each}}
       </div>
     </section>
+    {{/if}}
 
     <section class="karakter-panel karakter-abilities npc-abilities npc-ability-pool">
       <h2>Képességek</h2>
@@ -164,7 +166,7 @@
       <h2>Felszerelés</h2>
       {{#if showEquipmentDropZone}}
       <div class="npc-equipment-drop-zone" data-drop-zone="targy">
-        <p class="npc-equipment-drop-placeholder">Húzz ide bármilyen felszerelést (fegyver, páncél, mikro-chip, tárgy)</p>
+        <p class="npc-equipment-drop-placeholder">Húzz ide bármilyen felszerelést</p>
       </div>
       {{/if}}
 
@@ -257,6 +259,7 @@
                   <td class="karakter-equipment-cell-name">
                     {{#if this.img}}<img class="karakter-equipment-icon karakter-inventory-item-icon" src="{{this.img}}" alt="" data-item-id="{{this.itemId}}" />{{/if}}
                     <span class="karakter-microchip-label karakter-inventory-item-name" data-item-id="{{this.itemId}}">{{this.name}}</span>
+                    <button type="button" class="karakter-item-chat" data-item-id="{{this.itemId}}" title="Chat-be küldés"><i class="fas fa-comment-dots"></i></button>
                   </td>
                   <td class="karakter-equipment-cell-type">{{this.typeLabel}}</td>
                   <td class="karakter-equipment-cell-kp">{{#if this.isActive}}{{this.kp}}{{else}}—{{/if}}</td>

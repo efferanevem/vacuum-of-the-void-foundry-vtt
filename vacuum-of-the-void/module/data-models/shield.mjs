@@ -9,8 +9,8 @@ export class ShieldDataModel extends foundry.abstract.TypeDataModel {
       protectionBonus: new StringField({ required: false, blank: true, initial: "" }),
       /** Sebesség levonás (a táblázatban: Sebesség Levonás). */
       speedPenalty: new StringField({ required: false, blank: true, initial: "" }),
-      /** Szint (a táblázatban: Szint). */
-      level: new StringField({ required: false, blank: true, initial: "" }),
+      /** Szint: Alap, 1., 2., 3. (alapértelmezett Alap). */
+      level: new StringField({ required: false, blank: true, initial: "Alap" }),
       /** Speciális (a táblázatban: Speciális). */
       special: new StringField({ required: false, blank: true, initial: "" })
     };

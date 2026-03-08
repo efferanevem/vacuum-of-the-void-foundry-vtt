@@ -5,22 +5,29 @@
       <h1 class="item-name">
         <input name="name" type="text" value="{{item.name}}" placeholder="Páncél neve" />
       </h1>
+      <div class="field shield-sheet-level">
+        <label>Szint</label>
+        <select name="system.level">
+          <option value="Alap" {{#unless (or (eq system.level "1") (eq system.level "2") (eq system.level "3"))}}selected{{/unless}}>Alap</option>
+          <option value="1" {{#if (eq system.level "1")}}selected{{/if}}>1. szint</option>
+          <option value="2" {{#if (eq system.level "2")}}selected{{/if}}>2. szint</option>
+          <option value="3" {{#if (eq system.level "3")}}selected{{/if}}>3. szint</option>
+        </select>
+      </div>
     </div>
   </header>
 
   <section class="sheet-body">
     <div class="shield-grid">
-      <div class="field">
-        <label>Védelem Bónusz</label>
-        <input type="text" name="system.protectionBonus" value="{{system.protectionBonus}}" placeholder="pl. +3" />
-      </div>
-      <div class="field">
-        <label>Sebesség Levonás (m)</label>
-        <input type="text" name="system.speedPenalty" value="{{system.speedPenalty}}" placeholder="pl. -1,5" />
-      </div>
-      <div class="field">
-        <label>Szint</label>
-        <input type="text" name="system.level" value="{{system.level}}" placeholder="pl. 1" />
+      <div class="shield-row" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px;">
+        <div class="field">
+          <label>Védelem Bónusz</label>
+          <input type="text" name="system.protectionBonus" value="{{system.protectionBonus}}" placeholder="pl. +3" />
+        </div>
+        <div class="field">
+          <label>Sebesség Levonás (m)</label>
+          <input type="text" name="system.speedPenalty" value="{{system.speedPenalty}}" placeholder="pl. -1,5" />
+        </div>
       </div>
     </div>
 

@@ -11,7 +11,9 @@ export class BaseActorDataModel extends foundry.abstract.TypeDataModel {
         assignment: new StringField({ required: false, blank: true, initial: "" }),
         subAssignment: new StringField({ required: false, blank: true, initial: "" }),
         background: new StringField({ required: false, blank: true, initial: "" }),
-        languages: new StringField({ required: false, blank: true, initial: "" })
+        languages: new StringField({ required: false, blank: true, initial: "" }),
+        /** NPC méret (pl. Apró, Kicsi, Közepes, Nagy, Óriási) – token mérethez használt */
+        size: new StringField({ required: false, blank: true, initial: "" })
       }),
       resources: new SchemaField({
         health: new SchemaField({
@@ -68,11 +70,11 @@ export class BaseActorDataModel extends foundry.abstract.TypeDataModel {
         kp3: new NumberField({ required: false, integer: true, min: 0, initial: 0 })
       }),
       combat: new SchemaField({
-        defense: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
-        defenseBonus: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
+        defense: new NumberField({ required: false, integer: false, initial: 0 }),
+        defenseBonus: new NumberField({ required: false, integer: false, initial: 0 }),
         givenProtection: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
-        speed: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
-        speedBonus: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
+        speed: new NumberField({ required: false, integer: false, initial: 0 }),
+        speedBonus: new NumberField({ required: false, integer: false, initial: 0 }),
         givenSpeed: new NumberField({ required: false, integer: true, min: 0, initial: 0 })
       }),
       skills: new SchemaField({

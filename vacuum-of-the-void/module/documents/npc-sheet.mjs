@@ -1,5 +1,14 @@
 import { computeVotvCritInfo } from "../util/votv-result-type.mjs";
 
+/** Páncél szint nyers érték → megjelenített szöveg (karakterlap táblázat). */
+function _armorLevelLabel(raw) {
+  if (!raw) return "Alap";
+  if (raw === "1") return "1. szint";
+  if (raw === "2") return "2. szint";
+  if (raw === "3") return "3. szint";
+  return raw === "Alap" ? "Alap" : raw;
+}
+
 export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplicationMixin(
   foundry.applications.sheets.ActorSheetV2
 ) {
@@ -211,7 +220,7 @@ export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplication
         img: item?.img ?? "",
         protectionBonus: (sys.protectionBonus ?? "").toString().trim() || "—",
         speedPenalty: (sys.speedPenalty ?? "").toString().trim() || "—",
-        level: (sys.level ?? "").toString().trim() || "—",
+        level: _armorLevelLabel((sys.level ?? "").toString().trim()),
         special: (sys.special ?? sys.other ?? "").toString().trim() || "—",
         equipped
       };
@@ -632,9 +641,12 @@ export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplication
     const name = (item && item.name) || slotData.name || `Fegyver`;
     const weaponBonus = Number(slotData.bonus || 0) || 0;
 
-    // Robbanó (explosive) → Kézifegyver használat, egyéb → Löveghasználat
+    // Fegyver Jártasság mezője (alapértelmezett: explosive → Kézifegyver, egyéb → Löveghasználat)
     const weaponType = item?.system?.type || "kinetic";
-    const skillKey = weaponType === "explosive" ? "grenadeUse" : "firearms";
+    const rawSkill = (item?.system?.skillKey ?? "").trim();
+    const skillKey = rawSkill && skills[rawSkill] !== undefined
+      ? rawSkill
+      : (weaponType === "explosive" ? "grenadeUse" : "firearms");
     const skillBonus = Number(skills[skillKey] || 0) || 0;
     const totalBonus = weaponBonus + skillBonus;
     const modifier = totalBonus !== 0 ? (totalBonus > 0 ? `+${totalBonus}` : `${totalBonus}`) : "";
@@ -698,6 +710,12 @@ export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplication
 
     const doc = await fromUuid(uuid);
     if (!doc || doc.documentName !== "Item") return super._onDropItem?.(event, data);
+
+    // NPC-nél páncél nem húzható be
+    if (doc.type === "Pancel") {
+      ui.notifications?.info?.("Az NPC-khez nem rendelhető páncél. Helyette írd át a Védelmi Értékét.");
+      return;
+    }
 
     const actor = this.actor;
 

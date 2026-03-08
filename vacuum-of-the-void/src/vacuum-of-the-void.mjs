@@ -3,6 +3,13 @@ import { VoidKarakterSheet, VoidNpcSheet, VoidWeaponSheet, VoidShieldSheet, Void
 
 const VOTV_DEFAULT_SCENE_BG = "systems/vacuum-of-the-void/assets/void-bg.jpg";
 
+/** NPC méret (system.identity.size) → token grid méret (1, 2 vagy 3). Nagy = 2×2, Óriási = 3×3, egyéb = 1×1. */
+function npcTokenGridSizeFromMéret(size) {
+  if (size === "Nagy") return 2;
+  if (size === "Óriási") return 3;
+  return 1;
+}
+
 // Expose a system namespace following the tutorial style.
 Hooks.once("init", () => {
   console.log("Vacuum of the Void | Initializing system");
@@ -21,9 +28,10 @@ Hooks.once("init", () => {
   CONFIG.Actor.dataModels.Karakter = KarakterDataModel;
   CONFIG.Actor.dataModels.Npc = BaseActorDataModel;
 
-  // Register item data models
+  // Register item data models (weapon/ability = angol aliasok régi/importált adatokhoz, hogy ne legyen "type is not a valid type" hiba)
   CONFIG.Item.dataModels ??= {};
   CONFIG.Item.dataModels.Fegyver = WeaponDataModel;
+  CONFIG.Item.dataModels.weapon = WeaponDataModel;
   CONFIG.Item.dataModels.Pancel = ShieldDataModel;
   CONFIG.Item.dataModels.MikroChip = MicrochipDataModel;
   CONFIG.Item.dataModels.Kepesseg = AbilityDataModel;
@@ -52,6 +60,7 @@ Hooks.once("init", () => {
 
   CONFIG.Item.typeLabels ??= {};
   CONFIG.Item.typeLabels.Fegyver = "Fegyver";
+  CONFIG.Item.typeLabels.weapon = "Fegyver";
   CONFIG.Item.typeLabels.Pancel = "Páncél";
   CONFIG.Item.typeLabels.MikroChip = "Mikro-Chip";
   CONFIG.Item.typeLabels.Kepesseg = "Képesség";
@@ -71,9 +80,9 @@ Hooks.once("init", () => {
     label: "VOTV.NpcSheet"
   });
 
-  // Register item sheets
+  // Register item sheets (Fegyver + weapon alias, Kepesseg + ability alias)
   foundry.documents.collections.Items.registerSheet("vacuum-of-the-void", VoidWeaponSheet, {
-    types: ["Fegyver"],
+    types: ["Fegyver", "weapon"],
     makeDefault: true,
     label: "VOTV.FegyverSheet"
   });
@@ -107,9 +116,18 @@ Hooks.once("init", () => {
   // bármelyik lapon input/textarea van fókuszban (kurzor + görgetés maradjon), és ne a lapot, ami
   // épp mentett (blur save), hogy ne tekerjen fel.
   const UPDATE_ACTOR_SKIP_RENDER_MS = 500;
-  Hooks.on("updateActor", (actor, _changed, _options, _userId) => {
+  Hooks.on("updateActor", (actor, changed, _options, _userId) => {
     const actorId = actor?.id;
     if (!actorId) return;
+
+    // NPC: ha a méret (system.identity.size) változott, prototype token 1×1 / 2×2 / 3×3
+    if (actor.type === "Npc" && changed?.system?.identity && "size" in changed.system.identity) {
+      const gridSize = npcTokenGridSizeFromMéret(actor.system?.identity?.size);
+      actor.update({
+        "prototypeToken.width": gridSize,
+        "prototypeToken.height": gridSize
+      }).catch((err) => console.warn("Vacuum of the Void | NPC token size update failed for", actor.name, err));
+    }
     const activeEl = document.activeElement;
     const isInputLike = activeEl && (
       (activeEl.tagName === "INPUT" && activeEl.type !== "checkbox" && activeEl.type !== "radio") ||
@@ -338,10 +356,13 @@ Hooks.on("preCreateToken", (tokenDocument, _data, _options) => {
     return;
   }
   if (actor.type === "Npc") {
+    const gridSize = npcTokenGridSizeFromMéret(actor.system?.identity?.size);
     tokenDocument.updateSource({
       ...(sourceId ? { actorId: sourceId } : {}),
       "bar1.attribute": "",
-      "bar2.attribute": "resources.health"
+      "bar2.attribute": "resources.health",
+      width: gridSize,
+      height: gridSize
     });
   }
 });

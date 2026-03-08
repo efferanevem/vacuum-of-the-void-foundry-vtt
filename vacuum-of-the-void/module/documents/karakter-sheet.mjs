@@ -1,6 +1,15 @@
 import { computeVotvCritInfo } from "../util/votv-result-type.mjs";
 
-               export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplicationMixin(
+/** Páncél szint nyers érték → megjelenített szöveg (karakterlap táblázat). */
+function _armorLevelLabel(raw) {
+  if (!raw) return "Alap";
+  if (raw === "1") return "1. szint";
+  if (raw === "2") return "2. szint";
+  if (raw === "3") return "3. szint";
+  return raw === "Alap" ? "Alap" : raw;
+}
+
+export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplicationMixin(
   foundry.applications.sheets.ActorSheetV2
 ) {
   static PARTS = foundry.utils.mergeObject(
@@ -103,10 +112,14 @@ import { computeVotvCritInfo } from "../util/votv-result-type.mjs";
     requestAnimationFrame(() => {
       this._writeEffectiveGivenSpeed();
       this._writeEffectiveGivenProtection();
+      this._writeTotalDefense();
+      this._writeTotalSpeed();
     });
     setTimeout(() => {
       this._writeEffectiveGivenSpeed();
       this._writeEffectiveGivenProtection();
+      this._writeTotalDefense();
+      this._writeTotalSpeed();
     }, 150);
     const rootAfter = this.element;
     const formAfter = this.form ?? this.element;
@@ -225,6 +238,43 @@ import { computeVotvCritInfo } from "../util/votv-result-type.mjs";
     span.textContent = String(effective);
   }
 
+  /** Összesített védelem/sebesség kijelzés: Alap + Ideiglenes + Kapott, a DOM-ból olvasva. */
+  _writeTotalDefense(scope = null) {
+    const root = scope ?? this.form ?? this.element;
+    const sel = (s) => root?.querySelector?.(s) ?? (this.id ? document.querySelector(`#${CSS.escape(this.id)} ${s}`) : null);
+    const totalSpan = sel(".karakter-total-defense-effective");
+    const givenSpan = sel(".karakter-given-defense-effective");
+    const inpDef = sel('input[name="system.combat.defense"]');
+    const inpBonus = sel('input[name="system.combat.defenseBonus"]');
+    if (!totalSpan) return;
+    const a = Number(inpDef?.value) || 0;
+    const b = Number(inpBonus?.value) || 0;
+    const c = Number(givenSpan?.textContent) || 0;
+    totalSpan.textContent = String(a + b + c);
+  }
+
+  _writeTotalSpeed(scope = null) {
+    const root = scope ?? this.form ?? this.element;
+    const sel = (s) => root?.querySelector?.(s) ?? (this.id ? document.querySelector(`#${CSS.escape(this.id)} ${s}`) : null);
+    const totalSpan = sel(".karakter-total-speed-effective");
+    const givenSpan = sel(".karakter-given-speed-effective");
+    const inpSpeed = sel('input[name="system.combat.speed"]');
+    const inpBonus = sel('input[name="system.combat.speedBonus"]');
+    if (!totalSpan) return;
+    const res = this.actor?.system?.resources ?? {};
+    const legsTotal = res.hitLocations?.legs?.value ?? 0;
+    const legsCurrent = res.currentHealth?.legs ?? 0;
+    const legsStatus = VoidKarakterSheet._healthStatusFromRatio(legsCurrent, legsTotal);
+    if (legsStatus === 0) {
+      totalSpan.textContent = "0";
+      return;
+    }
+    const a = Number(inpSpeed?.value) || 0;
+    const b = Number(inpBonus?.value) || 0;
+    const c = Number(givenSpan?.textContent) || 0;
+    totalSpan.textContent = String(a + b + c);
+  }
+
   /** Return health status 0–3 for the body part linked to this skill, or undefined if not linked. */
   _getSkillHealthStatus(skillKey) {
     const part = VoidKarakterSheet.BODY_PART_BY_SKILL[skillKey];
@@ -285,6 +335,17 @@ import { computeVotvCritInfo } from "../util/votv-result-type.mjs";
       { combat: { givenSpeed: effectiveGivenSpeed, givenProtection: effectiveGivenProtection } },
       { inplace: false }
     );
+    const sysCombat = context.system?.combat ?? {};
+    context.totalDefense =
+      (Number(sysCombat.defense) || 0) +
+      (Number(sysCombat.defenseBonus) || 0) +
+      (Number(sysCombat.givenProtection) || 0);
+    const givenSpeedNum = Number(sysCombat.givenSpeed);
+    const totalSpeedSum =
+      (Number(sysCombat.speed) || 0) +
+      (Number(sysCombat.speedBonus) || 0) +
+      (Number.isFinite(givenSpeedNum) ? givenSpeedNum : 0);
+    context.totalSpeed = legsStatus === 0 ? 0 : totalSpeedSum;
     const BODY_PART_BY_SKILL = VoidKarakterSheet.BODY_PART_BY_SKILL;
     context.skillHealthStatus = {};
     context.skillDisabled = {};
@@ -443,7 +504,7 @@ import { computeVotvCritInfo } from "../util/votv-result-type.mjs";
         img: item?.img ?? "",
         protectionBonus: (sys.protectionBonus ?? "").toString().trim() || "—",
         speedPenalty: (sys.speedPenalty ?? "").toString().trim() || "—",
-        level: (sys.level ?? "").toString().trim() || "—",
+        level: _armorLevelLabel((sys.level ?? "").toString().trim()),
         special: (sys.special ?? sys.other ?? "").toString().trim() || "—",
         equipped
       };
@@ -544,6 +605,14 @@ import { computeVotvCritInfo } from "../util/votv-result-type.mjs";
         equipped
       };
     });
+
+    // Üres felszerelés: ne jelenjenek meg üres táblázatok; ha egyáltalán nincs elem, kis jelzés (mint NPC lapon)
+    const hasEquipment =
+      (context.weaponsTable?.length ?? 0) > 0 ||
+      (context.armorTable?.length ?? 0) > 0 ||
+      (context.microchipsTable?.length ?? 0) > 0 ||
+      (context.itemsTable?.length ?? 0) > 0;
+    context.showEquipmentDropZone = !hasEquipment;
 
     // Képességek (abilities): Faji / Háttér single slots and Passzív / Aktív multi-areas
     const abilities = this.actor.system.abilities ?? {};
@@ -651,17 +720,31 @@ import { computeVotvCritInfo } from "../util/votv-result-type.mjs";
     const stressInput = root.querySelector?.('input[name="system.resources.stress.value"]');
     if (stressInput) updateStressHighlight({ currentTarget: stressInput });
 
+    const updateTripleTotals = () => {
+      this._writeTotalDefense();
+      this._writeTotalSpeed();
+    };
+    $html.on("input change", "input[name=\"system.combat.defense\"], input[name=\"system.combat.defenseBonus\"], input[name=\"system.combat.speed\"], input[name=\"system.combat.speedBonus\"]", updateTripleTotals);
+
     this._writeEffectiveGivenSpeed(html);
     this._writeEffectiveGivenSpeed(root);
     this._writeEffectiveGivenProtection(html);
     this._writeEffectiveGivenProtection(root);
+    this._writeTotalDefense(html);
+    this._writeTotalDefense(root);
+    this._writeTotalSpeed(html);
+    this._writeTotalSpeed(root);
     requestAnimationFrame(() => {
       this._writeEffectiveGivenSpeed();
       this._writeEffectiveGivenProtection();
+      this._writeTotalDefense();
+      this._writeTotalSpeed();
     });
     setTimeout(() => {
       this._writeEffectiveGivenSpeed();
       this._writeEffectiveGivenProtection();
+      this._writeTotalDefense();
+      this._writeTotalSpeed();
     }, 100);
 
     // Karakterkép: kattintásra Foundry fájlkezelő (FilePicker) megnyitása (user data / assets)
@@ -750,7 +833,7 @@ import { computeVotvCritInfo } from "../util/votv-result-type.mjs";
       await item.update({ "system.quantity": qty });
     });
 
-    // Remove inventory item from actor: Alt+click to delete (delegated)
+    // Remove inventory item from actor: Alt+click to delete (delegated). Egyetlen handler minden típusra (Fegyver, Pancel, Targy, Egyeb stb.).
     $html.on("click", ".karakter-item-delete", async ev => {
       ev.preventDefault();
       if (!ev.altKey) return;
@@ -760,6 +843,7 @@ import { computeVotvCritInfo } from "../util/votv-result-type.mjs";
 
       const actor = this.actor;
       const item = actor.items.get(itemId);
+      if (!item) return; // már törölve (pl. dupla kattintás) – ne dobjunk "Item does not exist!" hibát
       const updates = {};
       if (item?.type === "Fegyver") {
         const weapons = actor.system.weapons ?? {};
@@ -1026,6 +1110,8 @@ import { computeVotvCritInfo } from "../util/votv-result-type.mjs";
       await item.update({ "system.equipped": checkbox.checked });
       this._writeEffectiveGivenSpeed();
       this._writeEffectiveGivenProtection();
+      this._writeTotalDefense();
+      this._writeTotalSpeed();
     });
 
     $html.on("change", ".karakter-weapon-equipped-checkbox", async ev => {
@@ -1139,16 +1225,7 @@ import { computeVotvCritInfo } from "../util/votv-result-type.mjs";
       }, 80);
     });
 
-    // Tárgy: törlés az inventory-ból (Alt+klikk)
-    $html.on("click", ".karakter-item-delete", async ev => {
-      ev.preventDefault();
-      if (!ev.altKey) return;
-      const itemId = ev.currentTarget.dataset.itemId;
-      if (!itemId) return;
-      const item = this.actor.items.get(itemId);
-      if (!item || (item.type !== "Targy" && item.type !== "Egyeb")) return;
-      await this.actor.deleteEmbeddedDocuments("Item", [itemId]);
-    });
+    // Tárgy/Egyeb törlést a fent .karakter-item-delete (Alt+klikk) egyetlen handler intézi – ne legyen duplikált handler, mert az már törölte az itemet és a második .get() "Item does not exist!" hibát dobna.
 
     // Mentés csak kikattintáskor (blur), ne gépelés közben – így nem ugrik a kurzor és a lap.
     const sheet = this;
@@ -1727,9 +1804,12 @@ import { computeVotvCritInfo } from "../util/votv-result-type.mjs";
     const name = (item && item.name) || slotData.name || `Fegyver (${slot})`;
     const weaponBonus = Number(slotData.bonus || 0) || 0;
 
-    // Robbanó (explosive) → Kézifegyver használat, egyéb → Löveghasználat
+    // Fegyver Jártasság mezője (alapértelmezett: explosive → Kézifegyver, egyéb → Löveghasználat)
     const weaponType = item?.system?.type || "kinetic";
-    const skillKey = weaponType === "explosive" ? "grenadeUse" : "firearms";
+    const rawSkill = (item?.system?.skillKey ?? "").trim();
+    const skillKey = rawSkill && skills[rawSkill] !== undefined
+      ? rawSkill
+      : (weaponType === "explosive" ? "grenadeUse" : "firearms");
     const skillBonus = Number(skills[skillKey] || 0) || 0;
     const totalBonus = weaponBonus + skillBonus;
     const modifier = totalBonus !== 0 ? (totalBonus > 0 ? `+${totalBonus}` : `${totalBonus}`) : "";

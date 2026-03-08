@@ -154,28 +154,38 @@
             <span class="karakter-resource-suffix karakter-resource-morale-suffix"><span>db</span> &nbsp;<img class="karakter-resource-d8-icon karakter-roll-morale-d8" src="systems/vacuum-of-the-void/assets/moral_d8.svg" alt="d8" title="Morál dobás (1d8) – 1 morál levonása" /></span>
           </div>
         </div>
-        <div class="karakter-resource karakter-resource-defense karakter-resource-triple">
-          <label>Védelem</label>
-          <input type="number" name="system.combat.defense" value="{{system.combat.defense}}" min="0" />
-          <span class="karakter-resource-plus">+</span>
-          <input type="number" name="system.combat.defenseBonus" value="{{system.combat.defenseBonus}}" min="0" />
-          <span class="karakter-resource-plus">+</span>
-          <span class="karakter-given-defense-effective" title="Kapott védelem">{{system.combat.givenProtection}}</span>
-        </div>
-        <div class="karakter-resource karakter-resource-speed karakter-resource-triple" data-legs-health="{{computedHealthStatus.legs}}">
-          <label>Sebesség</label>
-          <input type="number" name="system.combat.speed" value="{{system.combat.speed}}" min="0" />
-          <span class="karakter-resource-plus">+</span>
-          <input type="number" name="system.combat.speedBonus" value="{{system.combat.speedBonus}}" min="0" />
-          <span class="karakter-resource-plus">+</span>
-          <span class="karakter-given-speed-effective" title="Kapott sebesség (Lábak állapota alapján)">{{system.combat.givenSpeed}}</span>
-          <span class="karakter-resource-speed-unit">m</span>
-        </div>
-        <div class="karakter-resource-triple-sublabels">
-          <span class="karakter-resource-triple-sublabels-spacer"></span>
-          <span class="karakter-resource-triple-sublabels-cell">Alap</span>
-          <span class="karakter-resource-triple-sublabels-cell">Ideiglenes</span>
-          <span class="karakter-resource-triple-sublabels-cell">Kapott</span>
+        <div class="karakter-resource-triple-block" data-legs-health="{{computedHealthStatus.legs}}">
+          <div class="karakter-resource-triple-row">
+            <label>Védelem</label>
+            <input type="number" name="system.combat.defense" value="{{system.combat.defense}}" min="-999" step="any" />
+            <span class="karakter-resource-plus">+</span>
+            <input type="number" name="system.combat.defenseBonus" value="{{system.combat.defenseBonus}}" min="-999" step="any" />
+            <span class="karakter-resource-plus">+</span>
+            <span class="karakter-given-defense-effective" title="Kapott védelem">{{system.combat.givenProtection}}</span>
+            <span class="karakter-resource-plus">=</span>
+            <span class="karakter-total-defense-effective" title="Összesített védelem">{{totalDefense}}</span>
+          </div>
+          <div class="karakter-resource-triple-row">
+            <label>Sebesség</label>
+            <input type="number" name="system.combat.speed" value="{{system.combat.speed}}" min="-999" step="any" />
+            <span class="karakter-resource-plus">+</span>
+            <input type="number" name="system.combat.speedBonus" value="{{system.combat.speedBonus}}" min="-999" step="any" />
+            <span class="karakter-resource-plus">+</span>
+            <span class="karakter-given-speed-effective" title="Kapott sebesség">{{system.combat.givenSpeed}}</span>
+            <span class="karakter-resource-plus">=</span>
+            <span class="karakter-total-speed-effective" title="Összesített sebesség">{{totalSpeed}}</span>
+            <span class="karakter-resource-speed-unit">m</span>
+          </div>
+          <div class="karakter-resource-triple-row karakter-resource-triple-sublabels-row">
+            <span class="karakter-resource-triple-sublabel-spacer"></span>
+            <span class="karakter-resource-triple-sublabel">Alap</span>
+            <span class="karakter-resource-triple-sublabel-sep" aria-hidden="true">+</span>
+            <span class="karakter-resource-triple-sublabel">Ideiglenes</span>
+            <span class="karakter-resource-triple-sublabel-sep" aria-hidden="true">+</span>
+            <span class="karakter-resource-triple-sublabel">Kapott</span>
+            <span class="karakter-resource-triple-sublabel-sep" aria-hidden="true">=</span>
+            <span class="karakter-resource-triple-sublabel" title="Összesített">∑</span>
+          </div>
         </div>
       </section>
     </section>
@@ -383,7 +393,7 @@
     </section>
 
     <section class="karakter-panel karakter-fegyverek">
-      <h2>Fegyverek</h2>
+      <h2>Támadások</h2>
       <div class="karakter-weapon-slots">
         {{#each weaponSlots}}
           <div class="karakter-weapon-slot" data-slot="{{this.slotKey}}" data-drop-zone="weapon">
@@ -463,7 +473,13 @@
 
     <section class="karakter-panel karakter-equipment">
       <h2>Felszerelés</h2>
-      <div class="karakter-equipment-spacer"></div>
+      {{#if showEquipmentDropZone}}
+      <div class="karakter-equipment-drop-zone" data-drop-zone="targy">
+        <p class="karakter-equipment-placeholder">Húzz ide bármilyen felszerelést</p>
+      </div>
+      {{/if}}
+
+      {{#if weaponsTable.length}}
       <h3 class="karakter-equipment-table-title">Fegyverek</h3>
       <div class="karakter-equipment-block">
         <table class="karakter-equipment-table karakter-equipment-weapons">
@@ -511,7 +527,9 @@
           </tbody>
         </table>
       </div>
+      {{/if}}
 
+      {{#if armorTable.length}}
       <h3 class="karakter-equipment-table-title">Páncélok</h3>
       <div class="karakter-equipment-block">
         <table class="karakter-equipment-table karakter-equipment-armor">
@@ -549,7 +567,9 @@
           </tbody>
         </table>
       </div>
+      {{/if}}
 
+      {{#if microchipsTable.length}}
       <h3 class="karakter-equipment-table-title">Mikro-Chip-ek</h3>
       <div class="karakter-equipment-block">
         <table class="karakter-equipment-table karakter-equipment-microchips">
@@ -581,7 +601,9 @@
           </tbody>
         </table>
       </div>
+      {{/if}}
 
+      {{#if itemsTable.length}}
       <h3 class="karakter-equipment-table-title">Egyéb Felszerelés</h3>
       <div class="karakter-equipment-block" data-drop-zone="targy">
         <table class="karakter-equipment-table karakter-equipment-items">
@@ -612,6 +634,7 @@
           </tbody>
         </table>
       </div>
+      {{/if}}
     </section>
 
     <section class="karakter-panel karakter-notes">

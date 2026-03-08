@@ -25,7 +25,9 @@ export class WeaponDataModel extends foundry.abstract.TypeDataModel {
       }),
       range: new StringField({ required: false, blank: true, initial: "" }),
       special: new StringField({ required: false, blank: true, initial: "" }),
-      quantity: new StringField({ required: false, blank: true, initial: "1" })
+      quantity: new StringField({ required: false, blank: true, initial: "1" }),
+      /** Jártasság kulcs (pl. grenadeUse, firearms) – ezt a bónuszt adja hozzá a támadáshoz. Alapértelmezett: Kézifegyver Használat. */
+      skillKey: new StringField({ required: false, blank: true, initial: "grenadeUse" })
     };
   }
 }

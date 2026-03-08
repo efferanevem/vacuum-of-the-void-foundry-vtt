@@ -1,12 +1,35 @@
 /* Páncél item sheet – specific styles only */
 
-.vacuum-of-the-void.sheet.item.Pancel .sheet-header .profile {
+.vacuum-of-the-void.sheet.item.Pancel .sheet-header .profile,
+.votv-shield-sheet .sheet-header .profile {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
 }
 
-.vacuum-of-the-void.sheet.item.Pancel .shield-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px 12px;
+/* Szint a név alatt a headerben */
+.vacuum-of-the-void.sheet.item.Pancel .sheet-header .shield-sheet-level,
+.votv-shield-sheet .sheet-header .shield-sheet-level {
+  margin-top: 6px;
+  margin-bottom: 0;
+}
+
+.vacuum-of-the-void.sheet.item.Pancel .shield-grid .shield-row,
+.votv-shield-sheet .shield-grid .shield-row {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+  gap: 0 12px;
+  width: 100%;
+}
+
+.vacuum-of-the-void.sheet.item.Pancel .shield-grid .shield-row .field,
+.votv-shield-sheet .shield-grid .shield-row .field {
+  min-width: 0;
+}
+
+.vacuum-of-the-void.sheet.item.Pancel .shield-grid,
+.votv-shield-sheet .shield-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
   margin-bottom: 8px;
+  width: 100%;
 }

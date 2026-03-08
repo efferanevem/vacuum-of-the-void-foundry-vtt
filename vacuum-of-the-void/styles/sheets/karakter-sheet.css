@@ -243,7 +243,6 @@
 }
 
 .votv.karakter-sheet .karakter-resource input[type="number"] {
-  width: 2.8em;
   min-width: 0;
   text-align: center;
 }
@@ -304,12 +303,17 @@
 
 .votv.karakter-sheet .karakter-resource-morale {
   gap: 0;
-  margin-left: -16px;
 }
 
 .votv.karakter-sheet .karakter-resource-morale label {
   min-width: 2.9em;
   margin-right: 0;
+}
+
+.votv.karakter-sheet .karakter-resource-stress input {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: auto;
 }
 
 .votv.karakter-sheet .karakter-resource-stress input.karakter-stress-over-10 {
@@ -337,22 +341,100 @@
   padding: 0 2px;
 }
 
-.votv.karakter-sheet .karakter-resource-triple input[type="number"] {
-  width: 3.2em;
+.votv.karakter-sheet .karakter-resource-triple-block input[type="number"] {
+  width: 3em;
   min-width: 3em;
+  max-width: 3em;
+  box-sizing: border-box;
 }
 
-.votv.karakter-sheet .karakter-resource-triple input[type="number"]:disabled {
+.votv.karakter-sheet .karakter-resource-triple-block input[type="number"]:disabled {
   background: rgba(60, 60, 70, 0.5);
   cursor: not-allowed;
   color: var(--color-text-dark-primary, #bbb);
 }
 
+/* Védelem + Sebesség: három sor flexboxbal, explicit szélességekkel (grid nélkül, minden böngészőben egy sor) */
+.votv.karakter-sheet .karakter-resource-triple-block {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.votv.karakter-sheet .karakter-resource-triple-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 3px;
+  min-height: 2.25em;
+}
+
+.votv.karakter-sheet .karakter-resource-triple-row label {
+  flex: 0 0 4.6em;
+  min-width: 4.6em;
+}
+
+.votv.karakter-sheet .karakter-resource-triple-row .karakter-resource-plus {
+  flex: 0 0 2ch;
+  min-width: 2ch;
+}
+
+.votv.karakter-sheet .karakter-resource-triple-row input[type="number"] {
+  flex: 0 0 3em;
+}
+
+.votv.karakter-sheet .karakter-resource-triple-row .karakter-given-defense-effective,
+.votv.karakter-sheet .karakter-resource-triple-row .karakter-given-speed-effective,
+.votv.karakter-sheet .karakter-resource-triple-row .karakter-total-defense-effective,
+.votv.karakter-sheet .karakter-resource-triple-row .karakter-total-speed-effective {
+  flex: 0 0 3em;
+  min-width: 3em;
+}
+
+.votv.karakter-sheet .karakter-resource-triple-row .karakter-resource-speed-unit {
+  flex: 0 0 auto;
+}
+
+/* Címek sor: ugyanolyan szélességek, hogy oszlopról oszlopra igazodjon */
+.votv.karakter-sheet .karakter-resource-triple-sublabels-row {
+  min-height: 1.5em;
+}
+
+.votv.karakter-sheet .karakter-resource-triple-sublabels-row .karakter-resource-triple-sublabel-spacer {
+  flex: 0 0 4.6em;
+  min-width: 4.6em;
+}
+
+.votv.karakter-sheet .karakter-resource-triple-sublabels-row .karakter-resource-triple-sublabel {
+  flex: 0 0 3em;
+  min-width: 3em;
+}
+
+.votv.karakter-sheet .karakter-resource-triple-sublabels-row .karakter-resource-triple-sublabel-sep {
+  flex: 0 0 2ch;
+  min-width: 2ch;
+}
+
+.votv.karakter-sheet .karakter-resource-triple-sublabels-row .karakter-resource-triple-sublabel:nth-child(4) {
+  margin-left: 10px;
+}
+
+.votv.karakter-sheet .karakter-resource-triple-sublabels-row .karakter-resource-triple-sublabel:nth-child(6) {
+  margin-left: 15px;
+}
+
+.votv.karakter-sheet .karakter-resource-triple-sublabels-row .karakter-resource-triple-sublabel:nth-child(8) {
+  margin-left: 15px;
+}
+
 /* Kapott sebesség: csak kijelzés (effektív érték, Lábak alapján), input helyett span */
 .votv.karakter-sheet .karakter-given-speed-effective {
   display: inline-block;
-  width: 3.2em;
+  width: 3em;
   min-width: 3em;
+  max-width: 3em;
   box-sizing: border-box;
   padding: 4px 6px;
   font-size: var(--votv-font-body);
@@ -360,14 +442,14 @@
   background: rgba(60, 60, 70, 0.5);
   border: 1px solid var(--votv-border-muted);
   border-radius: 2px;
-  color: var(--color-text-dark-primary, #bbb);
 }
 
 /* Kapott védelem: ugyanolyan readonly kijelzés, mint a kapott sebesség */
 .votv.karakter-sheet .karakter-given-defense-effective {
   display: inline-block;
-  width: 3.2em;
+  width: 3em;
   min-width: 3em;
+  max-width: 3em;
   box-sizing: border-box;
   padding: 4px 6px;
   font-size: var(--votv-font-body);
@@ -375,59 +457,53 @@
   background: rgba(60, 60, 70, 0.5);
   border: 1px solid var(--votv-border-muted);
   border-radius: 2px;
-  color: var(--color-text-dark-primary, #bbb);
 }
 
-/* Sebesség Kapott: lábak egészségi állapota szerinti színezés (opacity 25%) */
-.votv.karakter-sheet .karakter-resource-speed.karakter-resource-triple[data-legs-health="0"] .karakter-given-speed-effective,
-.votv.karakter-sheet .karakter-resource-speed.karakter-resource-triple[data-legs-health="0"] input {
+/* Összesített védelem / sebesség: read-only negyedik mező (= után) */
+.votv.karakter-sheet .karakter-total-defense-effective,
+.votv.karakter-sheet .karakter-total-speed-effective {
+  display: inline-block;
+  width: 3em;
+  min-width: 3em;
+  max-width: 3em;
+  box-sizing: border-box;
+  padding: 4px 6px;
+  font-size: var(--votv-font-body);
+  text-align: center;
+  background: rgba(60, 60, 70, 0.5);
+  border: 1px solid var(--votv-border-muted);
+  border-radius: 2px;
+}
+
+/* Sebesség Kapott/Összesített: lábak egészségi állapota szerinti színezés (a block-on data-legs-health) */
+.votv.karakter-sheet .karakter-resource-triple-block[data-legs-health="0"] .karakter-given-speed-effective,
+.votv.karakter-sheet .karakter-resource-triple-block[data-legs-health="0"] .karakter-total-speed-effective,
+.votv.karakter-sheet .karakter-resource-triple-block[data-legs-health="0"] input[name="system.combat.speed"],
+.votv.karakter-sheet .karakter-resource-triple-block[data-legs-health="0"] input[name="system.combat.speedBonus"] {
   background: rgba(70, 22, 22, 0.4);
 }
-.votv.karakter-sheet .karakter-resource-speed.karakter-resource-triple[data-legs-health="1"] .karakter-given-speed-effective {
+.votv.karakter-sheet .karakter-resource-triple-block[data-legs-health="1"] .karakter-given-speed-effective {
   background: rgba(192, 57, 43, 0.25);
 }
-.votv.karakter-sheet .karakter-resource-speed.karakter-resource-triple[data-legs-health="2"] .karakter-given-speed-effective {
+.votv.karakter-sheet .karakter-resource-triple-block[data-legs-health="2"] .karakter-given-speed-effective {
   background: rgba(214, 137, 16, 0.25);
 }
 
-.votv.karakter-sheet .karakter-resource-triple-sublabels {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 6px;
-  margin-top: 4px;
-  margin-bottom: 6px;
-  padding-left: 6px;
+.votv.karakter-sheet .karakter-resource-triple-sublabel {
   font-size: 0.75em;
   line-height: 1.2;
   color: inherit;
   opacity: 0.75;
+  text-align: center;
 }
 
-.votv.karakter-sheet .karakter-resource-triple-sublabels-spacer {
-  flex: 0 0 4.6em;
+.votv.karakter-sheet .karakter-resource-triple-sublabel-sep {
+  visibility: hidden;
+  padding: 0 2px;
+}
+
+.votv.karakter-sheet .karakter-resource-triple-sublabel-spacer {
   min-width: 0;
-}
-
-.votv.karakter-sheet .karakter-resource-triple-sublabels-cell {
-  flex: 1 1 0;
-  min-width: 4em;
-  text-align: left;
-}
-
-.votv.karakter-sheet .karakter-resource-triple-sublabels-cell:nth-child(2) {
-  padding-left: 15px;
-}
-
-.votv.karakter-sheet .karakter-resource-triple-sublabels-cell:nth-child(3) {
-  padding-left: 0;
-  margin-left: -9px;
-}
-
-.votv.karakter-sheet .karakter-resource-triple-sublabels-cell:nth-child(4) {
-  padding-left: 5px;
-  padding-right: 5px;
-  transform: translateX(4px);
 }
 
 .votv.karakter-sheet .karakter-current-hp {
@@ -1794,6 +1870,21 @@
   flex-shrink: 0;
   margin-right: 0;
 }
+.votv.karakter-sheet .karakter-equipment-microchips .karakter-equipment-cell-name .karakter-item-chat,
+.votv.npc-sheet .karakter-equipment-microchips .karakter-equipment-cell-name .karakter-item-chat {
+  flex-shrink: 0;
+}
+
+/* NPC lap: mikrochip név cella ugyanúgy flex (ikon + név + beküldő gomb) */
+.votv.npc-sheet .karakter-equipment-microchips .karakter-equipment-cell-name {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.votv.npc-sheet .karakter-equipment-microchips .karakter-equipment-cell-name .karakter-microchip-label {
+  flex: 1;
+  min-width: 0;
+}
 
 /* Mikro-Chip táblázat: KP oszlop keskeny, mint a fegyvernél a Lőszer */
 .votv.karakter-sheet .karakter-equipment-microchips .karakter-equipment-th-kp {
@@ -1842,6 +1933,29 @@
 .votv.karakter-sheet .karakter-equipment-spacer {
   height: 10px;
   flex-shrink: 0;
+}
+
+/* Felszerelés: üres állapot jelzés (mint NPC lapon) */
+.votv.karakter-sheet .karakter-equipment-drop-zone {
+  border: 1px dashed var(--votv-border-muted);
+  border-radius: var(--votv-radius);
+  background: rgba(3, 6, 10, 0.5);
+  padding: 10px 12px;
+  margin-bottom: 8px;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.votv.karakter-sheet .karakter-equipment-drop-zone:hover,
+.votv.karakter-sheet .karakter-equipment-drop-zone.karakter-equipment-drag-over {
+  border-color: var(--votv-border-accent);
+  background: rgba(43, 255, 136, 0.08);
+}
+
+.votv.karakter-sheet .karakter-equipment-placeholder {
+  margin: 0;
+  font-size: var(--votv-font-body);
+  color: var(--votv-text-muted);
+  opacity: 0.9;
 }
 
 .votv.karakter-sheet .karakter-equipment-table-title {
