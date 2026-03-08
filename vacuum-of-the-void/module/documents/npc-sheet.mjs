@@ -326,6 +326,65 @@ export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplication
     context.abilityPassiveList = mapIdsToAbilityList(getAreaIds("passive"));
     context.abilityActiveList = mapIdsToAbilityList(getAreaIds("active"));
 
+    // Harc szekció: csak ha ez az NPC a combatban van; range tábla + kezdeményezés + KP (mint Karakter)
+    const actorId = actor?.id;
+    const inCombat = !!game.combat?.combatants?.some(
+      (c) => (c.actor?.id ?? c.actorId) === actorId
+    );
+    context.showHarcSection = inCombat;
+    const resources = context.system?.resources ?? {};
+    const initiativeResult = context.system?.combat?.initiativeResult;
+    const initiativeNum = typeof initiativeResult === "number" ? initiativeResult : -1;
+    const DEFAULT_INITIATIVE_RANGES = [
+      { min: 0, max: 6, kp: 2 },
+      { min: 7, max: 12, kp: 3 },
+      { min: 13, max: 18, kp: 4 },
+      { min: 19, max: 24, kp: 5 },
+      { min: 25, max: 999, kp: 6 }
+    ];
+    const rawRanges = context.system?.combat?.initiativeRanges;
+    const parsedRanges = Array.isArray(rawRanges)
+      ? rawRanges.map((r) => ({ min: Number(r.min) ?? 0, max: Number(r.max) ?? 0, kp: Math.min(10, Math.max(0, Number(r.kp) ?? 0)) }))
+      : [];
+    const sortedForLookup = (parsedRanges.length > 0 ? parsedRanges : DEFAULT_INITIATIVE_RANGES).slice().sort((a, b) => a.min - b.min);
+    const initiativeRangesForLookup = sortedForLookup;
+    const MIN_RANGE_ROWS = 3;
+    let displayRanges = parsedRanges.length > 0 ? parsedRanges : [];
+    if (displayRanges.length < MIN_RANGE_ROWS) {
+      displayRanges = [...displayRanges, ...Array(MIN_RANGE_ROWS - displayRanges.length).fill({ min: 0, max: 0, kp: 0 })];
+    }
+    context.initiativeRanges = displayRanges.map((r, i) => ({
+      ...r,
+      isFirst: i === 0,
+      isLast: i === displayRanges.length - 1
+    }));
+    let kpUsableCount = 0;
+    if (typeof initiativeNum === "number" && initiativeNum >= 0 && initiativeRangesForLookup.length > 0) {
+      const first = initiativeRangesForLookup[0];
+      const last = initiativeRangesForLookup[initiativeRangesForLookup.length - 1];
+      let range = null;
+      if (initiativeNum <= first.max) range = first;
+      else if (initiativeNum >= last.min) range = last;
+      else range = initiativeRangesForLookup.find((r) => initiativeNum >= r.min && initiativeNum <= r.max);
+      if (range) kpUsableCount = range.kp;
+    }
+    const lastRange = initiativeRangesForLookup.length > 0 ? initiativeRangesForLookup[initiativeRangesForLookup.length - 1] : null;
+    const maxKpFromRanges = Math.min(10, lastRange ? lastRange.kp : 6);
+    const kpDotKeys = ["kpDot1", "kpDot2", "kpDot3", "kpDot4", "kpDot5", "kpDot6", "kpDot7", "kpDot8", "kpDot9", "kpDot10"];
+    const kpDots = kpDotKeys.slice(0, Math.max(1, maxKpFromRanges)).map((key, i) => {
+      const index = i + 1;
+      const used = !!(Number(resources[key]) || 0);
+      const usable = index <= kpUsableCount;
+      return { index, used, usable };
+    });
+    const half = Math.ceil(kpDots.length / 2);
+    context.kpDotsRow1 = kpDots.slice(0, half);
+    context.kpDotsRow2 = kpDots.slice(half);
+    context.canEditInitiative = !!game.user?.isGM;
+    context.showInitiativeResult = typeof initiativeResult === "number";
+    context.initiativeResult = context.showInitiativeResult ? initiativeResult : "";
+    context.speedUnitForSelect = context.system?.combat?.speedUnit ?? "m";
+
     return context;
   }
 
@@ -408,6 +467,24 @@ export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplication
       }
       if (!itemId || !this.actor) return;
       await this._rollWeaponDamage(itemId, (btn?.dataset?.slot ?? "").trim());
+    });
+
+    $html.on("click", ".karakter-harc-initiative", async (ev) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+      if (!this.actor) return;
+      const { openRollSheetForSkill } = await import("./roll-sheet.mjs");
+      openRollSheetForSkill(this.actor, "quickThinking", "Kezdeményezés");
+    });
+
+    $html.on("click", ".karakter-kp-dot", async (ev) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+      const btn = ev.currentTarget;
+      const index = parseInt(btn.dataset.index, 10);
+      if (!Number.isFinite(index) || index < 1 || index > 10 || !this.actor) return;
+      const current = !!(Number(this.actor.system?.resources?.[`kpDot${index}`]) || 0);
+      await this.actor.update({ [`system.resources.kpDot${index}`]: current ? 0 : 1 });
     });
 
     // Jártasságok: kattintás a jártasság nevére → dobás lap megnyitása (ugyanúgy mint karakterlapon)

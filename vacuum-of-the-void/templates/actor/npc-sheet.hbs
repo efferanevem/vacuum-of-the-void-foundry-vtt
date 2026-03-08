@@ -54,29 +54,38 @@
           <span class="npc-header-stat-sep">/</span>
           <input type="number" name="system.resources.health.max" value="{{system.resources.health.max}}" min="0" />
         </div>
-        <div class="npc-header-stat-row">
-          <input type="text" name="system.skills.quickThinking1" value="{{system.skills.quickThinking1}}" class="npc-header-stat-extra" placeholder="—" />
-          <span class="npc-header-stat-sep">:</span>
-          <input type="text" name="system.resources.kp" value="{{system.resources.kp}}" class="npc-header-stat-extra" placeholder="—" />
+        <div class="npc-header-stat-ranges" title="Kezdeményezés eredménye melyik range-be esik, annyi KP jár">
+          {{#each initiativeRanges}}
+            <div class="karakter-harc-range-row npc-header-range-row" data-index="{{@index}}">
+              {{#if this.isFirst}}
+                <span class="karakter-harc-range-placeholder karakter-harc-range-min-placeholder" title="A legkisebb range alja nincs mező – ez alatti dobás ide tartozik"></span>
+              {{else}}
+                <input type="number" class="karakter-harc-range-min" name="system.combat.initiativeRanges.{{@index}}.min" value="{{this.min}}" data-dtype="Number" placeholder="min" title="Range alja" />
+              {{/if}}
+              <span class="karakter-harc-range-sep">–</span>
+              {{#if this.isLast}}
+                <span class="karakter-harc-range-placeholder karakter-harc-range-max-placeholder" title="A legnagyobb range teteje nincs mező – ez feletti dobás ide tartozik"></span>
+              {{else}}
+                <input type="number" class="karakter-harc-range-max" name="system.combat.initiativeRanges.{{@index}}.max" value="{{this.max}}" data-dtype="Number" placeholder="max" title="Range teteje" />
+              {{/if}}
+              <span class="karakter-harc-range-sep">:</span>
+              <input type="number" class="karakter-harc-range-kp" name="system.combat.initiativeRanges.{{@index}}.kp" value="{{this.kp}}" data-dtype="Number" min="0" max="6" title="KP" />
+            </div>
+          {{/each}}
         </div>
         <div class="npc-header-stat-row-left">
           <label class="npc-header-stat-label">Védelem</label>
           <input type="number" name="system.combat.defense" value="{{system.combat.defense}}" min="0" />
         </div>
-        <div class="npc-header-stat-row">
-          <input type="text" name="system.skills.quickThinking2" value="{{system.skills.quickThinking2}}" class="npc-header-stat-extra" placeholder="—" />
-          <span class="npc-header-stat-sep">:</span>
-          <input type="text" name="system.resources.kp2" value="{{system.resources.kp2}}" class="npc-header-stat-extra" placeholder="—" />
-        </div>
-        <div class="npc-header-stat-row-left">
+        <div class="npc-header-stat-row-left npc-header-stat-row-speed">
           <label class="npc-header-stat-label">Sebesség</label>
           <input type="number" name="system.combat.speed" value="{{system.combat.speed}}" min="0" />
-          <span class="npc-header-stat-unit">m</span>
-        </div>
-        <div class="npc-header-stat-row">
-          <input type="text" name="system.skills.quickThinking3" value="{{system.skills.quickThinking3}}" class="npc-header-stat-extra" placeholder="—" />
-          <span class="npc-header-stat-sep">:</span>
-          <input type="text" name="system.resources.kp3" value="{{system.resources.kp3}}" class="npc-header-stat-extra" placeholder="—" />
+          <select name="system.combat.speedUnit" class="npc-header-stat-unit-select" title="Mértékegység">
+            {{#select speedUnitForSelect}}
+            <option value="m">m</option>
+            <option value="TE">TE</option>
+            {{/select}}
+          </select>
         </div>
       </div>
     </div>
@@ -101,6 +110,52 @@
             </div>
           </div>
         {{/each}}
+      </div>
+    </section>
+    {{/if}}
+
+    {{#if showHarcSection}}
+    <section class="karakter-panel karakter-harc npc-harc">
+      <h2>Harc</h2>
+      <div class="karakter-harc-row">
+        <div class="karakter-harc-initiative-cell">
+          <button type="button" class="karakter-harc-initiative" title="Kezdeményezés dobás">Kezdeményezés</button>
+          {{#if showInitiativeResult}}
+            {{#if canEditInitiative}}
+              <input type="number" class="karakter-harc-initiative-result" name="system.combat.initiativeResult" value="{{initiativeResult}}" data-dtype="Number" title="Kezdeményezés eredménye" />
+            {{else}}
+              <input type="text" class="karakter-harc-initiative-result" value="{{initiativeResult}}" readonly tabindex="-1" title="Kezdeményezés eredménye" />
+            {{/if}}
+          {{/if}}
+        </div>
+        <div class="karakter-harc-kp-dots npc-harc-kp-dots" title="KP (kattintásra elhasznált)">
+          <div class="karakter-harc-kp-dots-row">
+            {{#each kpDotsRow1}}
+              {{#if this.usable}}
+                <button type="button" class="karakter-kp-dot {{#if this.used}}karakter-kp-dot-used{{/if}}" data-index="{{this.index}}" aria-label="KP {{this.index}}">
+                  <img src="systems/vacuum-of-the-void/assets/{{#if this.used}}pattle _points_used{{else}}pattle _points{{/if}}.png" alt="" />
+                </button>
+              {{else}}
+                <span class="karakter-kp-dot karakter-kp-dot-not-usable" aria-label="KP {{this.index}} (nem használható)">
+                  <img src="systems/vacuum-of-the-void/assets/pattle _points_not_usable.png" alt="" />
+                </span>
+              {{/if}}
+            {{/each}}
+          </div>
+          <div class="karakter-harc-kp-dots-row">
+            {{#each kpDotsRow2}}
+              {{#if this.usable}}
+                <button type="button" class="karakter-kp-dot {{#if this.used}}karakter-kp-dot-used{{/if}}" data-index="{{this.index}}" aria-label="KP {{this.index}}">
+                  <img src="systems/vacuum-of-the-void/assets/{{#if this.used}}pattle _points_used{{else}}pattle _points{{/if}}.png" alt="" />
+                </button>
+              {{else}}
+                <span class="karakter-kp-dot karakter-kp-dot-not-usable" aria-label="KP {{this.index}} (nem használható)">
+                  <img src="systems/vacuum-of-the-void/assets/pattle _points_not_usable.png" alt="" />
+                </span>
+              {{/if}}
+            {{/each}}
+          </div>
+        </div>
       </div>
     </section>
     {{/if}}

@@ -675,12 +675,33 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
     const kpDotKeys = ["kpDot1", "kpDot2", "kpDot3", "kpDot4", "kpDot5", "kpDot6"];
     const initiativeResult = context.system?.combat?.initiativeResult;
     const initiativeNum = typeof initiativeResult === "number" ? initiativeResult : -1;
+    const DEFAULT_INITIATIVE_RANGES = [
+      { min: 0, max: 6, kp: 2 },
+      { min: 7, max: 12, kp: 3 },
+      { min: 13, max: 18, kp: 4 },
+      { min: 19, max: 24, kp: 5 },
+      { min: 25, max: 999, kp: 6 }
+    ];
+    const rawRanges = context.system?.combat?.initiativeRanges;
+    const parsedRanges = Array.isArray(rawRanges)
+      ? rawRanges.map((r) => ({ min: Number(r.min) ?? 0, max: Number(r.max) ?? 0, kp: Math.min(10, Math.max(0, Number(r.kp) ?? 0)) }))
+      : [];
+    const sortedForLookup = (parsedRanges.length > 0 ? parsedRanges : DEFAULT_INITIATIVE_RANGES).slice().sort((a, b) => a.min - b.min);
+    const initiativeRangesForLookup = sortedForLookup;
+    const mins = parsedRanges.map((r) => r.min);
+    const minMin = mins.length ? Math.min(...mins) : 0;
+    const maxMin = mins.length ? Math.max(...mins) : 0;
+    context.initiativeRanges = parsedRanges.map((r) => ({ ...r, isFirst: r.min === minMin, isLast: r.min === maxMin }));
     let kpUsableCount = 0;
-    if (initiativeNum >= 25) kpUsableCount = 6;
-    else if (initiativeNum >= 19) kpUsableCount = 5;
-    else if (initiativeNum >= 13) kpUsableCount = 4;
-    else if (initiativeNum >= 7) kpUsableCount = 3;
-    else if (initiativeNum >= 0) kpUsableCount = 2;
+    if (typeof initiativeNum === "number" && initiativeNum >= 0 && initiativeRangesForLookup.length > 0) {
+      const first = initiativeRangesForLookup[0];
+      const last = initiativeRangesForLookup[initiativeRangesForLookup.length - 1];
+      let range = null;
+      if (initiativeNum <= first.max) range = first;
+      else if (initiativeNum >= last.min) range = last;
+      else range = initiativeRangesForLookup.find((r) => initiativeNum >= r.min && initiativeNum <= r.max);
+      if (range) kpUsableCount = range.kp;
+    }
     context.kpDots = kpDotKeys.map((key, i) => {
       const index = i + 1;
       const used = !!(Number(resources[key]) || 0);

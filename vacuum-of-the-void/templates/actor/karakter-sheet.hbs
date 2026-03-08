@@ -416,7 +416,26 @@
       </section>
       {{#if showHarcSection}}
       <section class="karakter-panel karakter-harc">
-        <h2>Harc</h2>
+        <h2>Harc - Küzdelmi Pontok</h2>
+        <div class="karakter-harc-ranges" title="Kezdeményezés eredménye melyik range-be esik, annyi KP jár">
+          {{#each initiativeRanges}}
+            <div class="karakter-harc-range-row" data-index="{{@index}}">
+              {{#if this.isFirst}}
+                <span class="karakter-harc-range-placeholder karakter-harc-range-min-placeholder" title="A legkisebb range alja nincs mező – ez alatti dobás ide tartozik"></span>
+              {{else}}
+                <input type="number" class="karakter-harc-range-min" name="system.combat.initiativeRanges.{{@index}}.min" value="{{this.min}}" data-dtype="Number" placeholder="min" title="Range alja" />
+              {{/if}}
+              <span class="karakter-harc-range-sep">–</span>
+              {{#if this.isLast}}
+                <span class="karakter-harc-range-placeholder karakter-harc-range-max-placeholder" title="A legnagyobb range teteje nincs mező – ez feletti dobás ide tartozik"></span>
+              {{else}}
+                <input type="number" class="karakter-harc-range-max" name="system.combat.initiativeRanges.{{@index}}.max" value="{{this.max}}" data-dtype="Number" placeholder="max" title="Range teteje" />
+              {{/if}}
+              <span class="karakter-harc-range-sep">:</span>
+              <input type="number" class="karakter-harc-range-kp" name="system.combat.initiativeRanges.{{@index}}.kp" value="{{this.kp}}" data-dtype="Number" min="0" max="6" title="KP" />
+            </div>
+          {{/each}}
+        </div>
         <div class="karakter-harc-row">
           <div class="karakter-harc-initiative-cell">
             <button type="button" class="karakter-harc-initiative" title="Kezdeményezés dobás">Kezdeményezés</button>

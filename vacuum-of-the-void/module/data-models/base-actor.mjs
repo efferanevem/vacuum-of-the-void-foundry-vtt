@@ -68,23 +68,38 @@ export class BaseActorDataModel extends foundry.abstract.TypeDataModel {
         kp: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
         kp2: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
         kp3: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
-        // Karakterlap: 6 KP ikon külön-külön le/fel kapcsolható (0 = aktív, 1 = elhasznált)
+        // Karakterlap / NPC: KP ikonok külön-külön le/fel kapcsolható (0 = aktív, 1 = elhasznált); NPC-nél akár 10 is
         kpDot1: new NumberField({ required: false, integer: true, min: 0, max: 1, initial: 0 }),
         kpDot2: new NumberField({ required: false, integer: true, min: 0, max: 1, initial: 0 }),
         kpDot3: new NumberField({ required: false, integer: true, min: 0, max: 1, initial: 0 }),
         kpDot4: new NumberField({ required: false, integer: true, min: 0, max: 1, initial: 0 }),
         kpDot5: new NumberField({ required: false, integer: true, min: 0, max: 1, initial: 0 }),
-        kpDot6: new NumberField({ required: false, integer: true, min: 0, max: 1, initial: 0 })
+        kpDot6: new NumberField({ required: false, integer: true, min: 0, max: 1, initial: 0 }),
+        kpDot7: new NumberField({ required: false, integer: true, min: 0, max: 1, initial: 0 }),
+        kpDot8: new NumberField({ required: false, integer: true, min: 0, max: 1, initial: 0 }),
+        kpDot9: new NumberField({ required: false, integer: true, min: 0, max: 1, initial: 0 }),
+        kpDot10: new NumberField({ required: false, integer: true, min: 0, max: 1, initial: 0 })
       }),
       combat: new SchemaField({
         defense: new NumberField({ required: false, integer: false, initial: 0 }),
         defenseBonus: new NumberField({ required: false, integer: false, initial: 0 }),
         givenProtection: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
         speed: new NumberField({ required: false, integer: false, initial: 0 }),
+        /** Sebesség mértékegység (NPC header: m vagy TE). */
+        speedUnit: new StringField({ required: false, blank: true, initial: "m" }),
         speedBonus: new NumberField({ required: false, integer: false, initial: 0 }),
         givenSpeed: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
         /** Kezdeményezés dobás eredménye; csak dobás után jelenik meg a Harc mezőben (readonly). */
-        initiativeResult: new NumberField({ required: false, integer: true, initial: undefined })
+        initiativeResult: new NumberField({ required: false, integer: true, initial: undefined }),
+        /** Kezdeményezés → KP: range tábla (min–max : KP); a dobás eredménye melyik range-be esik, annyi KP jár. */
+        initiativeRanges: new ArrayField(
+          new SchemaField({
+            min: new NumberField({ required: false, integer: true, initial: 0 }),
+            max: new NumberField({ required: false, integer: true, initial: 0 }),
+            kp: new NumberField({ required: false, integer: true, min: 0, max: 10, initial: 0 })
+          }),
+          { required: false, initial: [] }
+        )
       }),
       skills: new SchemaField({
         deception: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),

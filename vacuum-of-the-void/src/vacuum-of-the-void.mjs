@@ -3,8 +3,9 @@ import { VoidKarakterSheet, VoidNpcSheet, VoidWeaponSheet, VoidShieldSheet, Void
 
 const VOTV_DEFAULT_SCENE_BG = "systems/vacuum-of-the-void/assets/void-bg.jpg";
 
-/** NPC méret (system.identity.size) → token grid méret (1, 2 vagy 3). Nagy = 2×2, Óriási = 3×3, egyéb = 1×1. */
+/** NPC méret (system.identity.size) → token grid méret. Apró = 0.5×0.5, Nagy = 2×2, Óriási = 3×3, egyéb = 1×1. */
 function npcTokenGridSizeFromMéret(size) {
+  if (size === "Apró") return 0.5;
   if (size === "Nagy") return 2;
   if (size === "Óriási") return 3;
   return 1;
@@ -120,8 +121,8 @@ Hooks.once("init", () => {
     const actorId = actor?.id;
     if (!actorId) return;
 
-    // Karakter kezdeményezés (initiativeResult) → Combat Tracker initiative mező szinkron
-    if (actor.type === "Karakter" && changed?.system?.combat && "initiativeResult" in changed.system.combat) {
+    // Karakter/NPC kezdeményezés (initiativeResult) → Combat Tracker initiative mező szinkron
+    if ((actor.type === "Karakter" || actor.type === "Npc") && changed?.system?.combat && "initiativeResult" in changed.system.combat) {
       const value = Number(actor.system?.combat?.initiativeResult);
       const initiative = Number.isFinite(value) ? value : 0;
       const combat = game.combat;
@@ -391,10 +392,10 @@ Hooks.on("preCreateCombatant", (combatant, _data, _options) => {
   }
 });
 
-// Karakter combat-be kerüléskor: kezdeményezés eredménye legyen üres (még nem dobott)
+// Karakter vagy NPC combat-be kerüléskor: kezdeményezés eredménye legyen üres (még nem dobott)
 Hooks.on("createCombatant", (combatant, _data, _options) => {
   const actor = combatant.actor;
-  if (!actor || actor.type !== "Karakter") return;
+  if (!actor || (actor.type !== "Karakter" && actor.type !== "Npc")) return;
   actor.update({ "system.combat.initiativeResult": null }).catch((err) => {
     console.warn("Vacuum of the Void | Clear initiative on combat join failed:", err);
   });
@@ -415,7 +416,7 @@ function votvResetKpForCombat(combat) {
   const list = combatants?.contents ?? (combatants ? Array.from(combatants) : []);
   for (const c of list) {
     const actor = c.actor;
-    if (!actor || actor.type !== "Karakter") continue;
+    if (!actor || (actor.type !== "Karakter" && actor.type !== "Npc")) continue;
     actor.update(VOTV_KP_RESET).catch((err) => {
       console.warn("Vacuum of the Void | KP reset failed for", actor.name, err);
     });
@@ -427,10 +428,10 @@ Hooks.on("combatRound", (combat, _updateData, updateOptions) => {
   votvResetKpForCombat(combat);
 });
 
-// Harc vége vagy combatant változás: nyitott Karakter lapok újrarajzolása, hogy a Harc szekció azonnal eltűnjön
-function votvRenderOpenKarakterSheets() {
+// Harc vége vagy combatant változás: nyitott Karakter és NPC lapok újrarajzolása, hogy a Harc szekció azonnal eltűnjön
+function votvRenderOpenCombatSheets() {
   const seen = new Set();
-  for (const actor of game.actors?.filter((a) => a.type === "Karakter") ?? []) {
+  for (const actor of game.actors?.filter((a) => a.type === "Karakter" || a.type === "Npc") ?? []) {
     const apps = actor.apps ?? [];
     const list = apps.contents ? Array.from(apps.contents) : Array.from(apps);
     for (const app of list) {
@@ -440,7 +441,9 @@ function votvRenderOpenKarakterSheets() {
     }
   }
   for (const app of Object.values(ui?.windows ?? {})) {
-    if (app?.document?.documentName !== "Actor" || app?.document?.type !== "Karakter") continue;
+    if (app?.document?.documentName !== "Actor") continue;
+    const docType = app?.document?.type;
+    if (docType !== "Karakter" && docType !== "Npc") continue;
     if (seen.has(app.id)) continue;
     seen.add(app.id);
     if (typeof app.render === "function") app.render(true);
@@ -448,12 +451,12 @@ function votvRenderOpenKarakterSheets() {
 }
 
 Hooks.on("deleteCombat", () => {
-  setTimeout(votvRenderOpenKarakterSheets, 100);
+  setTimeout(votvRenderOpenCombatSheets, 100);
 });
 
 Hooks.on("updateCombat", (combat, change, _options) => {
   if (change?.round != null) votvResetKpForCombat(combat);
-  setTimeout(votvRenderOpenKarakterSheets, 0);
+  setTimeout(votvRenderOpenCombatSheets, 0);
 });
 
 // Combat Tracker: Roll Initiative gombok elrejtése
