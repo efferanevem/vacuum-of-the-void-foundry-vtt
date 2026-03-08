@@ -67,7 +67,14 @@ export class BaseActorDataModel extends foundry.abstract.TypeDataModel {
         // NPC header – három külön KP mezőhöz használható (kp, kp2, kp3)
         kp: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
         kp2: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
-        kp3: new NumberField({ required: false, integer: true, min: 0, initial: 0 })
+        kp3: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
+        // Karakterlap: 6 KP ikon külön-külön le/fel kapcsolható (0 = aktív, 1 = elhasznált)
+        kpDot1: new NumberField({ required: false, integer: true, min: 0, max: 1, initial: 0 }),
+        kpDot2: new NumberField({ required: false, integer: true, min: 0, max: 1, initial: 0 }),
+        kpDot3: new NumberField({ required: false, integer: true, min: 0, max: 1, initial: 0 }),
+        kpDot4: new NumberField({ required: false, integer: true, min: 0, max: 1, initial: 0 }),
+        kpDot5: new NumberField({ required: false, integer: true, min: 0, max: 1, initial: 0 }),
+        kpDot6: new NumberField({ required: false, integer: true, min: 0, max: 1, initial: 0 })
       }),
       combat: new SchemaField({
         defense: new NumberField({ required: false, integer: false, initial: 0 }),
@@ -75,7 +82,9 @@ export class BaseActorDataModel extends foundry.abstract.TypeDataModel {
         givenProtection: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
         speed: new NumberField({ required: false, integer: false, initial: 0 }),
         speedBonus: new NumberField({ required: false, integer: false, initial: 0 }),
-        givenSpeed: new NumberField({ required: false, integer: true, min: 0, initial: 0 })
+        givenSpeed: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
+        /** Kezdeményezés dobás eredménye; csak dobás után jelenik meg a Harc mezőben (readonly). */
+        initiativeResult: new NumberField({ required: false, integer: true, initial: undefined })
       }),
       skills: new SchemaField({
         deception: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),

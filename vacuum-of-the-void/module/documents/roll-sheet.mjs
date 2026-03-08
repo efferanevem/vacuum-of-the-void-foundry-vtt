@@ -28,20 +28,23 @@ export class VoidRollSheet extends Application {
       injuryModifier,
       injuryPenalty,
       isWeaponAttack,
+      isInitiativeRoll,
       weaponSlotKey,
       weaponItemId,
       weaponDamageFormula
     } = options;
     super(options);
     this._actor = actor;
-    this._skillKey = skillKey;
-    this._label = label ?? skillKey;
+    this._skillKey = skillKey ?? "";
+    this._label = label ?? skillKey ?? "";
     this._baseModifier = Number(baseModifier) || 0;
     this._injuryModifier = Number(injuryModifier) || 0;
     /** Opcionális sérülés levonás (pl. fegyver dobásnál karok); megjelenik külön, beleszámít a dobásba. */
     this._injuryPenalty = Number(injuryPenalty) || 0;
     /** Fegyver támadás esetén true, ilyenkor Védelem ellen dobunk és sebzés gombot adunk a chathez. */
     this._isWeaponAttack = !!isWeaponAttack;
+    /** Kezdeményezés dobás: az eredményt a karakterlap Harc mezőjébe írjuk. */
+    this._isInitiativeRoll = !!isInitiativeRoll;
     this._weaponSlotKey = weaponSlotKey || "";
     this._weaponItemId = weaponItemId || "";
     /** Fegyver sebzés formulája, ha ismert (chat sebzés gombhoz); ha nincs, a handler próbálja újraképezni az itemből/slotból. */
@@ -220,7 +223,7 @@ export class VoidRollSheet extends Application {
   async _doRoll(form) {
     const actor = this.actor;
     if (!actor) return;
-
+    try {
     const moraleDiceEl = form.querySelector("[name='moraleDice']");
     const advantageEl = form.querySelector("[name='advantage']");
     const constantBonusEl = form.querySelector("[name='constantBonus']");
@@ -320,7 +323,21 @@ export class VoidRollSheet extends Application {
       await actor.update({ "system.resources.morale": nextMorale });
     }
 
-    this.close();
+    if (this._isInitiativeRoll) {
+      try {
+        const total = Number(combinedRoll.total) ?? 0;
+        await actor.update({ "system.combat.initiativeResult": total });
+        const apps = actor.apps ?? [];
+        for (const app of apps) {
+          if (typeof app?.render === "function") app.render(true);
+        }
+      } catch (e) {
+        console.warn("VOTV initiative result update:", e);
+      }
+    }
+    } finally {
+      this.close();
+    }
   }
 }
 
@@ -340,12 +357,14 @@ export function openRollSheetForSkill(actor, skillKey, label) {
   if (healthStatus === 1) injuryModifier = -6;
   else if (healthStatus === 2) injuryModifier = -3;
   const baseModifier = baseValue + injuryModifier;
+  const isInitiativeRoll = (label || "").trim() === "Kezdeményezés";
   const sheet = new VoidRollSheet({
     actor,
     skillKey,
     label: label || skillKey,
     baseModifier: baseValue,
-    injuryModifier
+    injuryModifier,
+    isInitiativeRoll
   });
   sheet.render(true);
 }

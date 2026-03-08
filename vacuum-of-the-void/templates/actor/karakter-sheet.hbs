@@ -392,27 +392,53 @@
       </div>
     </section>
 
-    <section class="karakter-panel karakter-fegyverek">
-      <h2>Támadások</h2>
-      <div class="karakter-weapon-slots">
-        {{#each weaponSlots}}
-          <div class="karakter-weapon-slot" data-slot="{{this.slotKey}}" data-drop-zone="weapon">
-            <div class="karakter-weapon-slot-select-wrap">
-              <div class="karakter-weapon-slot-display">
-                {{#if this.img}}
-                  <img class="karakter-weapon-slot-thumb" src="{{this.img}}" alt="" />
-                {{/if}}
-                <span class="karakter-weapon-slot-display-text">{{this.displayName}}</span>
+    <div class="karakter-fegyverek-harc-wrap">
+      <section class="karakter-panel karakter-fegyverek">
+        <h2>Támadások</h2>
+        <div class="karakter-weapon-slots">
+          {{#each weaponSlots}}
+            <div class="karakter-weapon-slot" data-slot="{{this.slotKey}}" data-drop-zone="weapon">
+              <div class="karakter-weapon-slot-select-wrap">
+                <div class="karakter-weapon-slot-display">
+                  {{#if this.img}}
+                    <img class="karakter-weapon-slot-thumb" src="{{this.img}}" alt="" />
+                  {{/if}}
+                  <span class="karakter-weapon-slot-display-text">{{this.displayName}}</span>
+                </div>
+              </div>
+              <div class="karakter-weapon-slot-actions">
+                <button type="button" class="karakter-weapon-attack" data-slot="{{this.slotKey}}" title="Támadás (találat)">Támadás</button>
+                <button type="button" class="karakter-weapon-damage" data-slot="{{this.slotKey}}" data-item-id="{{this.itemId}}" title="Sebzés dobás">Sebzés</button>
               </div>
             </div>
-            <div class="karakter-weapon-slot-actions">
-              <button type="button" class="karakter-weapon-attack" data-slot="{{this.slotKey}}" title="Támadás (találat)">Támadás</button>
-              <button type="button" class="karakter-weapon-damage" data-slot="{{this.slotKey}}" data-item-id="{{this.itemId}}" title="Sebzés dobás">Sebzés</button>
-            </div>
+          {{/each}}
+        </div>
+      </section>
+      <section class="karakter-panel karakter-harc">
+        <h2>Harc</h2>
+        <div class="karakter-harc-row">
+          <div class="karakter-harc-initiative-cell">
+            <button type="button" class="karakter-harc-initiative" title="Kezdeményezés dobás">Kezdeményezés</button>
+            {{#if showInitiativeResult}}
+              <input type="text" class="karakter-harc-initiative-result" value="{{initiativeResult}}" readonly tabindex="-1" title="Kezdeményezés eredménye" />
+            {{/if}}
           </div>
-        {{/each}}
-      </div>
-    </section>
+          <div class="karakter-harc-kp-dots" title="KP (kattintásra elhasznált)">
+            {{#each kpDots}}
+              {{#if this.usable}}
+                <button type="button" class="karakter-kp-dot {{#if this.used}}karakter-kp-dot-used{{/if}}" data-index="{{this.index}}" aria-label="KP {{this.index}}">
+                  <img src="systems/vacuum-of-the-void/assets/{{#if this.used}}pattle _points_used{{else}}pattle _points{{/if}}.png" alt="" />
+                </button>
+              {{else}}
+                <span class="karakter-kp-dot karakter-kp-dot-not-usable" aria-label="KP {{this.index}} (nem használható)">
+                  <img src="systems/vacuum-of-the-void/assets/pattle _points_not_usable.png" alt="" />
+                </span>
+              {{/if}}
+            {{/each}}
+          </div>
+        </div>
+      </section>
+    </div>
 
     <section class="karakter-panel karakter-microchips">
       <h2>Mikro-Chip-ek</h2>

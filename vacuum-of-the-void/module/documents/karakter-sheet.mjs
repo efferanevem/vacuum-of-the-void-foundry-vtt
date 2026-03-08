@@ -671,6 +671,26 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
     context.abilityPassiveList = mapIdsToAbilityList(getAreaIds("passive"));
     context.abilityActiveList = mapIdsToAbilityList(getAreaIds("active"));
 
+    const resources = context.system?.resources ?? {};
+    const kpDotKeys = ["kpDot1", "kpDot2", "kpDot3", "kpDot4", "kpDot5", "kpDot6"];
+    const initiativeResult = context.system?.combat?.initiativeResult;
+    const initiativeNum = typeof initiativeResult === "number" ? initiativeResult : -1;
+    let kpUsableCount = 0;
+    if (initiativeNum >= 25) kpUsableCount = 6;
+    else if (initiativeNum >= 19) kpUsableCount = 5;
+    else if (initiativeNum >= 13) kpUsableCount = 4;
+    else if (initiativeNum >= 7) kpUsableCount = 3;
+    else if (initiativeNum >= 0) kpUsableCount = 2;
+    context.kpDots = kpDotKeys.map((key, i) => {
+      const index = i + 1;
+      const used = !!(Number(resources[key]) || 0);
+      const usable = index <= kpUsableCount;
+      return { index, used, usable };
+    });
+
+    context.showInitiativeResult = typeof initiativeResult === "number";
+    context.initiativeResult = context.showInitiativeResult ? initiativeResult : "";
+
     return context;
   }
 
@@ -705,6 +725,24 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
       }
       if (!itemId) return;
       await this._rollWeaponDamage(itemId, btn.dataset.slot?.trim() ?? "");
+    });
+
+    $html.on("click", ".karakter-harc-initiative", async (ev) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+      const { openRollSheetForSkill } = await import("./roll-sheet.mjs");
+      openRollSheetForSkill(this.actor, "quickThinking", "Kezdeményezés");
+    });
+
+    $html.on("click", ".karakter-kp-dot", async (ev) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+      const btn = ev.currentTarget;
+      const index = parseInt(btn.dataset.index, 10);
+      if (!Number.isFinite(index) || index < 1 || index > 6) return;
+      const key = `system.resources.kpDot${index}`;
+      const current = !!(Number(this.actor.system?.resources?.[`kpDot${index}`]) || 0);
+      await this.actor.update({ [key]: current ? 0 : 1 });
     });
 
     if (!this.isEditable) return;
@@ -1789,6 +1827,21 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
     });
     const next = Math.max(0, current - 1);
     await this.actor.update({ "system.resources.morale": next });
+  }
+
+  async _rollInitiative() {
+    const quickThinking = Number(this.actor.system.skills?.quickThinking ?? 0) || 0;
+    const modifier = quickThinking !== 0 ? (quickThinking > 0 ? `+${quickThinking}` : `${quickThinking}`) : "";
+    const formula = `1d20${modifier}`;
+    const roll = new Roll(formula);
+    await roll.evaluate({ async: true });
+    const rollMode = game.settings.get("core", "rollMode") ?? CONST.DICE_ROLL_MODES.PUBLIC;
+    await roll.toMessage({
+      speaker: ChatMessage.getSpeaker({ actor: this.actor }),
+      flavor: "Kezdeményezés",
+      flags: { "vacuum-of-the-void": {} },
+      rollMode
+    });
   }
 
   async _rollWeapon(slot) {

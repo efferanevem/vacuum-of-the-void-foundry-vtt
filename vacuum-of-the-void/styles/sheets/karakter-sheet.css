@@ -1676,8 +1676,142 @@
   grid-column: 1 / 3;
 }
 
-.votv.karakter-sheet .karakter-fegyverek {
+.votv.karakter-sheet .karakter-fegyverek-harc-wrap {
   grid-column: 3 / 4;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+}
+
+.votv.karakter-sheet .karakter-fegyverek-harc-wrap .karakter-fegyverek {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.votv.karakter-sheet .karakter-fegyverek-harc-wrap .karakter-fegyverek .karakter-weapon-slots {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.votv.karakter-sheet .karakter-harc {
+  flex: 0 0 auto;
+}
+
+.votv.karakter-sheet .karakter-harc-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+
+.votv.karakter-sheet .karakter-harc-initiative-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+}
+
+.votv.karakter-sheet .karakter-harc-initiative {
+  flex: 0 0 auto;
+  padding: 6px 12px;
+  font-size: var(--votv-font-body);
+  font-family: var(--font-body);
+  color: var(--votv-text-main);
+  background: rgba(43, 255, 136, 0.12);
+  border: 1px solid rgba(43, 255, 136, 0.5);
+  border-radius: var(--votv-radius);
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.votv.karakter-sheet .karakter-harc-initiative:hover {
+  background: rgba(43, 255, 136, 0.2);
+  border-color: rgba(43, 255, 136, 0.7);
+}
+
+.votv.karakter-sheet .karakter-harc-initiative-result {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 6px 12px;
+  font-size: var(--votv-font-body);
+  font-family: var(--font-body);
+  text-align: center;
+  background: rgba(3, 6, 10, 0.6);
+  border: 1px solid var(--votv-border-muted);
+  border-radius: var(--votv-radius);
+  color: var(--votv-text-main);
+  cursor: default;
+}
+
+.votv.karakter-sheet .karakter-harc-field {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.votv.karakter-sheet .karakter-harc-field-label {
+  font-size: 0.75em;
+  line-height: 1.2;
+  color: inherit;
+  opacity: 0.75;
+  text-align: center;
+}
+
+.votv.karakter-sheet .karakter-harc-field input[type="number"] {
+  width: 3.5em;
+  min-width: 3.5em;
+  text-align: center;
+}
+
+.votv.karakter-sheet .karakter-harc-kp-dots {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px 12px;
+  flex: 1 1 auto;
+  min-width: 0;
+  align-content: center;
+}
+
+.votv.karakter-sheet .karakter-kp-dot {
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  outline: none;
+  box-shadow: none;
+}
+
+.votv.karakter-sheet .karakter-kp-dot:focus,
+.votv.karakter-sheet .karakter-kp-dot:active {
+  outline: none;
+  box-shadow: none;
+}
+
+.votv.karakter-sheet .karakter-kp-dot img {
+  width: 100%;
+  height: auto;
+  max-width: 36px;
+  display: block;
+}
+
+.votv.karakter-sheet .karakter-kp-dot-not-usable {
+  cursor: default;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .votv.karakter-sheet .karakter-microchip-slots {
