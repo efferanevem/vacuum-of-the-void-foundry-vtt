@@ -2845,6 +2845,11 @@
   padding: 1px 2px;
 }
 
+.votv.karakter-sheet.npc-sheet .npc-given-protection-display {
+  opacity: 0.75;
+  color: var(--votv-text-muted, rgba(255, 255, 255, 0.7));
+}
+
 .votv.karakter-sheet.npc-sheet .npc-header-stat-unit {
   font-size: 0.9em;
   color: var(--votv-text-muted, rgba(255, 255, 255, 0.7));

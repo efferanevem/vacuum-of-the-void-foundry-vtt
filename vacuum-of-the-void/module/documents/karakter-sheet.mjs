@@ -276,14 +276,15 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
     span.textContent = String(effective);
   }
 
-  /** Kapott védelem kijelzés: tárolt givenProtection + felszerelt páncélok védelmi bónusza. */
+  /** Kapott védelem kijelzés: tárolt givenProtection + páncélok + Körültekintés státusz (+1). */
   _writeEffectiveGivenProtection(scope = null) {
     const root = scope ?? this.form ?? this.element;
     let span = root?.querySelector?.(".karakter-given-defense-effective");
     if (!span && this.id) span = document.querySelector(`#${CSS.escape(this.id)} .karakter-given-defense-effective`);
     if (!span) return;
     const raw = Number(this.actor?.system?.combat?.givenProtection ?? 0) || 0;
-    const effective = raw + this._getTotalArmorProtectionBonus();
+    const lookaroundBonus = this.actor?.statuses?.has?.("lookaround") ? 1 : 0;
+    const effective = raw + this._getTotalArmorProtectionBonus() + lookaroundBonus;
     span.textContent = String(effective);
   }
 
@@ -382,7 +383,8 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
     effectiveGivenSpeed += armorSpeedPenalty;
     context.effectiveGivenSpeed = effectiveGivenSpeed;
     const rawGivenProtection = Number(this.actor.system?.combat?.givenProtection ?? 0) || 0;
-    const effectiveGivenProtection = rawGivenProtection + this._getTotalArmorProtectionBonus();
+    const lookaroundBonus = this.actor?.statuses?.has?.("lookaround") ? 1 : 0;
+    const effectiveGivenProtection = rawGivenProtection + this._getTotalArmorProtectionBonus() + lookaroundBonus;
     context.system = foundry.utils.mergeObject(
       foundry.utils.duplicate(this.actor.system),
       { combat: { givenSpeed: effectiveGivenSpeed, givenProtection: effectiveGivenProtection } },

@@ -76,6 +76,9 @@
         <div class="npc-header-stat-row-left">
           <label class="npc-header-stat-label">Védelem</label>
           <input type="number" name="system.combat.defense" value="{{system.combat.defense}}" min="0" />
+          <span class="npc-header-stat-plus" aria-hidden="true">+</span>
+          <input type="hidden" name="system.combat.givenProtection" value="{{system.combat.givenProtection}}" />
+          <input type="number" class="npc-given-protection-display" value="{{effectiveGivenProtection}}" min="0" readonly title="Kapott védelem (alap + Körültekintés)" tabindex="-1" />
         </div>
         <div class="npc-header-stat-row-left npc-header-stat-row-speed">
           <label class="npc-header-stat-label">Sebesség</label>

@@ -136,6 +136,10 @@ export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplication
     context.sizeForSelect = (context.system?.identity?.size ?? "").trim() || "Közepes";
 
     const actor = this.actor;
+    const combat = context.system?.combat ?? {};
+    const baseGivenProtection = Number(combat.givenProtection ?? 0) || 0;
+    const lookaroundBonus = actor?.statuses?.has?.("lookaround") ? 1 : 0;
+    context.effectiveGivenProtection = baseGivenProtection + lookaroundBonus;
     const items = actor?.items?.contents ?? [];
 
     // Támadások: minden slotban lévő (felszerelt) fegyver megjelenik; minden slotot nézünk, sorrend: slotOrder majd többi
