@@ -120,6 +120,22 @@ Hooks.once("init", () => {
     const actorId = actor?.id;
     if (!actorId) return;
 
+    // Karakter kezdeményezés (initiativeResult) → Combat Tracker initiative mező szinkron
+    if (actor.type === "Karakter" && changed?.system?.combat && "initiativeResult" in changed.system.combat) {
+      const value = Number(actor.system?.combat?.initiativeResult);
+      const initiative = Number.isFinite(value) ? value : 0;
+      const combat = game.combat;
+      if (combat) {
+        const combatants = combat.combatants?.contents ?? Array.from(combat.combatants ?? []);
+        for (const comb of combatants) {
+          if (comb.actor?.id === actorId || comb.actorId === actorId) {
+            combat.updateEmbeddedDocuments("Combatant", [{ _id: comb.id, initiative }]).catch(() => {});
+            break;
+          }
+        }
+      }
+    }
+
     // NPC: ha a méret (system.identity.size) változott, prototype token 1×1 / 2×2 / 3×3
     if (actor.type === "Npc" && changed?.system?.identity && "size" in changed.system.identity) {
       const gridSize = npcTokenGridSizeFromMéret(actor.system?.identity?.size);
@@ -373,6 +389,71 @@ Hooks.on("preCreateCombatant", (combatant, _data, _options) => {
   if (init === undefined || init === null || (typeof init === "number" && isNaN(init))) {
     combatant.updateSource({ initiative: 0 });
   }
+});
+
+// Karakter combat-be kerüléskor: kezdeményezés eredménye legyen üres (még nem dobott)
+Hooks.on("createCombatant", (combatant, _data, _options) => {
+  const actor = combatant.actor;
+  if (!actor || actor.type !== "Karakter") return;
+  actor.update({ "system.combat.initiativeResult": null }).catch((err) => {
+    console.warn("Vacuum of the Void | Clear initiative on combat join failed:", err);
+  });
+});
+
+// Minden kör végén: összes KP ikon visszaállítása „simára” (used → 0) a combatban lévő Karaktereknél
+const VOTV_KP_RESET = {
+  "system.resources.kpDot1": 0,
+  "system.resources.kpDot2": 0,
+  "system.resources.kpDot3": 0,
+  "system.resources.kpDot4": 0,
+  "system.resources.kpDot5": 0,
+  "system.resources.kpDot6": 0
+};
+
+function votvResetKpForCombat(combat) {
+  const combatants = combat?.combatants;
+  const list = combatants?.contents ?? (combatants ? Array.from(combatants) : []);
+  for (const c of list) {
+    const actor = c.actor;
+    if (!actor || actor.type !== "Karakter") continue;
+    actor.update(VOTV_KP_RESET).catch((err) => {
+      console.warn("Vacuum of the Void | KP reset failed for", actor.name, err);
+    });
+  }
+}
+
+Hooks.on("combatRound", (combat, _updateData, updateOptions) => {
+  if (updateOptions?.direction <= 0) return;
+  votvResetKpForCombat(combat);
+});
+
+// Harc vége vagy combatant változás: nyitott Karakter lapok újrarajzolása, hogy a Harc szekció azonnal eltűnjön
+function votvRenderOpenKarakterSheets() {
+  const seen = new Set();
+  for (const actor of game.actors?.filter((a) => a.type === "Karakter") ?? []) {
+    const apps = actor.apps ?? [];
+    const list = apps.contents ? Array.from(apps.contents) : Array.from(apps);
+    for (const app of list) {
+      if (!app || seen.has(app.id)) continue;
+      seen.add(app.id);
+      if (typeof app.render === "function") app.render(true);
+    }
+  }
+  for (const app of Object.values(ui?.windows ?? {})) {
+    if (app?.document?.documentName !== "Actor" || app?.document?.type !== "Karakter") continue;
+    if (seen.has(app.id)) continue;
+    seen.add(app.id);
+    if (typeof app.render === "function") app.render(true);
+  }
+}
+
+Hooks.on("deleteCombat", () => {
+  setTimeout(votvRenderOpenKarakterSheets, 100);
+});
+
+Hooks.on("updateCombat", (combat, change, _options) => {
+  if (change?.round != null) votvResetKpForCombat(combat);
+  setTimeout(votvRenderOpenKarakterSheets, 0);
 });
 
 // Combat Tracker: Roll Initiative gombok elrejtése

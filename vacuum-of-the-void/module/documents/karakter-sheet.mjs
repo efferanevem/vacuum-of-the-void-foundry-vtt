@@ -688,6 +688,9 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
       return { index, used, usable };
     });
 
+    const hasCombatWithKarakter = !!game.combat?.combatants?.some((c) => c.actor?.type === "Karakter");
+    context.showHarcSection = hasCombatWithKarakter;
+    context.canEditInitiative = !!game.user?.isGM;
     context.showInitiativeResult = typeof initiativeResult === "number";
     context.initiativeResult = context.showInitiativeResult ? initiativeResult : "";
 

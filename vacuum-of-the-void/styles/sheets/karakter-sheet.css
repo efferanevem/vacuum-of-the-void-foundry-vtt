@@ -1749,6 +1749,11 @@
   cursor: default;
 }
 
+.votv.karakter-sheet .karakter-harc-initiative-result:not([readonly]) {
+  cursor: text;
+  background: rgba(3, 6, 10, 0.95);
+}
+
 .votv.karakter-sheet .karakter-harc-field {
   display: flex;
   flex-direction: column;

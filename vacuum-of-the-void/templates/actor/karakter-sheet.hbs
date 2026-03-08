@@ -414,13 +414,18 @@
           {{/each}}
         </div>
       </section>
+      {{#if showHarcSection}}
       <section class="karakter-panel karakter-harc">
         <h2>Harc</h2>
         <div class="karakter-harc-row">
           <div class="karakter-harc-initiative-cell">
             <button type="button" class="karakter-harc-initiative" title="Kezdeményezés dobás">Kezdeményezés</button>
             {{#if showInitiativeResult}}
-              <input type="text" class="karakter-harc-initiative-result" value="{{initiativeResult}}" readonly tabindex="-1" title="Kezdeményezés eredménye" />
+              {{#if canEditInitiative}}
+                <input type="number" class="karakter-harc-initiative-result" name="system.combat.initiativeResult" value="{{initiativeResult}}" data-dtype="Number" title="Kezdeményezés eredménye" />
+              {{else}}
+                <input type="text" class="karakter-harc-initiative-result" value="{{initiativeResult}}" readonly tabindex="-1" title="Kezdeményezés eredménye" />
+              {{/if}}
             {{/if}}
           </div>
           <div class="karakter-harc-kp-dots" title="KP (kattintásra elhasznált)">
@@ -438,6 +443,7 @@
           </div>
         </div>
       </section>
+      {{/if}}
     </div>
 
     <section class="karakter-panel karakter-microchips">
