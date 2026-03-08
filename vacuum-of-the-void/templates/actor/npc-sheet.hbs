@@ -108,7 +108,11 @@
               </div>
             </div>
             <div class="karakter-weapon-slot-actions">
-              <button type="button" class="karakter-weapon-attack" data-slot="{{this.slotKey}}" title="Támadás (találat)">Támadás</button>
+              {{#if this.isThrown}}
+                <span class="karakter-weapon-range-display" title="Hatótáv">{{this.rangeStr}}</span>
+              {{else}}
+                <button type="button" class="karakter-weapon-attack" data-slot="{{this.slotKey}}" title="Támadás (találat)">Támadás</button>
+              {{/if}}
               <button type="button" class="karakter-weapon-damage" data-slot="{{this.slotKey}}" data-item-id="{{this.itemId}}" title="Sebzés dobás">Sebzés</button>
             </div>
           </div>

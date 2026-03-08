@@ -163,11 +163,17 @@ export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplication
       const slotData = weapons[slotKey] ?? {};
       const itemId = (slotData.itemId ?? "").trim();
       const item = weaponItems.find((w) => w.id === itemId);
+      const itemDoc = weaponDocs.find((w) => w.id === itemId);
+      const sys = itemDoc?.system ?? {};
+      const isThrown = sys.size === "thrown";
+      const rangeStr = (typeof sys.range === "string" ? (sys.range || "").trim() : "") || "—";
       return {
         slotKey,
         itemId,
         displayName: item?.name || slotData.name || emptyLabel,
-        img: item?.img || ""
+        img: item?.img || "",
+        isThrown,
+        rangeStr
       };
     });
 
