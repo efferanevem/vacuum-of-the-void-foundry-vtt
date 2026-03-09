@@ -1,0 +1,206 @@
+/* Jármű (Vehicle) actor sheet – design a karakterlap mintájára, szélesség 1000 */
+
+.votv.jarmu-sheet {
+  font-family: var(--font-body);
+  font-size: var(--votv-font-body);
+  padding: 10px 14px;
+  box-sizing: border-box;
+  background: linear-gradient(145deg, rgba(5, 7, 10, 0.9), rgba(5, 10, 18, 0.98));
+  border-radius: var(--votv-radius);
+  border: 1px solid rgba(66, 135, 245, 0.25);
+  box-shadow: var(--votv-shadow-soft);
+  color: var(--votv-text-main);
+  height: 100%;
+  overflow-y: auto;
+}
+
+.votv.jarmu-sheet .jarmu-header label,
+.votv.jarmu-sheet .jarmu-stats label {
+  font-size: var(--votv-font-label-small);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--votv-text-muted);
+}
+
+.votv.jarmu-sheet .jarmu-header {
+  margin-bottom: 12px;
+}
+
+.votv.jarmu-sheet .jarmu-header-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr minmax(120px, 0.4fr);
+  gap: 8px;
+  align-items: end;
+}
+
+.votv.jarmu-sheet .jarmu-header-field {
+  border: 1px solid var(--votv-border-muted);
+  padding: 3px 6px;
+  background: var(--votv-panel-bg-soft);
+  border-radius: var(--votv-radius);
+  box-shadow: inset 0 0 0 1px rgba(1, 3, 6, 0.6);
+}
+
+.votv.jarmu-sheet .jarmu-header-field label {
+  display: block;
+  margin-bottom: 2px;
+}
+
+.votv.jarmu-sheet .jarmu-header-field input,
+.votv.jarmu-sheet .jarmu-header-field select {
+  width: 100%;
+  box-sizing: border-box;
+  font-size: var(--votv-font-body);
+  padding: 4px 6px;
+  background-color: rgba(3, 6, 10, 0.9);
+  border: 1px solid var(--votv-border-muted);
+  color: var(--votv-text-main);
+  border-radius: 2px;
+}
+
+.votv.jarmu-sheet .jarmu-header-field input {
+  border: none;
+  background: transparent;
+}
+
+.votv.jarmu-sheet .jarmu-main {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+  align-items: stretch;
+}
+
+/* Bal oszlop: kép mindig látszik, magasságot kitölti, szélesség igazodik (négyzet). Max az ablak fele. */
+.votv.jarmu-sheet .jarmu-column.jarmu-left {
+  min-width: 120px;
+  min-height: 120px;
+  max-width: 50%;
+  display: flex;
+  flex-direction: column;
+}
+
+.votv.jarmu-sheet .jarmu-portrait {
+  flex: 1 1 auto;
+  min-height: 120px;
+  padding: 0;
+  overflow: hidden;
+  aspect-ratio: 1;
+  width: auto;
+  height: 100%;
+  align-self: flex-start;
+}
+
+.votv.jarmu-sheet .jarmu-portrait-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer;
+  border-radius: 2px;
+}
+
+/* Jobb oldal: közvetlenül mellette, az egész maradék teret kitölti */
+.votv.jarmu-sheet .jarmu-column.jarmu-right {
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.votv.jarmu-sheet .jarmu-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  flex: 1 1 auto;
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+  box-sizing: border-box;
+}
+
+.votv.jarmu-sheet .jarmu-stat-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.votv.jarmu-sheet .jarmu-stat-row label {
+  flex: 0 0 auto;
+  min-width: 140px;
+}
+
+.votv.jarmu-sheet .jarmu-stat-row input[type="text"],
+.votv.jarmu-sheet .jarmu-stat-row input[type="number"] {
+  width: 4em;
+  min-width: 3em;
+  font-size: var(--votv-font-body);
+  padding: 4px 6px;
+  background-color: rgba(3, 6, 10, 0.9);
+  border: 1px solid var(--votv-border-muted);
+  color: var(--votv-text-main);
+  border-radius: 2px;
+  box-sizing: border-box;
+}
+
+.votv.jarmu-sheet .jarmu-stat-row-defense input[type="number"] {
+  width: 3.5em;
+}
+
+.votv.jarmu-sheet .jarmu-stat-unit {
+  font-size: var(--votv-font-body);
+  color: var(--votv-text-muted);
+}
+
+.votv.jarmu-sheet .jarmu-stat-plus {
+  margin: 0 2px;
+  color: var(--votv-text-muted);
+}
+
+.votv.jarmu-sheet .jarmu-total-defense-label {
+  margin-left: 8px;
+  font-size: var(--votv-font-label-small);
+  color: var(--votv-text-muted);
+}
+
+.votv.jarmu-sheet .jarmu-total-defense-effective {
+  font-weight: bold;
+  color: var(--votv-header-accent);
+}
+
+.votv.jarmu-sheet .jarmu-section {
+  width: 100%;
+  margin-top: 12px;
+}
+
+/* Járműegységek és Modulok szekció */
+.votv.jarmu-sheet .jarmu-section.jarmu-units h2 {
+  margin: 0 0 6px;
+  font-size: var(--votv-font-label);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--votv-header-accent);
+}
+
+.votv.jarmu-sheet .jarmu-section.jarmu-units h2::before {
+  content: "> ";
+  color: rgba(43, 255, 136, 0.9);
+  margin-right: 2px;
+}
+
+.votv.jarmu-sheet .jarmu-units-content {
+  min-height: 60px;
+  border: 1px dashed var(--votv-border-muted);
+  border-radius: var(--votv-radius);
+  padding: 10px;
+  background: var(--votv-panel-bg);
+}
+
+.votv.jarmu-sheet input:focus,
+.votv.jarmu-sheet select:focus {
+  outline: none;
+  border-color: var(--votv-focus-ring);
+  box-shadow: 0 0 0 1px rgba(43, 255, 136, 0.4);
+}

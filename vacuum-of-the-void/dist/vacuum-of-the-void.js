@@ -1,2 +1,2 @@
-import "./vacuum-of-the-void-CML8Hom4.mjs";
+import "./vacuum-of-the-void-CrsaWFr0.mjs";
 //# sourceMappingURL=vacuum-of-the-void.js.map

@@ -28,7 +28,8 @@
   "documentTypes": {
     "Actor": {
       "Karakter": {},
-      "Npc": {}
+      "Npc": {},
+      "Jarmu": {}
     },
     "Item": {
       "Fegyver": {},

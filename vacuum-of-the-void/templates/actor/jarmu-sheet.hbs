@@ -1,0 +1,252 @@
+<form class="votv jarmu-sheet karakter-sheet" autocomplete="off">
+  <header class="jarmu-header">
+    <div class="jarmu-header-row">
+      <div class="jarmu-header-field jarmu-header-name">
+        <label>Név</label>
+        <input type="text" name="name" value="{{actor.name}}" data-dtype="String" />
+      </div>
+      <div class="jarmu-header-field jarmu-header-type">
+        <label>Típus</label>
+        <input type="text" name="system.vehicle.type" value="{{system.vehicle.type}}" data-dtype="String" />
+      </div>
+      <div class="jarmu-header-field jarmu-header-size">
+        <label>Méret</label>
+        <select name="system.identity.size">
+          {{#select sizeForSelect}}
+          <option value="Kicsi">Kicsi</option>
+          <option value="Közepes">Közepes</option>
+          <option value="Nagy">Nagy</option>
+          {{/select}}
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <section class="jarmu-main">
+    <section class="jarmu-column jarmu-left">
+      <section class="karakter-panel jarmu-portrait">
+        <img
+          class="jarmu-portrait-img"
+          src="{{actor.img}}"
+          data-edit="img"
+          alt="{{actor.name}}"
+          title="{{actor.name}}"
+        />
+      </section>
+    </section>
+    <section class="jarmu-column jarmu-right">
+      <section class="karakter-panel jarmu-stats">
+        <div class="jarmu-stat-row">
+          <label>Sebesség</label>
+          <input type="text" name="system.combat.speed" value="{{system.combat.speed}}" placeholder="0" data-dtype="String" />
+          <span class="jarmu-stat-unit">TE</span>
+        </div>
+        <div class="jarmu-stat-row">
+          <label>Eszközök Hatótávolsága</label>
+          <input type="text" name="system.vehicle.toolsRange" value="{{system.vehicle.toolsRange}}" placeholder="0" data-dtype="String" />
+          <span class="jarmu-stat-unit">TE</span>
+        </div>
+        <div class="jarmu-stat-row jarmu-stat-row-defense">
+          <label>Védelem</label>
+          <input type="number" name="system.combat.defense" value="{{system.combat.defense}}" min="0" />
+          <span class="jarmu-stat-plus">+</span>
+          <input type="number" name="system.combat.givenProtection" value="{{system.combat.givenProtection}}" min="0" title="Kapott védelem" />
+          <span class="jarmu-stat-unit">TE</span>
+        </div>
+      </section>
+    </section>
+  </section>
+
+  <section class="jarmu-section jarmu-units karakter-panel">
+    <h2>Járműegységek és Modulok</h2>
+    <div class="jarmu-units-content">
+      {{!-- Később: járműegységek / modulok item lista vagy drop zone --}}
+    </div>
+  </section>
+
+  <section class="jarmu-section jarmu-raktar karakter-panel karakter-equipment">
+    <h2>Raktár</h2>
+    {{#if showEquipmentDropZone}}
+    <div class="karakter-equipment-drop-zone" data-drop-zone="targy">
+      <p class="karakter-equipment-placeholder">Húzz ide bármilyen felszerelést</p>
+    </div>
+    {{/if}}
+
+    {{#if weaponsTable.length}}
+    <h3 class="karakter-equipment-table-title">Fegyverek</h3>
+    <div class="karakter-equipment-block">
+      <table class="karakter-equipment-table karakter-equipment-weapons">
+        <thead>
+          <tr>
+            <th class="karakter-equipment-th-name">Név</th>
+            <th class="karakter-equipment-th-type">Típus, Méret</th>
+            <th class="karakter-equipment-th-bonus">Bónusz</th>
+            <th class="karakter-equipment-th-damage">Sebzés</th>
+            <th class="karakter-equipment-th-range">Hatótáv</th>
+            <th class="karakter-equipment-th-ammo">Lőszer/DB</th>
+            <th class="karakter-equipment-th-other">Speciális</th>
+            <th class="karakter-equipment-th-delete"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each weaponsTable}}
+            <tr class="karakter-equipment-row" data-item-id="{{this.itemId}}">
+              <td class="karakter-equipment-cell-name">
+                {{#if this.img}}<img class="karakter-equipment-icon jarmu-inventory-item-icon" src="{{this.img}}" alt="" data-item-id="{{this.itemId}}" />{{/if}}
+                <span class="karakter-weapon-label jarmu-inventory-item-name" data-item-id="{{this.itemId}}">{{this.name}}</span>
+              </td>
+              <td class="karakter-equipment-cell-type">{{this.typeAndSize}}</td>
+              <td class="karakter-equipment-cell-bonus">{{this.bonus}}</td>
+              <td class="karakter-equipment-cell-damage">{{this.damage}}</td>
+              <td class="karakter-equipment-cell-range">{{this.rangeStr}}</td>
+              <td class="karakter-equipment-cell-ammo">
+                {{#if this.isProjectile}}
+                  <input type="text" class="jarmu-item-quantity-input" data-item-id="{{this.itemId}}" value="{{this.quantity}}" />
+                {{else}}
+                  —
+                {{/if}}
+              </td>
+              <td class="karakter-equipment-cell-other">{{this.special}}</td>
+              <td class="karakter-equipment-cell-delete">
+                <button type="button" class="karakter-equipment-delete jarmu-item-delete" data-item-id="{{this.itemId}}" data-actor-id="{{this.actorId}}" title="Alt+klikk: Törlés a raktárból">✕</button>
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+    {{/if}}
+
+    {{#if armorTable.length}}
+    <h3 class="karakter-equipment-table-title">Páncélok</h3>
+    <div class="karakter-equipment-block">
+      <table class="karakter-equipment-table karakter-equipment-armor">
+        <thead>
+          <tr>
+            <th class="karakter-equipment-th-name">Név</th>
+            <th class="karakter-equipment-th-protection">Védelem Bónusz</th>
+            <th class="karakter-equipment-th-speed">Sebesség Levonás (m)</th>
+            <th class="karakter-equipment-th-level">Szint</th>
+            <th class="karakter-equipment-th-other">Speciális</th>
+            <th class="karakter-equipment-th-equipped"></th>
+            <th class="karakter-equipment-th-delete"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each armorTable}}
+            <tr class="karakter-equipment-row" data-item-id="{{this.itemId}}">
+              <td class="karakter-equipment-cell-name">
+                {{#if this.img}}<img class="karakter-equipment-icon jarmu-inventory-item-icon" src="{{this.img}}" alt="" data-item-id="{{this.itemId}}" />{{/if}}
+                {{#if this.equipped}}<span class="karakter-weapon-equipped-dot" title="Felszerelve"></span>{{/if}}
+                <span class="karakter-armor-label jarmu-inventory-item-name" data-item-id="{{this.itemId}}">{{this.name}}</span>
+              </td>
+              <td class="karakter-equipment-cell-bonus">{{this.protectionBonus}}</td>
+              <td class="karakter-equipment-cell-speed">{{this.speedPenalty}}</td>
+              <td class="karakter-equipment-cell-level">{{this.level}}</td>
+              <td class="karakter-equipment-cell-other">{{this.special}}</td>
+              <td class="karakter-equipment-cell-equipped">
+                <input type="checkbox" class="jarmu-armor-equipped-checkbox" data-item-id="{{this.itemId}}" {{checked this.equipped}} title="Felszerelve" />
+              </td>
+              <td class="karakter-equipment-cell-delete">
+                <button type="button" class="karakter-equipment-delete jarmu-item-delete" data-item-id="{{this.itemId}}" data-actor-id="{{this.actorId}}" title="Alt+klikk: Törlés a raktárból">✕</button>
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+    {{/if}}
+
+    {{#if microchipsTable.length}}
+    <h3 class="karakter-equipment-table-title">Mikro-Chip-ek</h3>
+    <div class="karakter-equipment-block">
+      <table class="karakter-equipment-table karakter-equipment-microchips">
+        <thead>
+          <tr>
+            <th class="karakter-equipment-th-name">Név</th>
+            <th class="karakter-equipment-th-type">Típus</th>
+            <th class="karakter-equipment-th-kp">KP</th>
+            <th class="karakter-equipment-th-desc">Leírás</th>
+            <th class="karakter-equipment-th-delete"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each microchipsTable}}
+            <tr class="karakter-equipment-row" data-item-id="{{this.itemId}}">
+              <td class="karakter-equipment-cell-name">
+                {{#if this.img}}<img class="karakter-equipment-icon jarmu-inventory-item-icon" src="{{this.img}}" alt="" data-item-id="{{this.itemId}}" />{{/if}}
+                <span class="karakter-microchip-label jarmu-inventory-item-name" data-item-id="{{this.itemId}}">{{this.name}}</span>
+              </td>
+              <td class="karakter-equipment-cell-type">{{this.typeLabel}}</td>
+              <td class="karakter-equipment-cell-kp">{{#if this.isActive}}{{this.kp}}{{else}}—{{/if}}</td>
+              <td class="karakter-equipment-cell-desc">{{this.description}}</td>
+              <td class="karakter-equipment-cell-delete">
+                <button type="button" class="karakter-equipment-delete jarmu-item-delete" data-item-id="{{this.itemId}}" data-actor-id="{{this.actorId}}" title="Alt+klikk: Törlés a raktárból">✕</button>
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+    {{/if}}
+
+    {{#if itemsTable.length}}
+    <h3 class="karakter-equipment-table-title">Egyéb Felszerelés</h3>
+    <div class="karakter-equipment-block" data-drop-zone="targy">
+      <table class="karakter-equipment-table karakter-equipment-items">
+        <thead>
+          <tr>
+            <th class="karakter-equipment-th-name">Név</th>
+            <th class="karakter-equipment-th-qty">Mennyiség</th>
+            <th class="karakter-equipment-th-desc">Leírás</th>
+            <th class="karakter-equipment-th-delete"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each itemsTable}}
+            <tr class="karakter-equipment-row" data-item-id="{{this.itemId}}">
+              <td class="karakter-equipment-cell-name">
+                {{#if this.img}}<img class="karakter-equipment-icon jarmu-inventory-item-icon" src="{{this.img}}" alt="" data-item-id="{{this.itemId}}" />{{/if}}
+                <span class="jarmu-inventory-item-name" data-item-id="{{this.itemId}}">{{this.name}}</span>
+              </td>
+              <td class="karakter-equipment-cell-qty">
+                <input type="text" class="jarmu-item-quantity-input" data-item-id="{{this.itemId}}" value="{{this.quantity}}" />
+              </td>
+              <td class="karakter-equipment-cell-desc">{{this.description}}</td>
+              <td class="karakter-equipment-cell-delete">
+                <button type="button" class="karakter-equipment-delete jarmu-item-delete" data-item-id="{{this.itemId}}" data-actor-id="{{this.actorId}}" title="Alt+klikk: Törlés a raktárból">✕</button>
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+    </div>
+    {{/if}}
+  </section>
+
+  <section class="jarmu-section jarmu-egyeb karakter-panel karakter-notes">
+    <h2>Egyéb Információk</h2>
+    <div class="karakter-notes-split">
+      <div class="karakter-notes-left">
+        <textarea name="system.notes.biography" data-dtype="String" rows="3" placeholder="Egyéb információk…">{{system.notes.biography}}</textarea>
+      </div>
+      <div class="karakter-notes-right" data-drop-zone="egyeb">
+        <div class="karakter-notes-egyeb-list">
+          {{#each egyebList}}
+            <div class="karakter-notes-egyeb-row" data-item-id="{{this.itemId}}">
+              {{#if this.img}}<img class="karakter-notes-egyeb-icon jarmu-egyeb-icon" src="{{this.img}}" alt="" data-item-id="{{this.itemId}}" />{{/if}}
+              <div class="karakter-notes-egyeb-main">
+                <span class="karakter-notes-egyeb-name jarmu-egyeb-name" data-item-id="{{this.itemId}}">{{this.name}}</span>
+                {{#if this.description}}<p class="karakter-notes-egyeb-desc">{{this.description}}</p>{{/if}}
+              </div>
+              <button type="button" class="karakter-item-chat" data-item-id="{{this.itemId}}" title="Chat-be küldés"><i class="fas fa-comment-dots"></i></button>
+              <button type="button" class="karakter-equipment-delete jarmu-egyeb-delete" data-item-id="{{this.itemId}}" data-actor-id="{{this.actorId}}" title="Alt+klikk: Törlés">✕</button>
+            </div>
+          {{else}}
+            <p class="karakter-notes-egyeb-placeholder">Húzz ide Egyéb Információ típusú tételt</p>
+          {{/each}}
+        </div>
+      </div>
+    </div>
+  </section>
+</form>

@@ -1,5 +1,5 @@
-import { BaseActorDataModel, KarakterDataModel, WeaponDataModel, ShieldDataModel, MicrochipDataModel, AbilityDataModel, TargyDataModel, EgyebDataModel } from "../module/data-models/index.mjs";
-import { VoidKarakterSheet, VoidNpcSheet, VoidWeaponSheet, VoidShieldSheet, VoidMicrochipSheet, VoidAbilitySheet, VoidTargySheet, VoidEgyebSheet } from "../module/documents.mjs";
+import { BaseActorDataModel, KarakterDataModel, JarmuDataModel, WeaponDataModel, ShieldDataModel, MicrochipDataModel, AbilityDataModel, TargyDataModel, EgyebDataModel } from "../module/data-models/index.mjs";
+import { VoidKarakterSheet, VoidNpcSheet, VoidJarmuSheet, VoidWeaponSheet, VoidShieldSheet, VoidMicrochipSheet, VoidAbilitySheet, VoidTargySheet, VoidEgyebSheet } from "../module/documents.mjs";
 
 const VOTV_DEFAULT_SCENE_BG = "systems/vacuum-of-the-void/assets/void-bg.jpg";
 
@@ -28,6 +28,7 @@ Hooks.once("init", () => {
   CONFIG.Actor.dataModels ??= {};
   CONFIG.Actor.dataModels.Karakter = KarakterDataModel;
   CONFIG.Actor.dataModels.Npc = BaseActorDataModel;
+  CONFIG.Actor.dataModels.Jarmu = JarmuDataModel;
 
   // Register item data models (weapon/ability = angol aliasok régi/importált adatokhoz, hogy ne legyen "type is not a valid type" hiba)
   CONFIG.Item.dataModels ??= {};
@@ -54,6 +55,7 @@ Hooks.once("init", () => {
   CONFIG.Actor.typeLabels ??= {};
   CONFIG.Actor.typeLabels.Karakter = "Karakter";
   CONFIG.Actor.typeLabels.Npc = "NPC";
+  CONFIG.Actor.typeLabels.Jarmu = "Jármű";
 
   // Initiative: manuális beírás – formula kell, hogy az initiative oszlop megjelenjen
   CONFIG.Combat.initiative ??= {};
@@ -108,6 +110,11 @@ Hooks.once("init", () => {
     types: ["Npc"],
     makeDefault: true,
     label: "VOTV.NpcSheet"
+  });
+  foundry.documents.collections.Actors.registerSheet("vacuum-of-the-void", VoidJarmuSheet, {
+    types: ["Jarmu"],
+    makeDefault: true,
+    label: "VOTV.JarmuSheet"
   });
 
   // Register item sheets (Fegyver + weapon alias, Kepesseg + ability alias)
@@ -221,7 +228,9 @@ Hooks.once("init", () => {
     if (doc?.apps) appsToConsider.push(...Array.from(doc.apps));
     const windows = Object.values(ui?.windows ?? {});
     for (const app of windows) {
-      if (app.document?.id !== actorId || app.document?.documentName !== "Actor" || app.constructor?.name !== "VoidKarakterSheet") continue;
+      if (app.document?.id !== actorId || app.document?.documentName !== "Actor") continue;
+      const name = app.constructor?.name;
+      if (name !== "VoidKarakterSheet" && name !== "VoidJarmuSheet") continue;
       if (!appsToConsider.includes(app)) appsToConsider.push(app);
     }
     const anySheetHasFocusedInput = isInputLike && appsToConsider.some((app) => {
@@ -455,6 +464,13 @@ Hooks.on("preCreateToken", (tokenDocument, _data, _options) => {
       "bar1.attribute": "",
       "bar2.attribute": "",
       displayBars: foundry.CONST.TOKEN_DISPLAY_MODES.NONE
+    });
+    return;
+  }
+  if (actor.type === "Jarmu") {
+    tokenDocument.updateSource({
+      ...(sourceId ? { actorId: sourceId } : {}),
+      actorLink: true
     });
     return;
   }

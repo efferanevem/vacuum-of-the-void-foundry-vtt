@@ -1,6 +1,8 @@
 {
   "VOTV.KarakterSheet": "Karakter",
   "TYPES.Actor.Karakter": "Karakter",
+  "VOTV.JarmuSheet": "Jármű",
+  "TYPES.Actor.Jarmu": "Jármű",
 
   "TYPES.Item.Fegyver": "Fegyver",
   "VOTV.FegyverSheet": "Fegyver",
