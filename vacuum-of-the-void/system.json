@@ -13,7 +13,7 @@
     }
   ],
   "esmodules": [
-    "dist/vacuum-of-the-void.js"
+    "src/vacuum-of-the-void.mjs"
   ],
   "styles": [
     "styles/main.css"
@@ -37,7 +37,8 @@
       "MikroChip": {},
       "Kepesseg": {},
       "Targy": {},
-      "Egyeb": {}
+      "Egyeb": {},
+      "Jarmuegyseg": {}
     }
   },
   "packs": [

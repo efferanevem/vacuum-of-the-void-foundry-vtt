@@ -315,7 +315,8 @@ export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplication
         name: i.name,
         img: i.img,
         description: i.system?.description ?? "",
-        kp: Number(i.system?.kp ?? 0) || 0
+        kp: Number(i.system?.kp ?? 0) || 0,
+        kind: (i.system?.kind ?? "passive").toString()
       }));
     const abilityItemsById = new Map(abilityItems.map((a) => [a.id, a]));
     const emptySlot = { itemId: "", displayName: "— Nincs képesség —", img: "", description: "", kp: 0 };
@@ -332,7 +333,16 @@ export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplication
       (ids || [])
         .map((id) => {
           const item = abilityItemsById.get(id);
-          return item ? { id: item.id, name: item.name, img: item.img, description: item.description, kp: item.kp } : null;
+          if (!item) return null;
+          const isSpecies = item.kind === "species";
+          return {
+            id: item.id,
+            name: item.name,
+            img: item.img,
+            description: item.description,
+            // Faji képességnél ne jelenjen meg a KP mennyiség
+            kp: isSpecies ? 0 : item.kp
+          };
         })
         .filter(Boolean);
     context.abilityPassiveList = mapIdsToAbilityList(getAreaIds("passive"));

@@ -1,0 +1,124 @@
+<form class="{{cssClass}} votv-jarmuegyseg-sheet" autocomplete="off">
+  <header class="sheet-header">
+    <div class="header-fields">
+      <h1 class="item-name">
+        <input name="name" type="text" value="{{item.name}}" placeholder="Járműegység neve" />
+      </h1>
+      <div class="jarmuegyseg-header-row">
+        <div class="field jarmuegyseg-level-field">
+          <label>Szint (0–3)</label>
+          <select name="system.level">
+            {{#select system.level}}
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            {{/select}}
+          </select>
+        </div>
+        <div class="field jarmuegyseg-health-field">
+          <label>Életerő</label>
+          <div class="jarmuegyseg-health-inputs">
+            <input
+              type="number"
+              name="system.health.max"
+              value="{{system.health.max}}"
+              min="0"
+              placeholder="Max"
+            />
+            <span class="jarmuegyseg-health-sep">/</span>
+            <input
+              type="number"
+              name="system.health.value"
+              value="{{system.health.value}}"
+              min="0"
+              placeholder="Aktuális"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="sheet-body">
+    <section class="karakter-panel karakter-abilities npc-abilities npc-ability-pool jarmuegyseg-abilities">
+      <h2>Képességek</h2>
+      <div class="karakter-ability-area npc-ability-pool-area" data-area="abilities" data-drop-zone="ability">
+        <div class="karakter-ability-area-list">
+          {{#each abilityList}}
+            <div class="karakter-ability-pill" data-item-id="{{this.id}}" data-item-ref="{{this.ref}}">
+              <div class="karakter-ability-main">
+                {{#if this.img}}
+                  <img
+                    class="karakter-ability-pill-thumb karakter-ability-open"
+                    src="{{this.img}}"
+                    alt=""
+                    data-item-id="{{this.id}}"
+                    data-item-ref="{{this.ref}}"
+                  />
+                {{/if}}
+                <span
+                  class="karakter-ability-pill-name karakter-ability-open"
+                  data-item-id="{{this.id}}"
+                  data-item-ref="{{this.ref}}"
+                  title="{{this.name}}"
+                >
+                  {{this.name}}{{#if this.kpDisplay}} ({{this.kpDisplay}} KP){{/if}}
+                </span>
+              </div>
+              <div class="karakter-ability-actions">
+                <button
+                  type="button"
+                  class="karakter-ability-chat"
+                  data-item-id="{{this.id}}"
+                  data-item-ref="{{this.ref}}"
+                  title="Chat-be küldés"
+                >
+                  <i class="fas fa-comment-dots"></i>
+                </button>
+                <button
+                  type="button"
+                  class="karakter-ability-pill-remove"
+                  data-item-id="{{this.id}}"
+                  data-item-ref="{{this.ref}}"
+                  title="Alt+klikk: Eltávolítás"
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+          {{/each}}
+          <p class="karakter-ability-area-placeholder npc-ability-pool-placeholder">
+            Húzz ide képességeket
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="jarmuegyseg-stats-row">
+      <div class="field jarmuegyseg-stat-field">
+        <label>Sebesség (opcionális)</label>
+        <div class="jarmuegyseg-stat-input-with-unit">
+          <input type="text" name="system.speed" value="{{system.speed}}" placeholder="pl. 2" />
+          <span class="jarmuegyseg-stat-unit">TE</span>
+        </div>
+      </div>
+      <div class="field jarmuegyseg-stat-field">
+        <label>Hatótáv (opcionális)</label>
+        <div class="jarmuegyseg-stat-input-with-unit">
+          <input type="text" name="system.range" value="{{system.range}}" placeholder="pl. 2" />
+          <span class="jarmuegyseg-stat-unit">TE</span>
+        </div>
+      </div>
+      <div class="field jarmuegyseg-stat-field">
+        <label>Raktár (opcionális)</label>
+        <input type="text" name="system.storage" value="{{system.storage}}" placeholder="pl. +30" />
+      </div>
+      <div class="field jarmuegyseg-stat-field">
+        <label>Sebzés (opcionális)</label>
+        <input type="text" name="system.damage" value="{{system.damage}}" placeholder="pl. 1d6+1" />
+      </div>
+    </section>
+  </section>
+</form>
+

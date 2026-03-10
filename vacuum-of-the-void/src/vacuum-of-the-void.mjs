@@ -1,5 +1,5 @@
-import { BaseActorDataModel, KarakterDataModel, JarmuDataModel, WeaponDataModel, ShieldDataModel, MicrochipDataModel, AbilityDataModel, TargyDataModel, EgyebDataModel } from "../module/data-models/index.mjs";
-import { VoidKarakterSheet, VoidNpcSheet, VoidJarmuSheet, VoidWeaponSheet, VoidShieldSheet, VoidMicrochipSheet, VoidAbilitySheet, VoidTargySheet, VoidEgyebSheet } from "../module/documents.mjs";
+import { BaseActorDataModel, KarakterDataModel, JarmuDataModel, WeaponDataModel, ShieldDataModel, MicrochipDataModel, AbilityDataModel, TargyDataModel, EgyebDataModel, JarmuEgysegDataModel } from "../module/data-models/index.mjs";
+import { VoidKarakterSheet, VoidNpcSheet, VoidJarmuSheet, VoidWeaponSheet, VoidShieldSheet, VoidMicrochipSheet, VoidAbilitySheet, VoidTargySheet, VoidEgyebSheet, VoidJarmuEgysegSheet } from "../module/documents.mjs";
 
 const VOTV_DEFAULT_SCENE_BG = "systems/vacuum-of-the-void/assets/void-bg.jpg";
 
@@ -40,6 +40,7 @@ Hooks.once("init", () => {
   CONFIG.Item.dataModels.ability = AbilityDataModel;
   CONFIG.Item.dataModels.Targy = TargyDataModel;
   CONFIG.Item.dataModels.Egyeb = EgyebDataModel;
+  CONFIG.Item.dataModels.Jarmuegyseg = JarmuEgysegDataModel;
 
   // Trackable attributes for token bars – csak egy sáv (Életerő), mint az NPC lapon; bar2 ne jelenjen meg
   CONFIG.Actor.trackableAttributes ??= {};
@@ -70,6 +71,7 @@ Hooks.once("init", () => {
   CONFIG.Item.typeLabels.ability = "Képesség";
   CONFIG.Item.typeLabels.Targy = "Tárgy";
   CONFIG.Item.typeLabels.Egyeb = "Egyéb Információ";
+  CONFIG.Item.typeLabels.Jarmuegyseg = "Járműegység";
 
   // Status effectek: tokenre kattintva / Active Effectsnél választhatók, mindegyiknek id + megjelenített név + ikon (img)
   const VOTV_STATUS = "systems/vacuum-of-the-void/assets/status";
@@ -147,6 +149,11 @@ Hooks.once("init", () => {
     types: ["Egyeb"],
     makeDefault: true,
     label: "VOTV.EgyebSheet"
+  });
+  foundry.documents.collections.Items.registerSheet("vacuum-of-the-void", VoidJarmuEgysegSheet, {
+    types: ["Jarmuegyseg"],
+    makeDefault: true,
+    label: "VOTV.JarmuEgysegSheet"
   });
 
   // Karakter: összesített sebesség ≤ 0 → Mozgásképtelen automatikus; > 0 → eltávolítjuk az automatikus Mozgásképtelent.

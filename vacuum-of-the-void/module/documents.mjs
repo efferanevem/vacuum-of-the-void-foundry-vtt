@@ -7,3 +7,4 @@ export { VoidMicrochipSheet } from "./documents/microchip-sheet.mjs";
 export { VoidAbilitySheet } from "./documents/ability-sheet.mjs";
 export { VoidTargySheet } from "./documents/targy-sheet.mjs";
 export { VoidEgyebSheet } from "./documents/egyeb-sheet.mjs";
+export { VoidJarmuEgysegSheet } from "./documents/jarmuegyseg-sheet.mjs";

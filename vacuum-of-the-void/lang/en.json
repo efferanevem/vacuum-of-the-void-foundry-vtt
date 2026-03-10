@@ -21,6 +21,8 @@
 
   "TYPES.Item.Egyeb": "Egyéb Információ",
   "VOTV.EgyebSheet": "Egyéb Információ",
+  "TYPES.Item.Jarmuegyseg": "Járműegység",
+  "VOTV.JarmuEgysegSheet": "Járműegység",
 
   "VOTV.LabelName": "Név",
   "VOTV.LabelPlayer": "Játékos",
