@@ -161,7 +161,6 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
     context.totalDefense =
       (Number(combat.defense) || 0) +
       (Number(combat.givenProtection) || 0);
-    context.sizeForSelect = (context.system?.identity?.size ?? "").trim() || "Közepes";
 
     // Raktár: ugyanolyan táblázatok mint a karakter Felszerelés (Fegyver, Páncél, Mikro-Chip, Tárgy)
     const weaponTypeLabels = { kinetic: "Kinetikus", projectile: "Lövedékes", blade: "Pengés", explosive: "Robbanó", other: "Egyéb" };
@@ -248,6 +247,107 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
         description
       };
     });
+    const unitDocs = (this.actor.items?.contents ?? []).filter(i => i.type === "Jarmuegyseg");
+    const unitsTable = [];
+    let unitSpeedSum = 0;
+    let unitRangeSum = 0;
+    for (const item of unitDocs) {
+      const sys = item?.system ?? {};
+      const health = sys.health ?? {};
+      const level = Number(sys.level ?? 0) || 0;
+      const hpMax = Number(health.max ?? 0) || 0;
+      const hpValue = Number(health.value ?? 0) || 0;
+      const hit = (sys.hit ?? "").toString().trim();
+      const unitSpeedRaw = (sys.speed ?? "").toString().trim().replace(",", ".");
+      const unitSpeedNum = Number(unitSpeedRaw);
+      if (Number.isFinite(unitSpeedNum)) unitSpeedSum += unitSpeedNum;
+      const unitRangeRaw = (sys.range ?? "").toString().trim().replace(",", ".");
+      const unitRangeNum = Number(unitRangeRaw);
+      if (Number.isFinite(unitRangeNum)) unitRangeSum += unitRangeNum;
+      const damage = (sys.damage ?? "").toString().trim();
+
+      const abilities = sys.abilities ?? {};
+      const abilityRefs = Array.isArray(abilities.items) ? abilities.items : [];
+      const abilityDocs = await Promise.all(
+        abilityRefs.map(async (ref) => {
+          if (!ref) return null;
+          try {
+            const doc = await fromUuid(ref);
+            if (doc && (doc.type === "Kepesseg" || doc.type === "ability")) return doc;
+          } catch {
+            const itemDoc = game.items?.get(ref);
+            if (itemDoc && (itemDoc.type === "Kepesseg" || itemDoc.type === "ability")) return itemDoc;
+          }
+          return null;
+        })
+      );
+      const abilityItems = abilityDocs
+        .map((doc, index) => ({ doc, ref: abilityRefs[index] }))
+        .filter((pair) => !!pair.doc && !!pair.ref)
+        .map(({ doc, ref }) => {
+          const kind = (doc.system?.kind ?? "passive").toString();
+          const kp = Number(doc.system?.kp ?? 0) || 0;
+          const isSpecies = kind === "species";
+          return {
+            id: doc.id,
+            ref,
+            name: doc.name,
+            img: doc.img,
+            kind,
+            kpDisplay: isSpecies ? 0 : kp
+          };
+        });
+
+      unitsTable.push({
+        itemId: item.id,
+        actorId: this.actor.id,
+        name: item?.name ?? "—",
+        img: item?.img ?? "",
+        level,
+        hpMax,
+        hpValue,
+        hit,
+        damage,
+        abilities: abilityItems
+      });
+    }
+    context.unitsTable = unitsTable;
+
+    // Jármű méret automatikus meghatározása a járműegységek száma alapján.
+    const unitCount = unitDocs.length;
+    let sizeLabel = "Kicsi";
+    let sizeSpeedPenalty = 0;
+    let sizeDefensePenalty = 0;
+    if (unitCount >= 11) {
+      sizeLabel = "Nagy";
+      sizeSpeedPenalty = -4;
+      sizeDefensePenalty = -6;
+    } else if (unitCount >= 6) {
+      sizeLabel = "Közepes";
+      sizeSpeedPenalty = -2;
+      sizeDefensePenalty = -3;
+    } else {
+      sizeLabel = "Kicsi";
+      sizeSpeedPenalty = 0;
+      sizeDefensePenalty = 0;
+    }
+    context.sizeForSelect = sizeLabel;
+    context.sizeSpeedPenalty = sizeSpeedPenalty;
+    context.sizeDefensePenalty = sizeDefensePenalty;
+
+    // Jármű sebesség és eszközök hatótávja: a járműegységek értékei + méret módosító.
+    const totalSpeed = unitSpeedSum + sizeSpeedPenalty;
+    const totalRange = unitRangeSum;
+    context.system = foundry.utils.mergeObject(
+      foundry.utils.duplicate(this.actor.system ?? {}),
+      {
+        combat: { speed: totalSpeed },
+        vehicle: { toolsRange: totalRange },
+        identity: { size: sizeLabel }
+      },
+      { inplace: false }
+    );
+
     const hasEquipment =
       (context.weaponsTable?.length ?? 0) > 0 ||
       (context.armorTable?.length ?? 0) > 0 ||
@@ -359,6 +459,46 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
       await this._postItemToChat(itemId);
     });
 
+    // Járműegység sebzés gomb: az egység sebzés formuláját dobja.
+    $html.on("click", ".jarmu-unit-damage-button", async (ev) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+      const btn = ev.currentTarget;
+      const itemId = (btn?.dataset?.itemId ?? "").trim();
+      if (!itemId) return;
+      await this._rollUnitDamage(itemId);
+    });
+
+    // Járműegység képességek: név / ikon → képesség lap megnyitása
+    $html.on("click", ".jarmu-unit-ability-name, .jarmu-unit-ability-icon", async (ev) => {
+      ev.preventDefault();
+      const ref = ev.currentTarget?.closest?.(".jarmu-unit-ability-pill")?.dataset?.abilityRef;
+      const abilityId = ev.currentTarget?.closest?.(".jarmu-unit-ability-pill")?.dataset?.abilityId;
+      let doc = null;
+      if (ref) {
+        try {
+          doc = await fromUuid(ref);
+        } catch {
+          doc = null;
+        }
+      }
+      if (!doc && abilityId) {
+        doc = game.items?.get(abilityId) ?? null;
+      }
+      doc?.sheet?.render(true);
+    });
+
+    // Járműegység képességek: chat bubble → képesség chat-be
+    $html.on("click", ".jarmu-unit-ability-chat", async (ev) => {
+      ev.preventDefault();
+      const pill = ev.currentTarget?.closest?.(".jarmu-unit-ability-pill");
+      const ref = pill?.dataset?.abilityRef;
+      const abilityId = pill?.dataset?.abilityId;
+      const key = ref || abilityId;
+      if (!key) return;
+      await this._postUnitAbilityToChat(key);
+    });
+
     const sheet = this;
     const doSubmit = (form) => {
       if (!form) return;
@@ -381,6 +521,29 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
       doSubmit(form);
     };
     document.body.addEventListener("blur", sheet._votvJarmuBlur, true);
+
+    // Járműegység: aktuális ÉP mező – csak value írható, max érték az itemből jön.
+    $html.on("change", ".jarmu-unit-hp-current", async (ev) => {
+      const input = ev.currentTarget;
+      const itemId = input?.dataset?.itemId;
+      if (!itemId) return;
+      const item = this.actor.items.get(itemId);
+      if (!item || item.type !== "Jarmuegyseg") return;
+      const raw = (input.value ?? "").trim();
+      const value = raw === "" ? 0 : Number(raw);
+      await item.update({ "system.health.value": Number.isFinite(value) ? value : 0 });
+    });
+
+    // Járműegység: Találati érték – szabad szöveg (számok, range, stb.)
+    $html.on("change", ".jarmu-unit-hit-input", async (ev) => {
+      const input = ev.currentTarget;
+      const itemId = input?.dataset?.itemId;
+      if (!itemId) return;
+      const item = this.actor.items.get(itemId);
+      if (!item || item.type !== "Jarmuegyseg") return;
+      const value = (input.value ?? "").trim();
+      await item.update({ "system.hit": value });
+    });
   }
 
   _tearDown(options) {
@@ -432,6 +595,65 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
     });
   }
 
+  /** Járműegység sebzés gomb: az egység sebzés formuláját dobja. */
+  async _rollUnitDamage(itemId) {
+    const actor = this.actor;
+    if (!actor) return;
+    const item = actor.items.get?.(itemId) ?? actor.items.contents?.find?.((i) => i.id === itemId);
+    if (!item || item.type !== "Jarmuegyseg") return;
+    const damageFormula = (item.system?.damage ?? "").trim();
+    if (!damageFormula) {
+      ui.notifications?.warn?.(
+        game.i18n?.localize?.("votv.weapon.no-damage") ?? "A járműegységnek nincs sebzés formulája."
+      );
+      return;
+    }
+    const roll = new Roll(damageFormula);
+    await roll.evaluate({ async: true });
+    const rollMode = game.settings.get("core", "rollMode") ?? CONST.DICE_ROLL_MODES.PUBLIC;
+    return roll.toMessage({
+      speaker: ChatMessage.getSpeaker({ actor, alias: actor?.name ?? undefined }),
+      flavor: `${item.name} – sebzés`,
+      flags: { "vacuum-of-the-void": {} },
+      rollMode
+    });
+  }
+
+  async _postUnitAbilityToChat(ref) {
+    if (!ref) return;
+    let item = null;
+    try {
+      item = await fromUuid(ref);
+    } catch {
+      item = game.items?.get(ref) ?? null;
+    }
+    if (!item || (item.type !== "Kepesseg" && item.type !== "ability")) return;
+    const kind = item.system?.kind ?? "passive";
+    const kp = Number(item.system?.kp ?? 0) || 0;
+    const description = (item.system?.description ?? "").trim();
+    const kindLabel =
+      kind === "active"
+        ? "Aktív"
+        : kind === "species"
+        ? "Faji"
+        : kind === "background"
+        ? "Háttér"
+        : "Passzív";
+    const kpLine = kp > 0 ? `<p><strong>KP:</strong> ${kp}</p>` : "";
+    const descLine = description ? `<p>${description}</p>` : "";
+    const content = `
+      <h2>${item.name}</h2>
+      <p><strong>Típus:</strong> ${kindLabel}</p>
+      ${kpLine}
+      ${descLine}
+    `;
+    return ChatMessage.create({
+      speaker: ChatMessage.getSpeaker({}),
+      content,
+      flags: { "vacuum-of-the-void": { abilityId: item.id } }
+    });
+  }
+
   async _onDropItem(event, data) {
     let uuid =
       data?.uuid ??
@@ -450,7 +672,7 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
     const doc = await fromUuid(uuid);
     if (!doc || doc.documentName !== "Item") return super._onDropItem(event, data);
     const actor = this.actor;
-    const allowed = ["Fegyver", "Pancel", "MikroChip", "Targy", "Egyeb"];
+    const allowed = ["Fegyver", "Pancel", "MikroChip", "Targy", "Egyeb", "Jarmuegyseg"];
     if (!allowed.includes(doc.type)) return super._onDropItem(event, data);
     if (doc.parent?.id === actor.id) return;
     const itemData = foundry.utils.mergeObject(doc.toObject(), {

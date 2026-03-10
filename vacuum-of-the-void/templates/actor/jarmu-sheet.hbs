@@ -11,13 +11,7 @@
       </div>
       <div class="jarmu-header-field jarmu-header-size">
         <label>Méret</label>
-        <select name="system.identity.size">
-          {{#select sizeForSelect}}
-          <option value="Kicsi">Kicsi</option>
-          <option value="Közepes">Közepes</option>
-          <option value="Nagy">Nagy</option>
-          {{/select}}
-        </select>
+        <span class="jarmu-header-size-value">{{sizeForSelect}}</span>
       </div>
     </div>
   </header>
@@ -38,20 +32,39 @@
       <section class="karakter-panel jarmu-stats">
         <div class="jarmu-stat-row">
           <label>Sebesség</label>
-          <input type="text" name="system.combat.speed" value="{{system.combat.speed}}" placeholder="0" data-dtype="String" />
+          <input
+            type="text"
+            name="system.combat.speed"
+            value="{{system.combat.speed}}"
+            placeholder="0"
+            data-dtype="String"
+            readonly
+          />
           <span class="jarmu-stat-unit">TE</span>
         </div>
-        <div class="jarmu-stat-row">
+        <div class="jarmu-stat-row jarmu-stat-row-range">
           <label>Eszközök Hatótávolsága</label>
-          <input type="text" name="system.vehicle.toolsRange" value="{{system.vehicle.toolsRange}}" placeholder="0" data-dtype="String" />
+          <input
+            type="text"
+            name="system.vehicle.toolsRange"
+            value="{{system.vehicle.toolsRange}}"
+            placeholder="0"
+            data-dtype="String"
+            readonly
+          />
           <span class="jarmu-stat-unit">TE</span>
         </div>
         <div class="jarmu-stat-row jarmu-stat-row-defense">
           <label>Védelem</label>
           <input type="number" name="system.combat.defense" value="{{system.combat.defense}}" min="0" />
           <span class="jarmu-stat-plus">+</span>
-          <input type="number" name="system.combat.givenProtection" value="{{system.combat.givenProtection}}" min="0" title="Kapott védelem" />
-          <span class="jarmu-stat-unit">TE</span>
+          <input
+            type="text"
+            class="jarmu-size-defense-effective"
+            value="{{sizeDefensePenalty}}"
+            readonly
+          />
+          <span class="jarmu-stat-unit">TE + Távolság</span>
         </div>
       </section>
     </section>
@@ -59,8 +72,101 @@
 
   <section class="jarmu-section jarmu-units karakter-panel">
     <h2>Járműegységek és Modulok</h2>
-    <div class="jarmu-units-content">
-      {{!-- Később: járműegységek / modulok item lista vagy drop zone --}}
+    <div class="jarmu-units-content" data-drop-zone="jarmuegyseg">
+      {{#if unitsTable.length}}
+        <table class="karakter-equipment-table jarmu-units-table">
+          <thead>
+            <tr>
+              <th class="karakter-equipment-th-name">Járműegység</th>
+              <th class="karakter-equipment-th-hp">Életerő</th>
+              <th class="karakter-equipment-th-hit">Találati érték</th>
+              <th class="karakter-equipment-th-level">Szint</th>
+              <th class="karakter-equipment-th-delete"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each unitsTable}}
+              <tr class="karakter-equipment-row jarmu-unit-row" data-item-id="{{this.itemId}}">
+                <td class="karakter-equipment-cell-name">
+                  {{#if this.img}}<img class="karakter-equipment-icon jarmu-inventory-item-icon karakter-inventory-item-icon" src="{{this.img}}" alt="" data-item-id="{{this.itemId}}" />{{/if}}
+                  <span class="karakter-inventory-item-name jarmu-inventory-item-name" data-item-id="{{this.itemId}}">{{this.name}}</span>
+                </td>
+                <td class="karakter-equipment-cell-hp">
+                  <span class="jarmu-unit-hp-max">{{this.hpMax}}</span>
+                  <span>/</span>
+                  <input
+                    type="number"
+                    class="jarmu-unit-hp-current"
+                    data-item-id="{{this.itemId}}"
+                    value="{{this.hpValue}}"
+                    min="0"
+                  />
+                </td>
+                <td class="karakter-equipment-cell-hit">
+                  <input
+                    type="text"
+                    class="jarmu-unit-hit-input"
+                    data-item-id="{{this.itemId}}"
+                    value="{{this.hit}}"
+                    placeholder="pl. 1–3"
+                  />
+                </td>
+                <td class="karakter-equipment-cell-level">
+                  {{this.level}}
+                </td>
+                <td class="karakter-equipment-cell-delete">
+                  <button
+                    type="button"
+                    class="karakter-equipment-delete jarmu-item-delete"
+                    data-item-id="{{this.itemId}}"
+                    data-actor-id="{{this.actorId}}"
+                    title="Alt+klikk: Járműegység eltávolítása"
+                  >✕</button>
+                </td>
+              </tr>
+              {{#if this.damage}}
+                <tr class="jarmu-unit-damage-row" data-item-id="{{this.itemId}}">
+                  <td class="jarmu-unit-damage-cell" colspan="5">
+                    <button
+                      type="button"
+                      class="jarmu-unit-damage-button"
+                      data-item-id="{{this.itemId}}"
+                      title="Sebzés dobás"
+                    >
+                      {{this.name}} Sebzés ({{this.damage}})
+                    </button>
+                  </td>
+                </tr>
+              {{/if}}
+              {{#if this.abilities.length}}
+                <tr class="jarmu-unit-abilities-row" data-item-id="{{this.itemId}}">
+                  <td class="jarmu-unit-abilities-cell" colspan="5">
+                    <div class="jarmu-unit-abilities-list">
+                      {{#each this.abilities}}
+                        <div class="jarmu-unit-ability-pill jarmu-unit-ability-line" data-ability-ref="{{this.ref}}" data-ability-id="{{this.id}}">
+                          <span class="jarmu-unit-ability-name">
+                            {{this.name}}
+                            {{#if this.kpDisplay}}
+                              <span class="jarmu-unit-ability-kp">({{this.kpDisplay}} KP)</span>
+                            {{/if}}
+                          </span>
+                          <button type="button" class="jarmu-unit-ability-chat" title="Képesség chat-be küldése">
+                            <i class="fas fa-comment-dots"></i>
+                          </button>
+                        </div>
+                      {{/each}}
+                    </div>
+                  </td>
+                </tr>
+              {{/if}}
+            {{/each}}
+          </tbody>
+        </table>
+      {{else}}
+        <p class="karakter-equipment-placeholder">
+          Húzz ide Járműegység típusú itemeket
+        </p>
+      {{/if}}
     </div>
   </section>
 

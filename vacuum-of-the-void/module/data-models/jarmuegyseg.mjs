@@ -25,7 +25,9 @@ export class JarmuEgysegDataModel extends foundry.abstract.TypeDataModel {
       /** Raktár (szabad szöveg, opcionális). */
       storage: new StringField({ required: false, blank: true, initial: "" }),
       /** Sebzés (szabad szöveg, opcionális). */
-      damage: new StringField({ required: false, blank: true, initial: "" })
+      damage: new StringField({ required: false, blank: true, initial: "" }),
+      /** Találati érték (szabad szöveg, opcionális). */
+      hit: new StringField({ required: false, blank: true, initial: "" })
     };
   }
 }

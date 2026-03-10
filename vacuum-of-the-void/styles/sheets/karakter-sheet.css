@@ -50,7 +50,6 @@
 
 .votv.karakter-sheet input[type="text"],
 .votv.karakter-sheet input[type="number"] {
-  width: 100%;
   box-sizing: border-box;
   font-size: var(--votv-font-body);
   padding: 4px 6px;
