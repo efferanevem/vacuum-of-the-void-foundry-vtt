@@ -263,6 +263,19 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
       const level = Number(sys.level ?? 0) || 0;
       const hpMax = Number(health.max ?? 0) || 0;
       const hpValue = Number(health.value ?? 0) || 0;
+      // HP státusz: 3 = kifogástalan (felső harmad), 2 = károsult (középső harmad),
+      // 1 = kritikus (alsó harmad), 0 = 0 HP (üzemen kívül)
+      let hpStatus;
+      if (hpMax <= 0) {
+        hpStatus = undefined;
+      } else if (hpValue <= 0) {
+        hpStatus = 0;
+      } else {
+        const ratio = hpValue / hpMax;
+        if (ratio > 2 / 3) hpStatus = 3;
+        else if (ratio > 1 / 3) hpStatus = 2;
+        else hpStatus = 1;
+      }
       const hit = (sys.hit ?? "").toString().trim();
       const unitSpeedRaw = (sys.speed ?? "").toString().trim().replace(",", ".");
       const unitSpeedNum = Number(unitSpeedRaw);
@@ -312,6 +325,7 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
         level,
         hpMax,
         hpValue,
+        hpStatus,
         hit,
         damage,
         abilities: abilityItems
@@ -595,6 +609,7 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
     document.body.addEventListener("blur", this._votvJarmuBlur, true);
 
     // Járműegység: aktuális ÉP mező – csak value írható, max érték az itemből jön.
+    // Változtatáskor azonnal frissítjük a sor HP-státuszát (színezés), hogy ne kelljen újranyitni a lapot.
     $html.on("change", ".jarmu-unit-hp-current", async (ev) => {
       const input = ev.currentTarget;
       const itemId = input?.dataset?.itemId;
@@ -603,6 +618,28 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
       if (!item || item.type !== "Jarmuegyseg") return;
       const raw = (input.value ?? "").trim();
       const value = raw === "" ? 0 : Number(raw);
+
+      // DOM-beli HP státusz frissítése (ugyanaz a logika, mint a _prepareContext-ben)
+      const row = input.closest?.(".jarmu-unit-row");
+      if (row) {
+        const maxEl = row.querySelector?.(".jarmu-unit-hp-max");
+        const maxRaw = maxEl?.textContent ?? "";
+        const hpMax = Number((maxRaw ?? "").trim()) || 0;
+        let hpStatus;
+        if (hpMax <= 0) {
+          hpStatus = undefined;
+        } else if (!Number.isFinite(value) || value <= 0) {
+          hpStatus = 0;
+        } else {
+          const ratio = value / hpMax;
+          if (ratio > 2 / 3) hpStatus = 3;
+          else if (ratio > 1 / 3) hpStatus = 2;
+          else hpStatus = 1;
+        }
+        if (hpStatus === undefined) row.removeAttribute("data-hp-status");
+        else row.dataset.hpStatus = String(hpStatus);
+      }
+
       await item.update({ "system.health.value": Number.isFinite(value) ? value : 0 });
     });
 

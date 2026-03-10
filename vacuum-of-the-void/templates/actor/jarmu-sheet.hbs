@@ -86,10 +86,23 @@
           </thead>
           <tbody>
             {{#each unitsTable}}
-              <tr class="karakter-equipment-row jarmu-unit-row" data-item-id="{{this.itemId}}" draggable="true">
+              <tr class="karakter-equipment-row jarmu-unit-row"
+                  data-item-id="{{this.itemId}}"
+                  draggable="true"
+                  data-hp-status="{{this.hpStatus}}">
                 <td class="karakter-equipment-cell-name">
                   {{#if this.img}}<img class="karakter-equipment-icon jarmu-inventory-item-icon karakter-inventory-item-icon" src="{{this.img}}" alt="" data-item-id="{{this.itemId}}" />{{/if}}
                   <span class="karakter-inventory-item-name jarmu-inventory-item-name" data-item-id="{{this.itemId}}">{{this.name}}</span>
+                  {{#if this.damage}}
+                    <button
+                      type="button"
+                      class="jarmu-unit-damage-button"
+                      data-item-id="{{this.itemId}}"
+                      title="Sebzés dobás"
+                    >
+                      Sebzés ({{this.damage}})
+                    </button>
+                  {{/if}}
                 </td>
                 <td class="karakter-equipment-cell-hp">
                   <span class="jarmu-unit-hp-max">{{this.hpMax}}</span>
@@ -124,20 +137,6 @@
                   >✕</button>
                 </td>
               </tr>
-              {{#if this.damage}}
-                <tr class="jarmu-unit-damage-row" data-item-id="{{this.itemId}}">
-                  <td class="jarmu-unit-damage-cell" colspan="5">
-                    <button
-                      type="button"
-                      class="jarmu-unit-damage-button"
-                      data-item-id="{{this.itemId}}"
-                      title="Sebzés dobás"
-                    >
-                      {{this.name}} Sebzés ({{this.damage}})
-                    </button>
-                  </td>
-                </tr>
-              {{/if}}
               {{#if this.abilities.length}}
                 <tr class="jarmu-unit-abilities-row" data-item-id="{{this.itemId}}">
                   <td class="jarmu-unit-abilities-cell" colspan="5">
