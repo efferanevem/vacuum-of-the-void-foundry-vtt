@@ -286,6 +286,16 @@
   word-break: break-word;
 }
 
+/* Járműegység sorok drag & drop kiemelése és kurzor jelzés */
+.votv.jarmu-sheet .jarmu-units-table .jarmu-unit-row td {
+  cursor: grab;
+}
+
+.votv.jarmu-sheet .jarmu-units-table .jarmu-unit-row.karakter-actions-row-drag-over td {
+  background: rgba(43, 255, 136, 0.06);
+  box-shadow: inset 2px 0 0 0 var(--votv-border-accent);
+}
+
 .votv.jarmu-sheet .jarmu-unit-hp-current {
   width: 2.4em;
   box-sizing: border-box;

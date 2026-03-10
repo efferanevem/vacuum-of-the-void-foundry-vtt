@@ -86,7 +86,7 @@
           </thead>
           <tbody>
             {{#each unitsTable}}
-              <tr class="karakter-equipment-row jarmu-unit-row" data-item-id="{{this.itemId}}">
+              <tr class="karakter-equipment-row jarmu-unit-row" data-item-id="{{this.itemId}}" draggable="true">
                 <td class="karakter-equipment-cell-name">
                   {{#if this.img}}<img class="karakter-equipment-icon jarmu-inventory-item-icon karakter-inventory-item-icon" src="{{this.img}}" alt="" data-item-id="{{this.itemId}}" />{{/if}}
                   <span class="karakter-inventory-item-name jarmu-inventory-item-name" data-item-id="{{this.itemId}}">{{this.name}}</span>

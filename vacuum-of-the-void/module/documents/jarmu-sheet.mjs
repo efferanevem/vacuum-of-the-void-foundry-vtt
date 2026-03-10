@@ -247,7 +247,13 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
         description
       };
     });
-    const unitDocs = (this.actor.items?.contents ?? []).filter(i => i.type === "Jarmuegyseg");
+    const unitDocs = (this.actor.items?.contents ?? [])
+      .filter((i) => i.type === "Jarmuegyseg")
+      .sort((a, b) => {
+        const sa = typeof a.sort === "number" ? a.sort : 0;
+        const sb = typeof b.sort === "number" ? b.sort : 0;
+        return sa - sb;
+      });
     const unitsTable = [];
     let unitSpeedSum = 0;
     let unitRangeSum = 0;
@@ -469,6 +475,73 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
       await this._rollUnitDamage(itemId);
     });
 
+    // Járműegységek: sorrend változtatás drag & drop-pal (az egész sor húzható).
+    const sheet = this;
+    this._draggingUnitId = null;
+
+    $html.on("dragstart", ".jarmu-unit-row", (ev) => {
+      const row = ev.currentTarget;
+      const itemId = row?.dataset?.itemId;
+      if (!itemId) return;
+      sheet._draggingUnitId = itemId;
+      const dt = ev.originalEvent?.dataTransfer;
+      if (dt) {
+        dt.setData("text/plain", itemId);
+        dt.effectAllowed = "move";
+        if (typeof dt.setDragImage === "function") {
+          dt.setDragImage(row, 0, 0);
+        }
+      }
+    });
+
+    $html.on("dragover", ".jarmu-unit-row", (ev) => {
+      const targetId = ev.currentTarget?.dataset?.itemId;
+      const sourceId = sheet._draggingUnitId;
+      if (!sourceId || !targetId || sourceId === targetId) return;
+      ev.preventDefault();
+      const dt = ev.originalEvent?.dataTransfer;
+      if (dt) dt.dropEffect = "move";
+      ev.currentTarget?.classList.add("karakter-actions-row-drag-over");
+    });
+
+    $html.on("dragleave", ".jarmu-unit-row", (ev) => {
+      ev.currentTarget?.classList.remove("karakter-actions-row-drag-over");
+    });
+
+    $html.on("drop", ".jarmu-unit-row", async (ev) => {
+      ev.preventDefault();
+      ev.currentTarget?.classList.remove("karakter-actions-row-drag-over");
+      const targetId = ev.currentTarget?.dataset?.itemId;
+      let sourceId = sheet._draggingUnitId;
+      const dt = ev.originalEvent?.dataTransfer;
+      if (!sourceId && dt) {
+        sourceId = dt.getData("text/plain");
+      }
+      sheet._draggingUnitId = null;
+      if (!sourceId || !targetId || sourceId === targetId) return;
+
+      const items = this.actor.items.contents
+        .filter((i) => i.type === "Jarmuegyseg")
+        .sort((a, b) => {
+          const sa = typeof a.sort === "number" ? a.sort : 0;
+          const sb = typeof b.sort === "number" ? b.sort : 0;
+          return sa - sb;
+        });
+      const ids = items.map((i) => i.id);
+      const fromIdx = ids.indexOf(sourceId);
+      const toIdx = ids.indexOf(targetId);
+      if (fromIdx === -1 || toIdx === -1) return;
+
+      ids.splice(fromIdx, 1);
+      ids.splice(toIdx, 0, sourceId);
+
+      const updates = ids.map((id, index) => ({
+        _id: id,
+        sort: (index + 1) * 10
+      }));
+      await this.actor.updateEmbeddedDocuments("Item", updates);
+    });
+
     // Járműegység képességek: név / ikon → képesség lap megnyitása
     $html.on("click", ".jarmu-unit-ability-name, .jarmu-unit-ability-icon", async (ev) => {
       ev.preventDefault();
@@ -499,16 +572,15 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
       await this._postUnitAbilityToChat(key);
     });
 
-    const sheet = this;
     const doSubmit = (form) => {
       if (!form) return;
-      const updateData = sheet._getFormDataForUpdate(form);
+      const updateData = this._getFormDataForUpdate(form);
       if (Object.keys(updateData).length === 0) return;
-      sheet.actor.update(updateData).catch((err) => console.warn("VoidJarmuSheet save failed", err));
+      this.actor.update(updateData).catch((err) => console.warn("VoidJarmuSheet save failed", err));
     };
     const isOurForm = (form) =>
-      form && (sheet.element?.contains?.(form) || (sheet.id && form.closest?.(`#${CSS.escape(sheet.id)}`)));
-    sheet._votvJarmuBlur = (ev) => {
+      form && (this.element?.contains?.(form) || (this.id && form.closest?.(`#${CSS.escape(this.id)}`)));
+    this._votvJarmuBlur = (ev) => {
       const target = ev.target;
       if (!target || !target.form) return;
       const tag = target.tagName;
@@ -516,11 +588,11 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
       const form = target.form;
       if (!isOurForm(form)) return;
       const next = ev.relatedTarget;
-      if (next && (form.contains(next) || (sheet.id && next.closest?.(`#${CSS.escape(sheet.id)}`)))) return;
-      if (game.votv) game.votv._lastKarakterSheetBlurSave = { appId: sheet.id, at: Date.now() };
+      if (next && (form.contains(next) || (this.id && next.closest?.(`#${CSS.escape(this.id)}`)))) return;
+      if (game.votv) game.votv._lastKarakterSheetBlurSave = { appId: this.id, at: Date.now() };
       doSubmit(form);
     };
-    document.body.addEventListener("blur", sheet._votvJarmuBlur, true);
+    document.body.addEventListener("blur", this._votvJarmuBlur, true);
 
     // Járműegység: aktuális ÉP mező – csak value írható, max érték az itemből jön.
     $html.on("change", ".jarmu-unit-hp-current", async (ev) => {
