@@ -1,0 +1,98 @@
+<form class="{{cssClass}} votv-helyiseg-sheet" autocomplete="off">
+  <header class="sheet-header">
+    <div class="header-fields">
+      <h1 class="item-name">
+        <input name="name" type="text" value="{{item.name}}" placeholder="Helyiség neve" />
+      </h1>
+      <div class="helyiseg-header-row">
+        <div class="field helyiseg-level-field">
+          <label>Szint (0–3)</label>
+          <select name="system.level">
+            {{#select system.level}}
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            {{/select}}
+          </select>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="sheet-body">
+    <section class="karakter-panel karakter-abilities npc-abilities npc-ability-pool helyiseg-abilities">
+      <h2>Képességek</h2>
+      <div class="karakter-ability-area npc-ability-pool-area" data-area="abilities" data-drop-zone="ability">
+        <div class="karakter-ability-area-list">
+          {{#each abilityList}}
+            <div class="karakter-ability-pill" data-item-id="{{this.id}}" data-item-ref="{{this.ref}}">
+              <div class="karakter-ability-main">
+                {{#if this.img}}
+                  <img
+                    class="karakter-ability-pill-thumb karakter-ability-open"
+                    src="{{this.img}}"
+                    alt=""
+                    data-item-id="{{this.id}}"
+                    data-item-ref="{{this.ref}}"
+                  />
+                {{/if}}
+                <span
+                  class="karakter-ability-pill-name karakter-ability-open"
+                  data-item-id="{{this.id}}"
+                  data-item-ref="{{this.ref}}"
+                  title="{{this.name}}"
+                >
+                  {{#if (eq this.kind "module")}}<strong>Modul:</strong> {{/if}}
+                  {{#if (eq this.kind "module")}}
+                    <strong>{{this.name}}</strong>
+                  {{else}}
+                    {{this.name}}
+                  {{/if}}
+                  {{#if this.kpDisplay}} ({{this.kpDisplay}} KP){{/if}}
+                </span>
+              </div>
+              <div class="karakter-ability-actions">
+                <button
+                  type="button"
+                  class="karakter-ability-chat"
+                  data-item-id="{{this.id}}"
+                  data-item-ref="{{this.ref}}"
+                  title="Chat-be küldés"
+                >
+                  <i class="fas fa-comment-dots"></i>
+                </button>
+                <button
+                  type="button"
+                  class="karakter-ability-pill-remove"
+                  data-item-id="{{this.id}}"
+                  data-item-ref="{{this.ref}}"
+                  title="Alt+klikk: Eltávolítás"
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+          {{/each}}
+          <p class="karakter-ability-area-placeholder npc-ability-pool-placeholder">
+            Húzz ide képességeket
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="helyiseg-stats-row">
+      <div class="field helyiseg-stat-field">
+        <label>Veszély (opcionális)</label>
+        <div class="helyiseg-stat-input-with-unit">
+          <input type="text" name="system.veszely" value="{{system.veszely}}" placeholder="pl. +15" />
+          <span class="helyiseg-stat-unit">%</span>
+        </div>
+      </div>
+      <div class="field helyiseg-stat-field">
+        <label>Raktár (opcionális)</label>
+        <input type="text" name="system.storage" value="{{system.storage}}" placeholder="pl. +30" />
+      </div>
+    </section>
+  </section>
+</form>

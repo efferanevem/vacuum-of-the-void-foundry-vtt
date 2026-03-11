@@ -1,0 +1,213 @@
+/* Helyiség item lap – mintázva a járműegység lapról */
+.votv-helyiseg-sheet {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: var(--votv-font-body);
+  background: linear-gradient(145deg, rgba(5, 7, 10, 0.9), rgba(5, 10, 18, 0.98));
+  border-radius: var(--votv-radius);
+  border: 1px solid rgba(66, 135, 245, 0.25);
+  box-shadow: var(--votv-shadow-soft);
+  padding: 12px 14px;
+  color: var(--votv-text-main);
+}
+
+.votv-helyiseg-sheet .helyiseg-header-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.votv-helyiseg-sheet .helyiseg-level-field {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* Képességek panel – ugyanaz, mint járműegység lapon */
+.votv-helyiseg-sheet .helyiseg-abilities.karakter-panel {
+  font-size: var(--votv-font-body);
+  border: 1px solid var(--votv-border-muted);
+  padding: 10px 12px;
+  background: var(--votv-panel-bg);
+  border-radius: var(--votv-radius);
+  box-shadow: inset 0 0 0 1px rgba(1, 3, 6, 0.7);
+}
+
+.votv-helyiseg-sheet .helyiseg-abilities h2 {
+  margin: 0 0 6px;
+  font-size: var(--votv-font-label);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--votv-header-accent);
+  position: relative;
+}
+
+.votv-helyiseg-sheet .helyiseg-abilities h2::before {
+  content: "> ";
+  color: rgba(43, 255, 136, 0.9);
+  margin-right: 2px;
+}
+
+.votv-helyiseg-sheet .helyiseg-abilities .npc-ability-pool-area {
+  margin-top: 4px;
+}
+
+.votv-helyiseg-sheet .helyiseg-abilities .karakter-ability-area-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  align-items: stretch;
+}
+
+.votv-helyiseg-sheet .helyiseg-abilities .karakter-ability-pill {
+  flex: 0 0 auto;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+  padding: 6px 4px;
+  border-radius: var(--votv-radius);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(3, 6, 10, 0.5);
+}
+
+.votv-helyiseg-sheet .helyiseg-abilities .karakter-ability-area-list:has(.karakter-ability-pill) .npc-ability-pool-placeholder {
+  display: none;
+}
+
+.votv-helyiseg-sheet .helyiseg-abilities .npc-ability-pool-placeholder {
+  font-size: var(--votv-font-body);
+  color: var(--votv-text-muted);
+}
+
+.votv-helyiseg-sheet .helyiseg-abilities .karakter-ability-area {
+  border: 1px dashed var(--votv-border-muted);
+  border-radius: var(--votv-radius);
+  background: rgba(3, 6, 10, 0.5);
+  padding: 6px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  transition: border-color 0.15s ease, background 0.15s ease;
+  position: relative;
+}
+
+.votv-helyiseg-sheet .helyiseg-abilities .karakter-ability-area-placeholder {
+  font-size: var(--votv-font-body);
+  color: var(--votv-text-muted);
+  opacity: 0.8;
+}
+
+.votv-helyiseg-sheet .helyiseg-abilities .karakter-ability-area.karakter-ability-area-drag-over {
+  border-color: var(--votv-border-accent);
+  background: rgba(43, 255, 136, 0.08);
+}
+
+.votv-helyiseg-sheet .helyiseg-abilities .karakter-ability-pill-remove {
+  border-radius: 2px;
+  padding: 2px 3px;
+  font-size: 11px;
+  cursor: pointer;
+  border: 1px solid var(--votv-border-muted);
+  background: transparent;
+  color: var(--votv-text-muted);
+  flex-shrink: 0;
+}
+
+.votv-helyiseg-sheet .helyiseg-abilities .karakter-ability-pill-remove:hover {
+  border-color: var(--votv-border-accent);
+  color: var(--votv-border-accent);
+}
+
+.votv-helyiseg-sheet .helyiseg-abilities .karakter-ability-pill-thumb {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  border-radius: 2px;
+  border: 1px solid var(--votv-border-muted);
+  flex-shrink: 0;
+}
+
+.votv-helyiseg-sheet .helyiseg-abilities .karakter-ability-main {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.votv-helyiseg-sheet .helyiseg-abilities .karakter-ability-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex: 0 0 auto;
+  justify-content: flex-end;
+}
+
+.votv-helyiseg-sheet .helyiseg-abilities .karakter-ability-pill-name {
+  cursor: pointer;
+}
+
+.votv-helyiseg-sheet .helyiseg-abilities .karakter-ability-pill-name:hover,
+.votv-helyiseg-sheet .helyiseg-abilities .karakter-ability-open:hover {
+  color: var(--votv-border-accent);
+}
+
+.votv-helyiseg-sheet .helyiseg-abilities .karakter-ability-open {
+  cursor: pointer;
+}
+
+.votv-helyiseg-sheet .helyiseg-abilities .karakter-ability-chat {
+  border-radius: 2px;
+  padding: 2px 4px;
+  font-size: 11px;
+  cursor: pointer;
+  border: 1px solid var(--votv-border-muted);
+  background: transparent;
+  color: var(--votv-text-muted);
+  min-width: 26px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.votv-helyiseg-sheet .helyiseg-abilities .karakter-ability-chat:hover {
+  border-color: var(--votv-border-accent);
+  color: var(--votv-border-accent);
+}
+
+/* Veszély + Raktár egy sorban, % a sorban */
+.votv-helyiseg-sheet .helyiseg-stats-row {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 8px;
+  align-items: end;
+}
+
+.votv-helyiseg-sheet .helyiseg-stat-field label {
+  display: block;
+  margin-bottom: 2px;
+}
+
+.votv-helyiseg-sheet .helyiseg-stat-input-with-unit {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.votv-helyiseg-sheet .helyiseg-stat-input-with-unit input {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.votv-helyiseg-sheet .helyiseg-stat-unit {
+  flex: 0 0 auto;
+  font-size: var(--votv-font-label-small);
+  color: var(--votv-text-muted);
+}

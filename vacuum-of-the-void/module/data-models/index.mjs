@@ -9,3 +9,4 @@ export { AbilityDataModel } from "./ability.mjs";
 export { TargyDataModel } from "./targy.mjs";
 export { EgyebDataModel } from "./egyeb.mjs";
 export { JarmuEgysegDataModel } from "./jarmuegyseg.mjs";
+export { HelyisegDataModel } from "./helyiseg.mjs";

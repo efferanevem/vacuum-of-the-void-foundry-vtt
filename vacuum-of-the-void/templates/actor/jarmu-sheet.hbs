@@ -20,6 +20,7 @@
 
   <section class="jarmu-main">
     <section class="jarmu-column jarmu-left">
+      {{#unless (eq actor.type "Bazis")}}
       <section class="karakter-panel jarmu-portrait">
         <img
           class="jarmu-portrait-img"
@@ -29,6 +30,7 @@
           title="{{actor.name}}"
         />
       </section>
+      {{/unless}}
     </section>
     <section class="jarmu-column jarmu-right">
       <section class="karakter-panel jarmu-stats">
@@ -141,69 +143,89 @@
         <table class="karakter-equipment-table jarmu-units-table">
           <thead>
             <tr>
-              <th class="karakter-equipment-th-name">Járműegység</th>
-              <th class="karakter-equipment-th-hp">Életerő</th>
-              <th class="karakter-equipment-th-hit">Találati érték</th>
-              <th class="karakter-equipment-th-level">Szint</th>
+              <th class="karakter-equipment-th-name">{{unitItemTypeLabel}}</th>
+              {{#if (eq actor.type "Bazis")}}
+                <th class="karakter-equipment-th-hit">Cépont szám</th>
+                <th class="karakter-equipment-th-level">Szint</th>
+              {{else}}
+                <th class="karakter-equipment-th-hp">Életerő</th>
+                <th class="karakter-equipment-th-hit">Cépont szám</th>
+                <th class="karakter-equipment-th-level">Szint</th>
+              {{/if}}
               <th class="karakter-equipment-th-delete"></th>
             </tr>
           </thead>
           <tbody>
             {{#each unitsTable}}
-              <tr class="karakter-equipment-row jarmu-unit-row"
+              <tr class="karakter-equipment-row jarmu-unit-row {{#if this.isHelyiseg}}jarmu-unit-row-helyiseg{{/if}}"
                   data-item-id="{{this.itemId}}"
                   draggable="true"
-                  data-hp-status="{{this.hpStatus}}">
+                  {{#unless this.isHelyiseg}}data-hp-status="{{this.hpStatus}}"{{/unless}}>
                 <td class="karakter-equipment-cell-name">
                   {{#if this.img}}<img class="karakter-equipment-icon jarmu-inventory-item-icon karakter-inventory-item-icon" src="{{this.img}}" alt="" data-item-id="{{this.itemId}}" />{{/if}}
                   <span class="karakter-inventory-item-name jarmu-inventory-item-name" data-item-id="{{this.itemId}}">{{this.name}}</span>
-                  {{#if this.damage}}
-                    <button
-                      type="button"
-                      class="jarmu-unit-damage-button"
+                  {{#unless this.isHelyiseg}}
+                    {{#if this.damage}}
+                      <button
+                        type="button"
+                        class="jarmu-unit-damage-button"
+                        data-item-id="{{this.itemId}}"
+                        title="Sebzés dobás"
+                      >
+                        Sebzés ({{this.damage}})
+                      </button>
+                    {{/if}}
+                  {{/unless}}
+                </td>
+                {{#if this.isHelyiseg}}
+                  <td class="karakter-equipment-cell-hit">
+                    <input
+                      type="text"
+                      class="jarmu-unit-hit-input"
                       data-item-id="{{this.itemId}}"
-                      title="Sebzés dobás"
-                    >
-                      Sebzés ({{this.damage}})
-                    </button>
-                  {{/if}}
-                </td>
-                <td class="karakter-equipment-cell-hp">
-                  <span class="jarmu-unit-hp-max">{{this.hpMax}}</span>
-                  <span>/</span>
-                  <input
-                    type="number"
-                    class="jarmu-unit-hp-current"
-                    data-item-id="{{this.itemId}}"
-                    value="{{this.hpValue}}"
-                    min="0"
-                  />
-                </td>
-                <td class="karakter-equipment-cell-hit">
-                  <input
-                    type="text"
-                    class="jarmu-unit-hit-input"
-                    data-item-id="{{this.itemId}}"
-                    value="{{this.hit}}"
-                    placeholder="pl. 1–3"
-                  />
-                </td>
-                <td class="karakter-equipment-cell-level">
-                  {{this.level}}
-                </td>
+                      value="{{this.hit}}"
+                      placeholder="pl. 1–3"
+                    />
+                  </td>
+                  <td class="karakter-equipment-cell-level">{{this.level}}</td>
+                {{else}}
+                  <td class="karakter-equipment-cell-hp">
+                    <span class="jarmu-unit-hp-max">{{this.hpMax}}</span>
+                    <span>/</span>
+                    <input
+                      type="number"
+                      class="jarmu-unit-hp-current"
+                      data-item-id="{{this.itemId}}"
+                      value="{{this.hpValue}}"
+                      min="0"
+                    />
+                  </td>
+                  <td class="karakter-equipment-cell-hit">
+                    <input
+                      type="text"
+                      class="jarmu-unit-hit-input"
+                      data-item-id="{{this.itemId}}"
+                      value="{{this.hit}}"
+                      placeholder="pl. 1–3"
+                    />
+                  </td>
+                  <td class="karakter-equipment-cell-level">
+                    {{this.level}}
+                  </td>
+                {{/if}}
                 <td class="karakter-equipment-cell-delete">
                   <button
                     type="button"
                     class="karakter-equipment-delete jarmu-item-delete"
                     data-item-id="{{this.itemId}}"
                     data-actor-id="{{this.actorId}}"
-                    title="Alt+klikk: Járműegység eltávolítása"
+                    title="Alt+klikk: {{../unitItemTypeLabel}} eltávolítása"
                   >✕</button>
                 </td>
               </tr>
               {{#if this.abilities.length}}
                 <tr class="jarmu-unit-abilities-row" data-item-id="{{this.itemId}}">
-                  <td class="jarmu-unit-abilities-cell" colspan="5">
+                  <td class="jarmu-unit-abilities-cell" colspan="{{../unitAbilitiesColspan}}">
                     <div class="jarmu-unit-abilities-list">
                       {{#each this.abilities}}
                         <div class="jarmu-unit-ability-pill jarmu-unit-ability-line" data-ability-ref="{{this.ref}}" data-ability-id="{{this.id}}">
@@ -232,7 +254,7 @@
         </table>
       {{else}}
         <p class="karakter-equipment-placeholder">
-          Húzz ide Járműegység típusú itemeket
+          Húzz ide {{unitItemTypeLabel}} típusú itemeket
         </p>
       {{/if}}
     </div>

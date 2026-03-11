@@ -1,5 +1,5 @@
-import { BaseActorDataModel, KarakterDataModel, JarmuDataModel, BazisDataModel, WeaponDataModel, ShieldDataModel, MicrochipDataModel, AbilityDataModel, TargyDataModel, EgyebDataModel, JarmuEgysegDataModel } from "../module/data-models/index.mjs";
-import { VoidKarakterSheet, VoidNpcSheet, VoidJarmuSheet, VoidBazisSheet, VoidWeaponSheet, VoidShieldSheet, VoidMicrochipSheet, VoidAbilitySheet, VoidTargySheet, VoidEgyebSheet, VoidJarmuEgysegSheet } from "../module/documents.mjs";
+import { BaseActorDataModel, KarakterDataModel, JarmuDataModel, BazisDataModel, WeaponDataModel, ShieldDataModel, MicrochipDataModel, AbilityDataModel, TargyDataModel, EgyebDataModel, JarmuEgysegDataModel, HelyisegDataModel } from "../module/data-models/index.mjs";
+import { VoidKarakterSheet, VoidNpcSheet, VoidJarmuSheet, VoidBazisSheet, VoidWeaponSheet, VoidShieldSheet, VoidMicrochipSheet, VoidAbilitySheet, VoidTargySheet, VoidEgyebSheet, VoidJarmuEgysegSheet, VoidHelyisegSheet } from "../module/documents.mjs";
 
 const VOTV_DEFAULT_SCENE_BG = "systems/vacuum-of-the-void/assets/void-bg.jpg";
 
@@ -42,6 +42,7 @@ Hooks.once("init", () => {
   CONFIG.Item.dataModels.Targy = TargyDataModel;
   CONFIG.Item.dataModels.Egyeb = EgyebDataModel;
   CONFIG.Item.dataModels.Jarmuegyseg = JarmuEgysegDataModel;
+  CONFIG.Item.dataModels.Helyiseg = HelyisegDataModel;
 
   // Trackable attributes for token bars – csak egy sáv (Életerő), mint az NPC lapon; bar2 ne jelenjen meg
   CONFIG.Actor.trackableAttributes ??= {};
@@ -74,6 +75,7 @@ Hooks.once("init", () => {
   CONFIG.Item.typeLabels.Targy = "Tárgy";
   CONFIG.Item.typeLabels.Egyeb = "Egyéb Információ";
   CONFIG.Item.typeLabels.Jarmuegyseg = "Járműegység";
+  CONFIG.Item.typeLabels.Helyiseg = "Helyiség";
 
   // Status effectek: tokenre kattintva / Active Effectsnél választhatók, mindegyiknek id + megjelenített név + ikon (img)
   const VOTV_STATUS = "systems/vacuum-of-the-void/assets/status";
@@ -162,6 +164,27 @@ Hooks.once("init", () => {
     makeDefault: true,
     label: "VOTV.JarmuEgysegSheet"
   });
+  foundry.documents.collections.Items.registerSheet("vacuum-of-the-void", VoidHelyisegSheet, {
+    types: ["Helyiseg"],
+    makeDefault: true,
+    label: "VOTV.HelyisegSheet"
+  });
+
+  // Bázis: ne legyen látható kép – üres/transzparens asset (a listában sem jelenjen meg default ikon)
+  const VOTV_BAZIS_BLANK_IMG = "systems/vacuum-of-the-void/assets/blank.svg";
+  Hooks.on("preCreateActor", (document, data, _options) => {
+    if (data?.type === "Bazis") data.img = VOTV_BAZIS_BLANK_IMG;
+  });
+  Hooks.on("preUpdateActor", (document, change, _options) => {
+    if (document?.type === "Bazis" && Object.prototype.hasOwnProperty.call(change ?? {}, "img")) change.img = VOTV_BAZIS_BLANK_IMG;
+  });
+  Hooks.on("ready", () => {
+    const blank = VOTV_BAZIS_BLANK_IMG;
+    const bazisNeedBlank = (game.actors?.contents ?? []).filter(
+      (a) => a.type === "Bazis" && (a.img ?? "").toString().trim() !== blank
+    );
+    if (bazisNeedBlank.length) bazisNeedBlank.forEach((a) => a.update({ img: blank }).catch(() => {}));
+  });
 
   // Karakter: összesített sebesség ≤ 0 → Mozgásképtelen automatikus; > 0 → eltávolítjuk az automatikus Mozgásképtelent.
   // setTimeout + gyűjteményből olvasás: a merge/effect lista biztosan naprakész (pl. láb 0→1 után).
@@ -244,7 +267,7 @@ Hooks.once("init", () => {
     for (const app of windows) {
       if (app.document?.id !== actorId || app.document?.documentName !== "Actor") continue;
       const name = app.constructor?.name;
-      if (name !== "VoidKarakterSheet" && name !== "VoidJarmuSheet") continue;
+      if (name !== "VoidKarakterSheet" && name !== "VoidJarmuSheet" && name !== "VoidBazisSheet") continue;
       if (!appsToConsider.includes(app)) appsToConsider.push(app);
     }
     const anySheetHasFocusedInput = isInputLike && appsToConsider.some((app) => {
@@ -465,12 +488,16 @@ Hooks.on("ready", () => {
   })();
 });
 
-Hooks.on("preCreateToken", (tokenDocument, _data, _options) => {
+Hooks.on("preCreateToken", (tokenDocument, data, _options) => {
   const sourceId = game.votv?._dragSourceActorId;
-  const actorId = sourceId ?? tokenDocument.actorId ?? null;
+  const actorId = sourceId ?? tokenDocument.actorId ?? tokenDocument._source?.actorId ?? data?.actorId ?? null;
   if (sourceId) game.votv._dragSourceActorId = null;
-  const actor = actorId ? game.actors?.get(actorId) : null;
+  const actor = actorId ? game.actors?.get(actorId) : (tokenDocument.actor ?? null);
   if (!actor) return;
+  if (actor.type === "Bazis") {
+    ui?.notifications?.warn(game.i18n?.localize?.("VOTV.BazisNoToken") ?? "Bázis nem helyezhető tokenként a térképre.");
+    return false;
+  }
   if (actor.type === "Karakter") {
     tokenDocument.updateSource({
       ...(sourceId ? { actorId: sourceId } : {}),
@@ -500,8 +527,12 @@ Hooks.on("preCreateToken", (tokenDocument, _data, _options) => {
   }
 });
 
-// Combatant: alapértelmezett initiative 0, hogy a mező megjelenjen és szerkeszthető legyen
+// Combatant: Bázis ne kerülhessen harcba; egyébként alapértelmezett initiative 0
 Hooks.on("preCreateCombatant", (combatant, _data, _options) => {
+  const actor = combatant.actorId ? game.actors?.get(combatant.actorId) : null;
+  if (actor?.type === "Bazis") {
+    throw new Error(game.i18n?.localize?.("VOTV.BazisNoCombat") ?? "Bázis nem vehet részt harcban.");
+  }
   const init = combatant.initiative;
   if (init === undefined || init === null || (typeof init === "number" && isNaN(init))) {
     combatant.updateSource({ initiative: 0 });

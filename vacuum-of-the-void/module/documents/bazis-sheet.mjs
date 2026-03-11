@@ -1,5 +1,22 @@
 import { VoidJarmuSheet } from "./jarmu-sheet.mjs";
 
+/** Helyiség veszély string (pl. "+15", "15") → szám. */
+function parseVeszely(s) {
+  if (s == null) return 0;
+  const t = String(s).trim().replace(/^\+/, "");
+  if (t === "") return 0;
+  const n = Number(t);
+  return Number.isFinite(n) ? n : 0;
+}
+
+/** Bázis helyiségeinek veszély értékének összege (bele számít a veszélyeztetettségbe). */
+function sumHelyisegVeszely(actor) {
+  const contents = actor?.items?.contents ?? [];
+  return contents
+    .filter((i) => i.type === "Helyiseg")
+    .reduce((sum, i) => sum + parseVeszely(i.system?.veszely), 0);
+}
+
 /** Bázis actor lap: ugyanaz a template és getData mint a jármű (Régió, Zóna Típus, Méret, Veszélyeztetettség, egységek, raktár). */
 export class VoidBazisSheet extends VoidJarmuSheet {
   static DEFAULT_OPTIONS = foundry.utils.mergeObject(
@@ -44,11 +61,12 @@ export class VoidBazisSheet extends VoidJarmuSheet {
       const zone = zoneSelect?.value ?? "";
       const regionVal = regionMap[region] ?? 0;
       const zoneVal = zoneMap[zone] ?? 0;
-      const unitCount = (this.actor?.items?.contents ?? []).filter((i) => i.type === "Jarmuegyseg").length;
+      const unitCount = (this.actor?.items?.contents ?? []).filter((i) => i.type === "Helyiseg").length;
       const sizeLabel = unitCount >= 11 ? "Nagy" : unitCount >= 6 ? "Közepes" : "Kicsi";
       const sizeVal = sizeMap[sizeLabel] ?? 0;
       const bonus = Number(bonusInput.value ?? 0) || 0;
-      const total = regionVal + zoneVal + sizeVal + bonus;
+      const veszelySum = sumHelyisegVeszely(this.actor);
+      const total = regionVal + zoneVal + sizeVal + bonus + veszelySum;
       totalInput.value = total;
       // Ne hívjunk actor.update()-et: a form submit (submitOnChange) menti a mezőket.
       // Így nem rajzolódik újra a lap, a selectek nem ugrálnak vissza.
@@ -86,7 +104,8 @@ export class VoidBazisSheet extends VoidJarmuSheet {
       const sizeLabel = context.sizeForSelect ?? "Kicsi";
       const sizeThreat = sizeMap[sizeLabel] ?? 0;
       const bonus = Number(combat.threatBonus ?? 0) || 0;
-      const finalThreat = regionThreat + zoneThreat + sizeThreat + bonus;
+      const veszelySum = sumHelyisegVeszely(this.actor);
+      const finalThreat = regionThreat + zoneThreat + sizeThreat + bonus + veszelySum;
 
       context.system = foundry.utils.mergeObject(
         foundry.utils.duplicate(system),

@@ -531,7 +531,7 @@ export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplication
     // Egyéb info / Mikro-Chip: chat gomb → beküldés chatbe
     $html.on("click", ".karakter-item-chat", async (ev) => {
       ev.preventDefault();
-      const itemId = (ev.currentTarget?.dataset?.itemId ?? "").trim();
+      const itemId = (ev.currentTarget?.dataset?.itemId ?? ev.currentTarget?.getAttribute?.("data-item-id") ?? "").trim();
       if (!itemId || !this.actor) return;
       const item = this.actor.items.get(itemId);
       if (!item) return;

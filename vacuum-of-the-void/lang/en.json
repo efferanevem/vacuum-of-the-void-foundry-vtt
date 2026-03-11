@@ -23,6 +23,8 @@
   "VOTV.EgyebSheet": "Egyéb Információ",
   "TYPES.Item.Jarmuegyseg": "Járműegység",
   "VOTV.JarmuEgysegSheet": "Járműegység",
+  "TYPES.Item.Helyiseg": "Helyiség",
+  "VOTV.HelyisegSheet": "Helyiség",
 
   "VOTV.LabelName": "Név",
   "VOTV.LabelPlayer": "Játékos",
@@ -62,6 +64,9 @@
   "VOTV.RollSheet.AdvantageStunnedTarget": "Kábult",
   "VOTV.RollSheet.NoHeavyWeaponInHalfCover": "Fél-fedezékben nem támadhatsz nehéz fegyverekkel!",
   "VOTV.RollSheet.NoMediumHeavyWeaponInThreeQuarterCover": "Háromnegyed-fedezékben csak könnyű és dobható fegyverekkel támadhatsz!",
-  "VOTV.RollSheet.NoNonThrownWeaponInFullCover": "Teljes-fedezékben csak dobható fegyverekkel támadhatsz!"
+  "VOTV.RollSheet.NoNonThrownWeaponInFullCover": "Teljes-fedezékben csak dobható fegyverekkel támadhatsz!",
+
+  "VOTV.BazisNoToken": "Bázis nem helyezhető tokenként a térképre.",
+  "VOTV.BazisNoCombat": "Bázis nem vehet részt harcban."
 }
 

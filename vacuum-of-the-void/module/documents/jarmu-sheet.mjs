@@ -247,8 +247,9 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
         description
       };
     });
+    const unitItemType = this.actor.type === "Bazis" ? "Helyiseg" : "Jarmuegyseg";
     const unitDocs = (this.actor.items?.contents ?? [])
-      .filter((i) => i.type === "Jarmuegyseg")
+      .filter((i) => i.type === unitItemType)
       .sort((a, b) => {
         const sa = typeof a.sort === "number" ? a.sort : 0;
         const sb = typeof b.sort === "number" ? b.sort : 0;
@@ -262,33 +263,9 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
 
     for (const item of unitDocs) {
       const sys = item?.system ?? {};
-      const health = sys.health ?? {};
       const level = Number(sys.level ?? 0) || 0;
-      const hpMax = Number(health.max ?? 0) || 0;
-      const hpValue = Number(health.value ?? 0) || 0;
-      // HP státusz: 3 = kifogástalan (felső harmad), 2 = károsult (középső harmad),
-      // 1 = kritikus (alsó harmad), 0 = 0 HP (üzemen kívül)
-      let hpStatus;
-      if (hpMax <= 0) {
-        hpStatus = undefined;
-      } else if (hpValue <= 0) {
-        hpStatus = 0;
-      } else {
-        const ratio = hpValue / hpMax;
-        if (ratio > 2 / 3) hpStatus = 3;
-        else if (ratio > 1 / 3) hpStatus = 2;
-        else hpStatus = 1;
-      }
-      const hit = (sys.hit ?? "").toString().trim();
-      const unitSpeedRaw = (sys.speed ?? "").toString().trim().replace(",", ".");
-      const unitSpeedNum = Number(unitSpeedRaw);
-      if (Number.isFinite(unitSpeedNum)) unitSpeedSum += unitSpeedNum;
-      const unitRangeRaw = (sys.range ?? "").toString().trim().replace(",", ".");
-      const unitRangeNum = Number(unitRangeRaw);
-      if (Number.isFinite(unitRangeNum)) unitRangeSum += unitRangeNum;
-      const damage = (sys.damage ?? "").toString().trim();
 
-      // Raktár kapacitás: járműegység storage mezőjének összege
+      // Raktár kapacitás: egység/helyiség storage mezőjének összege
       const unitStorageRaw = (sys.storage ?? "").toString().trim().replace(",", ".");
       const unitStorageNum = Number(unitStorageRaw);
       if (Number.isFinite(unitStorageNum)) totalStorageUsed += unitStorageNum;
@@ -325,6 +302,44 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
           };
         });
 
+      if (unitItemType === "Helyiseg") {
+        const hit = (sys.hit ?? "").toString().trim();
+        unitsTable.push({
+          itemId: item.id,
+          actorId: this.actor.id,
+          name: item?.name ?? "—",
+          img: item?.img ?? "",
+          level,
+          hit,
+          abilities: abilityItems,
+          isHelyiseg: true
+        });
+        continue;
+      }
+
+      const health = sys.health ?? {};
+      const hpMax = Number(health.max ?? 0) || 0;
+      const hpValue = Number(health.value ?? 0) || 0;
+      let hpStatus;
+      if (hpMax <= 0) {
+        hpStatus = undefined;
+      } else if (hpValue <= 0) {
+        hpStatus = 0;
+      } else {
+        const ratio = hpValue / hpMax;
+        if (ratio > 2 / 3) hpStatus = 3;
+        else if (ratio > 1 / 3) hpStatus = 2;
+        else hpStatus = 1;
+      }
+      const hit = (sys.hit ?? "").toString().trim();
+      const unitSpeedRaw = (sys.speed ?? "").toString().trim().replace(",", ".");
+      const unitSpeedNum = Number(unitSpeedRaw);
+      if (Number.isFinite(unitSpeedNum)) unitSpeedSum += unitSpeedNum;
+      const unitRangeRaw = (sys.range ?? "").toString().trim().replace(",", ".");
+      const unitRangeNum = Number(unitRangeRaw);
+      if (Number.isFinite(unitRangeNum)) unitRangeSum += unitRangeNum;
+      const damage = (sys.damage ?? "").toString().trim();
+
       unitsTable.push({
         itemId: item.id,
         actorId: this.actor.id,
@@ -336,14 +351,17 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
         hpStatus,
         hit,
         damage,
-        abilities: abilityItems
+        abilities: abilityItems,
+        isHelyiseg: false
       });
     }
     context.unitsTable = unitsTable;
     context.totalStorageUsed = totalStorageUsed;
     context.vehicleStorageMax = vehicleStorageMax;
+    context.unitItemTypeLabel = this.actor.type === "Bazis" ? "Helyiség" : "Járműegység";
+    context.unitAbilitiesColspan = this.actor.type === "Bazis" ? 4 : 5;
 
-    // Jármű méret automatikus meghatározása a járműegységek száma alapján.
+    // Jármű/Bázis méret automatikus meghatározása az egységek/helyiségek száma alapján.
     const unitCount = unitDocs.length;
     let sizeLabel = "Kicsi";
     let sizeSpeedPenalty = 0;
@@ -406,7 +424,8 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
 
   _attachFrameListeners(html) {
     super._attachFrameListeners(html);
-    const root = this.form ?? html?.querySelector?.("form.votv.jarmu-sheet") ?? html ?? this.element;
+    // Root = renderelt tartalom, különben a listenerek lecsatolt elemre kerülnek (pl. tab váltás után)
+    const root = html?.querySelector?.("form.votv.jarmu-sheet") ?? html ?? this.form ?? this.element;
     const $html = $(root);
 
     this._writeTotalDefense(html);
@@ -485,8 +504,10 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
     });
     $html.on("click", ".karakter-item-chat", async (ev) => {
       ev.preventDefault();
-      const itemId = ev.currentTarget?.dataset?.itemId;
-      if (!itemId) return;
+      const itemId = (ev.currentTarget?.dataset?.itemId ?? ev.currentTarget?.getAttribute?.("data-item-id") ?? "").trim();
+      if (!itemId || !this.actor) return;
+      const item = this.actor.items.get(itemId);
+      if (!item || (item.type !== "MikroChip" && item.type !== "Egyeb")) return;
       await this._postItemToChat(itemId);
     });
 
@@ -545,8 +566,9 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
       sheet._draggingUnitId = null;
       if (!sourceId || !targetId || sourceId === targetId) return;
 
+      const unitItemType = this.actor.type === "Bazis" ? "Helyiseg" : "Jarmuegyseg";
       const items = this.actor.items.contents
-        .filter((i) => i.type === "Jarmuegyseg")
+        .filter((i) => i.type === unitItemType)
         .sort((a, b) => {
           const sa = typeof a.sort === "number" ? a.sort : 0;
           const sb = typeof b.sort === "number" ? b.sort : 0;
@@ -654,13 +676,13 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
       await item.update({ "system.health.value": Number.isFinite(value) ? value : 0 });
     });
 
-    // Járműegység: Találati érték – szabad szöveg (számok, range, stb.)
+    // Járműegység / Helyiség: Cépont szám – szabad szöveg
     $html.on("change", ".jarmu-unit-hit-input", async (ev) => {
       const input = ev.currentTarget;
       const itemId = input?.dataset?.itemId;
       if (!itemId) return;
       const item = this.actor.items.get(itemId);
-      if (!item || item.type !== "Jarmuegyseg") return;
+      if (!item || (item.type !== "Jarmuegyseg" && item.type !== "Helyiseg")) return;
       const value = (input.value ?? "").trim();
       await item.update({ "system.hit": value });
     });
@@ -720,7 +742,7 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
     const actor = this.actor;
     if (!actor) return;
     const item = actor.items.get?.(itemId) ?? actor.items.contents?.find?.((i) => i.id === itemId);
-    if (!item || item.type !== "Jarmuegyseg") return;
+    if (!item || (item.type !== "Jarmuegyseg" && item.type !== "Helyiseg")) return;
     const damageFormula = (item.system?.damage ?? "").trim();
     if (!damageFormula) {
       ui.notifications?.warn?.(
@@ -792,7 +814,10 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
     const doc = await fromUuid(uuid);
     if (!doc || doc.documentName !== "Item") return super._onDropItem(event, data);
     const actor = this.actor;
-    const allowed = ["Fegyver", "Pancel", "MikroChip", "Targy", "Egyeb", "Jarmuegyseg"];
+    const allowed =
+      this.actor.type === "Bazis"
+        ? ["Fegyver", "Pancel", "MikroChip", "Targy", "Egyeb", "Helyiseg"]
+        : ["Fegyver", "Pancel", "MikroChip", "Targy", "Egyeb", "Jarmuegyseg"];
     if (!allowed.includes(doc.type)) return super._onDropItem(event, data);
     if (doc.parent?.id === actor.id) return;
     const itemData = foundry.utils.mergeObject(doc.toObject(), {

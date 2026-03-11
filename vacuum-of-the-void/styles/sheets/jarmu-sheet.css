@@ -411,12 +411,18 @@
 
 .votv.jarmu-sheet .jarmu-units-table .karakter-equipment-th-hp,
 .votv.jarmu-sheet .jarmu-units-table .karakter-equipment-th-hit,
-.votv.jarmu-sheet .jarmu-units-table .karakter-equipment-th-level,
+.votv.jarmu-sheet .jarmu-units-table .karakter-equipment-th-veszely,
 .votv.jarmu-sheet .jarmu-units-table .karakter-equipment-th-delete,
 .votv.jarmu-sheet .jarmu-units-table .karakter-equipment-cell-hp,
 .votv.jarmu-sheet .jarmu-units-table .karakter-equipment-cell-hit,
-.votv.jarmu-sheet .jarmu-units-table .karakter-equipment-cell-level,
+.votv.jarmu-sheet .jarmu-units-table .karakter-equipment-cell-veszely,
 .votv.jarmu-sheet .jarmu-units-table .karakter-equipment-cell-delete {
+  width: 1%;
+  white-space: nowrap;
+}
+
+.votv.jarmu-sheet .jarmu-units-table .karakter-equipment-th-level,
+.votv.jarmu-sheet .jarmu-units-table .karakter-equipment-cell-level {
   width: 1%;
   white-space: nowrap;
 }
@@ -425,8 +431,13 @@
   white-space: nowrap;
 }
 
+.votv.jarmu-sheet .jarmu-units-table .karakter-equipment-th-name,
 .votv.jarmu-sheet .jarmu-units-table .karakter-equipment-cell-name {
-  max-width: 40%;
+  width: 100%;
+  min-width: 6rem;
+}
+
+.votv.jarmu-sheet .jarmu-units-table .karakter-equipment-cell-name {
   white-space: normal;
 }
 
@@ -479,6 +490,15 @@
   width: 4.5em;
   flex: 0 0 auto;
   box-sizing: border-box;
+}
+
+.votv.jarmu-sheet .jarmu-unit-veszely-input {
+  width: 3em;
+  box-sizing: border-box;
+  text-align: right;
+}
+.votv.jarmu-sheet .jarmu-units-table .karakter-equipment-cell-veszely .jarmu-stat-unit {
+  margin-left: 2px;
 }
 
 .votv.jarmu-sheet .jarmu-unit-damage-row td {
