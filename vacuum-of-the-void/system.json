@@ -29,7 +29,8 @@
     "Actor": {
       "Karakter": {},
       "Npc": {},
-      "Jarmu": {}
+      "Jarmu": {},
+      "Bazis": {}
     },
     "Item": {
       "Fegyver": {},

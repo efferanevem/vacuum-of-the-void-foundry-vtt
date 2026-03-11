@@ -33,6 +33,11 @@
   align-items: stretch;
 }
 
+/* Bázis actor: a Név mező foglalja el a teljes szélességet a fejlécben. */
+.vacuum-of-the-void.sheet.actor.Bazis .jarmu-header-row {
+  grid-template-columns: 1fr;
+}
+
 .votv.jarmu-sheet .jarmu-header-field {
   display: flex;
   flex-direction: column;
@@ -75,6 +80,14 @@
   gap: 12px;
   margin-bottom: 12px;
   align-items: stretch;
+}
+
+/* Bázis actor: ne jelenjen meg a kép, csak a jobb oldali panel töltse ki a teret */
+.vacuum-of-the-void.sheet.actor.Bazis .jarmu-main {
+  grid-template-columns: 1fr;
+}
+.vacuum-of-the-void.sheet.actor.Bazis .jarmu-column.jarmu-left {
+  display: none;
 }
 
 /* Bal oszlop: kép mindig látszik, magasságot kitölti, szélesség igazodik (négyzet). Max az ablak fele. */
@@ -143,6 +156,65 @@
   max-width: 8em;
 }
 
+/* Bázis: Régió+Típus és Méret+Veszélyeztetettség egy-egy sorban, két cella */
+.votv.jarmu-sheet .jarmu-stat-row-duo {
+  display: flex;
+  gap: 12px;
+  align-items: stretch;
+}
+
+.votv.jarmu-sheet .jarmu-stat-row-duo .jarmu-stat-cell {
+  display: flex;
+  align-items: center;
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.votv.jarmu-sheet .jarmu-stat-row-duo .jarmu-stat-cell label {
+  flex: 0 0 auto;
+  min-width: 80px;
+}
+
+.votv.jarmu-sheet .jarmu-stat-row-duo .jarmu-stat-cell input[type="text"],
+.votv.jarmu-sheet .jarmu-stat-row-duo .jarmu-stat-cell input[type="number"],
+.votv.jarmu-sheet .jarmu-stat-row-duo .jarmu-stat-cell select {
+  flex: 1 1 auto;
+  min-width: 4em;
+  font-size: var(--votv-font-body);
+  padding: 4px 6px;
+  background-color: rgba(3, 6, 10, 0.9);
+  border: 1px solid var(--votv-border-muted);
+  color: var(--votv-text-main);
+  border-radius: 2px;
+  box-sizing: border-box;
+}
+
+.votv.jarmu-sheet .jarmu-stat-row-duo .jarmu-stat-cell select.jarmu-region-select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--votv-border-muted) 50%),
+    linear-gradient(135deg, var(--votv-border-muted) 50%, transparent 50%);
+  background-position: calc(100% - 12px) 50%, calc(100% - 7px) 50%;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+  padding-right: 20px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+.votv.jarmu-sheet .jarmu-stat-row-duo .jarmu-stat-cell select.jarmu-region-select option {
+  background-color: rgba(3, 6, 10, 0.95);
+  color: var(--votv-text-main);
+}
+
+.votv.jarmu-sheet .jarmu-stat-row-duo .jarmu-stat-cell .jarmu-header-size-value {
+  padding-top: 7px;
+  font-size: var(--votv-font-body);
+  color: var(--votv-text-main);
+}
+
 .votv.jarmu-sheet .jarmu-stat-row input[type="text"],
 .votv.jarmu-sheet .jarmu-stat-row input[type="number"] {
   width: 4em;
@@ -182,6 +254,28 @@
   color: var(--votv-text-muted);
 }
 
+/* Bázis: veszélyeztetettség sor – kisebb tér a mezők és a + között */
+.votv.jarmu-sheet .jarmu-stat-cell-threat {
+  gap: 2px;
+}
+
+/* Bázis: readonly összesített veszély – ugyanolyan design, mint .jarmu-storage-used */
+.votv.jarmu-sheet input.bazis-threat-total {
+  flex: 0 0 auto;
+  width: 4em;
+  min-width: 3em;
+  font-size: var(--votv-font-body);
+  padding: 2px 4px;
+  border: 1px solid var(--votv-border-muted);
+  color: var(--votv-text-main);
+  border-radius: 2px;
+  box-sizing: border-box;
+  text-align: right;
+}
+.votv.jarmu-sheet input.bazis-threat-total[readonly] {
+  background-color: rgba(60, 60, 70, 0.5) !important;
+}
+
 .votv.jarmu-sheet .jarmu-unit-speed-sum {
   font-size: var(--votv-font-body);
   color: var(--votv-text-muted);
@@ -209,7 +303,7 @@
   margin-top: 12px;
 }
 
-/* Járműegységek és Modulok szekció */
+/* Járműegységek / Helyiségek és Modulok szekció */
 .votv.jarmu-sheet .jarmu-section.jarmu-units h2 {
   margin: 0 0 6px;
   font-size: var(--votv-font-label);

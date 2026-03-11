@@ -1,5 +1,5 @@
-import { BaseActorDataModel, KarakterDataModel, JarmuDataModel, WeaponDataModel, ShieldDataModel, MicrochipDataModel, AbilityDataModel, TargyDataModel, EgyebDataModel, JarmuEgysegDataModel } from "../module/data-models/index.mjs";
-import { VoidKarakterSheet, VoidNpcSheet, VoidJarmuSheet, VoidWeaponSheet, VoidShieldSheet, VoidMicrochipSheet, VoidAbilitySheet, VoidTargySheet, VoidEgyebSheet, VoidJarmuEgysegSheet } from "../module/documents.mjs";
+import { BaseActorDataModel, KarakterDataModel, JarmuDataModel, BazisDataModel, WeaponDataModel, ShieldDataModel, MicrochipDataModel, AbilityDataModel, TargyDataModel, EgyebDataModel, JarmuEgysegDataModel } from "../module/data-models/index.mjs";
+import { VoidKarakterSheet, VoidNpcSheet, VoidJarmuSheet, VoidBazisSheet, VoidWeaponSheet, VoidShieldSheet, VoidMicrochipSheet, VoidAbilitySheet, VoidTargySheet, VoidEgyebSheet, VoidJarmuEgysegSheet } from "../module/documents.mjs";
 
 const VOTV_DEFAULT_SCENE_BG = "systems/vacuum-of-the-void/assets/void-bg.jpg";
 
@@ -29,6 +29,7 @@ Hooks.once("init", () => {
   CONFIG.Actor.dataModels.Karakter = KarakterDataModel;
   CONFIG.Actor.dataModels.Npc = BaseActorDataModel;
   CONFIG.Actor.dataModels.Jarmu = JarmuDataModel;
+   CONFIG.Actor.dataModels.Bazis = BazisDataModel;
 
   // Register item data models (weapon/ability = angol aliasok régi/importált adatokhoz, hogy ne legyen "type is not a valid type" hiba)
   CONFIG.Item.dataModels ??= {};
@@ -57,6 +58,7 @@ Hooks.once("init", () => {
   CONFIG.Actor.typeLabels.Karakter = "Karakter";
   CONFIG.Actor.typeLabels.Npc = "NPC";
   CONFIG.Actor.typeLabels.Jarmu = "Jármű";
+  CONFIG.Actor.typeLabels.Bazis = "Bázis";
 
   // Initiative: manuális beírás – formula kell, hogy az initiative oszlop megjelenjen
   CONFIG.Combat.initiative ??= {};
@@ -117,6 +119,11 @@ Hooks.once("init", () => {
     types: ["Jarmu"],
     makeDefault: true,
     label: "VOTV.JarmuSheet"
+  });
+  foundry.documents.collections.Actors.registerSheet("vacuum-of-the-void", VoidBazisSheet, {
+    types: ["Bazis"],
+    makeDefault: true,
+    label: "VOTV.BazisSheet"
   });
 
   // Register item sheets (Fegyver + weapon alias, Kepesseg + ability alias)

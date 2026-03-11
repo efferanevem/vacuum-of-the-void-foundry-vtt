@@ -100,6 +100,11 @@ export class BaseActorDataModel extends foundry.abstract.TypeDataModel {
           }),
           { required: false, initial: [] }
         )
+        ,
+        /** Általános veszélyeztetettség szint (Bázis lap használja, de bármely actor tárolhatja). */
+        threat: new NumberField({ required: false, integer: false, initial: 0 }),
+        /** Veszélyeztetettség kézi módosító (Bázis lap: readonly automata érték + írható bónusz). */
+        threatBonus: new NumberField({ required: false, integer: false, initial: 0 })
       }),
       skills: new SchemaField({
         deception: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
