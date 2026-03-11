@@ -209,7 +209,10 @@ export class VoidRollSheet extends Application {
     const advantageSources = [];
     const disadvantageSources = [];
     let disadvantageFromTarget = 0;
-    if (this._isWeaponAttack && game.user?.targets?.size) {
+    // Ha van kijelölt célpont, mindig vegyük át a nevét a dobólapra,
+    // és (ha releváns) az előny/hátrány forrásokat is számoljuk hozzá,
+    // nem csak fegyvertámadásnál.
+    if (game.user?.targets?.size) {
       const targets = Array.from(game.user.targets);
       const targetToken = targets[0];
       const targetActor = targetToken?.actor ?? null;
@@ -373,8 +376,10 @@ export class VoidRollSheet extends Application {
     let flavor = this._label;
     const flags = { resultType, critLabel };
 
-    // Ha fegyver támadás, és van kijelölt célpont, nézzük a Védelem értéket, és írjuk ki, hogy talált / nem talált.
-    if (this._isWeaponAttack && game.user?.targets?.size) {
+    // Ha van kijelölt célpont, nézzük a Védelem értékét, és számítsuk ki, hogy a dobás eléri-e.
+    // Fegyvertámadásnál megmarad a meglévő "weaponAttack" logika (sebzés gombbal),
+    // más dobásoknál csak egy egyszerű Találat/Nem talált sort jelenítünk meg.
+    if (game.user?.targets?.size) {
       const targets = Array.from(game.user.targets);
       const targetToken = targets[0];
       const targetActor = targetToken?.actor ?? null;
@@ -397,40 +402,54 @@ export class VoidRollSheet extends Application {
             if (Number.isFinite(v)) armorBonus += v;
           }
         }
-        const effectiveGivenProtection = rawGivenProtection + armorBonus + lookaroundBonus + halfcoverBonus + threequartercoverBonus;
+        const effectiveGivenProtection =
+          rawGivenProtection + armorBonus + lookaroundBonus + halfcoverBonus + threequartercoverBonus;
         const defenseTotal = defenseBase + defenseBonus + effectiveGivenProtection;
         const total = Number(combinedRoll.total ?? 0) || 0;
         const targetInFullCover = targetActor.statuses?.has?.("fullcover") ?? false;
         const isHit = !targetInFullCover && total >= defenseTotal;
         const targetName = targetActor.name ?? targetToken.name ?? "Célpont";
-        let hitLocationRoll = null;
-        let hitLocationName = null;
-        if (isHit && targetActor.type === "Karakter") {
-          try {
-            const d8 = new Roll("1d8");
-            await d8.evaluate({ async: true });
-            hitLocationRoll = Number(d8.total ?? 0) || 1;
-            if (hitLocationRoll === 1) hitLocationName = "Fej";
-            else if (hitLocationRoll >= 2 && hitLocationRoll <= 4) hitLocationName = "Törzs";
-            else if (hitLocationRoll === 5 || hitLocationRoll === 6) hitLocationName = "Karok";
-            else hitLocationName = "Lábak";
-          } catch (err) {
-            console.warn("VOTV hit location roll failed:", err);
+
+        // Fegyvertámadás: marad a meglévő weaponAttack + sebzés gomb logika.
+        if (this._isWeaponAttack) {
+          let hitLocationRoll = null;
+          let hitLocationName = null;
+          if (isHit && targetActor.type === "Karakter") {
+            try {
+              const d8 = new Roll("1d8");
+              await d8.evaluate({ async: true });
+              hitLocationRoll = Number(d8.total ?? 0) || 1;
+              if (hitLocationRoll === 1) hitLocationName = "Fej";
+              else if (hitLocationRoll >= 2 && hitLocationRoll <= 4) hitLocationName = "Törzs";
+              else if (hitLocationRoll === 5 || hitLocationRoll === 6) hitLocationName = "Karok";
+              else hitLocationName = "Lábak";
+            } catch (err) {
+              console.warn("VOTV hit location roll failed:", err);
+            }
           }
+          flags.weaponAttack = true;
+          flags.weapon = {
+            actorId: actor.id ?? null,
+            itemId: this._weaponItemId || null,
+            slotKey: this._weaponSlotKey || null,
+            damageFormula: this._weaponDamageFormula || null,
+            targetActorId: targetActor.id ?? null,
+            targetName,
+            defense: defenseTotal,
+            isHit,
+            hitLocationRoll: hitLocationRoll ?? null,
+            hitLocationName: hitLocationName ?? null
+          };
+        } else {
+          // Nem fegyvertámadás: csak "védelem ellen" találat / nem talált információ.
+          flags.vsDefense = true;
+          flags.vsDefenseInfo = {
+            targetActorId: targetActor.id ?? null,
+            targetName,
+            defense: defenseTotal,
+            isHit
+          };
         }
-        flags.weaponAttack = true;
-        flags.weapon = {
-          actorId: actor.id ?? null,
-          itemId: this._weaponItemId || null,
-          slotKey: this._weaponSlotKey || null,
-          damageFormula: this._weaponDamageFormula || null,
-          targetActorId: targetActor.id ?? null,
-          targetName,
-          defense: defenseTotal,
-          isHit,
-          hitLocationRoll: hitLocationRoll ?? null,
-          hitLocationName: hitLocationName ?? null
-        };
       }
     }
 

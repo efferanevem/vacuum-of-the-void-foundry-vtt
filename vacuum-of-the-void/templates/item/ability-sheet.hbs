@@ -12,6 +12,7 @@
           <option value="passive" {{#if (eq system.kind "passive")}}selected{{/if}}>Passzív</option>
           <option value="species" {{#if (eq system.kind "species")}}selected{{/if}}>Faji</option>
           <option value="background" {{#if (eq system.kind "background")}}selected{{/if}}>Háttér</option>
+          <option value="module" {{#if (eq system.kind "module")}}selected{{/if}}>Modul</option>
         </select>
       </div>
     </div>
@@ -19,7 +20,7 @@
 
   <section class="sheet-body">
     <div class="ability-grid">
-      {{#if (eq system.kind "active")}}
+      {{#if (or (eq system.kind "active") (eq system.kind "module"))}}
       <div class="field">
         <label>Küzdelmi Pont</label>
         <input type="number" name="system.kp" value="{{system.kp}}" min="0" />

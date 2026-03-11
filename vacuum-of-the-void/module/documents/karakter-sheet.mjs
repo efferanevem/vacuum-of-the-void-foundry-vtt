@@ -1457,6 +1457,11 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
           }
 
           const kind = (doc.system?.kind ?? "passive").toString();
+          // Modul típusú képességek csak járműegység lapra húzhatók, karakterlapra nem
+          if (kind === "module") {
+            ui.notifications?.warn?.("Modul típusú képességet csak Járműegység lapra lehet húzni.");
+            return;
+          }
           const abilities = this.actor.system.abilities ?? {};
 
           // Mindig a képesség típusa alapján: Faji / Háttér → egy slot, Aktív / Passzív → lista.

@@ -612,7 +612,9 @@ Hooks.on("renderChatMessageHTML", (message, html, data) => {
   const critLabel = flags.critLabel;
   const weaponAttack = flags.weaponAttack;
   const weaponInfo = flags.weapon;
-  if (!resultType && !critLabel && !weaponAttack) return;
+  const vsDefense = flags.vsDefense;
+  const vsDefenseInfo = flags.vsDefenseInfo;
+  if (!resultType && !critLabel && !weaponAttack && !vsDefense) return;
 
   const rollEl = html?.querySelector?.(".dice-roll");
   if (!rollEl) return;
@@ -675,6 +677,24 @@ Hooks.on("renderChatMessageHTML", (message, html, data) => {
         btn.dataset.messageId = String(message.id ?? "");
         container.appendChild(btn);
       }
+    }
+  }
+
+  // Nem fegyvertámadás, de célpont elleni dobás: egyszerű Találat / Nem talált sor a chatben.
+  if (!weaponAttack && vsDefense && vsDefenseInfo) {
+    const totalEl = rollEl.querySelector(".dice-total");
+    const container = totalEl?.parentElement ?? rollEl;
+
+    const existingOutcome = rollEl.querySelector(".votv-defense-outcome");
+    if (!existingOutcome) {
+      const outcomeEl = document.createElement("div");
+      outcomeEl.className = "votv-defense-outcome";
+      const isHit = !!vsDefenseInfo.isHit;
+      const targetName = vsDefenseInfo.targetName || "Célpont";
+      outcomeEl.textContent = isHit
+        ? `Találat – ${targetName}`
+        : `Nem talált – ${targetName}`;
+      container.appendChild(outcomeEl);
     }
   }
 });

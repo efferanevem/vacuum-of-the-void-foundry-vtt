@@ -66,8 +66,7 @@
 }
 
 .votv.jarmu-sheet .jarmu-header-field.jarmu-header-size .jarmu-header-size-value {
-  display: inline;
-  font-size: var(--votv-font-body);
+  padding-top: 7px;
 }
 
 .votv.jarmu-sheet .jarmu-main {
@@ -231,6 +230,55 @@
   border-radius: var(--votv-radius);
   padding: 10px;
   background: var(--votv-panel-bg);
+}
+
+/* Jármű raktár kapacitás sor – a Raktár címhez igazítva, jobbra húzva */
+.votv.jarmu-sheet .jarmu-raktar {
+  position: relative;
+}
+
+.votv.jarmu-sheet .jarmu-storage-header {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--votv-font-body);
+  padding: 5px;
+}
+
+.votv.jarmu-sheet .jarmu-storage-label {
+  color: var(--votv-text-muted);
+}
+
+.votv.jarmu-sheet .jarmu-storage-values {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.votv.jarmu-sheet .jarmu-storage-used,
+.votv.jarmu-sheet .jarmu-storage-max {
+  width: 4em;
+  min-width: 3em;
+  font-size: var(--votv-font-body);
+  padding: 2px 4px;
+  background-color: rgba(3, 6, 10, 0.9);
+  border: 1px solid var(--votv-border-muted);
+  color: var(--votv-text-main);
+  border-radius: 2px;
+  box-sizing: border-box;
+  text-align: right;
+}
+
+.votv.jarmu-sheet .jarmu-storage-used[readonly] {
+  background-color: rgba(60, 60, 70, 0.5);
+}
+
+.votv.jarmu-sheet .jarmu-storage-slash {
+  padding: 0 2px;
+  color: var(--votv-text-muted);
 }
 
 .votv.jarmu-sheet .jarmu-units-table {

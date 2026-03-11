@@ -171,6 +171,17 @@ body.system-vacuum-of-the-void .dice-roll .votv-weapon-damage-chat:hover {
   background: rgba(43, 255, 136, 0.25);
 }
 
+/* Célpont elleni nem-fegyver dobások eredménye (Találat / Nem talált) – középre igazítva a chatben */
+body.system-vacuum-of-the-void .dice-roll .votv-defense-outcome {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  margin-top: 4px;
+  text-align: center;
+  font-size: 12px;
+  opacity: 0.9;
+}
+
 /* Roll sheet: célpont felirat */
 .vacuum-of-the-void .roll-sheet .roll-sheet-target {
   margin-top: 2px;

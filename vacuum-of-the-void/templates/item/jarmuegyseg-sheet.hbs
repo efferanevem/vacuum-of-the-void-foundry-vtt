@@ -63,7 +63,13 @@
                   data-item-ref="{{this.ref}}"
                   title="{{this.name}}"
                 >
-                  {{this.name}}{{#if this.kpDisplay}} ({{this.kpDisplay}} KP){{/if}}
+                  {{#if (eq this.kind "module")}}<strong>Modul:</strong> {{/if}}
+                  {{#if (eq this.kind "module")}}
+                    <strong>{{this.name}}</strong>
+                  {{else}}
+                    {{this.name}}
+                  {{/if}}
+                  {{#if this.kpDisplay}} ({{this.kpDisplay}} KP){{/if}}
                 </span>
               </div>
               <div class="karakter-ability-actions">

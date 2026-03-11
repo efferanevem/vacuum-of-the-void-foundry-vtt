@@ -257,6 +257,9 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
     const unitsTable = [];
     let unitSpeedSum = 0;
     let unitRangeSum = 0;
+    let totalStorageUsed = 0;
+    const vehicleStorageMax = Number(this.actor.system?.vehicle?.storage ?? 0) || 0;
+
     for (const item of unitDocs) {
       const sys = item?.system ?? {};
       const health = sys.health ?? {};
@@ -284,6 +287,11 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
       const unitRangeNum = Number(unitRangeRaw);
       if (Number.isFinite(unitRangeNum)) unitRangeSum += unitRangeNum;
       const damage = (sys.damage ?? "").toString().trim();
+
+      // Raktár kapacitás: járműegység storage mezőjének összege
+      const unitStorageRaw = (sys.storage ?? "").toString().trim().replace(",", ".");
+      const unitStorageNum = Number(unitStorageRaw);
+      if (Number.isFinite(unitStorageNum)) totalStorageUsed += unitStorageNum;
 
       const abilities = sys.abilities ?? {};
       const abilityRefs = Array.isArray(abilities.items) ? abilities.items : [];
@@ -332,6 +340,8 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
       });
     }
     context.unitsTable = unitsTable;
+    context.totalStorageUsed = totalStorageUsed;
+    context.vehicleStorageMax = vehicleStorageMax;
 
     // Jármű méret automatikus meghatározása a járműegységek száma alapján.
     const unitCount = unitDocs.length;
@@ -352,6 +362,7 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
       sizeDefensePenalty = 0;
     }
     context.sizeForSelect = sizeLabel;
+    context.unitCount = unitCount;
     context.sizeSpeedPenalty = sizeSpeedPenalty;
     context.sizeDefensePenalty = sizeDefensePenalty;
 
@@ -362,7 +373,7 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
       foundry.utils.duplicate(this.actor.system ?? {}),
       {
         combat: { speed: totalSpeed },
-        vehicle: { toolsRange: totalRange },
+        vehicle: { toolsRange: totalRange, storage: vehicleStorageMax },
         identity: { size: sizeLabel }
       },
       { inplace: false }

@@ -6,7 +6,7 @@ export class AbilityDataModel extends foundry.abstract.TypeDataModel {
       kind: new StringField({
         required: true,
         blank: false,
-        options: ["active", "passive", "species", "background"],
+        options: ["active", "passive", "species", "background", "module"],
         initial: "passive"
       }),
       description: new StringField({

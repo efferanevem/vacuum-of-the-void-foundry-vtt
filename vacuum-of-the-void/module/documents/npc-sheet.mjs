@@ -820,13 +820,18 @@ export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplication
 
     // Képesség: minden (aktív/passzív/stb.) a Képességek szekció alá kerül
     if (doc.type === "Kepesseg" || doc.type === "ability") {
+      const kind = (doc.system?.kind ?? "passive").toString();
+      // Modul típusú képességek csak járműegység lapra húzhatók, NPC lapra nem
+      if (kind === "module") {
+        ui.notifications?.warn?.("Modul típusú képességet csak Járműegység lapra lehet húzni.");
+        return;
+      }
       let itemId = doc.id;
       if (doc.parent?.id !== actor.id) {
         const itemData = foundry.utils.mergeObject(doc.toObject(), { type: "Kepesseg" });
         const created = await actor.createEmbeddedDocuments("Item", [itemData]);
         itemId = created[0]?.id ?? itemId;
       }
-      const kind = (doc.system?.kind ?? "passive").toString();
       const abilities = actor.system?.abilities ?? {};
       const area = kind === "active" ? "active" : "passive";
       const current = Array.isArray(abilities[area]?.items) ? abilities[area].items.slice() : Array.isArray(abilities[area]) ? abilities[area].slice() : [];

@@ -11,7 +11,7 @@
       </div>
       <div class="jarmu-header-field jarmu-header-size">
         <label>Méret</label>
-        <span class="jarmu-header-size-value">{{sizeForSelect}}</span>
+        <span class="jarmu-header-size-value">{{sizeForSelect}} ({{unitCount}} egység)</span>
       </div>
     </div>
   </header>
@@ -144,7 +144,12 @@
                       {{#each this.abilities}}
                         <div class="jarmu-unit-ability-pill jarmu-unit-ability-line" data-ability-ref="{{this.ref}}" data-ability-id="{{this.id}}">
                           <span class="jarmu-unit-ability-name">
-                            {{this.name}}
+                            {{#if (eq this.kind "module")}}<strong>Modul:</strong> {{/if}}
+                            {{#if (eq this.kind "module")}}
+                              <strong>{{this.name}}</strong>
+                            {{else}}
+                              {{this.name}}
+                            {{/if}}
                             {{#if this.kpDisplay}}
                               <span class="jarmu-unit-ability-kp">({{this.kpDisplay}} KP)</span>
                             {{/if}}
@@ -171,6 +176,25 @@
 
   <section class="jarmu-section jarmu-raktar karakter-panel karakter-equipment">
     <h2>Raktár</h2>
+    <div class="jarmu-storage-header">
+      <span class="jarmu-storage-label">Raktárkapacitás:</span>
+      <span class="jarmu-storage-values">
+        <input
+          type="number"
+          class="jarmu-storage-used"
+          value="{{totalStorageUsed}}"
+          readonly
+        />
+        <span class="jarmu-storage-slash">/</span>
+        <input
+          type="number"
+          name="system.vehicle.storage"
+          class="jarmu-storage-max"
+          value="{{vehicleStorageMax}}"
+          min="0"
+        />
+      </span>
+    </div>
     {{#if showEquipmentDropZone}}
     <div class="npc-equipment-drop-zone karakter-equipment-drop-zone" data-drop-zone="targy">
       <p class="npc-equipment-drop-placeholder karakter-equipment-placeholder">Húzz ide bármilyen felszerelést</p>

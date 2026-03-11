@@ -843,6 +843,12 @@
   flex: 1 1 0;
 }
 
+/* Célpont elleni nem-fegyver dobások eredménye (Találat / Nem talált) – középre igazítva */
+.votv.karakter-sheet .votv-defense-outcome {
+  text-align: center;
+  margin-top: 4px;
+}
+
 /* Képességek (abilities) grid */
 .votv.karakter-sheet .karakter-abilities-grid {
   display: flex;
