@@ -685,16 +685,33 @@ Hooks.on("renderChatMessageHTML", (message, html, data) => {
     const totalEl = rollEl.querySelector(".dice-total");
     const container = totalEl?.parentElement ?? rollEl;
 
-    const existingOutcome = rollEl.querySelector(".votv-defense-outcome");
-    if (!existingOutcome) {
-      const outcomeEl = document.createElement("div");
+    const isHit = !!vsDefenseInfo.isHit;
+    const targetName = vsDefenseInfo.targetName || "Célpont";
+    const hitRoll = vsDefenseInfo.hitLocationRoll;
+    const hitName = vsDefenseInfo.hitLocationName;
+
+    let outcomeEl = rollEl.querySelector(".votv-defense-outcome");
+    if (!outcomeEl) {
+      outcomeEl = document.createElement("div");
       outcomeEl.className = "votv-defense-outcome";
-      const isHit = !!vsDefenseInfo.isHit;
-      const targetName = vsDefenseInfo.targetName || "Célpont";
-      outcomeEl.textContent = isHit
-        ? `Találat – ${targetName}`
-        : `Nem talált – ${targetName}`;
       container.appendChild(outcomeEl);
+    }
+    outcomeEl.textContent = isHit
+      ? `Találat – ${targetName}`
+      : `Nem talált – ${targetName}`;
+
+    // Találati hely külön sorban, nagyobb betűvel, ha egyértelműen meghatározható volt.
+    const existingHitLoc = rollEl.querySelector(".votv-defense-hitloc");
+    if (isHit && hitRoll != null && hitName) {
+      let hitLocEl = existingHitLoc;
+      if (!hitLocEl) {
+        hitLocEl = document.createElement("div");
+        hitLocEl.className = "votv-defense-hitloc";
+        container.appendChild(hitLocEl);
+      }
+      hitLocEl.textContent = `Találati Hely ${hitRoll} - ${hitName}`;
+    } else if (existingHitLoc) {
+      existingHitLoc.remove();
     }
   }
 });

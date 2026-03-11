@@ -182,6 +182,14 @@ body.system-vacuum-of-the-void .dice-roll .votv-defense-outcome {
   opacity: 0.9;
 }
 
+/* Nem-fegyver dobások találati helye – egy sorral lejjebb, nagyobb betűvel */
+body.system-vacuum-of-the-void .dice-roll .votv-defense-hitloc {
+  margin-top: 2px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+}
+
 /* Roll sheet: célpont felirat */
 .vacuum-of-the-void .roll-sheet .roll-sheet-target {
   margin-top: 2px;

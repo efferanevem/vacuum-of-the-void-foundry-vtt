@@ -470,11 +470,11 @@ export class VoidRollSheet extends Application {
         const isHit = !targetInFullCover && total >= defenseTotal;
         const targetName = targetActor.name ?? targetToken.name ?? "Célpont";
 
-        // Fegyvertámadás: marad a meglévő weaponAttack + sebzés gomb logika.
-        if (this._isWeaponAttack) {
-          let hitLocationRoll = null;
-          let hitLocationName = null;
-          if (isHit && targetActor.type === "Karakter") {
+        // Találati hely meghatározása: Karakter → d8, Jármű → járműegységek találati értékei alapján
+        let hitLocationRoll = null;
+        let hitLocationName = null;
+        if (isHit) {
+          if (targetActor.type === "Karakter") {
             try {
               const d8 = new Roll("1d8");
               await d8.evaluate({ async: true });
@@ -486,7 +486,59 @@ export class VoidRollSheet extends Application {
             } catch (err) {
               console.warn("VOTV hit location roll failed:", err);
             }
+          } else if (targetActor.type === "Jarmu") {
+            try {
+              const unitItems = (targetActor.items?.contents ?? []).filter((i) => i.type === "Jarmuegyseg");
+              const parsed = [];
+              let maxUpper = 0;
+              for (const u of unitItems) {
+                const sysUnit = u.system ?? {};
+                const rawHit = (sysUnit.hit ?? "").toString().trim();
+                if (!rawHit) continue;
+                const normalized = rawHit.replace(/[–—]/g, "-");
+                const partsHit = normalized.split(/[,;\s]+/);
+                const segments = [];
+                for (const part of partsHit) {
+                  if (!part) continue;
+                  if (part.includes("-")) {
+                    const [aRaw, bRaw] = part.split("-");
+                    let a = Number(aRaw);
+                    let b = Number(bRaw);
+                    if (!Number.isFinite(a) || !Number.isFinite(b)) continue;
+                    if (b < a) [a, b] = [b, a];
+                    segments.push({ from: a, to: b });
+                    if (b > maxUpper) maxUpper = b;
+                  } else {
+                    const n = Number(part);
+                    if (!Number.isFinite(n)) continue;
+                    segments.push({ from: n, to: n });
+                    if (n > maxUpper) maxUpper = n;
+                  }
+                }
+                if (segments.length) {
+                  parsed.push({ unit: u, segments });
+                }
+              }
+              if (maxUpper >= 1 && parsed.length) {
+                const d = new Roll(`1d${maxUpper}`);
+                await d.evaluate({ async: true });
+                const v = Number(d.total ?? 0) || 1;
+                const matches = parsed.filter((entry) =>
+                  entry.segments.some((seg) => v >= seg.from && v <= seg.to)
+                );
+                if (matches.length === 1) {
+                  hitLocationRoll = v;
+                  hitLocationName = matches[0].unit.name ?? "";
+                }
+              }
+            } catch (err) {
+              console.warn("VOTV vehicle hit-location roll failed:", err);
+            }
           }
+        }
+
+        // Fegyvertámadás: marad a meglévő weaponAttack + sebzés gomb logika.
+        if (this._isWeaponAttack) {
           flags.weaponAttack = true;
           flags.weapon = {
             actorId: actor.id ?? null,
@@ -507,7 +559,9 @@ export class VoidRollSheet extends Application {
             targetActorId: targetActor.id ?? null,
             targetName,
             defense: defenseTotal,
-            isHit
+            isHit,
+            hitLocationRoll: hitLocationRoll ?? null,
+            hitLocationName: hitLocationName ?? null
           };
         }
       }
