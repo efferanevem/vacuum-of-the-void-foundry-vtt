@@ -208,6 +208,34 @@
   outline: none;
 }
 
+/* Távolság mező – ugyanaz a design, mint az Egyéb Bónusz mezőnél, TE egységgel egy sorban */
+.votv.roll-sheet .roll-sheet-row-distance .roll-sheet-distance-wrap {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.votv.roll-sheet .roll-sheet-distance {
+  flex: 1 1 auto;
+  min-width: 0;
+  box-sizing: border-box;
+  padding: 4px 8px;
+  text-align: center;
+  background-color: rgba(3, 6, 10, 0.9);
+  border: 1px solid rgba(245, 100, 80, 0.9);
+  color: var(--votv-text-main);
+  border-radius: 2px;
+  font-size: var(--votv-font-body);
+}
+
+.votv.roll-sheet .roll-sheet-distance-unit {
+  font-size: var(--votv-font-body);
+  color: var(--votv-text-muted);
+  white-space: nowrap;
+}
+
 .votv.roll-sheet .roll-sheet-formula-preview {
   margin-top: 6px;
   padding: 4px 0;

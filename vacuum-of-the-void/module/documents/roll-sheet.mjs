@@ -205,6 +205,7 @@ export class VoidRollSheet extends Application {
     const formulaText = ["3d6", basePart, injuryPart, injuryPenaltyPart].filter(Boolean).join(" ") || "3d6";
 
     let targetLabel = "";
+    let requireDistanceVsDefense = false;
     let advantageFromTarget = 0;
     const advantageSources = [];
     const disadvantageSources = [];
@@ -217,6 +218,22 @@ export class VoidRollSheet extends Application {
       const targetToken = targets[0];
       const targetActor = targetToken?.actor ?? null;
       targetLabel = targetActor?.name || targetToken?.name || "";
+      // Speciális célpontok (járművek / gigantikusak): távolság mező kötelező
+      if (targetActor) {
+        const sizeRaw = (targetActor.system?.identity?.size ?? "").toString().trim();
+        const SPECIAL_SIZES = [
+          "Jármű (Kicsi)",
+          "Jármű (Közepes)",
+          "Jármű (Nagy)",
+          "Gigantikus (Kicsi)",
+          "Gigantikus (Közepes)",
+          "Gigantikus (Nagy)"
+        ];
+        // Speciális nagy célpontoknál ÉS minden Jármű típusú aktornál kötelező a távolság mező
+        if (SPECIAL_SIZES.includes(sizeRaw) || targetActor.type === "Jarmu") {
+          requireDistanceVsDefense = true;
+        }
+      }
       // Kábult / Eszméletlen / Megragadott: mindegyik +1 előny, stackelődnek (3 db = 3 előny)
       if (targetActor?.statuses?.has?.("stunned")) {
         advantageFromTarget += 1;
@@ -278,7 +295,8 @@ export class VoidRollSheet extends Application {
       baseModifier: this._baseModifier,
       injuryModifier: this._injuryModifier,
       injuryPenalty: this._injuryPenalty,
-      targetLabel
+      targetLabel,
+      requireDistanceVsDefense
     };
   }
 
@@ -384,27 +402,69 @@ export class VoidRollSheet extends Application {
       const targetToken = targets[0];
       const targetActor = targetToken?.actor ?? null;
       if (targetActor) {
+        // Speciális méretű célpontoknál és minden Jármű típusú célpontnál a Távolság mező kötelező,
+        // és a megadott távolság hozzáadódik a Védelmükhöz.
+        let distanceBonus = 0;
+        const sizeRaw = (targetActor.system?.identity?.size ?? "").toString().trim();
+        const SPECIAL_SIZES = [
+          "Jármű (Kicsi)",
+          "Jármű (Közepes)",
+          "Jármű (Nagy)",
+          "Gigantikus (Kicsi)",
+          "Gigantikus (Közepes)",
+          "Gigantikus (Nagy)"
+        ];
+        const needsDistance = SPECIAL_SIZES.includes(sizeRaw) || targetActor.type === "Jarmu";
+        if (needsDistance) {
+          const distanceInput = form.querySelector("input[name='targetDistance']");
+          const rawDist = (distanceInput?.value ?? "").trim();
+          if (rawDist === "") {
+            ui.notifications?.warn?.("Távolság megadása kötelező ennél a célpontnál.");
+            return;
+          }
+          const distVal = Number(rawDist);
+          if (!Number.isFinite(distVal) || distVal < 0) {
+            ui.notifications?.warn?.("A Távolság mezőben nem érvényes szám szerepel.");
+            return;
+          }
+          distanceBonus = distVal;
+        }
         const combat = targetActor.system?.combat ?? {};
         const defenseBase = Number(combat.defense ?? 0) || 0;
         const defenseBonus = Number(combat.defenseBonus ?? 0) || 0;
-        const rawGivenProtection = Number(combat.givenProtection ?? 0) || 0;
-        const lookaroundBonus = targetActor.statuses?.has?.("lookaround") ? 1 : 0;
-        const halfcoverBonus = targetActor.statuses?.has?.("halfcover") ? 3 : 0;
-        const threequartercoverBonus = targetActor.statuses?.has?.("threequarteredcover") ? 6 : 0;
-        let armorBonus = 0;
-        if (targetActor.type === "Karakter") {
-          const armorItems = (targetActor.items?.contents ?? []).filter(
-            (i) => i.type === "Pancel" && (i.system?.equipped === true)
-          );
-          for (const item of armorItems) {
-            const raw = String(item.system?.protectionBonus ?? "").trim().replace(",", ".");
-            const v = Number(raw);
-            if (Number.isFinite(v)) armorBonus += v;
+
+        let defenseTotal;
+        if (targetActor.type === "Jarmu") {
+          // Jármű: Védelem = alap Védelem + méret miatti módosító + fedezék bónuszok + Távolság
+          const unitCount = (targetActor.items?.contents ?? []).filter((i) => i.type === "Jarmuegyseg").length;
+          let sizeDefensePenalty = 0;
+          if (unitCount >= 11) sizeDefensePenalty = -6;
+          else if (unitCount >= 6) sizeDefensePenalty = -3;
+          // Fedezék bónuszok járműre is érvényesek
+          const halfcoverBonus = targetActor.statuses?.has?.("halfcover") ? 3 : 0;
+          const threequartercoverBonus = targetActor.statuses?.has?.("threequarteredcover") ? 6 : 0;
+          defenseTotal = defenseBase + sizeDefensePenalty + halfcoverBonus + threequartercoverBonus + distanceBonus;
+        } else {
+          // Egyéb célpontok: meglévő logika (kapott védelem, páncél, fedezék) + Távolság
+          const rawGivenProtection = Number(combat.givenProtection ?? 0) || 0;
+          const lookaroundBonus = targetActor.statuses?.has?.("lookaround") ? 1 : 0;
+          const halfcoverBonus = targetActor.statuses?.has?.("halfcover") ? 3 : 0;
+          const threequartercoverBonus = targetActor.statuses?.has?.("threequarteredcover") ? 6 : 0;
+          let armorBonus = 0;
+          if (targetActor.type === "Karakter") {
+            const armorItems = (targetActor.items?.contents ?? []).filter(
+              (i) => i.type === "Pancel" && (i.system?.equipped === true)
+            );
+            for (const item of armorItems) {
+              const raw = String(item.system?.protectionBonus ?? "").trim().replace(",", ".");
+              const v = Number(raw);
+              if (Number.isFinite(v)) armorBonus += v;
+            }
           }
+          const effectiveGivenProtection =
+            rawGivenProtection + armorBonus + lookaroundBonus + halfcoverBonus + threequartercoverBonus;
+          defenseTotal = defenseBase + defenseBonus + effectiveGivenProtection + distanceBonus;
         }
-        const effectiveGivenProtection =
-          rawGivenProtection + armorBonus + lookaroundBonus + halfcoverBonus + threequartercoverBonus;
-        const defenseTotal = defenseBase + defenseBonus + effectiveGivenProtection;
         const total = Number(combinedRoll.total ?? 0) || 0;
         const targetInFullCover = targetActor.statuses?.has?.("fullcover") ?? false;
         const isHit = !targetInFullCover && total >= defenseTotal;

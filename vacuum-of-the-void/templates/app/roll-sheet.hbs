@@ -38,6 +38,16 @@
     </div>
   </div>
 
+  {{#if requireDistanceVsDefense}}
+    <div class="roll-sheet-row roll-sheet-row-distance">
+      <label>Távolság:</label>
+      <div class="roll-sheet-distance-wrap">
+        <input type="number" name="targetDistance" class="roll-sheet-distance" value="0" min="0" />
+        <span class="roll-sheet-distance-unit">TE</span>
+      </div>
+    </div>
+  {{/if}}
+
   <div class="roll-sheet-row roll-sheet-row-constant">
     <label>Egyéb Bónusz:</label>
     <div class="roll-sheet-constant-wrap">
