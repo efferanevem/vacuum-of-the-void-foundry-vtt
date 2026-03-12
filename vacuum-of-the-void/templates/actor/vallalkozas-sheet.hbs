@@ -1,0 +1,619 @@
+<form class="votv vallalkozas-sheet karakter-sheet" autocomplete="off">
+  <header class="karakter-header vallalkozas-header">
+    <div class="karakter-header-row vallalkozas-header-row">
+      <div class="karakter-header-field karakter-header-name">
+        <label>Név</label>
+        <input type="text" name="name" value="{{actor.name}}" data-dtype="String" />
+      </div>
+      <div class="karakter-header-field vallalkozas-header-kind">
+        <label>Vállalkozás fajtája</label>
+        <select name="system.vallalkozas.kind" data-dtype="String" class="vallalkozas-select">
+          {{#select system.vallalkozas.kind}}
+          <option value=""></option>
+          <option value="Szolgáltatások">Szolgáltatások</option>
+          <option value="Gyártás">Gyártás</option>
+          <option value="Milícia">Milícia</option>
+          {{/select}}
+        </select>
+      </div>
+      <div class="karakter-header-field vallalkozas-header-level">
+        <label>Szint</label>
+        <input type="number" name="system.vallalkozas.level" value="{{system.vallalkozas.level}}" min="1" />
+      </div>
+      <div class="karakter-header-field vallalkozas-header-employees">
+        <label>Alkalmazottak</label>
+        <div class="vallalkozas-employees-summary">
+          <input
+            type="number"
+            name="system.vallalkozas.employeesCurrent"
+            value="{{system.vallalkozas.employeesCurrent}}"
+            min="0"
+          />
+          <span>/</span>
+          <input
+            type="number"
+            name="system.vallalkozas.employeesMax"
+            value="{{system.vallalkozas.employeesMax}}"
+            min="0"
+          />
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section class="vallalkozas-main">
+    <section class="karakter-panel vallalkozas-employees-panel">
+      <h2>Alkalmazottak</h2>
+      <table class="karakter-equipment-table vallalkozas-employees-table">
+        <thead>
+          <tr>
+            <th class="vallalkozas-employees-th-type">Típus</th>
+            <th class="vallalkozas-employees-th-level">Szint</th>
+            <th class="vallalkozas-employees-th-count">Szám</th>
+            <th class="vallalkozas-employees-th-bonus">Bónusz</th>
+            <th class="vallalkozas-employees-th-delete"></th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each system.vallalkozas.employees}}
+            <tr class="karakter-equipment-row vallalkozas-employee-row" data-index="{{@index}}">
+              <td class="vallalkozas-employee-cell-type">
+                <input
+                  type="text"
+                  name="system.vallalkozas.employees.{{@index}}.type"
+                  value="{{this.type}}"
+                />
+              </td>
+              <td class="vallalkozas-employee-cell-level">
+                <input
+                  type="number"
+                  name="system.vallalkozas.employees.{{@index}}.level"
+                  value="{{this.level}}"
+                  min="0"
+                />
+              </td>
+              <td class="vallalkozas-employee-cell-count">
+                <input
+                  type="number"
+                  name="system.vallalkozas.employees.{{@index}}.count"
+                  value="{{this.count}}"
+                  min="0"
+                />
+              </td>
+              <td class="vallalkozas-employee-cell-bonus">
+                <input
+                  type="text"
+                  name="system.vallalkozas.employees.{{@index}}.bonus"
+                  value="{{this.bonus}}"
+                />
+              </td>
+              <td class="vallalkozas-employee-cell-delete">
+                <button
+                  type="button"
+                  class="karakter-equipment-delete vallalkozas-employee-delete"
+                  data-index="{{@index}}"
+                  title="Alt+klikk: Sor törlése"
+                >✕</button>
+              </td>
+            </tr>
+          {{/each}}
+        </tbody>
+      </table>
+      <button type="button" class="vallalkozas-employee-add" title="Új alkalmazott sor hozzáadása">+</button>
+    </section>
+
+    <section class="karakter-panel vallalkozas-level-bonus">
+      <h2>Szint által adott bónuszok</h2>
+      <textarea
+        name="system.vallalkozas.levelBonuses"
+        data-dtype="String"
+        rows="3"
+        placeholder="Ide írd a vállalkozás szintjei által adott bónuszokat…"
+      >{{system.vallalkozas.levelBonuses}}</textarea>
+    </section>
+
+    {{#if (eq system.vallalkozas.kind "Szolgáltatások")}}
+      <section class="karakter-panel vallalkozas-services-panel">
+        <h2>Szolgáltatások</h2>
+        <div class="vallalkozas-services-row">
+          <div class="vallalkozas-services-field">
+            <label>Szolgáltatás Típusa</label>
+            <input
+              type="text"
+              name="system.vallalkozas.servicesType"
+              value="{{system.vallalkozas.servicesType}}"
+              data-dtype="String"
+            />
+          </div>
+          <div class="vallalkozas-services-field vallalkozas-services-income">
+            <label>Bevétel / Idő</label>
+            <div class="vallalkozas-services-income-row">
+              <input
+                type="number"
+                name="system.vallalkozas.servicesIncomeAmount"
+                value="{{system.vallalkozas.servicesIncomeAmount}}"
+                min="0"
+                step="0.01"
+                data-dtype="Number"
+              />
+              <span class="vallalkozas-services-unit">cr /</span>
+              <input
+                type="text"
+                name="system.vallalkozas.servicesIncomePeriod"
+                value="{{system.vallalkozas.servicesIncomePeriod}}"
+                placeholder="pl. hét"
+                data-dtype="String"
+              />
+            </div>
+          </div>
+        </div>
+
+        <h3 class="karakter-health-status-title">Marketing</h3>
+        <div class="vallalkozas-marketing-row">
+          <div class="vallalkozas-marketing-field">
+            <label>Marketing Típusa</label>
+            <input
+              type="text"
+              name="system.vallalkozas.marketingType"
+              value="{{system.vallalkozas.marketingType}}"
+              data-dtype="String"
+            />
+          </div>
+          <div class="vallalkozas-marketing-field vallalkozas-marketing-cost">
+            <label>Ára / Hét</label>
+            <div class="vallalkozas-marketing-cost-row">
+              <input
+                type="number"
+                name="system.vallalkozas.marketingCostPerWeek"
+                value="{{system.vallalkozas.marketingCostPerWeek}}"
+                min="0"
+                step="0.01"
+                data-dtype="Number"
+              />
+              <span class="vallalkozas-marketing-unit">cr</span>
+            </div>
+          </div>
+          <div class="vallalkozas-marketing-field vallalkozas-marketing-profit">
+            <label>Profit</label>
+            <div class="vallalkozas-marketing-profit-row">
+              <input
+                type="number"
+                name="system.vallalkozas.marketingProfitPercent"
+                value="{{system.vallalkozas.marketingProfitPercent}}"
+                step="0.1"
+                data-dtype="Number"
+              />
+              <span class="vallalkozas-marketing-unit">%</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    {{/if}}
+
+    {{#if (eq system.vallalkozas.kind "Gyártás")}}
+      <section class="karakter-panel vallalkozas-gyartas-panel">
+        <h2>Gyártás</h2>
+        <div class="vallalkozas-gyartas-row">
+          <div class="vallalkozas-gyartas-field">
+            <label>Gyártási Specializálódás</label>
+            <input
+              type="text"
+              name="system.vallalkozas.manufacturingSpecialization"
+              value="{{system.vallalkozas.manufacturingSpecialization}}"
+              data-dtype="String"
+            />
+          </div>
+        </div>
+        <div class="vallalkozas-gyartas-field">
+          <label>Gyártható Dolgok Listája</label>
+          <textarea
+            name="system.vallalkozas.manufacturingProducts"
+            data-dtype="String"
+            rows="3"
+            placeholder="Írd ide, milyen termékek gyárthatók…"
+          >{{system.vallalkozas.manufacturingProducts}}</textarea>
+        </div>
+
+        <h3 class="karakter-health-status-title">Gyártósor</h3>
+        <table class="karakter-equipment-table vallalkozas-production-table">
+          <thead>
+            <tr>
+              <th class="vallalkozas-production-th-product">Gyártott Termék</th>
+              <th class="vallalkozas-production-th-count">Szám</th>
+              <th class="vallalkozas-production-th-time">Gyártási Idő</th>
+              <th class="vallalkozas-production-th-delete"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each system.vallalkozas.productionLines}}
+              <tr class="karakter-equipment-row vallalkozas-production-row" data-index="{{@index}}">
+                <td class="vallalkozas-production-cell-product">
+                  <input
+                    type="text"
+                    name="system.vallalkozas.productionLines.{{@index}}.product"
+                    value="{{this.product}}"
+                  />
+                </td>
+                <td class="vallalkozas-production-cell-count">
+                  <input
+                    type="number"
+                    name="system.vallalkozas.productionLines.{{@index}}.count"
+                    value="{{this.count}}"
+                    min="0"
+                  />
+                </td>
+                <td class="vallalkozas-production-cell-time">
+                  <input
+                    type="text"
+                    name="system.vallalkozas.productionLines.{{@index}}.time"
+                    value="{{this.time}}"
+                    placeholder="pl. 1 hét"
+                  />
+                </td>
+                <td class="vallalkozas-production-cell-delete">
+                  <button
+                    type="button"
+                    class="karakter-equipment-delete vallalkozas-production-delete"
+                    data-index="{{@index}}"
+                    title="Alt+klikk: Sor törlése"
+                  >✕</button>
+                </td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+        <button type="button" class="vallalkozas-production-add" title="Új gyártósor sor hozzáadása">+</button>
+      </section>
+    {{/if}}
+
+    {{#if (eq system.vallalkozas.kind "Milícia")}}
+      <section class="karakter-panel vallalkozas-milicia-panel">
+        <h2>Milícia</h2>
+
+        <div class="vallalkozas-milicia-header">
+          <div class="vallalkozas-milicia-field">
+            <label>Erő Pont</label>
+            <input
+              type="number"
+              name="system.vallalkozas.militiaPower"
+              value="{{system.vallalkozas.militiaPower}}"
+              min="0"
+              data-dtype="Number"
+            />
+          </div>
+          <div class="vallalkozas-milicia-field">
+            <label>Morál Pont</label>
+            <input
+              type="number"
+              name="system.vallalkozas.militiaMorale"
+              value="{{system.vallalkozas.militiaMorale}}"
+              min="0"
+              data-dtype="Number"
+            />
+          </div>
+        </div>
+
+        <h3 class="karakter-health-status-title">Küldetések</h3>
+        <table class="karakter-equipment-table vallalkozas-missions-table">
+          <thead>
+            <tr>
+              <th class="vallalkozas-missions-th-location">Helyszín</th>
+              <th class="vallalkozas-missions-th-difficulty">Nehézség</th>
+              <th class="vallalkozas-missions-th-risk">Rizikó</th>
+              <th class="vallalkozas-missions-th-loot">Zsákmány</th>
+              <th class="vallalkozas-missions-th-delete"></th>
+            </tr>
+          </thead>
+          <tbody>
+            {{#each system.vallalkozas.militiaMissions}}
+              <tr class="karakter-equipment-row vallalkozas-mission-row" data-index="{{@index}}">
+                <td class="vallalkozas-mission-cell-location">
+                  <input
+                    type="text"
+                    name="system.vallalkozas.militiaMissions.{{@index}}.location"
+                    value="{{this.location}}"
+                  />
+                </td>
+                <td class="vallalkozas-mission-cell-difficulty">
+                  <input
+                    type="number"
+                    name="system.vallalkozas.militiaMissions.{{@index}}.difficulty"
+                    value="{{this.difficulty}}"
+                    min="0"
+                    readonly
+                  />
+                  <input
+                    type="hidden"
+                    name="system.vallalkozas.militiaMissions.{{@index}}.baseRoll"
+                    value="{{this.baseRoll}}"
+                  />
+                </td>
+                <td class="vallalkozas-mission-cell-risk">
+                  <input
+                    type="number"
+                    name="system.vallalkozas.militiaMissions.{{@index}}.risk"
+                    value="{{this.risk}}"
+                    min="0"
+                  />
+                </td>
+                <td class="vallalkozas-mission-cell-loot">
+                  <input
+                    type="text"
+                    name="system.vallalkozas.militiaMissions.{{@index}}.loot"
+                    value="{{this.loot}}"
+                  />
+                </td>
+                <td class="vallalkozas-mission-cell-delete">
+                  <button
+                    type="button"
+                    class="karakter-equipment-delete vallalkozas-mission-delete"
+                    data-index="{{@index}}"
+                    title="Alt+klikk: Sor törlése"
+                  >✕</button>
+                </td>
+              </tr>
+            {{/each}}
+          </tbody>
+        </table>
+        <button
+          type="button"
+          class="vallalkozas-mission-add"
+          title="Új küldetés sor hozzáadása"
+        >+</button>
+      </section>
+    {{/if}}
+
+    {{#if (or (eq system.vallalkozas.kind "Gyártás") (eq system.vallalkozas.kind "Milícia"))}}
+      <section class="karakter-panel vallalkozas-raktar-panel karakter-equipment">
+        <h2>Raktár</h2>
+
+        {{#if showEquipmentDropZone}}
+          <div class="npc-equipment-drop-zone karakter-equipment-drop-zone" data-drop-zone="targy">
+            <p class="npc-equipment-drop-placeholder karakter-equipment-placeholder">
+              Húzz ide bármilyen felszerelést…
+            </p>
+          </div>
+        {{/if}}
+
+        {{#if weaponsTable.length}}
+          <h3 class="karakter-equipment-table-title">Fegyverek</h3>
+          <div class="karakter-equipment-block">
+            <table class="karakter-equipment-table karakter-equipment-weapons vallalkozas-raktar-weapons">
+              <thead>
+                <tr>
+                  <th class="karakter-equipment-th-name">Név</th>
+                  <th class="karakter-equipment-th-bonus">Bónusz</th>
+                  <th class="karakter-equipment-th-damage">Sebzés</th>
+                  <th class="karakter-equipment-th-range">Hatótáv</th>
+                  <th class="karakter-equipment-th-other">Speciális</th>
+                  <th class="karakter-equipment-th-delete"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each weaponsTable}}
+                  <tr class="karakter-equipment-row" data-item-id="{{this.itemId}}">
+                    <td class="karakter-equipment-cell-name">
+                      {{#if this.img}}<img
+                        class="karakter-equipment-icon karakter-inventory-item-icon"
+                        src="{{this.img}}"
+                        alt=""
+                        data-item-id="{{this.itemId}}"
+                      />{{/if}}
+                      <span
+                        class="karakter-weapon-label karakter-inventory-item-name"
+                        data-item-id="{{this.itemId}}"
+                      >{{this.name}}</span>
+                    </td>
+                    <td class="karakter-equipment-cell-bonus">{{this.bonus}}</td>
+                    <td class="karakter-equipment-cell-damage">{{this.damage}}</td>
+                    <td class="karakter-equipment-cell-range">{{this.rangeStr}}</td>
+                    <td class="karakter-equipment-cell-other">{{this.special}}</td>
+                    <td class="karakter-equipment-cell-delete">
+                      <button
+                        type="button"
+                        class="karakter-equipment-delete jarmu-item-delete vallalkozas-item-delete"
+                        data-item-id="{{this.itemId}}"
+                        data-actor-id="{{this.actorId}}"
+                        title="Alt+klikk: Törlés a raktárból"
+                      >✕</button>
+                    </td>
+                  </tr>
+                {{/each}}
+              </tbody>
+            </table>
+          </div>
+        {{/if}}
+
+        {{#if armorTable.length}}
+          <h3 class="karakter-equipment-table-title">Páncélok</h3>
+          <div class="karakter-equipment-block">
+            <table class="karakter-equipment-table karakter-equipment-armor vallalkozas-raktar-armor">
+              <thead>
+                <tr>
+                  <th class="karakter-equipment-th-name">Név</th>
+                  <th class="karakter-equipment-th-protection">Védelem Bónusz</th>
+                  <th class="karakter-equipment-th-speed">Sebesség Levonás (m)</th>
+                  <th class="karakter-equipment-th-level">Szint</th>
+                  <th class="karakter-equipment-th-other">Speciális</th>
+                  <th class="karakter-equipment-th-delete"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each armorTable}}
+                  <tr class="karakter-equipment-row" data-item-id="{{this.itemId}}">
+                    <td class="karakter-equipment-cell-name">
+                      {{#if this.img}}<img
+                        class="karakter-equipment-icon karakter-inventory-item-icon"
+                        src="{{this.img}}"
+                        alt=""
+                        data-item-id="{{this.itemId}}"
+                      />{{/if}}
+                      <span
+                        class="karakter-armor-label karakter-inventory-item-name"
+                        data-item-id="{{this.itemId}}"
+                      >{{this.name}}</span>
+                    </td>
+                    <td class="karakter-equipment-cell-bonus">{{this.protectionBonus}}</td>
+                    <td class="karakter-equipment-cell-speed">{{this.speedPenalty}}</td>
+                    <td class="karakter-equipment-cell-level">{{this.level}}</td>
+                    <td class="karakter-equipment-cell-other">{{this.special}}</td>
+                    <td class="karakter-equipment-cell-delete">
+                      <button
+                        type="button"
+                        class="karakter-equipment-delete jarmu-item-delete vallalkozas-item-delete"
+                        data-item-id="{{this.itemId}}"
+                        data-actor-id="{{this.actorId}}"
+                        title="Alt+klikk: Törlés a raktárból"
+                      >✕</button>
+                    </td>
+                  </tr>
+                {{/each}}
+              </tbody>
+            </table>
+          </div>
+        {{/if}}
+
+        {{#if microchipsTable.length}}
+          <h3 class="karakter-equipment-table-title">Mikro-Chipek</h3>
+          <div class="karakter-equipment-block">
+            <table class="karakter-equipment-table karakter-equipment-microchips vallalkozas-raktar-microchips">
+              <thead>
+                <tr>
+                  <th class="karakter-equipment-th-name">Név</th>
+                  <th class="karakter-equipment-th-type">Típus</th>
+                  <th class="karakter-equipment-th-desc">Leírás</th>
+                  <th class="karakter-equipment-th-kp">KP</th>
+                  <th class="karakter-equipment-th-delete"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each microchipsTable}}
+                  <tr class="karakter-equipment-row" data-item-id="{{this.itemId}}">
+                    <td class="karakter-equipment-cell-name">
+                      {{#if this.img}}<img
+                        class="karakter-equipment-icon karakter-inventory-item-icon"
+                        src="{{this.img}}"
+                        alt=""
+                        data-item-id="{{this.itemId}}"
+                      />{{/if}}
+                      <span
+                        class="karakter-inventory-item-name"
+                        data-item-id="{{this.itemId}}"
+                      >{{this.name}}</span>
+                    </td>
+                    <td class="karakter-equipment-cell-type">{{this.typeLabel}}</td>
+                    <td class="karakter-equipment-cell-desc">{{this.description}}</td>
+                    <td class="karakter-equipment-cell-kp">
+                      {{#if this.isActive}}{{this.kp}}{{else}}—{{/if}}
+                    </td>
+                    <td class="karakter-equipment-cell-delete">
+                      <button
+                        type="button"
+                        class="karakter-equipment-delete jarmu-item-delete vallalkozas-item-delete"
+                        data-item-id="{{this.itemId}}"
+                        data-actor-id="{{this.actorId}}"
+                        title="Alt+klikk: Törlés a raktárból"
+                      >✕</button>
+                    </td>
+                  </tr>
+                {{/each}}
+              </tbody>
+            </table>
+          </div>
+        {{/if}}
+
+        {{#if itemsTable.length}}
+          <h3 class="karakter-equipment-table-title">Egyéb Felszerelés</h3>
+          <div class="karakter-equipment-block">
+            <table class="karakter-equipment-table karakter-equipment-items vallalkozas-raktar-table">
+              <thead>
+                <tr>
+                  <th class="karakter-equipment-th-name">Név</th>
+                  <th class="karakter-equipment-th-qty">Mennyiség</th>
+                  <th class="karakter-equipment-th-desc">Leírás</th>
+                  <th class="karakter-equipment-th-delete"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each itemsTable}}
+                  <tr class="karakter-equipment-row" data-item-id="{{this.itemId}}">
+                    <td class="karakter-equipment-cell-name">
+                      {{#if this.img}}<img
+                        class="karakter-equipment-icon karakter-inventory-item-icon"
+                        src="{{this.img}}"
+                        alt=""
+                        data-item-id="{{this.itemId}}"
+                      />{{/if}}
+                      <span
+                        class="karakter-inventory-item-name"
+                        data-item-id="{{this.itemId}}"
+                      >{{this.name}}</span>
+                    </td>
+                    <td class="karakter-equipment-cell-qty">
+                      <input
+                        type="text"
+                        class="karakter-item-quantity-input vallalkozas-item-quantity-input"
+                        data-item-id="{{this.itemId}}"
+                        value="{{this.quantity}}"
+                      />
+                    </td>
+                    <td class="karakter-equipment-cell-desc">{{this.description}}</td>
+                    <td class="karakter-equipment-cell-delete">
+                      <button
+                        type="button"
+                        class="karakter-equipment-delete karakter-item-delete vallalkozas-item-delete"
+                        data-item-id="{{this.itemId}}"
+                        data-actor-id="{{this.actorId}}"
+                        title="Alt+klikk: Törlés a raktárból"
+                      >✕</button>
+                    </td>
+                  </tr>
+                {{/each}}
+              </tbody>
+            </table>
+          </div>
+        {{/if}}
+      </section>
+    {{/if}}
+
+    <section class="karakter-panel karakter-notes vallalkozas-egyeb">
+      <h2>Egyéb Információk</h2>
+      <div class="karakter-notes-split">
+        <div class="karakter-notes-left">
+          <textarea
+            name="system.notes.biography"
+            data-dtype="String"
+            rows="3"
+            placeholder="Egyéb információk…"
+          >{{system.notes.biography}}</textarea>
+        </div>
+        <div class="karakter-notes-right" data-drop-zone="egyeb">
+          <div class="karakter-notes-egyeb-list">
+            {{#each egyebList}}
+              <div class="karakter-notes-egyeb-row" data-item-id="{{this.itemId}}">
+                {{#if this.img}}<img class="karakter-notes-egyeb-icon" src="{{this.img}}" alt="" data-item-id="{{this.itemId}}" />{{/if}}
+                <div class="karakter-notes-egyeb-main">
+                  <span class="karakter-inventory-item-name karakter-notes-egyeb-name" data-item-id="{{this.itemId}}">{{this.name}}</span>
+                  {{#if this.description}}<p class="karakter-notes-egyeb-desc">{{this.description}}</p>{{/if}}
+                </div>
+                <button type="button" class="karakter-item-chat" data-item-id="{{this.itemId}}" title="Chat-be küldés">
+                  <i class="fas fa-comment-dots"></i>
+                </button>
+                <button
+                  type="button"
+                  class="karakter-equipment-delete vallalkozas-egyeb-delete"
+                  data-item-id="{{this.itemId}}"
+                  data-actor-id="{{this.actorId}}"
+                  title="Alt+klikk: Törlés"
+                >✕</button>
+              </div>
+            {{else}}
+              <p class="karakter-notes-egyeb-placeholder">Húzz ide Egyéb Információ típusú tételt</p>
+            {{/each}}
+          </div>
+        </div>
+      </div>
+    </section>
+  </section>
+</form>
+

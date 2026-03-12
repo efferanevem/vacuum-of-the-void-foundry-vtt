@@ -1,5 +1,5 @@
-import { BaseActorDataModel, KarakterDataModel, JarmuDataModel, BazisDataModel, WeaponDataModel, ShieldDataModel, MicrochipDataModel, AbilityDataModel, TargyDataModel, EgyebDataModel, JarmuEgysegDataModel, HelyisegDataModel } from "../module/data-models/index.mjs";
-import { VoidKarakterSheet, VoidNpcSheet, VoidJarmuSheet, VoidBazisSheet, VoidWeaponSheet, VoidShieldSheet, VoidMicrochipSheet, VoidAbilitySheet, VoidTargySheet, VoidEgyebSheet, VoidJarmuEgysegSheet, VoidHelyisegSheet } from "../module/documents.mjs";
+import { BaseActorDataModel, KarakterDataModel, JarmuDataModel, BazisDataModel, VallalkozasDataModel, WeaponDataModel, ShieldDataModel, MicrochipDataModel, AbilityDataModel, TargyDataModel, EgyebDataModel, JarmuEgysegDataModel, HelyisegDataModel } from "../module/data-models/index.mjs";
+import { VoidKarakterSheet, VoidNpcSheet, VoidJarmuSheet, VoidBazisSheet, VoidVallalkozasSheet, VoidWeaponSheet, VoidShieldSheet, VoidMicrochipSheet, VoidAbilitySheet, VoidTargySheet, VoidEgyebSheet, VoidJarmuEgysegSheet, VoidHelyisegSheet } from "../module/documents.mjs";
 
 const VOTV_DEFAULT_SCENE_BG = "systems/vacuum-of-the-void/assets/void-bg.jpg";
 
@@ -29,7 +29,8 @@ Hooks.once("init", () => {
   CONFIG.Actor.dataModels.Karakter = KarakterDataModel;
   CONFIG.Actor.dataModels.Npc = BaseActorDataModel;
   CONFIG.Actor.dataModels.Jarmu = JarmuDataModel;
-   CONFIG.Actor.dataModels.Bazis = BazisDataModel;
+  CONFIG.Actor.dataModels.Bazis = BazisDataModel;
+  CONFIG.Actor.dataModels.Vallalkozas = VallalkozasDataModel;
 
   // Register item data models (weapon/ability = angol aliasok régi/importált adatokhoz, hogy ne legyen "type is not a valid type" hiba)
   CONFIG.Item.dataModels ??= {};
@@ -60,6 +61,7 @@ Hooks.once("init", () => {
   CONFIG.Actor.typeLabels.Npc = "NPC";
   CONFIG.Actor.typeLabels.Jarmu = "Jármű";
   CONFIG.Actor.typeLabels.Bazis = "Bázis";
+  CONFIG.Actor.typeLabels.Vallalkozas = "Vállalkozás";
 
   // Initiative: manuális beírás – formula kell, hogy az initiative oszlop megjelenjen
   CONFIG.Combat.initiative ??= {};
@@ -127,6 +129,11 @@ Hooks.once("init", () => {
     makeDefault: true,
     label: "VOTV.BazisSheet"
   });
+  foundry.documents.collections.Actors.registerSheet("vacuum-of-the-void", VoidVallalkozasSheet, {
+    types: ["Vallalkozas"],
+    makeDefault: true,
+    label: "VOTV.VallalkozasSheet"
+  });
 
   // Register item sheets (Fegyver + weapon alias, Kepesseg + ability alias)
   foundry.documents.collections.Items.registerSheet("vacuum-of-the-void", VoidWeaponSheet, {
@@ -170,18 +177,22 @@ Hooks.once("init", () => {
     label: "VOTV.HelyisegSheet"
   });
 
-  // Bázis: ne legyen látható kép – üres/transzparens asset (a listában sem jelenjen meg default ikon)
+  // Bázis és Vállalkozás: ne legyen látható kép – üres/transzparens asset (a listában se default ikon)
   const VOTV_BAZIS_BLANK_IMG = "systems/vacuum-of-the-void/assets/blank.svg";
   Hooks.on("preCreateActor", (document, data, _options) => {
-    if (data?.type === "Bazis") data.img = VOTV_BAZIS_BLANK_IMG;
+    if (data?.type === "Bazis" || data?.type === "Vallalkozas") data.img = VOTV_BAZIS_BLANK_IMG;
   });
   Hooks.on("preUpdateActor", (document, change, _options) => {
-    if (document?.type === "Bazis" && Object.prototype.hasOwnProperty.call(change ?? {}, "img")) change.img = VOTV_BAZIS_BLANK_IMG;
+    if ((document?.type === "Bazis" || document?.type === "Vallalkozas") && Object.prototype.hasOwnProperty.call(change ?? {}, "img")) {
+      change.img = VOTV_BAZIS_BLANK_IMG;
+    }
   });
   Hooks.on("ready", () => {
     const blank = VOTV_BAZIS_BLANK_IMG;
     const bazisNeedBlank = (game.actors?.contents ?? []).filter(
-      (a) => a.type === "Bazis" && (a.img ?? "").toString().trim() !== blank
+      (a) =>
+        (a.type === "Bazis" || a.type === "Vallalkozas") &&
+        (a.img ?? "").toString().trim() !== blank
     );
     if (bazisNeedBlank.length) bazisNeedBlank.forEach((a) => a.update({ img: blank }).catch(() => {}));
   });
@@ -267,7 +278,14 @@ Hooks.once("init", () => {
     for (const app of windows) {
       if (app.document?.id !== actorId || app.document?.documentName !== "Actor") continue;
       const name = app.constructor?.name;
-      if (name !== "VoidKarakterSheet" && name !== "VoidJarmuSheet" && name !== "VoidBazisSheet") continue;
+      if (
+        name !== "VoidKarakterSheet" &&
+        name !== "VoidJarmuSheet" &&
+        name !== "VoidBazisSheet" &&
+        name !== "VoidVallalkozasSheet"
+      ) {
+        continue;
+      }
       if (!appsToConsider.includes(app)) appsToConsider.push(app);
     }
     const anySheetHasFocusedInput = isInputLike && appsToConsider.some((app) => {
@@ -496,6 +514,10 @@ Hooks.on("preCreateToken", (tokenDocument, data, _options) => {
   if (!actor) return;
   if (actor.type === "Bazis") {
     ui?.notifications?.warn(game.i18n?.localize?.("VOTV.BazisNoToken") ?? "Bázis nem helyezhető tokenként a térképre.");
+    return false;
+  }
+  if (actor.type === "Vallalkozas") {
+    ui?.notifications?.warn("Vállalkozás nem helyezhető tokenként a térképre.");
     return false;
   }
   if (actor.type === "Karakter") {

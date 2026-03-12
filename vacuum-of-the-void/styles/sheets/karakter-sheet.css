@@ -92,13 +92,231 @@
 
 .votv.karakter-sheet .karakter-header-row {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 4px;
   width: 100%;
 }
 
-.votv.karakter-sheet .karakter-header-row:first-child {
-  grid-template-columns: 1fr minmax(2.5em, 0.25fr) 1.75fr 1fr;
+.votv.karakter-sheet.vallalkozas-sheet .karakter-header-row {
+  grid-template-columns: 2fr 2fr minmax(0, 0.6fr) minmax(0, 1.4fr);
+}
+
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-employees-summary {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-employees-summary input[type="number"] {
+  width: 3.5em;
+}
+
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-header-level input[type="number"] {
+  width: 3.5em;
+}
+
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-select {
+  width: 100%;
+  box-sizing: border-box;
+  font-size: var(--votv-font-body);
+  padding: 4px 22px 4px 6px;
+  background-color: rgba(3, 6, 10, 0.9);
+  border: 1px solid var(--votv-border-muted);
+  color: var(--votv-text-main);
+  border-radius: 2px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, var(--votv-border-muted) 50%),
+    linear-gradient(135deg, var(--votv-border-muted) 50%, transparent 50%);
+  background-position: calc(100% - 12px) 50%, calc(100% - 7px) 50%;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+}
+
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-select option {
+  background-color: rgba(3, 6, 10, 0.95);
+  color: var(--votv-text-main);
+}
+
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-employees-table {
+  margin-top: 4px;
+}
+
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-employees-panel {
+  margin-bottom: 6px;
+}
+
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-level-bonus {
+  margin-bottom: 6px;
+}
+
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-services-panel,
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-marketing-panel {
+  margin-bottom: 6px;
+}
+
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-gyartas-panel,
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-raktar-panel {
+  margin-bottom: 6px;
+}
+
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-gyartas-row {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 8px;
+}
+
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-gyartas-field {
+  flex: 1 1 0;
+  margin-bottom: 6px;
+}
+
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-production-table {
+  margin-top: 4px;
+}
+
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-production-th-count,
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-production-th-time,
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-production-cell-count,
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-production-cell-time {
+  white-space: nowrap;
+}
+
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-production-cell-count input {
+  max-width: 4em;
+}
+
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-production-cell-time input {
+  width: 100%;
+}
+
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-production-th-delete,
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-production-cell-delete {
+  width: 32px;
+  text-align: center;
+}
+
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-services-row,
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-marketing-row {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 8px;
+}
+
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-services-field,
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-marketing-field {
+  flex: 1 1 0;
+}
+
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-marketing-field:first-child {
+  flex: 2 1 0;
+}
+
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-services-income-row,
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-marketing-cost-row,
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-marketing-profit-row {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 4px;
+}
+
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-services-income-row input[type="number"],
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-marketing-cost-row input[type="number"],
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-marketing-profit-row input[type="number"] {
+  width: 6em;
+}
+
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-services-unit,
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-marketing-unit {
+  font-size: var(--votv-font-label-small);
+  color: var(--votv-text-muted);
+  width: 30px;
+  display: inline-block;
+}
+
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-employees-th-level,
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-employees-th-count,
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-employee-cell-level,
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-employee-cell-count {
+  width: 1%;
+  white-space: nowrap;
+}
+
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-employees-th-type,
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-employee-cell-type {
+  width: 40%;
+}
+
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-employees-th-bonus,
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-employee-cell-bonus {
+  width: 60%;
+}
+
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-employees-th-delete,
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-employee-cell-delete {
+  width: 32px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-employee-cell-level input,
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-employee-cell-count input {
+  max-width: 4em;
+}
+
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-employee-add,
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-production-add,
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-mission-add {
+  display: block;
+  margin: 8px auto 0;
+  padding: 2px 10px;
+  min-width: 26px;
+  height: 24px;
+  border-radius: 4px;
+  border: 1px solid rgba(43, 255, 136, 0.9);
+  background: rgba(43, 255, 136, 0.12);
+  color: rgba(43, 255, 136, 0.95);
+  font-size: 16px;
+  line-height: 1;
+  text-align: center;
+  cursor: pointer;
+  padding: 0;
+}
+
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-employee-add:hover,
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-production-add:hover,
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-mission-add:hover {
+  background: rgba(43, 255, 136, 0.22);
+}
+
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-milicia-panel {
+  margin-bottom: 6px;
+}
+
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-milicia-header {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  align-items: flex-end;
+}
+
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-milicia-field {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-mission-cell-difficulty input[type="number"] {
+  background-color: rgba(60, 60, 70, 0.5);
+}
+
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-missions-th-difficulty,
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-missions-th-risk,
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-mission-cell-difficulty,
+.votv.karakter-sheet.vallalkozas-sheet .vallalkozas-mission-cell-risk {
+  width: 80px;
+  text-align: center;
 }
 
 .votv.karakter-sheet .karakter-header-field.karakter-header-level input {
