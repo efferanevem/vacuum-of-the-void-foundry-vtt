@@ -111,7 +111,7 @@
   },
   {
     "_id": "parancsnok_csapat-taktika",
-    "name": "Csapat Taktika",
+    "name": "1 - Csapat Taktika",
     "type": "Kepesseg",
     "path": "/Beosztás/Parancsnok/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -122,7 +122,7 @@
   },
   {
     "_id": "parancsnok_felkeszult-vezeto",
-    "name": "Felkészült Vezető",
+    "name": "1 - Felkészült Vezető",
     "type": "Kepesseg",
     "path": "/Beosztás/Parancsnok/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -134,7 +134,7 @@
   },
   {
     "_id": "parancsnok_vedelmezo-tekintely",
-    "name": "Védelmező Tekintély",
+    "name": "2 - Védelmező Tekintély",
     "type": "Kepesseg",
     "path": "/Beosztás/Parancsnok/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -145,7 +145,7 @@
   },
   {
     "_id": "parancsnok_kupaktancs",
-    "name": "Kupaktanács",
+    "name": "3 - Kupaktanács",
     "type": "Kepesseg",
     "path": "/Beosztás/Parancsnok/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -157,7 +157,7 @@
   },
   {
     "_id": "parancsnok_kisegito-jelenlet",
-    "name": "Kisegítő Jelenlét",
+    "name": "4 - Kisegítő Jelenlét",
     "type": "Kepesseg",
     "path": "/Beosztás/Parancsnok/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -168,7 +168,7 @@
   },
   {
     "_id": "parancsnok_motivalo-parancs",
-    "name": "Motiváló Parancs",
+    "name": "5 - Motiváló Parancs",
     "type": "Kepesseg",
     "path": "/Beosztás/Parancsnok/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -180,7 +180,7 @@
   },
   {
     "_id": "hadtestor_harckepzett-beosztottak",
-    "name": "Harcképzett Beosztottak",
+    "name": "2 - Harcképzett Beosztottak",
     "type": "Kepesseg",
     "path": "/Beosztás/Parancsnok/Hadtestőr/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -191,7 +191,7 @@
   },
   {
     "_id": "hadtestor_hadmuveleti-mozgas",
-    "name": "Hadműveleti Mozgás",
+    "name": "4 - Hadműveleti Mozgás",
     "type": "Kepesseg",
     "path": "/Beosztás/Parancsnok/Hadtestőr/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -203,7 +203,7 @@
   },
   {
     "_id": "admiralis_osszeszedett-legenyseg",
-    "name": "Összeszedett Legénység",
+    "name": "2 - Összeszedett Legénység",
     "type": "Kepesseg",
     "path": "/Beosztás/Parancsnok/Admirális/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -214,7 +214,7 @@
   },
   {
     "_id": "admiralis_inspiralo-reflektalas",
-    "name": "Inspiráló Reflektálás",
+    "name": "4 - Inspiráló Reflektálás",
     "type": "Kepesseg",
     "path": "/Beosztás/Parancsnok/Admirális/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -226,7 +226,7 @@
   },
   {
     "_id": "hadnagy_pontos-legenyseg",
-    "name": "Pontos Legénység",
+    "name": "2 - Pontos Legénység",
     "type": "Kepesseg",
     "path": "/Beosztás/Parancsnok/Hadnagy/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -237,7 +237,7 @@
   },
   {
     "_id": "hadnagy_holografikus-hasonmasok",
-    "name": "Holografikus Hasonmások",
+    "name": "4 - Holografikus Hasonmások",
     "type": "Kepesseg",
     "path": "/Beosztás/Parancsnok/Hadnagy/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -249,7 +249,7 @@
   },
   {
     "_id": "kem_beepitett-ugynokok",
-    "name": "Beépített Ügynökök",
+    "name": "2 - Beépített Ügynökök",
     "type": "Kepesseg",
     "path": "/Beosztás/Parancsnok/Kém/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -260,7 +260,7 @@
   },
   {
     "_id": "kem_kemek-arzenalja",
-    "name": "Kémek Arzenálja",
+    "name": "4 - Kémek Arzenálja",
     "type": "Kepesseg",
     "path": "/Beosztás/Parancsnok/Kém/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -272,7 +272,7 @@
   },
   {
     "_id": "taktikus_mindig-resen",
-    "name": "Mindig Résen",
+    "name": "2 - Mindig Résen",
     "type": "Kepesseg",
     "path": "/Beosztás/Parancsnok/Taktikus/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -283,7 +283,7 @@
   },
   {
     "_id": "taktikus_vigyazz-robban",
-    "name": "„Vigyázz, robban!”",
+    "name": "4 - „Vigyázz, robban!”",
     "type": "Kepesseg",
     "path": "/Beosztás/Parancsnok/Taktikus/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -295,7 +295,7 @@
   },
   {
     "_id": "pilota_hullamhosszon-a-hiddal",
-    "name": "Hullámhosszon a Híddal",
+    "name": "1 - Hullámhosszon a Híddal",
     "type": "Kepesseg",
     "path": "/Beosztás/Pilóta/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -306,7 +306,7 @@
   },
   {
     "_id": "pilota_veszhelyzeti-ugras",
-    "name": "Vészhelyzeti Ugrás",
+    "name": "1 - Vészhelyzeti Ugrás",
     "type": "Kepesseg",
     "path": "/Beosztás/Pilóta/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -318,7 +318,7 @@
   },
   {
     "_id": "pilota_pilota-kepzes",
-    "name": "Pilóta Képzés",
+    "name": "2 - Pilóta Képzés",
     "type": "Kepesseg",
     "path": "/Beosztás/Pilóta/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -329,7 +329,7 @@
   },
   {
     "_id": "pilota_vakmero-manover",
-    "name": "Vakmerő Manőver",
+    "name": "3 - Vakmerő Manőver",
     "type": "Kepesseg",
     "path": "/Beosztás/Pilóta/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -341,7 +341,7 @@
   },
   {
     "_id": "pilota_acel-idegrendszer",
-    "name": "Acél Idegrendszer",
+    "name": "4 - Acél Idegrendszer",
     "type": "Kepesseg",
     "path": "/Beosztás/Pilóta/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -352,7 +352,7 @@
   },
   {
     "_id": "pilota_elektromagneses-eropajzs",
-    "name": "Elektromágneses Erőpajzs",
+    "name": "5 - Elektromágneses Erőpajzs",
     "type": "Kepesseg",
     "path": "/Beosztás/Pilóta/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -364,7 +364,7 @@
   },
   {
     "_id": "felfedezo_pilota_cikazas",
-    "name": "Cikázás",
+    "name": "2 - Cikázás",
     "type": "Kepesseg",
     "path": "/Beosztás/Pilóta/Felfedező Pilóta/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -375,7 +375,7 @@
   },
   {
     "_id": "felfedezo_pilota_vilagjaro",
-    "name": "Világjáró",
+    "name": "4 - Világjáró",
     "type": "Kepesseg",
     "path": "/Beosztás/Pilóta/Felfedező Pilóta/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -387,7 +387,7 @@
   },
   {
     "_id": "szallito_pilota_vedelmezo-sofor",
-    "name": "Védelmező Sofőr",
+    "name": "2 - Védelmező Sofőr",
     "type": "Kepesseg",
     "path": "/Beosztás/Pilóta/Szállító Pilóta/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -398,7 +398,7 @@
   },
   {
     "_id": "szallito_pilota_tapasztalt-szallito",
-    "name": "Tapasztalt Szállító",
+    "name": "4 - Tapasztalt Szállító",
     "type": "Kepesseg",
     "path": "/Beosztás/Pilóta/Szállító Pilóta/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -410,7 +410,7 @@
   },
   {
     "_id": "harci_pilota_harcedzett-pilota",
-    "name": "Harcedzett Pilóta",
+    "name": "2 - Harcedzett Pilóta",
     "type": "Kepesseg",
     "path": "/Beosztás/Pilóta/Harci Pilóta/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -421,7 +421,7 @@
   },
   {
     "_id": "harci_pilota_jarmuvezetes-praktikak",
-    "name": "Járművezetései Praktikák",
+    "name": "4 - Járművezetései Praktikák",
     "type": "Kepesseg",
     "path": "/Beosztás/Pilóta/Harci Pilóta/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -433,7 +433,7 @@
   },
   {
     "_id": "versenypilota_zsoke",
-    "name": "Zsoké",
+    "name": "2 - Zsoké",
     "type": "Kepesseg",
     "path": "/Beosztás/Pilóta/Versenypilóta/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -444,7 +444,7 @@
   },
   {
     "_id": "versenypilota_a-sebesseg-en-vagyok",
-    "name": "A Sebesség Én Vagyok",
+    "name": "4 - A Sebesség Én Vagyok",
     "type": "Kepesseg",
     "path": "/Beosztás/Pilóta/Versenypilóta/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -456,7 +456,7 @@
   },
   {
     "_id": "tuningpilota_jol-van-az-ugy",
-    "name": "„Jól van az úgy”",
+    "name": "2 - „Jól van az úgy”",
     "type": "Kepesseg",
     "path": "/Beosztás/Pilóta/Tuningpilóta/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -467,7 +467,7 @@
   },
   {
     "_id": "tuningpilota_sufnituning",
-    "name": "Sufnituning",
+    "name": "4 - Sufnituning",
     "type": "Kepesseg",
     "path": "/Beosztás/Pilóta/Tuningpilóta/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -479,7 +479,7 @@
   },
   {
     "_id": "lovegkezelo_rutinos-kezek",
-    "name": "Rutinos Kezek",
+    "name": "1 - Rutinos Kezek",
     "type": "Kepesseg",
     "path": "/Beosztás/Lövegkezelő/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -490,7 +490,7 @@
   },
   {
     "_id": "lovegkezelo_feltoltott-loves",
-    "name": "Feltöltött Lövés",
+    "name": "1 - Feltöltött Lövés",
     "type": "Kepesseg",
     "path": "/Beosztás/Lövegkezelő/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -502,7 +502,7 @@
   },
   {
     "_id": "lovegkezelo_extra-tamadas",
-    "name": "Extra Támadás",
+    "name": "2 - Extra Támadás",
     "type": "Kepesseg",
     "path": "/Beosztás/Lövegkezelő/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -513,7 +513,7 @@
   },
   {
     "_id": "lovegkezelo_tudok-egy-embert",
-    "name": "„Tudok Egy Embert”",
+    "name": "3 - „Tudok Egy Embert”",
     "type": "Kepesseg",
     "path": "/Beosztás/Lövegkezelő/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -525,7 +525,7 @@
   },
   {
     "_id": "lovegkezelo_precizios-loves",
-    "name": "Precíziós Lövés",
+    "name": "4 - Precíziós Lövés",
     "type": "Kepesseg",
     "path": "/Beosztás/Lövegkezelő/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -536,7 +536,7 @@
   },
   {
     "_id": "lovegkezelo_loves-atiranyitas",
-    "name": "Lövés Átirányítás",
+    "name": "5 - Lövés Átirányítás",
     "type": "Kepesseg",
     "path": "/Beosztás/Lövegkezelő/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -548,7 +548,7 @@
   },
   {
     "_id": "rohamlovez_masodik-extra-tamadas",
-    "name": "Második Extra Támadás",
+    "name": "2 - Második Extra Támadás",
     "type": "Kepesseg",
     "path": "/Beosztás/Lövegkezelő/Rohamlövész/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -559,7 +559,7 @@
   },
   {
     "_id": "rohamlovez_halalos-lovessorozat",
-    "name": "Halálos Lövéssorozat",
+    "name": "4 - Halálos Lövéssorozat",
     "type": "Kepesseg",
     "path": "/Beosztás/Lövegkezelő/Rohamlövész/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -571,7 +571,7 @@
   },
   {
     "_id": "precizionista_agyuk-mesterlovesze",
-    "name": "Ágyúk Mesterlövésze",
+    "name": "2 - Ágyúk Mesterlövésze",
     "type": "Kepesseg",
     "path": "/Beosztás/Lövegkezelő/Precizionista/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -582,7 +582,7 @@
   },
   {
     "_id": "precizionista_celzassegito-robotika",
-    "name": "Célzássegítő Robotika",
+    "name": "4 - Célzássegítő Robotika",
     "type": "Kepesseg",
     "path": "/Beosztás/Lövegkezelő/Precizionista/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -594,7 +594,7 @@
   },
   {
     "_id": "tuzersegi_specialista_spec-lovedektipusok",
-    "name": "Speciális Lövedéktípusok",
+    "name": "2 - Speciális Lövedéktípusok",
     "type": "Kepesseg",
     "path": "/Beosztás/Lövegkezelő/Tüzérségi Specialista/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -605,7 +605,7 @@
   },
   {
     "_id": "tuzersegi_specialista_nyomkoveto-impulzus-torpedo",
-    "name": "Nyomkövető Impulzus-Torpedó",
+    "name": "4 - Nyomkövető Impulzus-Torpedó",
     "type": "Kepesseg",
     "path": "/Beosztás/Lövegkezelő/Tüzérségi Specialista/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -617,7 +617,7 @@
   },
   {
     "_id": "tuzszeresz_hazibarkacs",
-    "name": "Házibarkács",
+    "name": "2 - Házibarkács",
     "type": "Kepesseg",
     "path": "/Beosztás/Lövegkezelő/Tűzszerész/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -628,7 +628,7 @@
   },
   {
     "_id": "tuzszeresz_minden-bombak-tudora",
-    "name": "Minden Bombák Tudora",
+    "name": "4 - Minden Bombák Tudora",
     "type": "Kepesseg",
     "path": "/Beosztás/Lövegkezelő/Tűzszerész/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -641,7 +641,7 @@
   
   {
     "_id": "lovegkezelo_vadaszmester_a-ket-szeme-koze",
-    "name": "A Két Szeme Közé",
+    "name": "2 - A Két Szeme Közé",
     "type": "Kepesseg",
     "path": "/Beosztás/Lövegkezelő/Vadászmester/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -652,7 +652,7 @@
   },
   {
     "_id": "lovegkezelo_vadaszmester_vadaszatra-keszen",
-    "name": "Vadászatra Készen",
+    "name": "4 - Vadászatra Készen",
     "type": "Kepesseg",
     "path": "/Beosztás/Lövegkezelő/Vadászmester/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -664,7 +664,7 @@
   },
   {
     "_id": "katona_hajszalpontos-lovesz",
-    "name": "Hajszálpontos Lövész",
+    "name": "1 - Hajszálpontos Lövész",
     "type": "Kepesseg",
     "path": "/Beosztás/Katona/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -675,7 +675,7 @@
   },
   {
     "_id": "katona_improvizalt-pokolgep",
-    "name": "Improvizált Pokolgép",
+    "name": "1 - Improvizált Pokolgép",
     "type": "Kepesseg",
     "path": "/Beosztás/Katona/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -687,7 +687,7 @@
   },
   {
     "_id": "katona_edzett-harcos",
-    "name": "Edzett Harcos",
+    "name": "2 - Edzett Harcos",
     "type": "Kepesseg",
     "path": "/Beosztás/Katona/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -698,7 +698,7 @@
   },
   {
     "_id": "katona_gerilla-harcmodor",
-    "name": "Gerilla Harcmodor",
+    "name": "3 - Gerilla Harcmodor",
     "type": "Kepesseg",
     "path": "/Beosztás/Katona/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -710,7 +710,7 @@
   },
   {
     "_id": "katona_kozelharci-kepzettseg",
-    "name": "Közelharci Képzettség",
+    "name": "4 - Közelharci Képzettség",
     "type": "Kepesseg",
     "path": "/Beosztás/Katona/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -721,7 +721,7 @@
   },
   {
     "_id": "katona_kezi-ion-agyu",
-    "name": "Kézi Ion-Ágyú",
+    "name": "5 - Kézi Ion-Ágyú",
     "type": "Kepesseg",
     "path": "/Beosztás/Katona/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -733,7 +733,7 @@
   },
   {
     "_id": "urgyalogos_kritikus-pontossag",
-    "name": "Kritikus Pontosság",
+    "name": "2 - Kritikus Pontosság",
     "type": "Kepesseg",
     "path": "/Beosztás/Katona/Űrgyalogos/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -744,7 +744,7 @@
   },
   {
     "_id": "urgyalogos_tuzharcban-edzett",
-    "name": "Tűzharcban Edzett",
+    "name": "4 - Tűzharcban Edzett",
     "type": "Kepesseg",
     "path": "/Beosztás/Katona/Űrgyalogos/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -756,7 +756,7 @@
   },
   {
     "_id": "elit_mesterlovesz_turelmes-kezmozdulatok",
-    "name": "Türelmes Kézmozdulatok",
+    "name": "2 - Türelmes Kézmozdulatok",
     "type": "Kepesseg",
     "path": "/Beosztás/Katona/Elit Mesterlövész/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -767,7 +767,7 @@
   },
   {
     "_id": "elit_mesterlovesz_hoerzekelo-szenzoros-optika",
-    "name": "Hőérzékelő Szenzoros Optika",
+    "name": "4 - Hőérzékelő Szenzoros Optika",
     "type": "Kepesseg",
     "path": "/Beosztás/Katona/Elit Mesterlövész/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -779,7 +779,7 @@
   },
   {
     "_id": "szerkezet_szakerto_kulonleges-szerkezetek",
-    "name": "Különleges Szerkezetek",
+    "name": "2 - Különleges Szerkezetek",
     "type": "Kepesseg",
     "path": "/Beosztás/Katona/Szerkezet Szakértő/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -790,7 +790,7 @@
   },
   {
     "_id": "szerkezet_szakerto_hatotav-noveles",
-    "name": "Hatótáv Növelés",
+    "name": "4 - Hatótáv Növelés",
     "type": "Kepesseg",
     "path": "/Beosztás/Katona/Szerkezet Szakértő/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -802,7 +802,7 @@
   },
   {
     "_id": "katona_gerilla_improvizalt-kamuflazs",
-    "name": "Improvizált Kamuflázs",
+    "name": "2 - Improvizált Kamuflázs",
     "type": "Kepesseg",
     "path": "/Beosztás/Katona/Gerilla/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -813,7 +813,7 @@
   },
   {
     "_id": "katona_gerilla_rejtett-veszelyek",
-    "name": "Rejtett Veszélyek",
+    "name": "4 - Rejtett Veszélyek",
     "type": "Kepesseg",
     "path": "/Beosztás/Katona/Gerilla/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -825,7 +825,7 @@
   },
   {
     "_id": "katona_harcmuvesz_nyilt-tenyer-utja",
-    "name": "Nyílt Tenyér Útja",
+    "name": "2 - Nyílt Tenyér Útja",
     "type": "Kepesseg",
     "path": "/Beosztás/Katona/Harcművész/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -836,7 +836,7 @@
   },
   {
     "_id": "katona_harcmuvesz_tokeletessegig-fejlesztve",
-    "name": "Tökéletességig Fejlesztve",
+    "name": "4 - Tökéletességig Fejlesztve",
     "type": "Kepesseg",
     "path": "/Beosztás/Katona/Harcművész/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -848,7 +848,7 @@
   },
   {
     "_id": "mernok_kritikus-javitas",
-    "name": "Kritikus Javítás",
+    "name": "1 - Kritikus Javítás",
     "type": "Kepesseg",
     "path": "/Beosztás/Mérnök/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -859,7 +859,7 @@
   },
   {
     "_id": "mernok_energia-atiranyitas",
-    "name": "Energia Átirányítás",
+    "name": "1 - Energia Átirányítás",
     "type": "Kepesseg",
     "path": "/Beosztás/Mérnök/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -871,7 +871,7 @@
   },
   {
     "_id": "mernok_fejlett-eszkozhasznalat",
-    "name": "Fejlett Eszközhasználat",
+    "name": "2 - Fejlett Eszközhasználat",
     "type": "Kepesseg",
     "path": "/Beosztás/Mérnök/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -882,7 +882,7 @@
   },
   {
     "_id": "mernok_veszhelyzeti-szerviz",
-    "name": "Vészhelyzeti Szerviz",
+    "name": "3 - Vészhelyzeti Szerviz",
     "type": "Kepesseg",
     "path": "/Beosztás/Mérnök/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -894,7 +894,7 @@
   },
   {
     "_id": "mernok_specializalt-dron",
-    "name": "Specializált Drón",
+    "name": "4 - Specializált Drón",
     "type": "Kepesseg",
     "path": "/Beosztás/Mérnök/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -905,7 +905,7 @@
   },
   {
     "_id": "mernok_kommunikacios-kaosz",
-    "name": "Kommunikációs Káosz",
+    "name": "5 - Kommunikációs Káosz",
     "type": "Kepesseg",
     "path": "/Beosztás/Mérnök/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -917,7 +917,7 @@
   },
   {
     "_id": "mernok_technikai-makulatlan-aramkorok",
-    "name": "Makulátlan Áramkörök",
+    "name": "2 - Makulátlan Áramkörök",
     "type": "Kepesseg",
     "path": "/Beosztás/Mérnök/Technikai Specialista/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -928,7 +928,7 @@
   },
   {
     "_id": "mernok_technikai_surgos-hibaelharitas",
-    "name": "Sürgős Hibaelhárítás",
+    "name": "4 - Sürgős Hibaelhárítás",
     "type": "Kepesseg",
     "path": "/Beosztás/Mérnök/Technikai Specialista/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -940,7 +940,7 @@
   },
   {
     "_id": "mernok_lovegtorony_lovegtornyok",
-    "name": "Lövegtornyok",
+    "name": "2 - Lövegtornyok",
     "type": "Kepesseg",
     "path": "/Beosztás/Mérnök/Lövegtorony Kezelő/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -951,7 +951,7 @@
   },
   {
     "_id": "mernok_lovegtorony_iranyitott-lovegtornyok",
-    "name": "Irányított Lövegtornyok",
+    "name": "4 - Irányított Lövegtornyok",
     "type": "Kepesseg",
     "path": "/Beosztás/Mérnök/Lövegtorony Kezelő/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -963,7 +963,7 @@
   },
   {
     "_id": "mernok_hekker_kitanult-vedelmi-rendszerek",
-    "name": "Kitanult Védelmi Rendszerek",
+    "name": "2 - Kitanult Védelmi Rendszerek",
     "type": "Kepesseg",
     "path": "/Beosztás/Mérnök/Hekker/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -974,7 +974,7 @@
   },
   {
     "_id": "mernok_hekker_parancslefuttatas",
-    "name": "Parancslefuttatás",
+    "name": "4 - Parancslefuttatás",
     "type": "Kepesseg",
     "path": "/Beosztás/Mérnök/Hekker/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -986,7 +986,7 @@
   },
   {
     "_id": "mernok_epitesz_olcso-epitoanyagok",
-    "name": "Olcsó Építőanyagok, Hatékony Helyfelhasználás",
+    "name": "2 - Olcsó Építőanyagok, Hatékony Helyfelhasználás",
     "type": "Kepesseg",
     "path": "/Beosztás/Mérnök/Építész/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -997,7 +997,7 @@
   },
   {
     "_id": "mernok_epitesz_fejbol-terkep",
-    "name": "Fejből Térkép",
+    "name": "4 - Fejből Térkép",
     "type": "Kepesseg",
     "path": "/Beosztás/Mérnök/Építész/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -1009,7 +1009,7 @@
   },
   {
     "_id": "mernok_kontar_pont-mint-uj-koraban",
-    "name": "„Pont, mint új korában!”",
+    "name": "2 - „Pont, mint új korában!”",
     "type": "Kepesseg",
     "path": "/Beosztás/Mérnök/Kontár/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -1020,7 +1020,7 @@
   },
   {
     "_id": "mernok_kontar_probaltad-ki-es-bekapcsolni",
-    "name": "„Próbálta ki és bekapcsolni?”",
+    "name": "4 - „Próbálta ki és bekapcsolni?”",
     "type": "Kepesseg",
     "path": "/Beosztás/Mérnök/Kontár/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -1032,7 +1032,7 @@
   },
   {
     "_id": "orvos_veszhelyzeti-asszisztens",
-    "name": "Vészhelyzeti Asszisztens",
+    "name": "1 - Vészhelyzeti Asszisztens",
     "type": "Kepesseg",
     "path": "/Beosztás/Orvos/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -1043,7 +1043,7 @@
   },
   {
     "_id": "orvos_elsosegely",
-    "name": "Elsősegély",
+    "name": "1 - „Elsősegély”",
     "type": "Kepesseg",
     "path": "/Beosztás/Orvos/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -1055,7 +1055,7 @@
   },
   {
     "_id": "orvos_szakmai-tekintely",
-    "name": "Szakmai Tekintély",
+    "name": "2 - Szakmai Tekintély",
     "type": "Kepesseg",
     "path": "/Beosztás/Orvos/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -1066,7 +1066,7 @@
   },
   {
     "_id": "orvos_injekciok",
-    "name": "Injekciók",
+    "name": "3 - Injekciók",
     "type": "Kepesseg",
     "path": "/Beosztás/Orvos/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -1078,7 +1078,7 @@
   },
   {
     "_id": "orvos_gyogyito-jelenlet",
-    "name": "Gyógyító Jelenlét",
+    "name": "4 - Gyógyító Jelenlét",
     "type": "Kepesseg",
     "path": "/Beosztás/Orvos/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -1089,7 +1089,7 @@
   },
   {
     "_id": "orvos_tokeletes-doktor",
-    "name": "Tökéletes Doktor",
+    "name": "5 - Tökéletes Doktor",
     "type": "Kepesseg",
     "path": "/Beosztás/Orvos/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -1101,7 +1101,7 @@
   },
   {
     "_id": "orvos_felcser_surgossegi-ellatas",
-    "name": "Sürgősségi Ellátás",
+    "name": "2 - Sürgősségi Ellátás",
     "type": "Kepesseg",
     "path": "/Beosztás/Orvos/Felcser/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -1112,7 +1112,7 @@
   },
   {
     "_id": "orvos_felcser_iratlan-harciszabaly",
-    "name": "Íratlan Harciszabály",
+    "name": "4 - Íratlan Harciszabály",
     "type": "Kepesseg",
     "path": "/Beosztás/Orvos/Felcser/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -1124,7 +1124,7 @@
   },
   {
     "_id": "orvos_sebesz_elokeszites-a-mutetre",
-    "name": "Előkészítés a Műtétre",
+    "name": "2 - Előkészítés a Műtétre",
     "type": "Kepesseg",
     "path": "/Beosztás/Orvos/Sebész/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -1135,7 +1135,7 @@
   },
   {
     "_id": "orvos_sebesz_eletmento-procedura",
-    "name": "Életmentő Procedúra",
+    "name": "4 - Életmentő Procedúra",
     "type": "Kepesseg",
     "path": "/Beosztás/Orvos/Sebész/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -1147,7 +1147,7 @@
   },
   {
     "_id": "orvos_terapeuta_megnyugtato-jelenlet",
-    "name": "Megnyugtató Jelenlét",
+    "name": "2 - Megnyugtató Jelenlét",
     "type": "Kepesseg",
     "path": "/Beosztás/Orvos/Terapeuta/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -1158,7 +1158,7 @@
   },
   {
     "_id": "orvos_terapeuta_terapia",
-    "name": "Terápia",
+    "name": "4 - Terápia",
     "type": "Kepesseg",
     "path": "/Beosztás/Orvos/Terapeuta/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -1170,7 +1170,7 @@
   },
   {
     "_id": "orvos_gyogyszeresz_szimpatikus-patikus",
-    "name": "Szimpatikus Patikus",
+    "name": "2 - Szimpatikus Patikus",
     "type": "Kepesseg",
     "path": "/Beosztás/Orvos/Gyógyszerész/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -1181,7 +1181,7 @@
   },
   {
     "_id": "orvos_gyogyszeresz_tapasztalt-vegyesz",
-    "name": "Tapasztalt Vegyész",
+    "name": "4 - Tapasztalt Vegyész",
     "type": "Kepesseg",
     "path": "/Beosztás/Orvos/Gyógyszerész/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -1193,7 +1193,7 @@
   },
   {
     "_id": "orvos_kibernetikus_chip-in",
-    "name": "Chip-In",
+    "name": "2 - Chip-In",
     "type": "Kepesseg",
     "path": "/Beosztás/Orvos/Kibernetikus Specialista/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -1204,7 +1204,7 @@
   },
   {
     "_id": "orvos_kibernetikus_tultoltes",
-    "name": "Túltöltés",
+    "name": "4 - Túltöltés",
     "type": "Kepesseg",
     "path": "/Beosztás/Orvos/Kibernetikus Specialista/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -1216,7 +1216,7 @@
   },
   {
     "_id": "szakacs_mesteri-gasztronomia",
-    "name": "Mesteri Gasztronómia",
+    "name": "1 - Mesteri Gasztronómia",
     "type": "Kepesseg",
     "path": "/Beosztás/Szakács/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -1227,7 +1227,7 @@
   },
   {
     "_id": "szakacs_szuperszonikus-fakanal",
-    "name": "Szuperszonikus Fakanál",
+    "name": "1 - Szuperszonikus Fakanál",
     "type": "Kepesseg",
     "path": "/Beosztás/Szakács/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -1239,7 +1239,7 @@
   },
   {
     "_id": "szakacs_moral-noveles",
-    "name": "Morál Növelés",
+    "name": "2 - Morál Növelés",
     "type": "Kepesseg",
     "path": "/Beosztás/Szakács/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -1250,7 +1250,7 @@
   },
   {
     "_id": "szakacs_szaftos-pletykak",
-    "name": "Szaftos Pletykák",
+    "name": "3 - Szaftos Pletykák",
     "type": "Kepesseg",
     "path": "/Beosztás/Szakács/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -1262,7 +1262,7 @@
   },
   {
     "_id": "szakacs_instant-baratok",
-    "name": "Instant Barátok",
+    "name": "4 - Instant Barátok",
     "type": "Kepesseg",
     "path": "/Beosztás/Szakács/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -1273,7 +1273,7 @@
   },
   {
     "_id": "szakacs_hejaban-sult",
-    "name": "Héjában Sült",
+    "name": "5 - Héjában Sült",
     "type": "Kepesseg",
     "path": "/Beosztás/Szakács/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -1285,7 +1285,7 @@
   },
   {
     "_id": "szakacs_inyenc-sef_inyenc-etelek",
-    "name": "Ínyenc Ételek",
+    "name": "2 - Ínyenc Ételek",
     "type": "Kepesseg",
     "path": "/Beosztás/Szakács/Ínyenc Séf/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -1296,7 +1296,7 @@
   },
   {
     "_id": "szakacs_inyenc-sef_meghitt-vacsora",
-    "name": "Meghitt Vacsora",
+    "name": "4 - Meghitt Vacsora",
     "type": "Kepesseg",
     "path": "/Beosztás/Szakács/Ínyenc Séf/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -1308,7 +1308,7 @@
   },
   {
     "_id": "szakacs_gasztronomiai-szakerto_minden-hajjal-megkent",
-    "name": "Minden Hájjal Megkent",
+    "name": "2 - Minden Hájjal Megkent",
     "type": "Kepesseg",
     "path": "/Beosztás/Szakács/Gasztronómiai Szakértő/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -1319,7 +1319,7 @@
   },
   {
     "_id": "szakacs_gasztronomiai-szakerto_titkos-receptek",
-    "name": "Titkos Receptek",
+    "name": "4 - Titkos Receptek",
     "type": "Kepesseg",
     "path": "/Beosztás/Szakács/Gasztronómiai Szakértő/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -1331,7 +1331,7 @@
   },
   {
     "_id": "szakacs_kotyvaszto_meregkotyvasztas",
-    "name": "Méregkotyvasztás",
+    "name": "2 - Méregkotyvasztás",
     "type": "Kepesseg",
     "path": "/Beosztás/Szakács/Kotyvasztó/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -1342,7 +1342,7 @@
   },
   {
     "_id": "szakacs_kotyvaszto_savgranat",
-    "name": "Savgránát",
+    "name": "4 - Savgránát",
     "type": "Kepesseg",
     "path": "/Beosztás/Szakács/Kotyvasztó/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -1354,7 +1354,7 @@
   },
   {
     "_id": "szakacs_kifozdes_fast-food-samurai",
-    "name": "Fast-Food Samurai",
+    "name": "2 - Fast-Food Samurai",
     "type": "Kepesseg",
     "path": "/Beosztás/Szakács/Kifőzdés/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -1365,7 +1365,7 @@
   },
   {
     "_id": "szakacs_kifozdes_latvanykonyha",
-    "name": "Látványkonyha",
+    "name": "4 - Látványkonyha",
     "type": "Kepesseg",
     "path": "/Beosztás/Szakács/Kifőzdés/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -1377,7 +1377,7 @@
   },
   {
     "_id": "szakacs_hentes_tiszta-talalat",
-    "name": "Tiszta Találat",
+    "name": "2 - Tiszta Találat",
     "type": "Kepesseg",
     "path": "/Beosztás/Szakács/Hentes/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -1388,7 +1388,7 @@
   },
   {
     "_id": "szakacs_hentes_szorostul-borostul",
-    "name": "Szőröstűl, bőrőstűl",
+    "name": "4 - Szőröstűl, bőrőstűl",
     "type": "Kepesseg",
     "path": "/Beosztás/Szakács/Hentes/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -1400,7 +1400,7 @@
   },
   {
     "_id": "influenszer_ezustnyelvu",
-    "name": "Ezüstnyelvű",
+    "name": "1 - Ezüstnyelvű",
     "type": "Kepesseg",
     "path": "/Beosztás/Influenszer/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -1411,7 +1411,7 @@
   },
   {
     "_id": "influenszer_szponzoralt-tartalom",
-    "name": "Szponzorált Tartalom",
+    "name": "1 - Szponzorált Tartalom",
     "type": "Kepesseg",
     "path": "/Beosztás/Influenszer/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -1423,7 +1423,7 @@
   },
   {
     "_id": "influenszer_profi-a-szakmaban",
-    "name": "Profi a Szakmában",
+    "name": "2 - Profi a Szakmában",
     "type": "Kepesseg",
     "path": "/Beosztás/Influenszer/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -1434,7 +1434,7 @@
   },
   {
     "_id": "influenszer_koveto-bazis",
-    "name": "Követő Bázis",
+    "name": "3 - Követő Bázis",
     "type": "Kepesseg",
     "path": "/Beosztás/Influenszer/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -1446,7 +1446,7 @@
   },
   {
     "_id": "influenszer_hiresseg-a-haznal",
-    "name": "Híresség a Háznál",
+    "name": "4 - Híresség a Háznál",
     "type": "Kepesseg",
     "path": "/Beosztás/Influenszer/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -1457,7 +1457,7 @@
   },
   {
     "_id": "influenszer_a-harom-musketas",
-    "name": "A Három Muskétás",
+    "name": "5 - A Három Muskétás",
     "type": "Kepesseg",
     "path": "/Beosztás/Influenszer/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -1469,7 +1469,7 @@
   },
   {
     "_id": "influenszer_vlogger_en-a-szaki",
-    "name": "„Én a Szaki”",
+    "name": "2 - „Én a Szaki”",
     "type": "Kepesseg",
     "path": "/Beosztás/Influenszer/Vlogger/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -1480,7 +1480,7 @@
   },
   {
     "_id": "influenszer_vlogger_hebti-vlog",
-    "name": "Heti-Vlog",
+    "name": "4 - Heti-Vlog",
     "type": "Kepesseg",
     "path": "/Beosztás/Influenszer/Vlogger/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -1492,7 +1492,7 @@
   },
   {
     "_id": "influenszer_zenesz_improvizalt-muzsika",
-    "name": "Improvizált Muzsika",
+    "name": "2 - Improvizált Muzsika",
     "type": "Kepesseg",
     "path": "/Beosztás/Influenszer/Zenész/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -1503,7 +1503,7 @@
   },
   {
     "_id": "influenszer_zenesz_utcai-eloadas",
-    "name": "Utcai Előadás",
+    "name": "4 - Utcai Előadás",
     "type": "Kepesseg",
     "path": "/Beosztás/Influenszer/Zenész/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -1515,7 +1515,7 @@
   },
   {
     "_id": "influenszer_hiresseg_kozismert-arc",
-    "name": "Közismert Arc",
+    "name": "2 - Közismert Arc",
     "type": "Kepesseg",
     "path": "/Beosztás/Influenszer/Híresség/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -1526,7 +1526,7 @@
   },
   {
     "_id": "influenszer_hiresseg_celeb-vagyok-ments-ki-innen",
-    "name": "Celeb Vagyok, Ments Ki Innen!",
+    "name": "4 - Celeb Vagyok, Ments Ki Innen!",
     "type": "Kepesseg",
     "path": "/Beosztás/Influenszer/Híresség/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -1538,7 +1538,7 @@
   },
   {
     "_id": "banyasz_banyaba-szuletett",
-    "name": "Bányába Született",
+    "name": "1 - Bányába Született",
     "type": "Kepesseg",
     "path": "/Beosztás/Bányász/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -1549,7 +1549,7 @@
   },
   {
     "_id": "banyasz_acelkormok",
-    "name": "Acélkörmök",
+    "name": "1 - Acélkörmök",
     "type": "Kepesseg",
     "path": "/Beosztás/Bányász/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -1561,7 +1561,7 @@
   },
   {
     "_id": "banyasz_zord-korulmenyek",
-    "name": "Zord Körülmények",
+    "name": "2 - Zord Körülmények",
     "type": "Kepesseg",
     "path": "/Beosztás/Bányász/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -1572,7 +1572,7 @@
   },
   {
     "_id": "banyasz_omlasveszely",
-    "name": "Omlásveszély",
+    "name": "3 - Omlásveszély",
     "type": "Kepesseg",
     "path": "/Beosztás/Bányász/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -1584,7 +1584,7 @@
   },
   {
     "_id": "banyasz_csakanysugallat",
-    "name": "Csákánysugallat",
+    "name": "4 - Csákánysugallat",
     "type": "Kepesseg",
     "path": "/Beosztás/Bányász/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -1595,7 +1595,7 @@
   },
   {
     "_id": "banyasz_aszhd",
-    "name": "Alapanyag és Személy Hordozó Droid",
+    "name": "5 - Alapanyag és Személy Hordozó Droid",
     "type": "Kepesseg",
     "path": "/Beosztás/Bányász/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -1607,7 +1607,7 @@
   },
   {
     "_id": "banyasz_furo-specialista_furodron",
-    "name": "Fúródrón",
+    "name": "2 - Fúródrón",
     "type": "Kepesseg",
     "path": "/Beosztás/Bányász/Fúró Specialista/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -1618,7 +1618,7 @@
   },
   {
     "_id": "banyasz_furo-specialista_kezi-furokalapacs",
-    "name": "Kézi Fúrókalapács",
+    "name": "4 - Kézi Fúrókalapács",
     "type": "Kepesseg",
     "path": "/Beosztás/Bányász/Fúró Specialista/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -1630,7 +1630,7 @@
   },
   {
     "_id": "banyasz_barlangi-felderito_obszidian-memoria",
-    "name": "Obszidián Memória",
+    "name": "2 - Obszidián Memória",
     "type": "Kepesseg",
     "path": "/Beosztás/Bányász/Barlangi Felderítő/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -1641,7 +1641,7 @@
   },
   {
     "_id": "banyasz_barlangi-felderito_terepszkenner",
-    "name": "Terepszkenner",
+    "name": "4 - Terepszkenner",
     "type": "Kepesseg",
     "path": "/Beosztás/Bányász/Barlangi Felderítő/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
@@ -1653,7 +1653,7 @@
   },
   {
     "_id": "banyasz_banyatuzer_a-labai-kozott",
-    "name": "„A Lábai Között!”",
+    "name": "2 - „A Lábai Között!”",
     "type": "Kepesseg",
     "path": "/Beosztás/Bányász/Bányatüzér/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
@@ -1664,7 +1664,7 @@
   },
   {
     "_id": "banyasz_banyatuzer_lancreakcio",
-    "name": "Láncreakció",
+    "name": "4 - Láncreakció",
     "type": "Kepesseg",
     "path": "/Beosztás/Bányász/Bányatüzér/",
     "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
