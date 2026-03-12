@@ -100,13 +100,12 @@
 }
 
 .votv.jarmu-sheet .jarmu-portrait {
-  flex: 1 1 auto;
-  min-height: 120px;
+  flex: 0 0 auto;
+  width: 150px;
+  height: 150px;
   padding: 0;
   overflow: hidden;
   aspect-ratio: 1;
-  width: auto;
-  height: 100%;
   align-self: flex-start;
 }
 
@@ -324,11 +323,26 @@
   border-radius: var(--votv-radius);
   padding: 10px;
   background: var(--votv-panel-bg);
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.votv.jarmu-sheet .jarmu-units-content.jarmu-units-content--empty {
+  background: rgba(3, 6, 10, 0.5);
+}
+
+.votv.jarmu-sheet .jarmu-units-content.jarmu-units-content--empty:hover,
+.votv.jarmu-sheet .jarmu-units-content.jarmu-units-drag-over {
+  border-color: var(--votv-border-accent);
+  background: rgba(43, 255, 136, 0.08);
 }
 
 /* Jármű raktár kapacitás sor – a Raktár címhez igazítva, jobbra húzva */
 .votv.jarmu-sheet .jarmu-raktar {
   position: relative;
+}
+
+.votv.jarmu-sheet .jarmu-raktar.jarmu-raktar--empty {
+  padding-top: 32px;
 }
 
 .votv.jarmu-sheet .jarmu-storage-header {

@@ -285,8 +285,15 @@ export class VoidJarmuEgysegSheet extends foundry.applications.api.HandlebarsApp
         ? "Faji"
         : kind === "background"
         ? "Háttér"
+        : kind === "module"
+        ? "Modul"
         : "Passzív";
-    const kpLine = kp > 0 ? `<p><strong>KP:</strong> ${kp}</p>` : "";
+    let kpLine = "";
+    if (kind === "active" && kp > 0) {
+      kpLine = `<p><strong>KP:</strong> ${kp}</p>`;
+    } else if (kind === "module" && kp > 0) {
+      kpLine = `<p><strong>KP:</strong> ${kp}</p>`;
+    }
     const descLine = description ? `<p>${description}</p>` : "";
     const content = `
       <h2>${item.name}</h2>

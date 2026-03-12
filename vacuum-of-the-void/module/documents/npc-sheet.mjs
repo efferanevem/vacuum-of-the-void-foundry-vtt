@@ -897,8 +897,21 @@ export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplication
     const kp = Number(item.system?.kp ?? 0) || 0;
     const description = (item.system?.description ?? "").trim();
     const kindLabel =
-      kind === "active" ? "Aktív" : kind === "species" ? "Faji" : kind === "background" ? "Háttér" : "Passzív";
-    const kpLine = kp > 0 ? `<p><strong>KP:</strong> ${kp}</p>` : "";
+      kind === "active"
+        ? "Aktív"
+        : kind === "species"
+        ? "Faji"
+        : kind === "background"
+        ? "Háttér"
+        : kind === "module"
+        ? "Modul"
+        : "Passzív";
+    let kpLine = "";
+    if (kind === "active" && kp > 0) {
+      kpLine = `<p><strong>KP:</strong> ${kp}</p>`;
+    } else if (kind === "module" && kp > 0) {
+      kpLine = `<p><strong>KP:</strong> ${kp}</p>`;
+    }
     const descLine = description ? `<p>${description}</p>` : "";
     const content = `
       <h2>${item.name}</h2>

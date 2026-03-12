@@ -322,7 +322,7 @@
 .votv.karakter-sheet .karakter-header-field.karakter-header-level input {
   width: 100%;
   min-width: 0;
-  text-align: center;
+  text-align: left;
 }
 
 .votv.karakter-sheet .karakter-header-field {
@@ -381,7 +381,6 @@
   flex: 0 0 auto;
 }
 .votv.karakter-sheet .karakter-column.karakter-left .karakter-panel.karakter-health .karakter-health-table-wrap {
-  flex: 1 1 auto;
   min-height: 0;
 }
 .votv.karakter-sheet .karakter-column.karakter-left .karakter-panel.karakter-health .karakter-health-status-title,
@@ -906,7 +905,7 @@
 .votv.karakter-sheet .karakter-health-status-dot {
   flex: 1 1 0;
   min-width: 0;
-  height: 8px;
+  height: 10px;
   border-radius: 2px;
   background: rgba(0, 0, 0, 0.2);
   transition: background 0.15s ease;
@@ -1324,9 +1323,16 @@
 }
 
 .votv.karakter-sheet .karakter-ability-slot-drag-over,
-.votv.karakter-sheet .karakter-ability-area-drag-over {
+.votv.karakter-sheet .karakter-ability-area-drag-over,
+.votv.karakter-sheet .karakter-ability-area:has(.karakter-ability-area-placeholder):hover {
   border-color: var(--votv-border-accent);
   background: rgba(43, 255, 136, 0.08);
+}
+
+/* NPC: ha már van képesség pill, ne legyen hover highlight a poolon */
+.votv.karakter-sheet.npc-sheet .npc-ability-pool-area:hover:has(.karakter-ability-pill) {
+  border-color: var(--votv-border-muted);
+  background: rgba(3, 6, 10, 0.5);
 }
 
 /* Fegyverek: weapon slots */
@@ -2821,13 +2827,7 @@
 }
 
 .votv.karakter-sheet .karakter-notes-egyeb-icon {
-  width: 28px;
-  height: 28px;
-  object-fit: contain;
-  border-radius: 2px;
-  border: 1px solid var(--votv-border-muted);
-  flex-shrink: 0;
-  cursor: pointer;
+  display: none;
 }
 
 .votv.karakter-sheet .karakter-notes-egyeb-main {

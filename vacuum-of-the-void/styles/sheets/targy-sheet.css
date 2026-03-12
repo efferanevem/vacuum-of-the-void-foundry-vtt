@@ -9,8 +9,8 @@
 
 .vacuum-of-the-void.sheet.item.Targy .sheet-header .profile,
 .vacuum-of-the-void.sheet.item.Egyeb .sheet-header .profile {
-  width: 64px;
-  height: 64px;
+  width: 100px;
+  height: 100px;
   object-fit: cover;
 }
 

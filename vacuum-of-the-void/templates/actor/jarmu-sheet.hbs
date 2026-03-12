@@ -138,7 +138,7 @@
 
   <section class="jarmu-section jarmu-units karakter-panel">
     <h2>{{#if (eq actor.type "Bazis")}}Helyiségek és Modulok{{else}}Járműegységek és Modulok{{/if}}</h2>
-    <div class="jarmu-units-content" data-drop-zone="jarmuegyseg">
+    <div class="jarmu-units-content{{#unless unitsTable.length}} jarmu-units-content--empty{{/unless}}" data-drop-zone="jarmuegyseg">
       {{#if unitsTable.length}}
         <table class="karakter-equipment-table jarmu-units-table">
           <thead>
@@ -254,13 +254,13 @@
         </table>
       {{else}}
         <p class="karakter-equipment-placeholder">
-          Húzz ide {{unitItemTypeLabel}} típusú itemeket
+          {{#if (eq actor.type "Bazis")}}Húzz ide helyiségeket{{else}}Húzz ide járműegységeket{{/if}}
         </p>
       {{/if}}
     </div>
   </section>
 
-  <section class="jarmu-section jarmu-raktar karakter-panel karakter-equipment">
+  <section class="jarmu-section jarmu-raktar karakter-panel karakter-equipment{{#if showEquipmentDropZone}} jarmu-raktar--empty{{/if}}">
     <h2>Raktár</h2>
     <div class="jarmu-storage-header">
       <span class="jarmu-storage-label">Raktárkapacitás:</span>
@@ -469,7 +469,7 @@
               <button type="button" class="karakter-equipment-delete jarmu-egyeb-delete" data-item-id="{{this.itemId}}" data-actor-id="{{this.actorId}}" title="Alt+klikk: Törlés">✕</button>
             </div>
           {{else}}
-            <p class="karakter-notes-egyeb-placeholder">Húzz ide Egyéb Információ típusú tételt</p>
+            <p class="karakter-notes-egyeb-placeholder">Húzz ide egyéb információt</p>
           {{/each}}
         </div>
       </div>

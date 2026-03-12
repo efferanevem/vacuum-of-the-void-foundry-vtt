@@ -236,10 +236,10 @@ Hooks.once("init", () => {
   // Ha egy actort frissítenek, a nyitott VoidKarakterSheet lapok újrarajzolódjanak. Ne újrarajzoljunk, ha
   // bármelyik lapon input/textarea van fókuszban (kurzor + görgetés maradjon), és ne a lapot, ami
   // épp mentett (blur save), hogy ne tekerjen fel.
-  const UPDATE_ACTOR_SKIP_RENDER_MS = 500;
-  Hooks.on("updateActor", (actor, changed, _options, _userId) => {
-    const actorId = actor?.id;
-    if (!actorId) return;
+const UPDATE_ACTOR_SKIP_RENDER_MS = 500;
+Hooks.on("updateActor", (actor, changed, _options, _userId) => {
+  const actorId = actor?.id;
+  if (!actorId) return;
 
     // Karakter/NPC kezdeményezés (initiativeResult) → Combat Tracker initiative mező szinkron
     if ((actor.type === "Karakter" || actor.type === "Npc") && changed?.system?.combat && "initiativeResult" in changed.system.combat) {
@@ -570,23 +570,42 @@ Hooks.on("createCombatant", (combatant, _data, _options) => {
   });
 });
 
-// Minden kör végén: összes KP ikon visszaállítása „simára” (used → 0) a combatban lévő Karaktereknél
-const VOTV_KP_RESET = {
-  "system.resources.kpDot1": 0,
-  "system.resources.kpDot2": 0,
-  "system.resources.kpDot3": 0,
-  "system.resources.kpDot4": 0,
-  "system.resources.kpDot5": 0,
-  "system.resources.kpDot6": 0
-};
+// Minden kör végén: összes KP ikon visszaállítása „simára” (used → 0)
+// Dinamikusan kezeljük az 1–10. KP pontokat – csak azokat nullázzuk, amelyek
+// az adott actor `system.resources` objektumában ténylegesen léteznek.
+function votvBuildKpResetUpdate(actor) {
+  const res = actor?.system?.resources ?? {};
+  const updates = {};
+  for (let i = 1; i <= 10; i++) {
+    const key = `kpDot${i}`;
+    if (Object.prototype.hasOwnProperty.call(res, key)) {
+      updates[`system.resources.${key}`] = 0;
+    }
+  }
+  return updates;
+}
 
 function votvResetKpForCombat(combat) {
+  // Karaktereknél: minden karakterre vonatkozik (akkor is, ha épp nincs token a combatban),
+  // hogy új kör kezdetén mindig "feltöltött" KP sávval induljanak.
+  for (const actor of game.actors?.contents ?? []) {
+    if (!actor || actor.type !== "Karakter") continue;
+    const updates = votvBuildKpResetUpdate(actor);
+    if (!updates || !Object.keys(updates).length) continue;
+    actor.update(updates).catch((err) => {
+      console.warn("Vacuum of the Void | KP reset failed for", actor.name, err);
+    });
+  }
+
+  // NPC-knél csak a konkrét combatban résztvevőkre alkalmazzuk.
   const combatants = combat?.combatants;
   const list = combatants?.contents ?? (combatants ? Array.from(combatants) : []);
   for (const c of list) {
     const actor = c.actor;
-    if (!actor || (actor.type !== "Karakter" && actor.type !== "Npc")) continue;
-    actor.update(VOTV_KP_RESET).catch((err) => {
+    if (!actor || actor.type !== "Npc") continue;
+    const updates = votvBuildKpResetUpdate(actor);
+    if (!updates || !Object.keys(updates).length) continue;
+    actor.update(updates).catch((err) => {
       console.warn("Vacuum of the Void | KP reset failed for", actor.name, err);
     });
   }
@@ -595,6 +614,7 @@ function votvResetKpForCombat(combat) {
 Hooks.on("combatRound", (combat, _updateData, updateOptions) => {
   if (updateOptions?.direction <= 0) return;
   votvResetKpForCombat(combat);
+  setTimeout(votvRenderOpenCombatSheets, 0);
 });
 
 // Harc vége vagy combatant változás: nyitott Karakter és NPC lapok újrarajzolása, hogy a Harc szekció azonnal eltűnjön
@@ -624,8 +644,10 @@ Hooks.on("deleteCombat", () => {
 });
 
 Hooks.on("updateCombat", (combat, change, _options) => {
-  if (change?.round != null) votvResetKpForCombat(combat);
-  setTimeout(votvRenderOpenCombatSheets, 0);
+  if (change?.round != null) {
+    // A KP resetet combatRound kezeli; itt csak a nyitott lapok újrarajzolása marad.
+    setTimeout(votvRenderOpenCombatSheets, 0);
+  }
 });
 
 // Combat Tracker: Roll Initiative gombok elrejtése
