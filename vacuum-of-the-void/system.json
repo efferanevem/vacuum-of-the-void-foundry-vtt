@@ -58,6 +58,13 @@
       "type": "Item",
       "system": "vacuum-of-the-void",
       "path": "packs/microchips.db"
+    },
+    {
+      "name": "abilities",
+      "label": "Képességek",
+      "type": "Item",
+      "system": "vacuum-of-the-void",
+      "path": "packs/abilities.db"
     }
   ],
   "grid": {

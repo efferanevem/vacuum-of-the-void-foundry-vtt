@@ -1,0 +1,481 @@
+[
+  {
+    "_id": "ember",
+    "name": "Ember - Sokoldalú Létforma",
+    "type": "Kepesseg",
+    "path": "/Faji/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/abilities/species.png",
+    "system": {
+      "kind": "species",
+      "description": "Karakterkészítésnél az emberek sokoldalúsága miatt választhatsz kettő plusz képzettséget Jártasságokban."
+    }
+  },
+  {
+    "_id": "droid",
+    "name": "Droid - Ellenálló Áramkörök",
+    "type": "Kepesseg",
+    "path": "/Faji/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/abilities/species.png",
+    "system": {
+      "kind": "species",
+      "description": "A Droidoknak nincsen szüksége ételre, vízre és oxigénre. Ezen felül nem kaphatsz semmilyen módon Stressz Pontokat, és így immunis vagy a Mentális Betegségekre.\nAzonban amennyiben nem kapsz ellátást egy Elsősegély Egységben vagy valamilyen egészségügyi létesítményben, akkor nem tudsz magadtól gyógyulni."
+    }
+  },
+  {
+    "_id": "eventyr",
+    "name": "Eventyr – Improvizált Segítség",
+    "type": "Kepesseg",
+    "path": "/Faji/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/abilities/species.png",
+    "system": {
+      "kind": "species",
+      "description": "Az Eventyr faj kifejezetten segítőkész, és magas intelligenciájuk miatt ez sokszor hasznosnak bizonyul. Amikor segítesz egy bajtársadon egy Jártasságpróbában, a saját bónuszodon felül +2-őt adhatsz hozzá a dobáshoz. Abban az esetben, ha valamiben alulképzett vagy, akkor (a saját negatív bónuszodat elhagyva) +1-et adhatsz hozzá a dobáshoz."
+    }
+  },
+  {
+    "_id": "marhudi",
+    "name": "Mar’hudi – Újrahasznosítás Mesterei",
+    "type": "Kepesseg",
+    "path": "/Faji/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/abilities/species.png",
+    "system": {
+      "kind": "species",
+      "description": "Képes vagy 1 óra alatt egy improvizált fegyvert készíteni a körülötted lévő szemétből. Ez a fegyver közelharci fegyver (hatótávolsága: 1,5 méter) és 1d4+1 sebzést okoz Kézifegyver Használatpróbával. Napi egyszer ugyan ezekből az alapanyagokból képes vagy egy Egyszer Használatos Eszközt (+3) készíteni bármilyen Jártassághoz."
+    }
+  },
+  {
+    "_id": "fel-eventyr",
+    "name": "Fél-Eventyr – Született Diplomaták",
+    "type": "Kepesseg",
+    "path": "/Faji/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/abilities/species.png",
+    "system": {
+      "kind": "species",
+      "description": "A családodban megszokott „faji szakadék” miatt, hamar megtanultad, hogyan vethetsz véget elfajult vitáknak és konfliktusoknak. Bármilyen szituációban, amikor egy konfliktust (legyen az verbális vagy akár fegyveres) próbálsz megakadályozni vagy félbeszakítani, a Meggyőzéspróbádra előnyt kapsz."
+    }
+  },
+  {
+    "_id": "mar-urbs",
+    "name": "Mar’urbs – Bivalyerős Szervezet",
+    "type": "Kepesseg",
+    "path": "/Faji/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/abilities/species.png",
+    "system": {
+      "kind": "species",
+      "description": "A fajod nem arról híres, hogy könnyen ledől a lábáról. Amennyiben betegség, méreg, alkohol vagy egyéb narkotikum ellen kell Erőnlét mentődobást dobnod, akkor a dobásodhoz hozzáadhatsz +6-ot."
+    }
+  },
+  {
+    "_id": "melylako",
+    "name": "Mélylakó – Sötéthez Szokott Szemek",
+    "type": "Kepesseg",
+    "path": "/Faji/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/abilities/species.png",
+    "system": {
+      "kind": "species",
+      "description": "Az elődeid évezredeket töltöttek a földfelszín alatt. Ezalatt az idő alatt a szemeik hozzászoktak a sötétség összes árnyalatához. A fény teljes hiányában is képes vagy 6 méter távolságra ellátni. Ilyenkor nem tudod megállapítani a színeket. Azonban a szemeid érzékenyek a fényre. Így teljes világosságban -2 büntetést kapsz minden dobásodra, amennyiben nem viselsz napszemüveget vagy egyéb szemvédő eszközt."
+    }
+  },
+  {
+    "_id": "oobahgubguls",
+    "name": "Oobahgubguls – Éltető Nyálka",
+    "type": "Kepesseg",
+    "path": "/Faji/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/abilities/species.png",
+    "system": {
+      "kind": "species",
+      "description": "Az Oobahgubgulsok termelnek egy speciális váladékot, ami egész testfelületükön megtalálható. A nyálkás váladék erős mechanikai védelmet biztosít, így +2-t kapnak Védelmi Értékükre. Ugyanakkor vigyázniuk kell testük nedvesen tartására, így, ha speciális űrruhájuk (a „ghulplugg”) nélkül eltöltenek több mint egy napot kifejezetten forró és száraz területen, akkor -2-őt kapnak minden Jártasság próbájukra. Zsinórban 10 nap eltöltése ilyen körülmények között halált okoz.\n\n(A „ghulplugg” minden Obbahgubguls felszerelésében megtalálható, azonban nagyon sérülékeny. Minden olyan támadás, amely eltalál, és pengés/fizikai lövedékes/robbanó fegyverrel történik, magával von egy 12-es nehézségű Szerencse próbát. Amennyiben ez sikertelen, akkor a „ghulplugg” tönkremegy. Javítását egyszer lehet megpróbálni, és ehhez szükséges egy 19-es nehézségű Technikai Tudás próbát dobni (amelyre Oobahgubguls-ok 1d6 előnyt kapnak). „Ghulplugg” beszerzése nem egyszerű feladat, csak a Lianshlugg-on (350 cr) vagy távolról érkező kereskedőknél (1000 cr) lehet megtalálni.)"
+    }
+  },
+  {
+    "_id": "ophiocordy",
+    "name": "Ophio’cordy – Spóra-pokalipszis",
+    "type": "Kepesseg",
+    "path": "/Faji/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/abilities/species.png",
+    "system": {
+      "kind": "species",
+      "description": "Naponta egyszer megpróbálhatsz megfertőzni egy humanoidot az Ophio’cordy gombával 1,5 méteren belül. Ezt egy 15-ös nehézségű Észleléspróbával lehet észrevenni. Ekkor dobnia kell egy 15-ös nehézségű Mentális Erősség dobást. Amennyiben ez nem sikerül, akkor a gomba 1d4 perc alatt átveszi az uralmat felette. Ezután a személy 4 óráig szülőjeként tekint rád, és mindenben segít neked, majd ezután továbbáll, terjeszteni a fajtátok.\nMinden Kibernetikus vagy Szintetikus Testrésszel elvégzett próbára -1 büntetést kapsz, mivel ezeket nehezebben irányítod."
+    }
+  },
+  {
+    "_id": "saurid",
+    "name": "Saurid – Sokféle Tenyésztés",
+    "type": "Kepesseg",
+    "path": "/Faji/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/abilities/species.png",
+    "system": {
+      "kind": "species",
+      "description": "Attól függően, hogy milyen Beosztást választasz, az határozza meg a sebességedet és az alábbi képességek közül választhatsz egyet – a többit töröld ki.\n\nOrvos, Szakács, (Influenszer – Nagyvárosi Kiegészítő):\nHőlátás: Kapsz 4,5 méter hőlátást.\nSzínváltás: Tudatosan tudod változtatni a bőrszínedet. Ha beleolvadsz a környezetedbe, akkor +3 bónuszt kapsz Lopakodás próbákra. Ehhez mozdulatlannak kell maradnod.\nVágta: Képes vagy naponta háromszor hihetetlen sebességgel rohanni. Ekkor a sebességed háromszorosára növekszik 1d4+1 körig.\n\nPilóta, Mérnök:\nUltrahangos Kommunikáció: Képes vagy ultrahangos kommunikációra. Ezt az összes Saurid hallja és érti, azonban más fajok nem hallják (speciális felszerelés nélkül).\nTapadós Végtagok: Bármilyen felületen képes vagy mászni. Ekkor elbírod a saját testsúlyodat és még a saját súlyod harmadát. A mászási sebességed 6 méter.\n\nParancsnok, Lövegkezelő, Bányász, (Birodalmi Lovag – Birodalmi Kiegészítő):\nRegeneráció: Képes vagy naponta egyszer egy testrészeden 4d4-et gyógyítani.\nKarmok: Képes vagy a karmaiddal támadni. Ekkor egy Harcképzettség próbával kell támadnod, és a sebzésed 1d6+1.\nPikkelyes Bőr: A bőröd kemény pikkelyek borítják, amik miatt nehezebb megsebezni téged. Kapsz +1 bónuszt a Védelmi Értékedre.\nMéregfog: Képes vagy belevájni a méregfogaid valakibe. Ehhez egy Harcképzettség próbát kell dobnod. Ekkor 1d4-et sebzel és a célpont Mérgezett állapotba kerül.\n\nKatona:\nHarapás: Képes vagy erősen beleharapni valakibe. Ekkor egy Harcképzettség próbával kell támadnod, és a sebzésed 3d4+2."
+    }
+  },
+  {
+    "_id": "parancsnok_csapat-taktika",
+    "name": "Csapat Taktika",
+    "type": "Kepesseg",
+    "path": "/Beosztások/Parancsnok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
+    "system": {
+      "kind": "passive",
+      "description": "Megtanultál olyannyira együtt mozogni a legénységeddel, hogy ha a legénység legalább egy tagja 1,5 méteren belül helyezkedik el tőled, akkor előnnyel támadtok."
+    }
+  },
+  {
+    "_id": "parancsnok_felkeszult-vezeto",
+    "name": "Felkészült Vezető",
+    "type": "Kepesseg",
+    "path": "/Beosztások/Parancsnok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
+    "system": {
+      "kind": "active",
+      "kp": 0,
+      "description": "Ha számítasz a harcra, akkor előre felállíthatod a legénységedet úgy, hogy a harc kezdetekor a legénység tagjai egy külön, meglepetés kört kapnak."
+    }
+  },
+  {
+    "_id": "parancsnok_vedelmezo-tekintely",
+    "name": "Védelmező Tekintély",
+    "type": "Kepesseg",
+    "path": "/Beosztások/Parancsnok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
+    "system": {
+      "kind": "passive",
+      "description": "A jelenlétedből áradó önbizalom és az általad elvárt fegyelem miatt a legénység összes tagja +1 bónuszt kap a Védelmi Értékére."
+    }
+  },
+  {
+    "_id": "parancsnok_kupaktancs",
+    "name": "Kupaktanács",
+    "type": "Kepesseg",
+    "path": "/Beosztások/Parancsnok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
+    "system": {
+      "kind": "active",
+      "kp": 0,
+      "description": "Naponta egyszer szervezhetsz egy kupaktanácsot, amikor megbeszélhetik a legénység tagjai, hogy éppen mi jár a fejükben, mi bántja őket, vagy milyen stresszhelyzetben vannak. Ilyenkor minden csapattag, beleértve téged is, levonhat magától 2 Stressz Pontot."
+    }
+  },
+  {
+    "_id": "parancsnok_kisegito-jelenlet",
+    "name": "Kisegítő Jelenlét",
+    "type": "Kepesseg",
+    "path": "/Beosztások/Parancsnok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
+    "system": {
+      "kind": "passive",
+      "description": "A veled egy helyiségben tartózkodók +2-t kapnak minden próbájukra, amely a csapat érdekét szolgálja. Ez a bónusz rád nem vonatkozik. Amennyiben nem zárt térben vagytok, és nincs köztetek teljes takarás, akkor ennek a hatásköre 10,5 méter."
+    }
+  },
+  {
+    "_id": "parancsnok_motivalo-parancs",
+    "name": "Motiváló Parancs",
+    "type": "Kepesseg",
+    "path": "/Beosztások/Parancsnok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
+    "system": {
+      "kind": "active",
+      "kp": 0,
+      "description": "Harconként háromszor kiválaszthatsz egy csapattagot, aki veled egy járművön vagy épületben van, vagy zárt téren kívül 20 méteres körzetedben tartózkodik. Ennek a legénységi tagnak olyan parancsot adsz, amely miatt a következő körében 6-tal több Küzdelmi Pontot kap."
+    }
+  },
+  {
+    "_id": "hadtestor_harckepzett-beosztottak",
+    "name": "Harcképzett Beosztottak",
+    "type": "Kepesseg",
+    "path": "/Beosztások/Parancsnok/Hadtestőr/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
+    "system": {
+      "kind": "passive",
+      "description": "A továbbképzéseiddel eléred azt, hogy a legénység minden tagja +1 bónuszt kap a Harcképzettségre, és így a Védelmi Értékére is."
+    }
+  },
+  {
+    "_id": "hadtestor_hadmuveleti-mozgas",
+    "name": "Hadműveleti Mozgás",
+    "type": "Kepesseg",
+    "path": "/Beosztások/Parancsnok/Hadtestőr/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
+    "system": {
+      "kind": "active",
+      "kp": 4,
+      "description": "Elkölthetsz 4 Küzdelmi Pontot arra, hogy a következő két kör elejéig a 6 méteren belül álló legénységi tagokra érkező támadások hátrányt kapjanak. Ilyenkor a legénységednek azt a parancsot adod, hogy egy előre begyakorolt mozgássorozatot végezzenek el. Minden ellenség dobhat egy 19-es nehézségű Gyorsgondolkodás dobást; ha ezt sikeresen megdobják, akkor rájuk nem hat ez az effekt, mert ki tudják számítani a következő mozdulatokat."
+    }
+  },
+  {
+    "_id": "admiralis_osszeszedett-legenyseg",
+    "name": "Összeszedett Legénység",
+    "type": "Kepesseg",
+    "path": "/Beosztások/Parancsnok/Admirális/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
+    "system": {
+      "kind": "passive",
+      "description": "Mivel elvárod az egész legénységedtől, hogy a járművön gyorsan cselekedjenek minden esetben, ezért járművel vagy járművön vívott harc esetén minden csapattag kap 1 Küzdelmi Pontot, a kezdeményezéséből kapott Küzdelmi Pontokon felül."
+    }
+  },
+  {
+    "_id": "admiralis_inspiralo-reflektalas",
+    "name": "Inspiráló Reflektálás",
+    "type": "Kepesseg",
+    "path": "/Beosztások/Parancsnok/Admirális/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
+    "system": {
+      "kind": "active",
+      "kp": 4,
+      "description": "Elhasználhatsz 4 Küzdelmi Pontot arra, hogy a járművön lévő összes tagnak – és a járművön kívül 3 méteres körzetedben tartózkodóknak – megduplázd a Küzdelmi Pontjait a következő körükben."
+    }
+  },
+  {
+    "_id": "hadnagy_pontos-legenyseg",
+    "name": "Pontos Legénység",
+    "type": "Kepesseg",
+    "path": "/Beosztások/Parancsnok/Hadnagy/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
+    "system": {
+      "kind": "passive",
+      "description": "Harci szituáció esetén a legénység minden tagja +1 bónuszt kap a kézifegyveres sebzésdobásaikra, mivel megosztottad velük, hogy melyek azok a praktikák, amelyekkel halálosabb sebeket lehet okozni."
+    }
+  },
+  {
+    "_id": "hadnagy_holografikus-hasonmasok",
+    "name": "Holografikus Hasonmások",
+    "type": "Kepesseg",
+    "path": "/Beosztások/Parancsnok/Hadnagy/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
+    "system": {
+      "kind": "active",
+      "kp": 3,
+      "description": "Naponta háromszor felhasználhatod 3 Küzdelmi Pontodat, hogy egy veled egy járművön, épületben vagy tőled maximum 18 méteren belül elhelyezkedő legénységi tag testén elhelyezett eszközből 3 holografikus hasonmás vetüljön ki.\nEgy ilyen eszközt 75 cr-ért tudsz megvásárolni, és előre fel kell helyezni a tag ruhájára. Ezeknek a hasonmásoknak a Védelmi Értéke megegyezik a legénységi tagéval, és követik a tagot.\nMinden alkalommal, amikor valaki erre a tagra támad, 50% esélye van, hogy az igazi tagot találja el. Ha az egyik hasonmást eltalálják, akkor az eltűnik.\nAz ellenség, ha úgy dönt, dobhat egy 19-es nehézségű Észlelésdobást, amellyel meg tudja állapítani, hogy melyik az eredeti tag."
+    }
+  },
+  {
+    "_id": "kem_beepitett-ugynokok",
+    "name": "Beépített Ügynökök",
+    "type": "Kepesseg",
+    "path": "/Beosztások/Parancsnok/Kém/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
+    "system": {
+      "kind": "passive",
+      "description": "Bármely zónában is jársz, mindenhol kezelheted úgy, mintha már kiépítettél vagy beléptél volna egy Informátorrendszerbe. Ettől függetlenül, amikor információt kérsz, annak az árát ki kell fizetned. Ezen túl a sikerességi rátát 10%-kal növeled."
+    }
+  },
+  {
+    "_id": "kem_kemek-arzenalja",
+    "name": "Kémek Arzenálja",
+    "type": "Kepesseg",
+    "path": "/Beosztások/Parancsnok/Kém/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
+    "system": {
+      "kind": "active",
+      "kp": 0,
+      "description": "A karriered során sok kisebb, könnyen elrejthető eszköz és kütyü használatát tanultad meg, amelyek segítettek az elvegyülésben és az információszerzésben. Ezek mindegyikét megkapod először, és később darabját 60 cr-ért tudod újra megvásárolni. Ezeket az eszközöket csak te tudod megvásárolni egy Katonai Zónában és használni.\n\nSzemüvegbe Rejtett Kamera: Tökéletes rejtett felvételeket készíteni, és könnyen be lehet vinni akár zártkörű rendezvényekre is. Amennyiben valaki dob egy 19-es nehézségű Technikai Tudás próbát, észreveszi a kamerát.\n\nKinetikus Toll: Könnyen csempészhető fegyver egy toll alakjában, amely egy erős kinetikus impulzust lő ki magából. Nem mellesleg, a másik felével lehet írni. Amennyiben valaki dob egy 19-es nehézségű Technikai Tudás próbát, észreveszi a fegyvert.\nHatótáv: 5/10 méter, Sebzés: 1d4+1.\n\nVízalatti Oxigénellátó Szerkezet: Ez a kis szájba helyezhető szerkezet képes ellátni egy felnőtt humanoidot a víz alatt az életben maradáshoz szükséges oxigénnel, amelyet a körülötte elhelyezkedő folyadékból nyer ki.\n\nHangtorzító: Apró eszköz, amelyet a nyak azon külső részére kell helyezni, ahol a hangszálak vannak. Ez a pici korong arra képes, hogy akár 100%-ban megváltoztassa valakinek a hangját személyesen is. Amennyiben valaki dob egy 19-es nehézségű Észlelés próbát, észreveszi, hogy nem az igazi hangodon beszélsz."
+    }
+  },
+  {
+    "_id": "taktikus_mindig-resen",
+    "name": "Mindig Résen",
+    "type": "Kepesseg",
+    "path": "/Beosztások/Parancsnok/Taktikus/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
+    "system": {
+      "kind": "passive",
+      "description": "A legénységed mindig odafigyel a környezetére, mert ahonnan te jössz, ott ez szükséges az életben maradáshoz. Az egész legénységednek +1-gyel növekszik a Gyorsgondolkodása. Meglepetéskörökben minden csapattársad Védelmi Értéke 2-vel nő."
+    }
+  },
+  {
+    "_id": "taktikus_vigyazz-robban",
+    "name": "„Vigyázz, robban!”",
+    "type": "Kepesseg",
+    "path": "/Beosztások/Parancsnok/Taktikus/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
+    "system": {
+      "kind": "active",
+      "kp": 2,
+      "description": "Amennyiben 6 méteren belül a legénységed egy tagja területi sebzést szenvedne el (például egy gránát által), akkor elkölthetsz 2 Küzdelmi Pontot a következő körödből, hogy a veszély elől ellökd, és így egyikőtök sem sebződik."
+    }
+  },
+  {
+    "_id": "pilota_hullamhosszon-a-hiddal",
+    "name": "Hullámhosszon a Híddal",
+    "type": "Kepesseg",
+    "path": "/Beosztások/Pilóta/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
+    "system": {
+      "kind": "passive",
+      "description": "Olyas mértékben kiismerted a járműved, hogy tudod távolról is irányítani az egyszerűbb rendszereit. 0 Küzdelmi Pontból kinyithatod és becsukhatod az ajtókat a járművön, irányíthatod a lifteket, bezárhatsz ajtókat, elindíthatsz eszközöket (pl. TV, rádió stb.) a jármű területéről bárhonnan."
+    }
+  },
+  {
+    "_id": "pilota_veszhelyzeti-ugras",
+    "name": "Vészhelyzeti Ugrás",
+    "type": "Kepesseg",
+    "path": "/Beosztások/Pilóta/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
+    "system": {
+      "kind": "active",
+      "kp": 0,
+      "description": "Járműves harc vészhelyzete esetén megkísérelhetsz egy Vészhelyzeti Ugrást, amely 1d2+1 üzemanyagba kerül, és az üzemanyaggal arányos távolságra dob el a következő képlet alapján: Meghatározott Érték * 10 Távolság Egység (TE). A mozgás irányát te határozod meg."
+    }
+  },
+  {
+    "_id": "pilota_pilota-kepzes",
+    "name": "Pilóta Képzés",
+    "type": "Kepesseg",
+    "path": "/Beosztások/Pilóta/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
+    "system": {
+      "kind": "passive",
+      "description": "A képzésedből kifolyólag, és a járművekben töltött idő alatt kiismerted a jármű méreteit és irányítását. Amennyiben járműves harc folyamán vezetsz, és Kitérést próbálsz tenni vagy pedig Megközelítő Támadást, akkor azt 1d6 előnnyel teszed."
+    }
+  },
+  {
+    "_id": "pilota_vakmero-manover",
+    "name": "Vakmerő Manőver",
+    "type": "Kepesseg",
+    "path": "/Beosztások/Pilóta/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
+    "system": {
+      "kind": "active",
+      "kp": 2,
+      "description": "2 Küzdelmi Pontért megkísérelhetsz egy hirtelen irányváltoztatást (jobb, bal, előre, hátra), amellyel az összes nem rögzített személyt a járművön a kiválasztott irányba 4,5 méterrel mozgatod.\nAki falnak csapódik ennek következtében, az 1,5 méter esés esetén 1d4-et sebződik, nagyobb távolság esetén 1d6+2-t.\nMindenki a fedélzeten dobhat egy 17-es nehézségű Gyorsgondolkodáspróbát; ha ez sikeres, akkor nem mozdul el.\nEz a manőver járműves harc esetén 3-mal növeli a jármű Védelmi Értékét."
+    }
+  },
+  {
+    "_id": "pilota_acel-idegrendszer",
+    "name": "Acél Idegrendszer",
+    "type": "Kepesseg",
+    "path": "/Beosztások/Pilóta/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
+    "system": {
+      "kind": "passive",
+      "description": "Megszoktad a folyamatos stresszhelyzetet, ezért járműves harc esetén soha nem kapsz Stressz Pontokat, és minden egyéb helyzetben is csak a Stressz Pontok felét kapod meg (felfelé kerekítve)."
+    }
+  },
+  {
+    "_id": "pilota_elektromagneses-eropajzs",
+    "name": "Elektromágneses Erőpajzs",
+    "type": "Kepesseg",
+    "path": "/Beosztások/Pilóta/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
+    "system": {
+      "kind": "active",
+      "kp": 3,
+      "description": "Harconként háromszor 3 Küzdelmi Pontból beaktiválhatod a jármű vészhelyzeti pajzsát bizonyos áramkörök rövidre zárásával, ami a következő körben az összes találatot teljesen semlegesíti, majd deaktiválódik."
+    }
+  },
+  {
+    "_id": "felfedezo_pilota_cikazas",
+    "name": "Cikázás",
+    "type": "Kepesseg",
+    "path": "/Beosztások/Pilóta/Felfedező Pilóta/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
+    "system": {
+      "kind": "passive",
+      "description": "A jármű sebessége 2 Távolság Egységgel (TE) megnövekszik, ha te vezeted."
+    }
+  },
+  {
+    "_id": "felfedezo_pilota_vilagjaro",
+    "name": "Világjáró",
+    "type": "Kepesseg",
+    "path": "/Beosztások/Pilóta/Felfedező Pilóta/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
+    "system": {
+      "kind": "active",
+      "kp": 0,
+      "description": "Rengeteg helyen jártál, ezért amikor egy új területre – akár csak egy új zónába – mész, dobhatsz egy 13-as nehézségű Szerencsepróbát, hogy jártál-e már ott.\nHa igen, akkor ismered a helyi szokásokat, és van legalább egy ismerősöd ott."
+    }
+  },
+  {
+    "_id": "szallito_pilota_vedelmezo-sofor",
+    "name": "Védelmező Sofőr",
+    "type": "Kepesseg",
+    "path": "/Beosztások/Pilóta/Szállító Pilóta/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
+    "system": {
+      "kind": "passive",
+      "description": "Egy harci szituációban úgy irányítod a járművet, hogy ha el is találnak, akkor az utasok ne nagyon sérüljenek meg. Ezért a jármű sérüléséből adódó sérülések 2-vel kevesebbet sebeznek mindenkinek a jármű fedélzetén."
+    }
+  },
+  {
+    "_id": "szallito_pilota_tapasztalt-szallito",
+    "name": "Tapasztalt Szállító",
+    "type": "Kepesseg",
+    "path": "/Beosztások/Pilóta/Szállító Pilóta/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
+    "system": {
+      "kind": "active",
+      "kp": 4,
+      "description": "Harconként háromszor 4 Küzdelmi Pontot felhasználhatsz arra, hogy ha a következő három körben sérül egy általad kiválasztott járműegység, akkor a benne lévő karakterek nem sebződnek, és a járműegység 1d10+5-öt javul.\nRaktár esetén a jármű ebben a 3 körben nem veszít a rakományából."
+    }
+  },
+  {
+    "_id": "harci_pilota_harcedzett-pilota",
+    "name": "Harcedzett Pilóta",
+    "type": "Kepesseg",
+    "path": "/Beosztások/Pilóta/Harci Pilóta/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
+    "system": {
+      "kind": "passive",
+      "description": "Ha a pilótafülkében ülsz, és eltalálják ezt a járműegységet, akkor senki nem sebződik, és a pilótafülke 2-vel kevesebbet sérül."
+    }
+  },
+  {
+    "_id": "harci_pilota_jarmuvezetes-praktikak",
+    "name": "Járművezetései Praktikák",
+    "type": "Kepesseg",
+    "path": "/Beosztások/Pilóta/Harci Pilóta/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
+    "system": {
+      "kind": "active",
+      "kp": 3,
+      "description": "Elköltheted 3 Küzdelmi Pontodat arra, hogy az alábbi manőverek közül egyet végrehajts:\n\nSatufék: A következő körben a jármű Védelmi Értéke 6-tal nő, de ebben a körben nem mozoghatsz a járművel.\nMegkerülő Támadás: A jármű legénysége a következő körében az összes támadására +6 bónuszt kap a megkerült jármű vagy járművek ellen, de legalább egy ellenség másik oldalára kell juttatnod a járművet.\nDugóhúzó: A következő körben a jármű legénysége minden támadására +3 bónuszt kap, és az általad vezetett jármű Védelmi Értéke 3-mal nő. A járműnek ebben a körben legalább 5 TE-et egyenes vonalban kell megtennie."
+    }
+  },
+  {
+    "_id": "versenypilota_zsoke",
+    "name": "Zsoké",
+    "type": "Kepesseg",
+    "path": "/Beosztások/Pilóta/Versenypilóta/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
+    "system": {
+      "kind": "passive",
+      "description": "Utcai Versenyeknél és Járműves Üldözéseknél azonnal 2 sikerrel indulsz 0 helyett."
+    }
+  },
+  {
+    "_id": "versenypilota_a-sebesseg-en-vagyok",
+    "name": "A Sebesség Én Vagyok",
+    "type": "Kepesseg",
+    "path": "/Beosztások/Pilóta/Versenypilóta/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
+    "system": {
+      "kind": "active",
+      "kp": 0,
+      "description": "Ha a Gyorsgondolkodáspróbád eredménye legalább 14, akkor járműves harc alatt a jármű mozgatása és a Kitérés nem kerül neked Küzdelmi Pontba."
+    }
+  },
+  {
+    "_id": "tuningpilota_jol-van-az-ugy",
+    "name": "„Jól van az úgy”",
+    "type": "Kepesseg",
+    "path": "/Beosztások/Pilóta/Tuningpilóta/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/abilities/passive.png",
+    "system": {
+      "kind": "passive",
+      "description": "Megtanultad beszerelni a dolgokat olyan helyre, amit nem feltétlenül arra találtak ki. A csapat járműveiben minden járműegység eggyel több modullal rendelkezhet (például egy 0. szintű egység 1 modullal, egy 3. szintű egység 4 modullal)."
+    }
+  },
+  {
+    "_id": "tuningpilota_sufnituning",
+    "name": "Sufnituning",
+    "type": "Kepesseg",
+    "path": "/Beosztások/Pilóta/Tuningpilóta/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/abilities/active.png",
+    "system": {
+      "kind": "active",
+      "kp": 0,
+      "description": "Képes vagy arra, hogy egy járműegységet fejlessz saját magad. Ehhez Technikai Tudás próbát dobsz, és a rá költött összeget az alábbi táblázat szerint módosíthatod. Az alapár, amit módosítani kell, az a járműegység alapvetően meghatározott ára; megvásárlás helyett beszámítanak a beszerelt alkatrészek árai is. Új járműegységet ezzel a képességgel nem lehet beszerelni.\n\nDobás eredménye → ár változása:\n- 4 vagy kevesebb: +10%\n- 5–8: nincs változás\n- 9–12: −10%\n- 13–16: −20%\n- 17–20: −30%\n- 21–24: −40%\n- 25 vagy több: −50%"
+    }
+  }
+]
+
