@@ -1,0 +1,788 @@
+[
+  {
+    "_id": "loveg-lovedek",
+    "name": "Löveg Lövedék",
+    "type": "Targy",
+    "path": "/Legtöbbször Vásárolandó Dolgok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/turret_ammo.png",
+    "system": {
+      "description": "Szükséges a lövegek elsütéséhez."
+    }
+  },
+  {
+    "_id": "tartos-etel",
+    "name": "Tartósított, Vákumba Vihető Ételcsomag",
+    "type": "Targy",
+    "path": "/Legtöbbször Vásárolandó Dolgok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/consumables.png",
+    "system": {
+      "description": "Egy darab elég egy személynek egy napig."
+    }
+  },
+  {
+    "_id": "vakum-viztartaly",
+    "name": "Vákumba Vihető Víztartály",
+    "type": "Targy",
+    "path": "/Legtöbbször Vásárolandó Dolgok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/consumables.png",
+    "system": {
+      "description": "Egy darab elég egy személynek egy napig."
+    }
+  },
+  {
+    "_id": "uzemanyag-normal",
+    "name": "Üzemanyag",
+    "type": "Targy",
+    "path": "/Legtöbbször Vásárolandó Dolgok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/fuel.png",
+    "system": {
+      "description": "Egy közepes méretű űrrepülőgépnek elég 8 órán át a működtetéséhez."
+    }
+  },
+  {
+    "_id": "uzemanyag-hiperur",
+    "name": "Hiperűr-Ugrási Üzemanyag",
+    "type": "Targy",
+    "path": "/Legtöbbször Vásárolandó Dolgok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/fuel.png",
+    "system": {
+      "description": "Egy közepes méretű űrrepülőgépnek elég egy közepes távolságú hiperűr-ugrás elvégzéséhez."
+    }
+  },
+  {
+    "_id": "gyogyszer",
+    "name": "Gyógyszer",
+    "type": "Targy",
+    "path": "/Legtöbbször Vásárolandó Dolgok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/healing.png",
+    "system": {
+      "description": "1d4-et gyógyít egy organikus személy minden testrészén."
+    }
+  },
+  {
+    "_id": "javito-nanodroidok",
+    "name": "Javító Nanodroidok",
+    "type": "Targy",
+    "path": "/Legtöbbször Vásárolandó Dolgok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/healing.png",
+    "system": {
+      "description": "1d4-et javít egy Droid vagy Kiborg minden testrészén."
+    }
+  },
+  {
+    "_id": "erzestelenito-injekcio",
+    "name": "Érzéstelenítő Injekció",
+    "type": "Targy",
+    "path": "/Legtöbbször Vásárolandó Dolgok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/healing.png",
+    "system": {
+      "description": "4d4-et gyógyít egy organikus személy egy kiválasztott testrészén."
+    }
+  },
+  {
+    "_id": "surgossegi-nanodroidok",
+    "name": "Sürgősségi Nanodroidok",
+    "type": "Targy",
+    "path": "/Legtöbbször Vásárolandó Dolgok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/healing.png",
+    "system": {
+      "description": "4d4-et javít egy Droid vagy Kiborg egy kiválasztott testrészen."
+    }
+  },
+  {
+    "_id": "idegstim-sokkolotapasz",
+    "name": "Idegstimuláló Sokkolótapasz",
+    "type": "Targy",
+    "path": "/Legtöbbször Vásárolandó Dolgok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/healing.png",
+    "system": {
+      "description": "Képes egy testrészt 1d4 életpontra gyógyítani négy Használhatatlan állapotban eltöltött körön belül. Ez a fejen is működik."
+    }
+  },
+  {
+    "_id": "kes",
+    "name": "Kés",
+    "type": "Fegyver",
+    "path": "/Fegyverek/Könnyű Fegyverek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/light/knife.webp",
+    "system": {
+      "type": "blade",
+      "size": "light",
+      "damage": "1d6",
+      "range": "1,5 m",
+      "special": ""
+    }
+  },
+  {
+    "_id": "pisztoly",
+    "name": "Pisztoly",
+    "type": "Fegyver",
+    "path": "/Fegyverek/Könnyű Fegyverek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/light/pistol.webp",
+    "system": {
+      "type": "kinetic",
+      "size": "light",
+      "damage": "1d4",
+      "range": "21/42 m",
+      "special": ""
+    }
+  },
+  {
+    "_id": "geppisztoly",
+    "name": "Géppisztoly",
+    "type": "Fegyver",
+    "path": "/Fegyverek/Könnyű Fegyverek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/light/smg.webp",
+    "system": {
+      "type": "projectile",
+      "size": "light",
+      "damage": "1d4+1",
+      "range": "15/30 m",
+      "special": "*Újratöltés: 1 KP\n*Tár: 6 sorozat"
+    }
+  },
+  {
+    "_id": "revolver",
+    "name": "Revolver",
+    "type": "Fegyver",
+    "path": "/Fegyverek/Könnyű Fegyverek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/light/revolver.webp",
+    "system": {
+      "type": "projectile",
+      "size": "light",
+      "damage": "1d4+3",
+      "range": "15/30 m",
+      "special": "*Újratöltés: 2 KP\n*Tár: 6 lőszer"
+    }
+  },
+  {
+    "_id": "sokkolo",
+    "name": "Sokkoló",
+    "type": "Fegyver",
+    "path": "/Fegyverek/Könnyű Fegyverek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/light/teaser.png",
+    "system": {
+      "type": "other",
+      "size": "light",
+      "damage": "1d4-1",
+      "range": "1,5 m",
+      "special": "*Sokkol: Ezek a fegyverek lesokkolják a célpontjukat. A célpont 1d4 körre Kábult állapotba kerül, ha nem sikerül dobnia egy 13-as nehézségű Mentális Erősségpróbát. Ezt a dobást minden kör elején megismételheti."
+    }
+  },
+  {
+    "_id": "sokkolo-pisztoly",
+    "name": "Sokkoló Pisztoly",
+    "type": "Fegyver",
+    "path": "/Fegyverek/Könnyű Fegyverek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/light/teaser_gun.png",
+    "system": {
+      "type": "projectile",
+      "size": "light",
+      "damage": "0",
+      "range": "10,5/21 m",
+      "special": "*Sokkol: Ezek a fegyverek lesokkolják a célpontjukat. A célpont 1d4 körre Kábult állapotba kerül, ha nem sikerül dobnia egy 13-as nehézségű Mentális Erősségpróbát. Ezt a dobást minden kör elején megismételheti.\n*Újratöltés: 2 KP\n*Tár: 3 sokktű"
+    }
+  },
+  {
+    "_id": "trinity-revolver",
+    "name": "Trinity Revolver",
+    "type": "Fegyver",
+    "path": "/Fegyverek/Könnyű Fegyverek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/light/trinit_revolver.webp",
+    "system": {
+      "type": "projectile",
+      "size": "light",
+      "damage": "2d4+3",
+      "range": "15/30 m",
+      "special": "*Újratöltés: 2 KP\n*Tár: 3 lőszer"
+    }
+  },
+  {
+    "_id": "rozsda-petarda",
+    "name": "Rozsda Petárda",
+    "type": "Fegyver",
+    "path": "/Fegyverek/Könnyű Fegyverek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/light/rust_cracker.webp",
+    "system": {
+      "type": "projectile",
+      "size": "light",
+      "damage": "1d4",
+      "range": "21/42 m",
+      "special": "*Instabil: Amennyiben ezzel a fegyverrel támadva valaki kritikus sikertelenséget dob, akkor a fegyver felrobban, és 2d4-et sebez a karjába. Amennyiben ezzel a fegyverrel támadva valaki brutális sikertelenséget dob, akkor a fegyver felrobban és a karakter karja egy Kritikus Sérülést szenved el.\n*Újratöltés: 1 KP"
+    }
+  },
+  {
+    "_id": "hopenge",
+    "name": "Hőpenge",
+    "type": "Fegyver",
+    "path": "/Fegyverek/Közepes Fegyverek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/medium/heat_blade.webp",
+    "system": {
+      "type": "blade",
+      "size": "medium",
+      "damage": "2d4+2",
+      "range": "1,5 m",
+      "special": ""
+    }
+  },
+  {
+    "_id": "gepkarabely",
+    "name": "Gépkarabély",
+    "type": "Fegyver",
+    "path": "/Fegyverek/Közepes Fegyverek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/medium/machine_carbine.webp",
+    "system": {
+      "type": "kinetic",
+      "size": "medium",
+      "damage": "2d4",
+      "range": "27/54 m",
+      "special": ""
+    }
+  },
+  {
+    "_id": "soretes-puska-4-5",
+    "name": "Sörétes Puska (4,5 m)",
+    "type": "Fegyver",
+    "path": "/Fegyverek/Közepes Fegyverek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/medium/shotgun.webp",
+    "system": {
+      "type": "projectile",
+      "size": "medium",
+      "damage": "3d4+2",
+      "range": "4,5 m",
+      "special": "*Újratöltés: 2 KP\n*Tár: 5 sörét"
+    }
+  },
+  {
+    "_id": "soretes-puska-13-5",
+    "name": "Sörétes Puska (13,5 m)",
+    "type": "Fegyver",
+    "path": "/Fegyverek/Közepes Fegyverek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/medium/shotgun.webp",
+    "system": {
+      "type": "projectile",
+      "size": "medium",
+      "damage": "1d4+2",
+      "range": "13,5 m",
+      "special": "*Újratöltés: 2 KP\n*Tár: 5 sörét"
+    }
+  },
+  {
+    "_id": "karabely",
+    "name": "Karabély",
+    "type": "Fegyver",
+    "path": "/Fegyverek/Közepes Fegyverek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/medium/carbine.webp",
+    "system": {
+      "type": "kinetic",
+      "size": "medium",
+      "damage": "2d6",
+      "range": "60/120 m",
+      "special": ""
+    }
+  },
+  {
+    "_id": "gumibot",
+    "name": "Gumibot",
+    "type": "Fegyver",
+    "path": "/Fegyverek/Közepes Fegyverek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/medium/baton.webp",
+    "system": {
+      "type": "other",
+      "size": "medium",
+      "damage": "2d4",
+      "range": "1,5 m",
+      "special": ""
+    }
+  },
+  {
+    "_id": "rovid-soretes-3",
+    "name": "Rövid Csövű Sörétespuska (3 m)",
+    "type": "Fegyver",
+    "path": "/Fegyverek/Közepes Fegyverek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/medium/short_shotgun.webp",
+    "system": {
+      "type": "projectile",
+      "size": "medium",
+      "damage": "4d4+3",
+      "range": "3 m",
+      "special": "*Újratöltés: 2 KP\n*Tár: 5 sörét"
+    }
+  },
+  {
+    "_id": "rovid-soretes-9",
+    "name": "Rövid Csövű Sörétespuska (9 m)",
+    "type": "Fegyver",
+    "path": "/Fegyverek/Közepes Fegyverek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/medium/short_shotgun.webp",
+    "system": {
+      "type": "projectile",
+      "size": "medium",
+      "damage": "2d4+3",
+      "range": "9 m",
+      "special": "*Újratöltés: 2 KP\n*Tár: 5 sörét"
+    }
+  },
+  {
+    "_id": "vadasz-karabely",
+    "name": "Vadász Karabély",
+    "type": "Fegyver",
+    "path": "/Fegyverek/Közepes Fegyverek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/medium/hunting_carbine.webp",
+    "system": {
+      "type": "projectile",
+      "size": "medium",
+      "damage": "2d6+2",
+      "range": "60/120 m",
+      "special": "*Újratöltés: 2 KP\n*Tár: 4 lőszer"
+    }
+  },
+  {
+    "_id": "hullamveto",
+    "name": "Hullámvető",
+    "type": "Fegyver",
+    "path": "/Fegyverek/Közepes Fegyverek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/medium/wave_launcher.webp",
+    "system": {
+      "type": "kinetic",
+      "size": "medium",
+      "damage": "1d6-1",
+      "range": "21 m egyenes vonalban",
+      "special": "*Ellökés: A kijelölt egyenes vonalban a hatótávon belül mindenkinek dobnia kell egy 16-os nehézségű Harcképzettség próbát, különben valamennyi (kezdetben 3) métert hátra repülnek, Elesett és egy körre Kábult állapotba kerülnek.\n*Feltöltés: 2 KP"
+    }
+  },
+  {
+    "_id": "gepagyú",
+    "name": "Gépágyú",
+    "type": "Fegyver",
+    "path": "/Fegyverek/Nehéz Fegyverek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/heavy/autocannon.webp",
+    "system": {
+      "type": "projectile",
+      "size": "heavy",
+      "damage": "4d4",
+      "range": "36/72 m",
+      "special": "*Újratöltés: 3 KP\n*Tár: 5 sorozat"
+    }
+  },
+  {
+    "_id": "forgo-nehezgeppkarabely",
+    "name": "Forgó Nehézgépkarabély",
+    "type": "Fegyver",
+    "path": "/Fegyverek/Nehéz Fegyverek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/heavy/rotating_heavy_carbine.webp",
+    "system": {
+      "type": "kinetic",
+      "size": "heavy",
+      "damage": "2d8+2",
+      "range": "27/54 m",
+      "special": "*Feltöltés: 2 KP"
+    }
+  },
+  {
+    "_id": "mesterloveszpuska",
+    "name": "Mesterlövészpuska",
+    "type": "Fegyver",
+    "path": "/Fegyverek/Nehéz Fegyverek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/heavy/sniper.webp",
+    "system": {
+      "type": "kinetic",
+      "size": "heavy",
+      "damage": "3d6",
+      "range": "210/420 m",
+      "special": ""
+    }
+  },
+  {
+    "_id": "raketaveto",
+    "name": "Rakétavető",
+    "type": "Fegyver",
+    "path": "/Fegyverek/Nehéz Fegyverek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/heavy/rpg.webp",
+    "system": {
+      "type": "projectile",
+      "size": "heavy",
+      "damage": "3d10+5",
+      "range": "48/96 m",
+      "special": "*Újratölteni: 1 KP"
+    }
+  },
+  {
+    "_id": "langszoro",
+    "name": "Lángszóró",
+    "type": "Fegyver",
+    "path": "/Fegyverek/Nehéz Fegyverek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/heavy/flamethrower.webp",
+    "system": {
+      "type": "projectile",
+      "size": "heavy",
+      "damage": "2d4+2",
+      "range": "15 m egyenes vonalban",
+      "special": "*Gyújt: A kijelölt egyenes vonalban a hatótávon belül mindenkinek dobnia kell egy 16-os nehézségű Harcképzettség próbát, különben sebződik és a következő 3 körben Égő állapotba kerül.\n*Újratöltés: 3 KP\n*Tartály: 10 kör"
+    }
+  },
+  {
+    "_id": "szigony-puska",
+    "name": "Szigony Puska",
+    "type": "Fegyver",
+    "path": "/Fegyverek/Nehéz Fegyverek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/heavy/harpoon_gun.webp",
+    "system": {
+      "type": "projectile",
+      "size": "heavy",
+      "damage": "4d4+3",
+      "range": "9/18 m",
+      "special": "*Összeszedhető: A kilőtt szigonyokat össze lehet szedni, és újra lehet használni. Hogy a játékos ezeket milyen eséllyel, vagy hogyan szerzi vissza, az a Mesélő döntése.\n*Újratöltés: 1 KP"
+    }
+  },
+  {
+    "_id": "granatveto",
+    "name": "Gránátvető",
+    "type": "Fegyver",
+    "path": "/Fegyverek/Nehéz Fegyverek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/heavy/grenade_launcher.webp",
+    "system": {
+      "type": "projectile",
+      "size": "heavy",
+      "damage": "0",
+      "range": "21/42 m",
+      "special": "*Sebzés Függ: A Gránátvetőbe betölthető bármilyen gránát-féle (például Gránát, Gyújtógránát, de nem C4) és ez kilőhető vele egy ellenségre. Találatkor a gránát kifejti eredeti hatását.\n*Újratöltés: 1 KP"
+    }
+  },
+  {
+    "_id": "kezi-agyu",
+    "name": "Kézi-Ágyú",
+    "type": "Fegyver",
+    "path": "/Fegyverek/Nehéz Fegyverek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/heavy/handcannon.webp",
+    "system": {
+      "type": "kinetic",
+      "size": "heavy",
+      "damage": "3d6",
+      "range": "15/30 m",
+      "special": ""
+    }
+  },
+  {
+    "_id": "kinetikus-granat",
+    "name": "Kinetikus Gránát",
+    "type": "Fegyver",
+    "path": "/Fegyverek/Dobható Fegyverek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/throwable/grenade.webp",
+    "system": {
+      "type": "explosive",
+      "size": "throwable",
+      "damage": "3d6",
+      "range": "13,5 m",
+      "special": "*Mentődobás: 14-es nehézségű Harcképzettség\n*Hatás: 3 méteren belül sebzi azt, aki nem jár sikerrel a mentődobásban."
+    }
+  },
+  {
+    "_id": "villano-granat",
+    "name": "Villanógránát",
+    "type": "Fegyver",
+    "path": "/Fegyverek/Dobható Fegyverek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/throwable/grenade.webp",
+    "system": {
+      "type": "explosive",
+      "size": "throwable",
+      "damage": "0",
+      "range": "13,5 m",
+      "special": "*Mentődobás: 12-es nehézségű Harcképzettség\n*Hatás: 3 méteren belül elkábítja azt, aki nem jár sikerrel a mentődobásban."
+    }
+  },
+  {
+    "_id": "emp-granat",
+    "name": "Elektromágneses Impulzus Gránát",
+    "type": "Fegyver",
+    "path": "/Fegyverek/Dobható Fegyverek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/throwable/grenade.webp",
+    "system": {
+      "type": "explosive",
+      "size": "throwable",
+      "damage": "0",
+      "range": "13,5 m",
+      "special": "*Mentődobás: 16-os nehézségű Harcképzettség (csak Droidoknak)\n*Hatás: 4,5 méteren belül lekapcsol minden elektronikát egy körre, és a Droidokat elkábítja, ha nem járnak sikerrel a mentődobásban."
+    }
+  },
+  {
+    "_id": "gyujto-granat",
+    "name": "Gyújtógránát",
+    "type": "Fegyver",
+    "path": "/Fegyverek/Dobható Fegyverek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/throwable/grenade.webp",
+    "system": {
+      "type": "explosive",
+      "size": "throwable",
+      "damage": "2d4+2",
+      "range": "13,5 m",
+      "special": "*Mentődobás: 14-es nehézségű Harcképzettség\n*Hatás: 3 méteren belül sebez mindenkit, és ezen a területen minden gyúlékony anyag felgyullad. Ezek a következő 3 körükben Égő állapotba kerülnek."
+    }
+  },
+  {
+    "_id": "c4",
+    "name": "C4",
+    "type": "Fegyver",
+    "path": "/Fegyverek/Dobható Fegyverek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/throwable/c4.webp",
+    "system": {
+      "type": "explosive",
+      "size": "throwable",
+      "damage": "3d12+6",
+      "range": "13,5 m, 30 méterig detonálható",
+      "special": "*Mentődobás: 16-es nehézségű Harcképzettség\n*Hatás: 12 méteren belül sebzi azt, aki nem jár sikerrel a mentődobásban, azonban detonálni kell 1 KP-ért."
+    }
+  },
+  {
+    "_id": "akna",
+    "name": "Akna",
+    "type": "Fegyver",
+    "path": "/Fegyverek/Dobható Fegyverek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/throwable/mine.webp",
+    "system": {
+      "type": "explosive",
+      "size": "throwable",
+      "damage": "3d12+6",
+      "range": "Lehelyezhető",
+      "special": "*Mentődobás nem dobható.\n*Nem eldobni, hanem elhelyezni kell, és ha valaki rálép vagy belép a közvetlen környezetébe, akkor felrobban."
+    }
+  },
+  {
+    "_id": "repesz-granat",
+    "name": "Repeszgránát",
+    "type": "Fegyver",
+    "path": "/Fegyverek/Dobható Fegyverek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/throwable/grenade.webp",
+    "system": {
+      "type": "explosive",
+      "size": "throwable",
+      "damage": "3d6+6",
+      "range": "13,5 m",
+      "special": "*Mentődobás: 14-es nehézségű Harcképzettség\n*Hatás: 3 méteren belül sebzi azt, aki nem jár sikerrel a mentődobásban."
+    }
+  },
+  {
+    "_id": "barikad-bonto",
+    "name": "Barikád Bontó",
+    "type": "Fegyver",
+    "path": "/Fegyverek/Dobható Fegyverek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/throwable/grenade.webp",
+    "system": {
+      "type": "explosive",
+      "size": "throwable",
+      "damage": "2d12+3",
+      "range": "10,5 m",
+      "special": "*Mentődobás: 16-os nehézségű Harcképzettség\n*Hatás: 3 méteren belül sebzi azt, aki nem jár sikerrel a mentődobásban, és elbont minden nemű fedezéket."
+    }
+  },
+  {
+    "_id": "napalm-granat",
+    "name": "Napalm Gránát",
+    "type": "Fegyver",
+    "path": "/Fegyverek/Dobható Fegyverek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/throwable/grenade.webp",
+    "system": {
+      "type": "explosive",
+      "size": "throwable",
+      "damage": "0",
+      "range": "13,5 m",
+      "special": "*Mentődobás: 14-es nehézségű Harcképzettség\n*Hatás: 3 méteren belül minden gyúlékony anyag felgyullad. Ezek a következő 6 körükben Égő állapotba kerülnek."
+    }
+  },
+  {
+    "_id": "fust-granat",
+    "name": "Füstgránát",
+    "type": "Fegyver",
+    "path": "/Fegyverek/Dobható Fegyverek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/throwable/grenade.webp",
+    "system": {
+      "type": "explosive",
+      "size": "throwable",
+      "damage": "0",
+      "range": "13,5 m",
+      "special": "*Hatás: 6 méteres körzetben sűrű füstöt hoz létre, amiben nem lehet látni. Mindenki 1d6 hátránnyal támad a ködön belüliekre, vagy a ködből kifelé."
+    }
+  },
+  {
+    "_id": "konnyu-pancel-alap",
+    "name": "Könnyűpáncélzat (Alap)",
+    "type": "Pancel",
+    "path": "/Páncélzatok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/armor.png",
+    "system": {
+      "protectionBonus": "+1",
+      "speedPenalty": "0",
+      "level": "Alap",
+      "special": "Erősített Műanyagpáncélzat"
+    }
+  },
+  {
+    "_id": "konnyu-pancel-1",
+    "name": "Könnyűpáncélzat (1)",
+    "type": "Pancel",
+    "path": "/Páncélzatok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/armor.png",
+    "system": {
+      "protectionBonus": "+2",
+      "speedPenalty": "0",
+      "level": "1",
+      "special": "Erősített Műanyagpáncélzat"
+    }
+  },
+  {
+    "_id": "kozepes-pancel-alap",
+    "name": "Közepespáncélzat (Alap)",
+    "type": "Pancel",
+    "path": "/Páncélzatok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/armor.png",
+    "system": {
+      "protectionBonus": "+2",
+      "speedPenalty": "-1.5",
+      "level": "Alap",
+      "special": "Műanyagpáncélzat Rozsdamentes Acél Erősítésekkel"
+    }
+  },
+  {
+    "_id": "kozepes-pancel-1",
+    "name": "Közepespáncélzat (1)",
+    "type": "Pancel",
+    "path": "/Páncélzatok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/armor.png",
+    "system": {
+      "protectionBonus": "+3",
+      "speedPenalty": "-1.5",
+      "level": "1",
+      "special": "Műanyagpáncélzat Rozsdamentes Acél Erősítésekkel"
+    }
+  },
+  {
+    "_id": "kozepes-pancel-2",
+    "name": "Közepespáncélzat (2)",
+    "type": "Pancel",
+    "path": "/Páncélzatok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/armor.png",
+    "system": {
+      "protectionBonus": "+4",
+      "speedPenalty": "-1.5",
+      "level": "2",
+      "special": "Műanyagpáncélzat Rozsdamentes Acél Erősítésekkel"
+    }
+  },
+  {
+    "_id": "nehez-pancel-alap",
+    "name": "Nehézpáncélzat (Alap)",
+    "type": "Pancel",
+    "path": "/Páncélzatok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/armor.png",
+    "system": {
+      "protectionBonus": "+3",
+      "speedPenalty": "-1.5",
+      "level": "Alap",
+      "special": "Műanyagpáncélzat Rozsdamentes Acél Erősítésekkel\nHátránnyal (1d6) dobsz Lopakodás próbákra."
+    }
+  },
+  {
+    "_id": "nehez-pancel-1",
+    "name": "Nehézpáncélzat (1)",
+    "type": "Pancel",
+    "path": "/Páncélzatok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/armor.png",
+    "system": {
+      "protectionBonus": "+4",
+      "speedPenalty": "-1.5",
+      "level": "1",
+      "special": "Műanyagpáncélzat Rozsdamentes Acél Erősítésekkel\nHátránnyal (1d6) dobsz Lopakodás próbákra."
+    }
+  },
+  {
+    "_id": "nehez-pancel-2",
+    "name": "Nehézpáncélzat (2)",
+    "type": "Pancel",
+    "path": "/Páncélzatok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/armor.png",
+    "system": {
+      "protectionBonus": "+5",
+      "speedPenalty": "-1.5",
+      "level": "2",
+      "special": "Műanyagpáncélzat Rozsdamentes Acél Erősítésekkel\nHátránnyal (1d6) dobsz Lopakodás próbákra."
+    }
+  },
+  {
+    "_id": "nehez-pancel-3",
+    "name": "Nehézpáncélzat (3)",
+    "type": "Pancel",
+    "path": "/Páncélzatok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/armor.png",
+    "system": {
+      "protectionBonus": "+6",
+      "speedPenalty": "-1.5",
+      "level": "3",
+      "special": "Műanyagpáncélzat Rozsdamentes Acél Erősítésekkel\nHátránnyal (1d6) dobsz Lopakodás próbákra."
+    }
+  },
+  {
+    "_id": "urruhazat-alap",
+    "name": "Űrruházat (Alap)",
+    "type": "Pancel",
+    "path": "/Páncélzatok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/armor.png",
+    "system": {
+      "protectionBonus": "0",
+      "speedPenalty": "0",
+      "level": "Alap",
+      "special": "0,5 óráig lát el oxigénnel."
+    }
+  },
+  {
+    "_id": "urruhazat-1",
+    "name": "Űrruházat (1)",
+    "type": "Pancel",
+    "path": "/Páncélzatok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/armor.png",
+    "system": {
+      "protectionBonus": "0",
+      "speedPenalty": "0",
+      "level": "1",
+      "special": "1 óráig lát el oxigénnel."
+    }
+  },
+  {
+    "_id": "urruhazat-2",
+    "name": "Űrruházat (2)",
+    "type": "Pancel",
+    "path": "/Páncélzatok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/armor.png",
+    "system": {
+      "protectionBonus": "0",
+      "speedPenalty": "0",
+      "level": "2",
+      "special": "2,5 óráig lát el oxigénnel."
+    }
+  },
+  {
+    "_id": "urruhazat-3",
+    "name": "Űrruházat (3)",
+    "type": "Pancel",
+    "path": "/Páncélzatok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/armor.png",
+    "system": {
+      "protectionBonus": "0",
+      "speedPenalty": "0",
+      "level": "3",
+      "special": "5 óráig lát el oxigénnel."
+    }
+  },
+  {
+    "_id": "eromezos-pancelerosito",
+    "name": "Erőmezős Páncélerősítő",
+    "type": "Pancel",
+    "path": "/Páncélzatok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/armor.png",
+    "system": {
+      "protectionBonus": "0",
+      "speedPenalty": "0",
+      "level": "Alap",
+      "special": "Egy kiválasztott testrészt véd, és annak emeli a Védelmi Értékét +5-tel. Ebből egyszerre csak egyet hordhat egy karakter."
+    }
+  }
+]

@@ -46,25 +46,18 @@
   },
   "packs": [
     {
-      "name": "weapons",
-      "label": "Void Weapons",
-      "type": "Item",
-      "system": "vacuum-of-the-void",
-      "path": "packs/weapons.db"
-    },
-    {
-      "name": "microchips",
-      "label": "Mikro-Chip-ek",
-      "type": "Item",
-      "system": "vacuum-of-the-void",
-      "path": "packs/microchips.db"
-    },
-    {
       "name": "abilities",
       "label": "Képességek",
       "type": "Item",
       "system": "vacuum-of-the-void",
       "path": "packs/abilities.db"
+    },
+    {
+      "name": "purchasables",
+      "label": "Vásárolható Dolgok",
+      "type": "Item",
+      "system": "vacuum-of-the-void",
+      "path": "packs/purchasables.db"
     }
   ],
   "grid": {
