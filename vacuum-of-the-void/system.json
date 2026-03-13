@@ -1,7 +1,7 @@
 {
   "id": "vacuum-of-the-void",
   "title": "Vacuum of the Void",
-  "description": "A custom science-fantasy game system for Foundry Virtual Tabletop.",
+  "description": "Magyar fejlesztésű sci-fi szerepjátékrendszer.",
   "version": "0.1.1",
   "compatibility": {
     "minimum": 13,

@@ -129,7 +129,10 @@
 
 .vacuum-of-the-void.sheet.item .field textarea {
   min-height: 72px;
+  max-height: 300px;
+  height: auto;
   resize: vertical;
+  overflow-y: auto;
 }
 
 .vacuum-of-the-void.sheet.item input:focus-visible,

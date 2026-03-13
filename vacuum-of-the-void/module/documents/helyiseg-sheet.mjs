@@ -133,7 +133,9 @@ export class VoidHelyisegSheet extends foundry.applications.api.HandlebarsApplic
           if (!doc || doc.documentName !== "Item") return;
 
           if (doc.type === "Kepesseg" || doc.type === "ability") {
+            // Csak hivatkozást tárolunk: abilities.items = forrás képesség UUID / id.
             const ref = doc.uuid ?? doc.id;
+            if (!ref) return;
             const sys = this.document.system ?? {};
             const current = Array.isArray(sys.abilities?.items) ? sys.abilities.items.slice() : [];
             current.push(ref);
@@ -263,7 +265,9 @@ export class VoidHelyisegSheet extends foundry.applications.api.HandlebarsApplic
     } else if (kind === "module" && kp > 0) {
       kpLine = `<p><strong>KP:</strong> ${kp}</p>`;
     }
-    const descLine = description ? `<p>${description}</p>` : "";
+    const descLine = description
+      ? `<p class="votv-ability-description">${description}</p>`
+      : "";
     const content = `
       <h2>${item.name}</h2>
       <p><strong>Típus:</strong> ${kindLabel}</p>
@@ -283,7 +287,9 @@ export class VoidHelyisegSheet extends foundry.applications.api.HandlebarsApplic
     }
 
     if (document.type === "Kepesseg" || document.type === "ability") {
+      // Csak a meglévő képességre hivatkozunk – nem hozunk létre új Itemet.
       const ref = document.uuid ?? document.id;
+      if (!ref) return document;
       const sys = this.document.system ?? {};
       const current = Array.isArray(sys.abilities?.items) ? sys.abilities.items.slice() : [];
       current.push(ref);

@@ -1131,9 +1131,9 @@
 .votv.karakter-sheet .karakter-ability-pill-name {
   flex: 1 1 auto;
   min-width: 0;
-  white-space: nowrap;
+  white-space: normal;
   overflow: hidden;
-  text-overflow: ellipsis;
+  word-break: break-word;
 }
 
 .votv.karakter-sheet .karakter-ability-slot-placeholder,

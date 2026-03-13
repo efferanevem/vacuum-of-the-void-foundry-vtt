@@ -912,7 +912,9 @@ export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplication
     } else if (kind === "module" && kp > 0) {
       kpLine = `<p><strong>KP:</strong> ${kp}</p>`;
     }
-    const descLine = description ? `<p>${description}</p>` : "";
+    const descLine = description
+      ? `<p class="votv-ability-description">${description}</p>`
+      : "";
     const content = `
       <h2>${item.name}</h2>
       <p><strong>Típus:</strong> ${kindLabel}</p>

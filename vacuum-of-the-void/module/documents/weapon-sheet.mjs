@@ -132,6 +132,15 @@ export class VoidWeaponSheet extends foundry.applications.api.HandlebarsApplicat
     }
     context.system = sys;
     context.skillOptions = VOTV_WEAPON_SKILL_OPTIONS;
+    const special = String(sys.special ?? "");
+    const lines = special.split(/\r?\n/).reduce((sum, line) => {
+      if (!line) return sum + 1;
+      const approxWidth = 80;
+      return sum + Math.max(1, Math.ceil(line.length / approxWidth));
+    }, 0);
+    const base = 4;
+    const rows = Math.min(Math.max(lines, base), base * 3);
+    context.specialRows = rows;
     return context;
   }
 }

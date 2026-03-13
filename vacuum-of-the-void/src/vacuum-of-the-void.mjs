@@ -549,6 +549,66 @@ Hooks.on("preCreateToken", (tokenDocument, data, _options) => {
   }
 });
 
+// Item leírás textarea-k automatikus magasságállítása (min 1×, max 3× magasság).
+function votvAutoResizeTextareas(root, selector) {
+  if (!root?.querySelectorAll) return;
+  const textareas = root.querySelectorAll(selector);
+  if (!textareas || textareas.length === 0) return;
+
+  for (const el of textareas) {
+    const style = window.getComputedStyle(el);
+    const lineHeight = parseFloat(style.lineHeight || "16");
+    const minLines = Number(el.getAttribute("rows") || "3") || 3;
+    const minHeight = lineHeight * minLines;
+    const maxHeight = minHeight * 3;
+
+    el.style.overflowY = "auto";
+
+    const resize = () => {
+      el.style.height = "auto";
+      const next = Math.min(Math.max(el.scrollHeight, minHeight), maxHeight);
+      el.style.height = `${next}px`;
+    };
+
+    // Első renderkor és minden inputkor igazítsuk.
+    resize();
+    el.removeEventListener?.("input", el._votvAutoResize);
+    el._votvAutoResize = resize;
+    el.addEventListener("input", resize);
+  }
+}
+
+Hooks.on("renderVoidAbilitySheet", (app, html, _data) => {
+  const root = html[0] ?? html;
+  votvAutoResizeTextareas(root, 'textarea[name="system.description"]');
+});
+
+Hooks.on("renderVoidMicrochipSheet", (app, html, _data) => {
+  const root = html[0] ?? html;
+  votvAutoResizeTextareas(root, 'textarea[name="system.description"]');
+});
+
+Hooks.on("renderVoidTargySheet", (app, html, _data) => {
+  const root = html[0] ?? html;
+  votvAutoResizeTextareas(root, 'textarea[name="system.description"]');
+});
+
+Hooks.on("renderVoidEgyebSheet", (app, html, _data) => {
+  const root = html[0] ?? html;
+  votvAutoResizeTextareas(root, 'textarea[name="system.description"]');
+});
+
+// Weapon/Shield: itt a „leírás” mező a special textarea.
+Hooks.on("renderVoidWeaponSheet", (app, html, _data) => {
+  const root = html[0] ?? html;
+  votvAutoResizeTextareas(root, 'textarea[name="system.special"]');
+});
+
+Hooks.on("renderVoidShieldSheet", (app, html, _data) => {
+  const root = html[0] ?? html;
+  votvAutoResizeTextareas(root, 'textarea[name="system.special"]');
+});
+
 // Combatant: Bázis ne kerülhessen harcba; egyébként alapértelmezett initiative 0
 Hooks.on("preCreateCombatant", (combatant, _data, _options) => {
   const actor = combatant.actorId ? game.actors?.get(combatant.actorId) : null;

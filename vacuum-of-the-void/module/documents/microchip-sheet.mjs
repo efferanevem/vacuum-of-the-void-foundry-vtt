@@ -98,6 +98,15 @@ export class VoidMicrochipSheet extends foundry.applications.api.HandlebarsAppli
     context = context ?? {};
     context.item = this.item;
     context.system = this.item.system;
+    const desc = String(this.item.system?.description ?? "");
+    const lines = desc.split(/\r?\n/).reduce((sum, line) => {
+      if (!line) return sum + 1;
+      const approxWidth = 80;
+      return sum + Math.max(1, Math.ceil(line.length / approxWidth));
+    }, 0);
+    const base = 6;
+    const rows = Math.min(Math.max(lines, base), base * 3);
+    context.descriptionRows = rows;
     return context;
   }
 }

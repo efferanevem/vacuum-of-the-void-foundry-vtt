@@ -61,3 +61,14 @@ body.system-vacuum-of-the-void .chat-message .message-sender {
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
+
+/* Abilities/items sent to chat – preserve manual line breaks in descriptions
+   so they look like on the item/ability sheet (textarea). */
+body.system-vacuum-of-the-void .chat-message .card-content {
+  white-space: pre-line;
+}
+
+/* Képesség leírás a chatben – sortörések megtartása */
+body.system-vacuum-of-the-void .chat-message .votv-ability-description {
+  white-space: pre-line;
+}

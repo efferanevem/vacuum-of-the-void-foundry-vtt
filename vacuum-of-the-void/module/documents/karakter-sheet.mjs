@@ -1774,7 +1774,10 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
     } else if (kind === "module" && kp > 0) {
       kpLine = `<p><strong>KP:</strong> ${kp}</p>`;
     }
-    const descLine = description ? `<p>${description}</p>` : "";
+    // Őrizze meg a leírás sortöréseit a chatben
+    const descLine = description
+      ? `<p class="votv-ability-description">${description}</p>`
+      : "";
     const content = `
       <h2>${item.name}</h2>
       <p><strong>Típus:</strong> ${kindLabel}</p>
