@@ -3,204 +3,345 @@
     "_id": "gyorsmozgasu",
     "name": "Gyorsmozgású",
     "type": "microchip",
-    "img": "icons/svg/upgrade.svg",
+    "img": "systems/vacuum-of-the-void/assets/compendium/microships/passive.png",
+    "path": "/Passzív/",
     "system": {
       "abilityType": "passive",
-      "description": "A mozgási sebességed megnövekszik 3 méterrel.",
-      "cost": 1250,
-      "replaceCost": 3
+      "description": "A mozgási sebességed megnövekszik 3 méterrel."
     }
   },
   {
     "_id": "figyelmes",
     "name": "Figyelmes",
     "type": "microchip",
-    "img": "icons/svg/upgrade.svg",
+    "img": "systems/vacuum-of-the-void/assets/compendium/microships/passive.png",
+    "path": "/Passzív/",
     "system": {
       "abilityType": "passive",
-      "description": "Kapsz +3 bónuszt a Gyorsgondolkodáspróbáidra. Nem lehetsz meglepve, és ha elrejtőzve támadnak rád, akkor nem kapnak előnyt a támadásaikra.",
-      "cost": 1250,
-      "replaceCost": 3
+      "description": "Kapsz +3 bónuszt a Gyorsgondolkodáspróbáidra. Nem lehetsz meglepve, és ha elrejtőzve támadnak rád, akkor nem kapnak előnyt a támadásaikra."
     }
   },
   {
     "_id": "nagy-tudasu",
     "name": "Nagy tudású",
     "type": "microchip",
-    "img": "icons/svg/upgrade.svg",
+    "img": "systems/vacuum-of-the-void/assets/compendium/microships/passive.png",
+    "path": "/Passzív/",
     "system": {
       "abilityType": "passive",
-      "description": "Előnnyel idézel fel Köztársasági csillagrendszerekről dolgokat, történelmet és tudományos ismereteket. Ezen túl megpróbálhatsz hátrány nélkül Peremvidéki és Peremvidéken túli rendszerekről is felidézni információkat.",
-      "cost": 1250,
-      "replaceCost": 3
+      "description": "Előnnyel idézel fel Köztársasági csillagrendszerekről dolgokat, történelmet és tudományos ismereteket. Ezen túl megpróbálhatsz hátrány nélkül Peremvidéki és Peremvidéken túli rendszerekről is felidézni információkat."
     }
   },
   {
     "_id": "dupla-fegyverhasznalat",
     "name": "Dupla Fegyverhasználat",
     "type": "microchip",
-    "img": "icons/svg/upgrade.svg",
+    "img": "systems/vacuum-of-the-void/assets/compendium/microships/passive.png",
+    "path": "/Passzív/",
     "system": {
       "abilityType": "passive",
-      "description": "Tudsz kettő könnyű fegyvert használni 2 Küzdelmi Pontért, és ez nem ad neked semmilyen büntetést.",
-      "cost": 1250,
-      "replaceCost": 3
+      "description": "Tudsz kettő könnyű fegyvert használni 2 Küzdelmi Pontért, és ez nem ad neked semmilyen büntetést."
     }
   },
   {
     "_id": "nagyhiru",
     "name": "Nagyhírű",
     "type": "microchip",
-    "img": "icons/svg/upgrade.svg",
+    "img": "systems/vacuum-of-the-void/assets/compendium/microships/passive.png",
+    "path": "/Passzív/",
     "system": {
       "abilityType": "passive",
-      "description": "Amikor Hírnevet szerzel egy helyen, akkor egy mellette lévő ugyan olyan méretű helyen is megszerzed azt a Hírnevet. (Ha zónában, akkor a közeli zónában, ha bolygón, akkor a közeli bolygón.)",
-      "cost": 1250,
-      "replaceCost": 3
+      "description": "Amikor Hírnevet szerzel egy helyen, akkor egy mellette lévő ugyan olyan méretű helyen is megszerzed azt a Hírnevet. (Ha zónában, akkor a közeli zónában, ha bolygón, akkor a közeli bolygón.)"
     }
   },
   {
     "_id": "eleteros",
     "name": "Életerős",
     "type": "microchip",
-    "img": "icons/svg/upgrade.svg",
+    "img": "systems/vacuum-of-the-void/assets/compendium/microships/passive.png",
+    "path": "/Passzív/",
     "system": {
       "abilityType": "passive",
-      "description": "Minden testrészed életereje megnövekszik 3-mal.",
-      "cost": 1250,
-      "replaceCost": 3
+      "description": "Minden testrészed életereje megnövekszik 3-mal."
     }
   },
   {
     "_id": "eros-idegzetu",
     "name": "Erős Idegzetű",
     "type": "microchip",
-    "img": "icons/svg/upgrade.svg",
+    "img": "systems/vacuum-of-the-void/assets/compendium/microships/passive.png",
+    "path": "/Passzív/",
     "system": {
       "abilityType": "passive",
-      "description": "10 Stressz Pont helyett 13 Stressz Pontnak kell összegyűlnie, hogy egy Mentális Betegséget szerezz.",
-      "cost": 1250,
-      "replaceCost": 3
+      "description": "10 Stressz Pont helyett 13 Stressz Pontnak kell összegyűlnie, hogy egy Mentális Betegséget szerezz."
     }
   },
   {
     "_id": "serkentett-regeneracio",
     "name": "Serkentett Regeneráció",
     "type": "microchip",
-    "img": "icons/svg/upgrade.svg",
+    "img": "systems/vacuum-of-the-void/assets/compendium/microships/passive.png",
+    "path": "/Passzív/",
     "system": {
       "abilityType": "passive",
-      "description": "Kritikus Sérülések esetén, a sérülésed azonnal Stabilizált állapotba kerül. Ezentúl mindennap eggyel többet gyógyul minden testrészed.",
-      "cost": 1250,
-      "replaceCost": 3
+      "description": "Kritikus Sérülések esetén, a sérülésed azonnal Stabilizált állapotba kerül. Ezentúl mindennap eggyel többet gyógyul minden testrészed."
     }
   },
   {
     "_id": "reszleges-felepules",
     "name": "Részleges Felépülés",
     "type": "microchip",
-    "img": "icons/svg/upgrade.svg",
+    "img": "systems/vacuum-of-the-void/assets/compendium/microships/passive.png",
+    "path": "/Passzív/",
     "system": {
       "abilityType": "passive",
-      "description": "Brutális Sérülések esetén, ha Gyógyított állapotba kerülnek, akkor a negatív hatások megfeleződnek. Amennyiben nem lehet megfelezni, akkor a Mesélővel kell egyeztetni, hogy pontosan milyen negatívumok maradnak meg.",
-      "cost": 1250,
-      "replaceCost": 3
+      "description": "Brutális Sérülések esetén, ha Gyógyított állapotba kerülnek, akkor a negatív hatások megfeleződnek. Amennyiben nem lehet megfelezni, akkor a Mesélővel kell egyeztetni, hogy pontosan milyen negatívumok maradnak meg."
     }
   },
   {
     "_id": "hazugsagvizsgalo",
     "name": "Hazugságvizsgáló",
     "type": "microchip",
-    "img": "icons/svg/upgrade.svg",
+    "img": "systems/vacuum-of-the-void/assets/compendium/microships/passive.png",
+    "path": "/Passzív/",
     "system": {
       "abilityType": "passive",
-      "description": "Átverések ellen dobott Mentális Erősségpróbákra +5 bónuszt kapsz.",
-      "cost": 1250,
-      "replaceCost": 3
+      "description": "Átverések ellen dobott Mentális Erősségpróbákra +5 bónuszt kapsz."
     }
   },
   {
     "_id": "auto-transzalator",
     "name": "Auto-Transzalátor",
     "type": "microchip",
-    "img": "icons/svg/upgrade.svg",
+    "img": "systems/vacuum-of-the-void/assets/compendium/microships/passive.png",
+    "path": "/Passzív/",
     "system": {
       "abilityType": "passive",
-      "description": "Kiválaszthatsz két nyelvet, amelyet a karaktered folyékonyan beszél a Nyelvek Jártasságmódosítójától függetlenül.",
-      "cost": 1250,
-      "replaceCost": 3
+      "description": "Kiválaszthatsz két nyelvet, amelyet a karaktered folyékonyan beszél a Nyelvek Jártasságmódosítójától függetlenül."
     }
   },
   {
     "_id": "special-guest",
     "name": "Special Guest",
     "type": "microchip",
-    "img": "icons/svg/upgrade.svg",
+    "img": "systems/vacuum-of-the-void/assets/compendium/microships/passive.png",
+    "path": "/Passzív/",
     "system": {
       "abilityType": "passive",
-      "description": "Zártkörű rendezvényekre belépést nyújt. Ilyen rendezvények lehetnek gálák, bulik, vacsorák és hasonlók.",
-      "cost": 1250,
-      "replaceCost": 3
+      "description": "Zártkörű rendezvényekre belépést nyújt. Ilyen rendezvények lehetnek gálák, bulik, vacsorák és hasonlók."
+    }
+  },
+  {
+    "_id": "rejtek-hely",
+    "name": "Rejtek-Hely",
+    "type": "microchip",
+    "img": "systems/vacuum-of-the-void/assets/compendium/microships/passive.png",
+    "path": "/Passzív/",
+    "system": {
+      "abilityType": "passive",
+      "description": "A Bázisod veszélyeztetettsége 20%-kal csökken."
+    }
+  },
+  {
+    "_id": "kiber-kem",
+    "name": "Kiber-Kém",
+    "type": "microchip",
+    "img": "systems/vacuum-of-the-void/assets/compendium/microships/passive.png",
+    "path": "/Passzív/",
+    "system": {
+      "abilityType": "passive",
+      "description": "Mindig, amikor Informátorrendszertől vásárolsz információt, akkor a Kiderítési Idő megfeleződik."
+    }
+  },
+  {
+    "_id": "sebessegmamor",
+    "name": "Sebességmámor",
+    "type": "microchip",
+    "img": "systems/vacuum-of-the-void/assets/compendium/microships/passive.png",
+    "path": "/Passzív/",
+    "system": {
+      "abilityType": "passive",
+      "description": "Utcai Versenyeknél és Járműves Üldözéseknél +2-t kapsz minden próbádra, amely egy akadály miatt szükséges."
     }
   },
   {
     "_id": "villamcsapas",
     "name": "Villámcsapás",
     "type": "microchip",
-    "img": "icons/svg/upgrade.svg",
+    "img": "systems/vacuum-of-the-void/assets/compendium/microships/active.png",
+    "path": "/Aktív/",
     "system": {
       "abilityType": "active",
       "description": "2 Küzdelmi Pontért kiereszthetsz az ujjaidból egy áramcsapást, ami egy 6 méteres egyenes vonalban 1d4+1-et sebez. Mindenki, akit eltalálna, dobhat egy 16-os nehézségű Gyorsgondolkodáspróbát, hogy kikerülje.",
-      "cost": 1250,
-      "replaceCost": 3
+      "replaceCost": 2
     }
   },
   {
     "_id": "keszenleti-granat",
     "name": "Készenléti Gránát",
     "type": "microchip",
-    "img": "icons/svg/upgrade.svg",
+    "img": "systems/vacuum-of-the-void/assets/compendium/microships/active.png",
+    "path": "/Aktív/",
     "system": {
       "abilityType": "active",
       "description": "Ha Közepes Fegyverrel támadsz, akkor 0 Küzdelmi Pontért eldobhatsz egy dobható fegyvert (Gránát, Villanógránát…).",
-      "cost": 1250,
-      "replaceCost": 3
+      "replaceCost": 0
     }
   },
   {
     "_id": "beepitett-hacker",
     "name": "Beépített Hacker",
     "type": "microchip",
-    "img": "icons/svg/upgrade.svg",
+    "img": "systems/vacuum-of-the-void/assets/compendium/microships/active.png",
+    "path": "/Aktív/",
     "system": {
       "abilityType": "active",
-      "description": "Egy nap egyszer, feltörhetsz egy civil védettséggel rendelkező számítógépet vagy szervert, és annak tartalmával három dolgot tehetsz: törlöd, feltöltöd a saját tárhelyedre vagy pedig szabotálod valamilyen módon.",
-      "cost": 1250,
-      "replaceCost": 3
+      "description": "Egy nap egyszer, feltörhetsz egy civil védettséggel rendelkező számítógépet vagy szervert, és annak tartalmával három dolgot tehetsz. Törlöd, feltöltöd a saját tárhelyedre vagy pedig szabotálod valamilyen módon.",
+      "replaceCost": 0
     }
   },
   {
     "_id": "talalati-reakcio",
     "name": "Találati Reakció",
     "type": "microchip",
-    "img": "icons/svg/upgrade.svg",
+    "img": "systems/vacuum-of-the-void/assets/compendium/microships/active.png",
+    "path": "/Aktív/",
     "system": {
       "abilityType": "active",
       "description": "Ha eltalálják azt a járműegységet, amelyben te tartózkodsz, akkor felhasználhatod a következő körödből 1 Küzdelmi Pontodat, hogy ne sebződj és ne kapj Stressz Pontot.",
-      "cost": 1250,
-      "replaceCost": 3
+      "replaceCost": 1
     }
   },
   {
-    "_id": "gyengeségek-felmerese",
+    "_id": "gyengesegek-felmerese",
     "name": "Gyengeségek Felmérése",
     "type": "microchip",
-    "img": "icons/svg/upgrade.svg",
+    "img": "systems/vacuum-of-the-void/assets/compendium/microships/active.png",
+    "path": "/Aktív/",
     "system": {
       "abilityType": "active",
       "description": "Járműves csatánként háromszor felhasználhatod 2 Küzdelmi Pontodat arra, hogy felmérd egy típusú ellenséges jármű gyengeségeit, és ezeket elmondhasd a lövészeknek. Ezek után a lövészek három körig előnnyel támadhatnak erre a típusú járműre.",
-      "cost": 1250,
-      "replaceCost": 3
+      "replaceCost": 2
+    }
+  },
+  {
+    "_id": "konnyu-tamadas",
+    "name": "Könnyű Támadás",
+    "type": "microchip",
+    "img": "systems/vacuum-of-the-void/assets/compendium/microships/active.png",
+    "path": "/Aktív/",
+    "system": {
+      "abilityType": "active",
+      "description": "Ha a körödben nem támadsz semmilyen más fegyverrel, akkor 1 Küzdelmi Pontért támadhatsz egy könnyű vagy dobható fegyverrel.",
+      "replaceCost": 1
+    }
+  },
+  {
+    "_id": "megnyugtato-jelenlet",
+    "name": "Megnyugtató Jelenlét",
+    "type": "microchip",
+    "img": "systems/vacuum-of-the-void/assets/compendium/microships/active.png",
+    "path": "/Aktív/",
+    "system": {
+      "abilityType": "active",
+      "description": "Naponta egyszer 2 Stressz Pontot levonhatsz egy csapattársadtól (aki nem te vagy).",
+      "replaceCost": 0
+    }
+  },
+  {
+    "_id": "mentalis-pajzs",
+    "name": "Mentális Pajzs",
+    "type": "microchip",
+    "img": "systems/vacuum-of-the-void/assets/compendium/microships/active.png",
+    "path": "/Aktív/",
+    "system": {
+      "abilityType": "active",
+      "description": "Ha van rálátásod egy csapattársadra, aki Stressz Pontokat kap, akkor elköltheted a következő körödből 2 Küzdelmi Pontodat, hogy helyette te kapd a Stressz Pontokat.",
+      "replaceCost": 2
+    }
+  },
+  {
+    "_id": "kitarto-elme",
+    "name": "Kitartó Elme",
+    "type": "microchip",
+    "img": "systems/vacuum-of-the-void/assets/compendium/microships/active.png",
+    "path": "/Aktív/",
+    "system": {
+      "abilityType": "active",
+      "description": "Elkölthetsz egy morálkockát (d8) arra, hogy egy szituációban kevesebb Stressz Pontot kapj 1d4-gyel.",
+      "replaceCost": 0
+    }
+  },
+  {
+    "_id": "napi-kedvezmenyek",
+    "name": "Napi Kedvezmények",
+    "type": "microchip",
+    "img": "systems/vacuum-of-the-void/assets/compendium/microships/active.png",
+    "path": "/Aktív/",
+    "system": {
+      "abilityType": "active",
+      "description": "A Mikro-Chip letölt a Holo-Netről hasznosabb kuponokat vagy kedvezmény-kódokat, amelyekkel napi egyszer egy mindennapi tárgy vagy szolgáltatás (pl. nem Űrhajó) árát 30%-kal csökkentheted.",
+      "replaceCost": 0
+    }
+  },
+  {
+    "_id": "ellenallo",
+    "name": "Ellenálló",
+    "type": "microchip",
+    "img": "systems/vacuum-of-the-void/assets/compendium/microships/active.png",
+    "path": "/Aktív/",
+    "system": {
+      "abilityType": "active",
+      "description": "4 Küzdelmi Pontért levehetsz magadról egy Állapotot (kivéve a Fuldoklót, Vérzőt és Égőt).",
+      "replaceCost": 4
+    }
+  },
+  {
+    "_id": "multifunkcionalis-kibernetika",
+    "name": "Multifunkcionális Kibernetika",
+    "type": "microchip",
+    "img": "systems/vacuum-of-the-void/assets/compendium/microships/active.png",
+    "path": "/Aktív/",
+    "system": {
+      "abilityType": "active",
+      "description": "Heti egyszer megváltoztathatod egy Kiber-Testrészed módosítását 150 cr-ért.",
+      "replaceCost": 0
+    }
+  },
+  {
+    "_id": "sors-kiskedvence",
+    "name": "Sors Kiskedvence",
+    "type": "microchip",
+    "img": "systems/vacuum-of-the-void/assets/compendium/microships/active.png",
+    "path": "/Aktív/",
+    "system": {
+      "abilityType": "active",
+      "description": "Amennyiben a Mesélő a Bázisotoknál a veszélyeztetettségetek alá dob (azaz, a Bázist kirabolnák, vagy megtámadnák), akkor ezt hetente egyszer újradobathatod vele.",
+      "replaceCost": 0
+    }
+  },
+  {
+    "_id": "kapcsolati-halo",
+    "name": "Kapcsolati Háló",
+    "type": "microchip",
+    "img": "systems/vacuum-of-the-void/assets/compendium/microships/active.png",
+    "path": "/Aktív/",
+    "system": {
+      "abilityType": "active",
+      "description": "Amennyiben egy zónában elkapnák az informátorokat, és emiatt megszűnne az adott zónában a kapcsolatotok az Informátorrendszerrel, akkor dobhatsz egy 13-as nehézségű Szerencsepróbát. Ha ez sikerül, akkor az adott zónában meg marad az Informátorrendszeretek.",
+      "replaceCost": 0
+    }
+  },
+  {
+    "_id": "talpraesett",
+    "name": "Talpraesett",
+    "type": "microchip",
+    "img": "systems/vacuum-of-the-void/assets/compendium/microships/active.png",
+    "path": "/Aktív/",
+    "system": {
+      "abilityType": "active",
+      "description": "Utcai Versenyeknél és Járműves Üldözéseknél 2-ször újradobhatod az akadály által kívánt próbát azután, hogy megtudod, hogy mi az eredmény következménye. Viszont kötelező az új eredményt használnod.",
+      "replaceCost": 0
     }
   }
 ]
