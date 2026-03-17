@@ -585,33 +585,117 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
         equipped
       };
     });
-    // Felszerelés: Tárgyak táblázat – csak Targy típusú itemek (Egyeb a jobb oldali Egyéb infó panelbe kerül)
-    const targyDocs = (this.actor.items?.contents ?? []).filter(i => i.type === "Targy");
-    context.itemsTable = targyDocs.map((item) => {
+    // Felszerelés: Tárgyak + Csomagok táblázat.
+    const allItems = this.actor.items?.contents ?? [];
+    const packageDocs = allItems.filter((i) => i.type === "Csomag");
+    const targyDocs = allItems.filter((i) => i.type === "Targy");
+
+    const packageEntries = [];
+    const childIds = new Set();
+
+    // Csomagok: először maga a csomag, utána a tartalma külön sorokban, behúzva.
+    for (const item of packageDocs) {
       const sys = item?.system ?? {};
       const descRaw = (sys.description ?? "").trim();
       const description = descRaw || "—";
-      const quantity = sys.quantity != null ? String(sys.quantity).trim() : "1";
-      return {
+      const refs = Array.isArray(sys.contents) ? sys.contents : [];
+
+      packageEntries.push({
         itemId: item.id,
         actorId: this.actor.id,
         name: item?.name ?? "—",
         img: item?.img ?? "",
-        quantity,
-        description
-      };
-    });
+        quantity: "—",
+        description,
+        isPackage: true,
+        isPackageChild: false
+      });
+
+      if (!refs.length) continue;
+
+      const docs = await Promise.all(
+        refs.map(async (ref) => {
+          if (!ref) return null;
+          try {
+            const doc = await fromUuid(ref);
+            if (doc?.documentName === "Item") return doc;
+          } catch {
+            const fallback = game.items?.get(ref);
+            if (fallback) return fallback;
+          }
+          return null;
+        })
+      );
+
+      for (const doc of docs) {
+        if (!doc) continue;
+        childIds.add(doc.id);
+        const dSys = doc.system ?? {};
+        const dDescRaw = (dSys.description ?? "").toString().trim();
+        const dDescription = dDescRaw || "—";
+        const rawQty = (dSys.quantity ?? "").toString().trim();
+        const quantity = rawQty || "1";
+        const rawImg = doc.img ?? "";
+        // Csak Egyeb típusú itemeknél tüntessük el az alap bag ikont; Targyknál és más típusoknál mutassuk a képet.
+        const img =
+          doc.type === "Egyeb" && rawImg === "icons/svg/item-bag.svg"
+            ? ""
+            : rawImg;
+
+        packageEntries.push({
+          itemId: doc.id,
+          actorId: this.actor.id,
+          name: doc.name ?? "—",
+          img,
+          quantity,
+          description: dDescription,
+          isPackage: false,
+          isPackageChild: true,
+          parentPackageId: item.id,
+          parentPackageName: item.name ?? "Csomag",
+          innerType: doc.type
+        });
+      }
+    }
+
+    // Sima tárgyak, amelyek nem szerepelnek egyetlen csomagban sem.
+    const targyEntries = targyDocs
+      .filter((item) => !childIds.has(item.id))
+      .map((item) => {
+        const sys = item?.system ?? {};
+        const descRaw = (sys.description ?? "").trim();
+        const description = descRaw || "—";
+        const quantity = sys.quantity != null ? String(sys.quantity).trim() : "1";
+        const img = item.img ?? "";
+        return {
+          itemId: item.id,
+          actorId: this.actor.id,
+          name: item?.name ?? "—",
+          img,
+          quantity,
+          description,
+          isPackage: false,
+          isPackageChild: false
+        };
+      });
+
+    context.itemsTable = [...packageEntries, ...targyEntries];
     // Egyéb Információk jobb oldal: csak Egyeb típusú itemek (drop zone + lista)
     const egyebDocs = (this.actor.items?.contents ?? []).filter(i => i.type === "Egyeb");
     context.egyebList = egyebDocs.map((item) => {
       const sys = item?.system ?? {};
       const descRaw = (sys.description ?? "").trim();
       const description = descRaw ? (descRaw.length > 80 ? descRaw.slice(0, 77) + "…" : descRaw) : "";
+      const rawImg = item.img ?? "";
+      const img =
+        rawImg === "icons/svg/item-bag.svg"
+          ? ""
+          : rawImg;
       return {
         itemId: item.id,
         actorId: this.actor.id,
         name: item?.name ?? "—",
-        img: item?.img ?? "",
+        img,
         description
       };
     });
@@ -785,8 +869,11 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
       return { index, used, usable };
     });
 
-    const hasCombatWithKarakter = !!game.combat?.combatants?.some((c) => c.actor?.type === "Karakter");
-    context.showHarcSection = hasCombatWithKarakter;
+    const actorId = this.actor?.id;
+    const inCombat = !!game.combat?.combatants?.some(
+      (c) => (c.actor?.id ?? c.actorId) === actorId
+    );
+    context.showHarcSection = inCombat;
     context.canEditInitiative = !!game.user?.isGM;
     context.showInitiativeResult = typeof initiativeResult === "number";
     context.initiativeResult = context.showInitiativeResult ? initiativeResult : "";
@@ -844,6 +931,72 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
       const current = !!(Number(this.actor.system?.resources?.[`kpDot${index}`]) || 0);
       await this.actor.update({ [key]: current ? 0 : 1 });
     });
+
+    // Ha az aktor egy itemje (pl. fegyver, tárgy) frissül a saját lapján, a Karakter lap táblázata is frissüljön.
+    // deleteItem: ha törlünk itemet (pl. felszerelést), a lap újrarenderelődjön – így a "Húzz ide..." drop zone megjelenik üres inventory esetén.
+    // Plusz: ha egy világ-item, ami valamelyik Csomag tartalma (system.contents) között szerepel, frissül,
+    // akkor is újrarendereljük a lapot, hogy a behúzott sorok leírása/mennyisége azonnal frissüljön.
+    if (!this._votvKarakterItemHookRegistered) {
+      this._votvKarakterItemUpdateHook = (item, _data, _options) => {
+        const actor = this.actor;
+        if (!actor) return;
+
+        // 1) Közvetlenül az aktorhoz tartozó item frissült (pl. inventoryból megnyitott tárgy lapja).
+        if (item?.parent?.id === actor.id) {
+          this.render(true);
+          return;
+        }
+
+        // 2) Világ-item, amit valamelyik Csomag contents listája referál.
+        const updatedId = item?.id ?? "";
+        const updatedUuid = item?.uuid ?? "";
+        if (!updatedId && !updatedUuid) return;
+
+        const allItems = actor.items?.contents ?? [];
+        const hasPackageRef = allItems.some((i) => {
+          if (i.type !== "Csomag") return false;
+          const refs = Array.isArray(i.system?.contents) ? i.system.contents : [];
+          return refs.some((ref) => {
+            if (!ref) return false;
+            const refStr = String(ref);
+            return refStr === updatedId || refStr === updatedUuid;
+          });
+        });
+
+        if (hasPackageRef) this.render(true);
+      };
+      this._votvKarakterItemDeleteHook = (document, _options, _userId) => {
+        if (this.actor && document?.parent?.id === this.actor.id) this.render(true);
+      };
+      Hooks.on("updateItem", this._votvKarakterItemUpdateHook);
+      Hooks.on("deleteItem", this._votvKarakterItemDeleteHook);
+      this._votvKarakterItemHookRegistered = true;
+    }
+
+    if (!this._votvKarakterCombatHookRegistered) {
+      this._votvKarakterCombatHandler = () => {
+        const actor = this.actor;
+        if (!actor) return;
+        const actorId = actor.id;
+        const inCombatNow = !!game.combat?.combatants?.some(
+          (c) => (c.actor?.id ?? c.actorId) === actorId
+        );
+        const prev = this._votvKarakterLastInCombat;
+        this._votvKarakterLastInCombat = inCombatNow;
+        if (prev === undefined || prev === inCombatNow) return;
+        this.render(true);
+      };
+      const handler = this._votvKarakterCombatHandler;
+      Hooks.on("updateCombat", handler);
+      Hooks.on("deleteCombat", handler);
+      Hooks.on("createCombatant", handler);
+      Hooks.on("updateCombatant", handler);
+      Hooks.on("deleteCombatant", handler);
+      this._votvKarakterLastInCombat = !!game.combat?.combatants?.some(
+        (c) => (c.actor?.id ?? c.actorId) === this.actor?.id
+      );
+      this._votvKarakterCombatHookRegistered = true;
+    }
 
     if (!this.isEditable) return;
 
@@ -936,7 +1089,13 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
     const openInventoryItem = (target, ev) => {
       const itemId = target.dataset.itemId;
       if (!itemId) return;
-      const item = this.actor.items.get(itemId);
+
+      // Először az actor saját itemjei között keresünk,
+      // ha ott nincs, fallback a globális Item collectionre (pl. Csomag tartalma).
+      const item =
+        this.actor.items.get(itemId) ??
+        game.items?.get(itemId) ??
+        null;
       if (!item) return;
 
       // For weapons assigned to a slot, allow Alt+click on the name to roll instead of opening the sheet.
@@ -960,15 +1119,23 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
     });
 
     // Inventory quantity per item (delegated)
-    $html.on("change", ".karakter-item-qty", async ev => {
+    $html.on("change", ".karakter-item-quantity-input", async ev => {
       const input = ev.currentTarget;
-      const itemId = input.dataset.itemId;
+      const itemId = (input.dataset.itemId ?? "").trim();
       if (!itemId) return;
-      const item = this.actor.items.get(itemId);
+
+      // Elsődlegesen az aktor saját itemjei között keresünk,
+      // ha ott nincs, fallback a globális Item collectionre (pl. Csomag tartalma).
+      const item =
+        this.actor.items.get?.(itemId) ??
+        this.actor.items.contents?.find?.(i => i.id === itemId) ??
+        game.items?.get(itemId) ??
+        null;
       if (!item) return;
-      let qty = Number(input.value);
-      if (!Number.isFinite(qty) || qty < 0) qty = 0;
-      await item.update({ "system.quantity": qty });
+
+      const raw = (input.value ?? "").toString().trim();
+      const safe = raw === "" ? "0" : raw;
+      await item.update({ "system.quantity": safe });
     });
 
     // Remove inventory item from actor: Alt+click to delete (delegated). Egyetlen handler minden típusra (Fegyver, Pancel, Targy, Egyeb stb.).
@@ -1348,20 +1515,6 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
     $html.find(".karakter-item-quantity-input").each((i, el) => {
       this._resizeWeaponQuantityInput(el);
     });
-    $html.on("change", ".karakter-item-quantity-input", async ev => {
-      const input = ev.currentTarget;
-      const itemId = (input.dataset.itemId ?? "").trim();
-      if (!itemId) return;
-      const item = this.actor.items.get(itemId);
-      if (!item || item.type !== "Targy") return; // Egyeb nincs mennyiség mező
-      const val = (input.value ?? "").trim();
-      await item.update({ "system.quantity": val });
-      setTimeout(() => {
-        const root = this.form ?? this.element;
-        const el = root?.querySelector(`.karakter-item-quantity-input[data-item-id="${itemId}"]`);
-        if (el) this._resizeWeaponQuantityInput(el);
-      }, 80);
-    });
 
     // Tárgy/Egyeb törlést a fent .karakter-item-delete (Alt+klikk) egyetlen handler intézi – ne legyen duplikált handler, mert az már törölte az itemet és a második .get() "Item does not exist!" hibát dobna.
 
@@ -1398,6 +1551,28 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
 
   _tearDown(options) {
     document.body.removeEventListener("blur", this._votvBlur, true);
+    if (this._votvKarakterItemHookRegistered) {
+      if (this._votvKarakterItemUpdateHook) {
+        Hooks.off("updateItem", this._votvKarakterItemUpdateHook);
+        this._votvKarakterItemUpdateHook = null;
+      }
+      if (this._votvKarakterItemDeleteHook) {
+        Hooks.off("deleteItem", this._votvKarakterItemDeleteHook);
+        this._votvKarakterItemDeleteHook = null;
+      }
+      this._votvKarakterItemHookRegistered = false;
+    }
+    if (this._votvKarakterCombatHookRegistered) {
+      if (this._votvKarakterCombatHandler) {
+        Hooks.off("updateCombat", this._votvKarakterCombatHandler);
+        Hooks.off("deleteCombat", this._votvKarakterCombatHandler);
+        Hooks.off("createCombatant", this._votvKarakterCombatHandler);
+        Hooks.off("updateCombatant", this._votvKarakterCombatHandler);
+        Hooks.off("deleteCombatant", this._votvKarakterCombatHandler);
+        this._votvKarakterCombatHandler = null;
+      }
+      this._votvKarakterCombatHookRegistered = false;
+    }
     return super._tearDown?.(options);
   }
 

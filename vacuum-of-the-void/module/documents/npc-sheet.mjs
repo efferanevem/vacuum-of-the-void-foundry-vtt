@@ -268,31 +268,113 @@ export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplication
       };
     });
 
-    const targyDocs = items.filter((i) => i.type === "Targy");
-    context.itemsTable = targyDocs.map((item) => {
+    // Felszerelés: Tárgyak + Csomagok táblázat (ugyanaz a flatten logika, mint a karakterlapon).
+    const allItems = items;
+    const packageDocs = allItems.filter((i) => i.type === "Csomag");
+    const targyDocs = allItems.filter((i) => i.type === "Targy");
+
+    const packageEntries = [];
+    const childIds = new Set();
+
+    // Csomagok: először maga a csomag, utána a tartalma külön sorokban, behúzva.
+    for (const item of packageDocs) {
       const sys = item?.system ?? {};
       const descRaw = (sys.description ?? "").trim();
       const description = descRaw || "—";
-      return {
+      const refs = Array.isArray(sys.contents) ? sys.contents : [];
+
+      packageEntries.push({
         itemId: item.id,
         actorId: actor.id,
         name: item?.name ?? "—",
         img: item?.img ?? "",
-        quantity: sys.quantity != null ? String(sys.quantity).trim() : "1",
-        description
-      };
-    });
+        quantity: "—",
+        description,
+        isPackage: true,
+        isPackageChild: false
+      });
+
+      if (!refs.length) continue;
+
+      const docs = await Promise.all(
+        refs.map(async (ref) => {
+          if (!ref) return null;
+          try {
+            const doc = await fromUuid(ref);
+            if (doc?.documentName === "Item") return doc;
+          } catch {
+            const fallback = game.items?.get(ref);
+            if (fallback) return fallback;
+          }
+          return null;
+        })
+      );
+
+      for (const doc of docs) {
+        if (!doc) continue;
+        childIds.add(doc.id);
+        const dSys = doc.system ?? {};
+        const dDescRaw = (dSys.description ?? "").toString().trim();
+        const dDescription = dDescRaw || "—";
+        const rawQty = (dSys.quantity ?? "").toString().trim();
+        const quantity = rawQty || "1";
+        const rawImg = doc.img ?? "";
+        const img = rawImg;
+
+        packageEntries.push({
+          itemId: doc.id,
+          actorId: actor.id,
+          name: doc.name ?? "—",
+          img,
+          quantity,
+          description: dDescription,
+          isPackage: false,
+          isPackageChild: true,
+          parentPackageId: item.id,
+          parentPackageName: item.name ?? "Csomag",
+          innerType: doc.type
+        });
+      }
+    }
+
+    // Sima tárgyak, amelyek nem szerepelnek egyetlen csomagban sem.
+    const targyEntries = targyDocs
+      .filter((item) => !childIds.has(item.id))
+      .map((item) => {
+        const sys = item?.system ?? {};
+        const descRaw = (sys.description ?? "").trim();
+        const description = descRaw || "—";
+        const quantity = sys.quantity != null ? String(sys.quantity).trim() : "1";
+        const img = item?.img ?? "";
+        return {
+          itemId: item.id,
+          actorId: actor.id,
+          name: item?.name ?? "—",
+          img,
+          quantity,
+          description,
+          isPackage: false,
+          isPackageChild: false
+        };
+      });
+
+    context.itemsTable = [...packageEntries, ...targyEntries];
 
     const egyebDocs = items.filter((i) => i.type === "Egyeb");
     context.egyebList = egyebDocs.map((item) => {
       const sys = item?.system ?? {};
       const descRaw = (sys.description ?? "").trim();
       const description = descRaw ? (descRaw.length > 80 ? descRaw.slice(0, 77) + "…" : descRaw) : "";
+      const rawImg = item?.img ?? "";
+      const img =
+        rawImg === "icons/svg/item-bag.svg"
+          ? ""
+          : rawImg;
       return {
         itemId: item.id,
         actorId: actor.id,
         name: item?.name ?? "—",
-        img: item?.img ?? "",
+        img,
         description
       };
     });
@@ -689,6 +771,31 @@ export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplication
       Hooks.on("deleteItem", sheet._votvNpcItemDeleteHook);
       sheet._votvNpcItemHookRegistered = true;
     }
+
+    if (!sheet._votvNpcCombatHookRegistered) {
+      sheet._votvNpcCombatHandler = () => {
+        const actor = sheet.actor;
+        if (!actor) return;
+        const actorId = actor.id;
+        const inCombatNow = !!game.combat?.combatants?.some(
+          (c) => (c.actor?.id ?? c.actorId) === actorId
+        );
+        const prev = sheet._votvNpcLastInCombat;
+        sheet._votvNpcLastInCombat = inCombatNow;
+        if (prev === undefined || prev === inCombatNow) return;
+        sheet.render(true);
+      };
+      const handler = sheet._votvNpcCombatHandler;
+      Hooks.on("updateCombat", handler);
+      Hooks.on("deleteCombat", handler);
+      Hooks.on("createCombatant", handler);
+      Hooks.on("updateCombatant", handler);
+      Hooks.on("deleteCombatant", handler);
+      sheet._votvNpcLastInCombat = !!game.combat?.combatants?.some(
+        (c) => (c.actor?.id ?? c.actorId) === sheet.actor?.id
+      );
+      sheet._votvNpcCombatHookRegistered = true;
+    }
   }
 
   async _preClose(options) {
@@ -715,6 +822,17 @@ export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplication
         this._votvNpcItemDeleteHook = null;
       }
       this._votvNpcItemHookRegistered = false;
+    }
+    if (this._votvNpcCombatHookRegistered) {
+      if (this._votvNpcCombatHandler) {
+        Hooks.off("updateCombat", this._votvNpcCombatHandler);
+        Hooks.off("deleteCombat", this._votvNpcCombatHandler);
+        Hooks.off("createCombatant", this._votvNpcCombatHandler);
+        Hooks.off("updateCombatant", this._votvNpcCombatHandler);
+        Hooks.off("deleteCombatant", this._votvNpcCombatHandler);
+        this._votvNpcCombatHandler = null;
+      }
+      this._votvNpcCombatHookRegistered = false;
     }
     return super._tearDown?.(options);
   }

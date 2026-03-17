@@ -8,6 +8,7 @@ export { MicrochipDataModel } from "./microchip.mjs";
 export { AbilityDataModel } from "./ability.mjs";
 export { TargyDataModel } from "./targy.mjs";
 export { EgyebDataModel } from "./egyeb.mjs";
+export { CsomagDataModel } from "./csomag.mjs";
 export { JarmuEgysegDataModel } from "./jarmuegyseg.mjs";
 export { HelyisegDataModel } from "./helyiseg.mjs";
 export { VallalkozasDataModel } from "./vallalkozas.mjs";

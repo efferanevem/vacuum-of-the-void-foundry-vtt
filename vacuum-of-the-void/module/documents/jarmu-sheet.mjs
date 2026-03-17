@@ -232,21 +232,97 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
         equipped: false
       };
     });
-    const targyDocs = (this.actor.items?.contents ?? []).filter(i => i.type === "Targy");
-    context.itemsTable = targyDocs.map((item) => {
+    // Felszerelés: Tárgyak + Csomagok táblázat (ugyanaz a flatten logika, mint a karakterlapon).
+    const allItems = this.actor.items?.contents ?? [];
+    const packageDocs = allItems.filter((i) => i.type === "Csomag");
+    const targyDocs = allItems.filter((i) => i.type === "Targy");
+
+    const packageEntries = [];
+    const childIds = new Set();
+
+    // Csomagok: először maga a csomag, utána a tartalma külön sorokban, behúzva.
+    for (const item of packageDocs) {
       const sys = item?.system ?? {};
       const descRaw = (sys.description ?? "").trim();
       const description = descRaw || "—";
-      const quantity = sys.quantity != null ? String(sys.quantity).trim() : "1";
-      return {
+      const refs = Array.isArray(sys.contents) ? sys.contents : [];
+
+      packageEntries.push({
         itemId: item.id,
         actorId: this.actor.id,
         name: item?.name ?? "—",
         img: item?.img ?? "",
-        quantity,
-        description
-      };
-    });
+        quantity: "—",
+        description,
+        isPackage: true,
+        isPackageChild: false
+      });
+
+      if (!refs.length) continue;
+
+      const docs = await Promise.all(
+        refs.map(async (ref) => {
+          if (!ref) return null;
+          try {
+            const doc = await fromUuid(ref);
+            if (doc?.documentName === "Item") return doc;
+          } catch {
+            const fallback = game.items?.get(ref);
+            if (fallback) return fallback;
+          }
+          return null;
+        })
+      );
+
+      for (const doc of docs) {
+        if (!doc) continue;
+        childIds.add(doc.id);
+        const dSys = doc.system ?? {};
+        const dDescRaw = (dSys.description ?? "").toString().trim();
+        const dDescription = dDescRaw || "—";
+        const rawQty = (dSys.quantity ?? "").toString().trim();
+        const quantity = rawQty || "1";
+        const rawImg = doc.img ?? "";
+        const img = rawImg;
+
+        packageEntries.push({
+          itemId: doc.id,
+          actorId: this.actor.id,
+          name: doc.name ?? "—",
+          img,
+          quantity,
+          description: dDescription,
+          isPackage: false,
+          isPackageChild: true,
+          parentPackageId: item.id,
+          parentPackageName: item.name ?? "Csomag",
+          innerType: doc.type
+        });
+      }
+    }
+
+    // Sima tárgyak, amelyek nem szerepelnek egyetlen csomagban sem.
+    const targyEntries = targyDocs
+      .filter((item) => !childIds.has(item.id))
+      .map((item) => {
+        const sys = item?.system ?? {};
+        const descRaw = (sys.description ?? "").trim();
+        const description = descRaw || "—";
+        const quantity = sys.quantity != null ? String(sys.quantity).trim() : "1";
+        const img = item.img ?? "";
+        return {
+          itemId: item.id,
+          actorId: this.actor.id,
+          name: item?.name ?? "—",
+          img,
+          quantity,
+          description,
+          isPackage: false,
+          isPackageChild: false
+        };
+      });
+
+    context.itemsTable = [...packageEntries, ...targyEntries];
     const unitItemType = this.actor.type === "Bazis" ? "Helyiseg" : "Jarmuegyseg";
     const unitDocs = (this.actor.items?.contents ?? [])
       .filter((i) => i.type === unitItemType)

@@ -1,0 +1,69 @@
+<form class="{{cssClass}} votv-csomag-sheet" autocomplete="off">
+  <header class="sheet-header">
+    <div class="header-fields">
+      <h1 class="item-name">
+        <input name="name" type="text" value="{{item.name}}" placeholder="Csomag neve" />
+      </h1>
+    </div>
+  </header>
+
+  <section class="sheet-body">
+    <section class="karakter-panel">
+      <h2>Leírás</h2>
+      <textarea
+        name="system.description"
+        data-dtype="String"
+        rows="3"
+        placeholder="Rövid leírás a csomagról…"
+      >{{system.description}}</textarea>
+    </section>
+
+    <section class="karakter-panel">
+      <h2>Tartalom</h2>
+      <div class="csomag-contents-area" data-area="contents" data-drop-zone="item">
+        <div class="csomag-contents-list">
+          {{#each contentsList}}
+            <div class="csomag-row" data-item-id="{{this.id}}" data-item-ref="{{this.ref}}">
+              {{#if this.img}}
+                <img
+                  class="csomag-icon"
+                  src="{{this.img}}"
+                  alt=""
+                  data-item-id="{{this.id}}"
+                  data-item-ref="{{this.ref}}"
+                />
+              {{/if}}
+              <span
+                class="csomag-name csomag-item-open"
+                data-item-id="{{this.id}}"
+                data-item-ref="{{this.ref}}"
+              >
+                {{this.name}}
+              </span>
+              <span class="csomag-type">{{this.type}}</span>
+              <input
+                type="text"
+                class="karakter-item-quantity-input csomag-item-quantity-input"
+                data-item-id="{{this.id}}"
+                value="{{this.quantity}}"
+              />
+              <button
+                type="button"
+                class="csomag-item-remove"
+                data-item-ref="{{this.ref}}"
+                title="Törlés: Alt + Kattintás"
+              >
+                ✕
+              </button>
+            </div>
+          {{else}}
+            <p class="csomag-placeholder">
+              Húzz ide fegyvert, páncélt, Mikro-Chipet vagy tárgyat, hogy a csomag tartalmává váljon.
+            </p>
+          {{/each}}
+        </div>
+      </div>
+    </section>
+  </section>
+</form>
+

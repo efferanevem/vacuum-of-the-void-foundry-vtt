@@ -118,6 +118,11 @@ body.system-vacuum-of-the-void.game .app table tr:nth-child(even) {
   background-color: inherit;
 }
 
+/* Items menü: Egyéb típusú itemeknél ne jelenjen meg az alap bag ikon thumbnail. */
+body.system-vacuum-of-the-void .directory.item-directory .document.item[data-document-type="Egyeb"] .thumbnail img[src*="icons/svg/item-bag.svg"] {
+  display: none !important;
+}
+
 /* Combat: Roll Initiative gombok elrejtése */
 body.system-vacuum-of-the-void #combat [data-action="rollAll"],
 body.system-vacuum-of-the-void #combat [data-action="rollNPCs"],

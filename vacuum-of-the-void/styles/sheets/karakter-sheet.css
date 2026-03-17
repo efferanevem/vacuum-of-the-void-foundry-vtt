@@ -2412,6 +2412,17 @@
   vertical-align: middle;
   max-width: 100%;
 }
+
+.votv.karakter-sheet .karakter-equipment-items .karakter-package-child-row .karakter-equipment-cell-name {
+  padding-left: 26px;
+  font-size: 0.95em;
+}
+
+.votv.karakter-sheet .karakter-equipment-items .karakter-package-child-marker {
+  margin-right: 6px;
+  opacity: 0.8;
+  display: inline-block;
+}
 .votv.karakter-sheet .karakter-equipment-items .karakter-equipment-th-qty {
   width: 1%;
   min-width: 7.5em;
@@ -2421,6 +2432,7 @@
   width: 1%;
   min-width: 7.5em;
   white-space: nowrap;
+  text-align: center;
 }
 .votv.karakter-sheet .karakter-equipment-items .karakter-equipment-cell-qty .karakter-item-quantity-input {
   width: 5.5em;

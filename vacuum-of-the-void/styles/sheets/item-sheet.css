@@ -41,6 +41,11 @@
   box-shadow: 0 0 0 1px rgba(43, 255, 136, 0.25);
 }
 
+/* Egyéb sheet: egyáltalán ne legyen fejléc kép. */
+.votv-egyeb-sheet .sheet-header .profile {
+  display: none;
+}
+
 /* Név mező – egységes kinézet minden item sheeten */
 .vacuum-of-the-void.sheet.item .header-fields .item-name {
   margin: 0;

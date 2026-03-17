@@ -1,5 +1,5 @@
-import { BaseActorDataModel, KarakterDataModel, JarmuDataModel, BazisDataModel, VallalkozasDataModel, WeaponDataModel, ShieldDataModel, MicrochipDataModel, AbilityDataModel, TargyDataModel, EgyebDataModel, JarmuEgysegDataModel, HelyisegDataModel } from "../module/data-models/index.mjs";
-import { VoidKarakterSheet, VoidNpcSheet, VoidJarmuSheet, VoidBazisSheet, VoidVallalkozasSheet, VoidWeaponSheet, VoidShieldSheet, VoidMicrochipSheet, VoidAbilitySheet, VoidTargySheet, VoidEgyebSheet, VoidJarmuEgysegSheet, VoidHelyisegSheet } from "../module/documents.mjs";
+import { BaseActorDataModel, KarakterDataModel, JarmuDataModel, BazisDataModel, VallalkozasDataModel, WeaponDataModel, ShieldDataModel, MicrochipDataModel, AbilityDataModel, TargyDataModel, EgyebDataModel, CsomagDataModel, JarmuEgysegDataModel, HelyisegDataModel } from "../module/data-models/index.mjs";
+import { VoidKarakterSheet, VoidNpcSheet, VoidJarmuSheet, VoidBazisSheet, VoidVallalkozasSheet, VoidWeaponSheet, VoidShieldSheet, VoidMicrochipSheet, VoidAbilitySheet, VoidTargySheet, VoidEgyebSheet, VoidCsomagSheet, VoidJarmuEgysegSheet, VoidHelyisegSheet } from "../module/documents.mjs";
 
 const VOTV_DEFAULT_SCENE_BG = "systems/vacuum-of-the-void/assets/void-bg.jpg";
 
@@ -42,6 +42,7 @@ Hooks.once("init", () => {
   CONFIG.Item.dataModels.ability = AbilityDataModel;
   CONFIG.Item.dataModels.Targy = TargyDataModel;
   CONFIG.Item.dataModels.Egyeb = EgyebDataModel;
+  CONFIG.Item.dataModels.Csomag = CsomagDataModel;
   CONFIG.Item.dataModels.Jarmuegyseg = JarmuEgysegDataModel;
   CONFIG.Item.dataModels.Helyiseg = HelyisegDataModel;
 
@@ -76,8 +77,13 @@ Hooks.once("init", () => {
   CONFIG.Item.typeLabels.ability = "Képesség";
   CONFIG.Item.typeLabels.Targy = "Tárgy";
   CONFIG.Item.typeLabels.Egyeb = "Egyéb Információ";
+  CONFIG.Item.typeLabels.Csomag = "Csomag";
   CONFIG.Item.typeLabels.Jarmuegyseg = "Járműegység";
   CONFIG.Item.typeLabels.Helyiseg = "Helyiség";
+
+  // Item típusok alapértelmezett ikonjai (amit a Foundry használ, ha nincs img megadva).
+  CONFIG.Item.typeIcons ??= {};
+  CONFIG.Item.typeIcons.Targy = "systems/vacuum-of-the-void/assets/default/targy.png";
 
   // Status effectek: tokenre kattintva / Active Effectsnél választhatók, mindegyiknek id + megjelenített név + ikon (img)
   const VOTV_STATUS = "systems/vacuum-of-the-void/assets/status";
@@ -166,6 +172,11 @@ Hooks.once("init", () => {
     makeDefault: true,
     label: "VOTV.EgyebSheet"
   });
+  foundry.documents.collections.Items.registerSheet("vacuum-of-the-void", VoidCsomagSheet, {
+    types: ["Csomag"],
+    makeDefault: true,
+    label: "VOTV.CsomagSheet"
+  });
   foundry.documents.collections.Items.registerSheet("vacuum-of-the-void", VoidJarmuEgysegSheet, {
     types: ["Jarmuegyseg"],
     makeDefault: true,
@@ -179,6 +190,8 @@ Hooks.once("init", () => {
 
   // Bázis és Vállalkozás: ne legyen látható kép – üres/transzparens asset (a listában se default ikon)
   const VOTV_BAZIS_BLANK_IMG = "systems/vacuum-of-the-void/assets/blank.svg";
+  // Tárgy: saját default ikon (nem a Foundry bag).
+  const VOTV_TARGY_DEFAULT_IMG = "systems/vacuum-of-the-void/assets/default/targy.png";
   Hooks.on("preCreateActor", (document, data, _options) => {
     if (data?.type === "Bazis" || data?.type === "Vallalkozas") data.img = VOTV_BAZIS_BLANK_IMG;
   });
@@ -195,6 +208,52 @@ Hooks.once("init", () => {
         (a.img ?? "").toString().trim() !== blank
     );
     if (bazisNeedBlank.length) bazisNeedBlank.forEach((a) => a.update({ img: blank }).catch(() => {}));
+  });
+
+  // Egyéb Információ itemek: alapértelmezett kép ugyanaz az üres asset, mint a bázisnál,
+  // hogy az Items menüben se jelenjen meg a Foundry bag ikon, ha nincs saját képük.
+  // Tárgyak: kapjanak saját default ikont (targy.png), a Foundry bag helyett.
+  Hooks.on("preCreateItem", (document, data, _options) => {
+    if (data?.type === "Egyeb") {
+      data.img = VOTV_BAZIS_BLANK_IMG;
+    } else if (data?.type === "Targy") {
+      // Új Tárgy mindig a saját default ikont kapja.
+      data.img = VOTV_TARGY_DEFAULT_IMG;
+    }
+  });
+  Hooks.on("preUpdateItem", (document, change, _options) => {
+    if (document?.type === "Egyeb" && Object.prototype.hasOwnProperty.call(change ?? {}, "img")) {
+      // Egyéb mindig üres ikont használ.
+      change.img = VOTV_BAZIS_BLANK_IMG;
+    }
+  });
+  Hooks.on("ready", () => {
+    const blank = VOTV_BAZIS_BLANK_IMG;
+    const bag = "icons/svg/item-bag.svg";
+    const allItems = game.items?.contents ?? [];
+
+    // Egyeb: mindig blank ikon legyen (mint bázisnál).
+    const egyebNeedBlank = allItems.filter(
+      (i) =>
+        i.type === "Egyeb" &&
+        (i.img ?? "").toString().trim() !== blank
+    );
+    if (egyebNeedBlank.length) {
+      egyebNeedBlank.forEach((i) => i.update({ img: blank }).catch(() => {}));
+    }
+
+    // Targy: ha még az alap Foundry bag ikonon vagy üresen vannak, cseréljük le a saját default Targy ikonra.
+    const targyNeedDefault = allItems.filter(
+      (i) => {
+        const img = (i.img ?? "").toString().trim();
+        return i.type === "Targy" && (img === "" || img === bag);
+      }
+    );
+    if (targyNeedDefault.length) {
+      targyNeedDefault.forEach((i) => i.update({ img: VOTV_TARGY_DEFAULT_IMG }).catch(() => {}));
+    }
+
+    // Fegyvereknél nem nyúlunk az img-hez – marad a Foundry alap viselkedése vagy a kézzel beállított ikon.
   });
 
   // Karakter: összesített sebesség ≤ 0 → Mozgásképtelen automatikus; > 0 → eltávolítjuk az automatikus Mozgásképtelent.

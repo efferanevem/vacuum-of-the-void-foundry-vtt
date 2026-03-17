@@ -209,22 +209,95 @@ export class VoidVallalkozasSheet extends foundry.applications.api.HandlebarsApp
       };
     });
 
-    // Egyéb tárgyak táblázata
-    const targyDocs = itemDocs.filter((i) => i.type === "Targy");
-    context.itemsTable = targyDocs.map((item) => {
+    // Egyéb tárgyak + Csomagok táblázata (ugyanaz a flatten logika, mint a karakterlapon).
+    const allItems = itemDocs;
+    const packageDocs = allItems.filter((i) => i.type === "Csomag");
+    const targyDocs = allItems.filter((i) => i.type === "Targy");
+
+    const packageEntries = [];
+    const childIds = new Set();
+
+    for (const item of packageDocs) {
       const sys = item.system ?? {};
       const descRaw = (sys.description ?? "").trim();
       const description = descRaw || "—";
-      const quantity = sys.quantity != null ? String(sys.quantity).trim() : "1";
-      return {
+      const refs = Array.isArray(sys.contents) ? sys.contents : [];
+
+      packageEntries.push({
         itemId: item.id,
         actorId: actor.id,
         name: item.name ?? "—",
         img: item.img ?? "",
-        quantity,
-        description
-      };
-    });
+        quantity: "—",
+        description,
+        isPackage: true,
+        isPackageChild: false
+      });
+
+      if (!refs.length) continue;
+
+      const docs = await Promise.all(
+        refs.map(async (ref) => {
+          if (!ref) return null;
+          try {
+            const doc = await fromUuid(ref);
+            if (doc?.documentName === "Item") return doc;
+          } catch {
+            const fallback = game.items?.get(ref);
+            if (fallback) return fallback;
+          }
+          return null;
+        })
+      );
+
+      for (const doc of docs) {
+        if (!doc) continue;
+        childIds.add(doc.id);
+        const dSys = doc.system ?? {};
+        const dDescRaw = (dSys.description ?? "").toString().trim();
+        const dDescription = dDescRaw || "—";
+        const rawQty = (dSys.quantity ?? "").toString().trim();
+        const quantity = rawQty || "1";
+        const rawImg = doc.img ?? "";
+        const img = rawImg;
+
+        packageEntries.push({
+          itemId: doc.id,
+          actorId: actor.id,
+          name: doc.name ?? "—",
+          img,
+          quantity,
+          description: dDescription,
+          isPackage: false,
+          isPackageChild: true,
+          parentPackageId: item.id,
+          parentPackageName: item.name ?? "Csomag",
+          innerType: doc.type
+        });
+      }
+    }
+
+    const targyEntries = targyDocs
+      .filter((item) => !childIds.has(item.id))
+      .map((item) => {
+        const sys = item.system ?? {};
+        const descRaw = (sys.description ?? "").trim();
+        const description = descRaw || "—";
+        const quantity = sys.quantity != null ? String(sys.quantity).trim() : "1";
+        const img = item.img ?? "";
+        return {
+          itemId: item.id,
+          actorId: actor.id,
+          name: item.name ?? "—",
+          img,
+          quantity,
+          description,
+          isPackage: false,
+          isPackageChild: false
+        };
+      });
+
+    context.itemsTable = [...packageEntries, ...targyEntries];
 
     const hasEquipment =
       (context.weaponsTable?.length ?? 0) > 0 ||
@@ -239,11 +312,16 @@ export class VoidVallalkozasSheet extends foundry.applications.api.HandlebarsApp
       const sys = item.system ?? {};
       const descRaw = (sys.description ?? "").trim();
       const description = descRaw ? (descRaw.length > 80 ? `${descRaw.slice(0, 77)}…` : descRaw) : "";
+      const rawImg = item.img ?? "";
+      const img =
+        rawImg === "icons/svg/item-bag.svg"
+          ? ""
+          : rawImg;
       return {
         itemId: item.id,
         actorId: actor.id,
         name: item.name ?? "—",
-        img: item.img ?? "",
+        img,
         description
       };
     });
