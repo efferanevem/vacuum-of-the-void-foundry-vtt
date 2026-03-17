@@ -253,7 +253,7 @@ export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplication
       const abilityType = item?.system?.abilityType ?? "";
       const typeLabel = abilityType === "active" ? "Aktív" : abilityType === "passive" ? "Passzív" : abilityType || "—";
       const descRaw = (item?.system?.description ?? "").trim();
-      const description = descRaw ? (descRaw.length > 60 ? descRaw.slice(0, 57) + "…" : descRaw) : "—";
+      const description = descRaw || "—";
       return {
         itemId,
         actorId: actor.id,
@@ -272,7 +272,7 @@ export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplication
     context.itemsTable = targyDocs.map((item) => {
       const sys = item?.system ?? {};
       const descRaw = (sys.description ?? "").trim();
-      const description = descRaw ? (descRaw.length > 60 ? descRaw.slice(0, 57) + "…" : descRaw) : "—";
+      const description = descRaw || "—";
       return {
         itemId: item.id,
         actorId: actor.id,

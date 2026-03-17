@@ -414,7 +414,6 @@
   vertical-align: middle;
 }
 
-
 .votv.jarmu-sheet .jarmu-units-table th {
   font-size: var(--votv-font-label-small);
   text-transform: uppercase;
@@ -447,8 +446,7 @@
 
 .votv.jarmu-sheet .jarmu-units-table .karakter-equipment-th-name,
 .votv.jarmu-sheet .jarmu-units-table .karakter-equipment-cell-name {
-  width: 100%;
-  min-width: 6rem;
+  width: auto !important;
 }
 
 .votv.jarmu-sheet .jarmu-units-table .karakter-equipment-cell-name {

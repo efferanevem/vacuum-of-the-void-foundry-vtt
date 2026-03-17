@@ -214,11 +214,7 @@ export class VoidVallalkozasSheet extends foundry.applications.api.HandlebarsApp
     context.itemsTable = targyDocs.map((item) => {
       const sys = item.system ?? {};
       const descRaw = (sys.description ?? "").trim();
-      const description = descRaw
-        ? descRaw.length > 60
-          ? `${descRaw.slice(0, 57)}…`
-          : descRaw
-        : "—";
+      const description = descRaw || "—";
       const quantity = sys.quantity != null ? String(sys.quantity).trim() : "1";
       return {
         itemId: item.id,

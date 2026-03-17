@@ -6,7 +6,6 @@
         src="{{actor.img}}"
         data-edit="img"
         alt="{{actor.name}}"
-        title="{{actor.name}}"
       />
       {{#if showDeathSkull}}
         <img
@@ -54,22 +53,22 @@
           <span class="npc-header-stat-sep">/</span>
           <input type="number" name="system.resources.health.max" value="{{system.resources.health.max}}" min="0" />
         </div>
-        <div class="npc-header-stat-ranges" title="Kezdeményezés eredménye melyik range-be esik, annyi KP jár">
+        <div class="npc-header-stat-ranges">
           {{#each initiativeRanges}}
             <div class="karakter-harc-range-row npc-header-range-row" data-index="{{@index}}">
               {{#if this.isFirst}}
-                <span class="karakter-harc-range-placeholder karakter-harc-range-min-placeholder" title="A legkisebb range alja nincs mező – ez alatti dobás ide tartozik"></span>
+                <span class="karakter-harc-range-placeholder karakter-harc-range-min-placeholder"></span>
               {{else}}
-                <input type="number" class="karakter-harc-range-min" name="system.combat.initiativeRanges.{{@index}}.min" value="{{this.min}}" data-dtype="Number" placeholder="min" title="Range alja" />
+                <input type="number" class="karakter-harc-range-min" name="system.combat.initiativeRanges.{{@index}}.min" value="{{this.min}}" data-dtype="Number" placeholder="min" />
               {{/if}}
               <span class="karakter-harc-range-sep">–</span>
               {{#if this.isLast}}
-                <span class="karakter-harc-range-placeholder karakter-harc-range-max-placeholder" title="A legnagyobb range teteje nincs mező – ez feletti dobás ide tartozik"></span>
+                <span class="karakter-harc-range-placeholder karakter-harc-range-max-placeholder"></span>
               {{else}}
-                <input type="number" class="karakter-harc-range-max" name="system.combat.initiativeRanges.{{@index}}.max" value="{{this.max}}" data-dtype="Number" placeholder="max" title="Range teteje" />
+                <input type="number" class="karakter-harc-range-max" name="system.combat.initiativeRanges.{{@index}}.max" value="{{this.max}}" data-dtype="Number" placeholder="max" />
               {{/if}}
               <span class="karakter-harc-range-sep">:</span>
-              <input type="number" class="karakter-harc-range-kp" name="system.combat.initiativeRanges.{{@index}}.kp" value="{{this.kp}}" data-dtype="Number" min="0" max="6" title="KP" />
+              <input type="number" class="karakter-harc-range-kp" name="system.combat.initiativeRanges.{{@index}}.kp" value="{{this.kp}}" data-dtype="Number" min="0" max="6" />
             </div>
           {{/each}}
         </div>
@@ -78,12 +77,12 @@
           <input type="number" name="system.combat.defense" value="{{system.combat.defense}}" min="0" />
           <span class="npc-header-stat-plus" aria-hidden="true">+</span>
           <input type="hidden" name="system.combat.givenProtection" value="{{system.combat.givenProtection}}" />
-          <input type="number" class="npc-given-protection-display" value="{{effectiveGivenProtection}}" min="0" readonly title="Kapott védelem (alap + Körültekintés + Fél-fedezék)" tabindex="-1" />
+          <input type="number" class="npc-given-protection-display" value="{{effectiveGivenProtection}}" min="0" readonly tabindex="-1" />
         </div>
         <div class="npc-header-stat-row-left npc-header-stat-row-speed">
           <label class="npc-header-stat-label">Sebesség</label>
           <input type="number" name="system.combat.speed" value="{{system.combat.speed}}" min="0" />
-          <select name="system.combat.speedUnit" class="npc-header-stat-unit-select" title="Mértékegység">
+          <select name="system.combat.speedUnit" class="npc-header-stat-unit-select">
             {{#select speedUnitForSelect}}
             <option value="m">m</option>
             <option value="TE">TE</option>
@@ -109,11 +108,11 @@
             </div>
             <div class="karakter-weapon-slot-actions">
               {{#if this.isThrown}}
-                <span class="karakter-weapon-range-display" title="Hatótáv">{{this.rangeStr}}</span>
+                <span class="karakter-weapon-range-display">{{this.rangeStr}}</span>
               {{else}}
-                <button type="button" class="karakter-weapon-attack" data-slot="{{this.slotKey}}" title="Támadás (találat)">Támadás</button>
+                <button type="button" class="karakter-weapon-attack" data-slot="{{this.slotKey}}">Támadás</button>
               {{/if}}
-              <button type="button" class="karakter-weapon-damage" data-slot="{{this.slotKey}}" data-item-id="{{this.itemId}}" title="Sebzés dobás">Sebzés</button>
+              <button type="button" class="karakter-weapon-damage" data-slot="{{this.slotKey}}" data-item-id="{{this.itemId}}">Sebzés</button>
             </div>
           </div>
         {{/each}}
@@ -126,16 +125,16 @@
       <h2>Harc</h2>
       <div class="karakter-harc-row">
         <div class="karakter-harc-initiative-cell">
-          <button type="button" class="karakter-harc-initiative" title="Kezdeményezés dobás">Kezdeményezés</button>
+          <button type="button" class="karakter-harc-initiative">Kezdeményezés</button>
           {{#if showInitiativeResult}}
             {{#if canEditInitiative}}
-              <input type="number" class="karakter-harc-initiative-result" name="system.combat.initiativeResult" value="{{initiativeResult}}" data-dtype="Number" title="Kezdeményezés eredménye" />
+              <input type="number" class="karakter-harc-initiative-result" name="system.combat.initiativeResult" value="{{initiativeResult}}" data-dtype="Number" />
             {{else}}
-              <input type="text" class="karakter-harc-initiative-result" value="{{initiativeResult}}" readonly tabindex="-1" title="Kezdeményezés eredménye" />
+              <input type="text" class="karakter-harc-initiative-result" value="{{initiativeResult}}" readonly tabindex="-1" />
             {{/if}}
           {{/if}}
         </div>
-        <div class="karakter-harc-kp-dots npc-harc-kp-dots" title="KP (kattintásra elhasznált)">
+        <div class="karakter-harc-kp-dots npc-harc-kp-dots">
           <div class="karakter-harc-kp-dots-row">
             {{#each kpDotsRow1}}
               {{#if this.usable}}
@@ -175,11 +174,11 @@
             <div class="karakter-ability-pill" data-item-id="{{abilityFajiSlot.itemId}}">
               <div class="karakter-ability-main">
                 {{#if abilityFajiSlot.img}}<img class="karakter-ability-pill-thumb karakter-ability-open" src="{{abilityFajiSlot.img}}" alt="" data-item-id="{{abilityFajiSlot.itemId}}" />{{/if}}
-                <span class="karakter-ability-pill-name karakter-ability-open" data-item-id="{{abilityFajiSlot.itemId}}" title="{{abilityFajiSlot.displayName}}">{{abilityFajiSlot.displayName}}</span>
+                <span class="karakter-ability-pill-name karakter-ability-open" data-item-id="{{abilityFajiSlot.itemId}}">{{abilityFajiSlot.displayName}}</span>
               </div>
               <div class="karakter-ability-actions">
-                <button type="button" class="karakter-ability-chat" data-item-id="{{abilityFajiSlot.itemId}}" title="Chat-be küldés"><i class="fas fa-comment-dots"></i></button>
-                <button type="button" class="karakter-ability-slot-clear karakter-ability-pill-remove" data-slot="faji" data-area="faji" data-item-id="{{abilityFajiSlot.itemId}}" title="Alt+klikk: Eltávolítás">✕</button>
+                <button type="button" class="karakter-ability-chat" data-item-id="{{abilityFajiSlot.itemId}}" title="Beküldés"><i class="fas fa-comment-dots"></i></button>
+                <button type="button" class="karakter-ability-slot-clear karakter-ability-pill-remove" data-slot="faji" data-area="faji" data-item-id="{{abilityFajiSlot.itemId}}">✕</button>
               </div>
             </div>
           {{/if}}
@@ -187,11 +186,11 @@
             <div class="karakter-ability-pill" data-item-id="{{abilityHatterSlot.itemId}}">
               <div class="karakter-ability-main">
                 {{#if abilityHatterSlot.img}}<img class="karakter-ability-pill-thumb karakter-ability-open" src="{{abilityHatterSlot.img}}" alt="" data-item-id="{{abilityHatterSlot.itemId}}" />{{/if}}
-                <span class="karakter-ability-pill-name karakter-ability-open" data-item-id="{{abilityHatterSlot.itemId}}" title="{{abilityHatterSlot.displayName}}">{{abilityHatterSlot.displayName}}</span>
+                <span class="karakter-ability-pill-name karakter-ability-open" data-item-id="{{abilityHatterSlot.itemId}}">{{abilityHatterSlot.displayName}}</span>
               </div>
               <div class="karakter-ability-actions">
-                <button type="button" class="karakter-ability-chat" data-item-id="{{abilityHatterSlot.itemId}}" title="Chat-be küldés"><i class="fas fa-comment-dots"></i></button>
-                <button type="button" class="karakter-ability-slot-clear karakter-ability-pill-remove" data-slot="hatter" data-area="hatter" data-item-id="{{abilityHatterSlot.itemId}}" title="Alt+klikk: Eltávolítás">✕</button>
+                <button type="button" class="karakter-ability-chat" data-item-id="{{abilityHatterSlot.itemId}}" title="Beküldés"><i class="fas fa-comment-dots"></i></button>
+                <button type="button" class="karakter-ability-slot-clear karakter-ability-pill-remove" data-slot="hatter" data-area="hatter" data-item-id="{{abilityHatterSlot.itemId}}">✕</button>
               </div>
             </div>
           {{/if}}
@@ -199,11 +198,11 @@
             <div class="karakter-ability-pill" data-item-id="{{this.id}}">
               <div class="karakter-ability-main">
                 {{#if this.img}}<img class="karakter-ability-pill-thumb karakter-ability-open" src="{{this.img}}" alt="" data-item-id="{{this.id}}" />{{/if}}
-                <span class="karakter-ability-pill-name karakter-ability-open" data-item-id="{{this.id}}" title="{{this.name}}">{{this.name}}{{#if this.kp}} ({{this.kp}} KP){{/if}}</span>
+                <span class="karakter-ability-pill-name karakter-ability-open" data-item-id="{{this.id}}">{{this.name}}{{#if this.kp}} ({{this.kp}} KP){{/if}}</span>
               </div>
               <div class="karakter-ability-actions">
-                <button type="button" class="karakter-ability-chat" data-item-id="{{this.id}}" title="Chat-be küldés"><i class="fas fa-comment-dots"></i></button>
-                <button type="button" class="karakter-ability-pill-remove" data-area="passive" data-item-id="{{this.id}}" title="Alt+klikk: Eltávolítás">✕</button>
+                <button type="button" class="karakter-ability-chat" data-item-id="{{this.id}}" title="Beküldés"><i class="fas fa-comment-dots"></i></button>
+                <button type="button" class="karakter-ability-pill-remove" data-area="passive" data-item-id="{{this.id}}">✕</button>
               </div>
             </div>
           {{/each}}
@@ -211,11 +210,11 @@
             <div class="karakter-ability-pill" data-item-id="{{this.id}}">
               <div class="karakter-ability-main">
                 {{#if this.img}}<img class="karakter-ability-pill-thumb karakter-ability-open" src="{{this.img}}" alt="" data-item-id="{{this.id}}" />{{/if}}
-                <span class="karakter-ability-pill-name karakter-ability-open" data-item-id="{{this.id}}" title="{{this.name}}">{{this.name}}{{#if this.kp}} ({{this.kp}} KP){{/if}}</span>
+                <span class="karakter-ability-pill-name karakter-ability-open" data-item-id="{{this.id}}">{{this.name}}{{#if this.kp}} ({{this.kp}} KP){{/if}}</span>
               </div>
               <div class="karakter-ability-actions">
-                <button type="button" class="karakter-ability-chat" data-item-id="{{this.id}}" title="Chat-be küldés"><i class="fas fa-comment-dots"></i></button>
-                <button type="button" class="karakter-ability-pill-remove" data-area="active" data-item-id="{{this.id}}" title="Alt+klikk: Eltávolítás">✕</button>
+                <button type="button" class="karakter-ability-chat" data-item-id="{{this.id}}" title="Beküldés"><i class="fas fa-comment-dots"></i></button>
+                <button type="button" class="karakter-ability-pill-remove" data-area="active" data-item-id="{{this.id}}">✕</button>
               </div>
             </div>
           {{/each}}
@@ -258,7 +257,7 @@
                   <td class="karakter-equipment-cell-range">{{this.rangeStr}}</td>
                   <td class="karakter-equipment-cell-other">{{this.special}}</td>
                   <td class="karakter-equipment-cell-delete">
-                    <button type="button" class="karakter-equipment-delete karakter-weapon-delete" data-item-id="{{this.itemId}}" data-slot-key="{{this.slotKey}}" data-actor-id="{{this.actorId}}" title="Alt+klikk: Törlés az inventory-ból">✕</button>
+                    <button type="button" class="karakter-equipment-delete karakter-weapon-delete" data-item-id="{{this.itemId}}" data-slot-key="{{this.slotKey}}" data-actor-id="{{this.actorId}}" title="Törlés: Alt + Kattintás">✕</button>
                   </td>
                 </tr>
               {{/each}}
@@ -293,7 +292,7 @@
                   <td class="karakter-equipment-cell-level">{{this.level}}</td>
                   <td class="karakter-equipment-cell-other">{{this.special}}</td>
                   <td class="karakter-equipment-cell-delete">
-                    <button type="button" class="karakter-equipment-delete karakter-armor-delete" data-item-id="{{this.itemId}}" data-actor-id="{{this.actorId}}" title="Alt+klikk: Törlés az inventory-ból">✕</button>
+                    <button type="button" class="karakter-equipment-delete karakter-armor-delete" data-item-id="{{this.itemId}}" data-actor-id="{{this.actorId}}" title="Törlés: Alt + Kattintás">✕</button>
                   </td>
                 </tr>
               {{/each}}
@@ -321,13 +320,13 @@
                   <td class="karakter-equipment-cell-name">
                     {{#if this.img}}<img class="karakter-equipment-icon karakter-inventory-item-icon" src="{{this.img}}" alt="" data-item-id="{{this.itemId}}" />{{/if}}
                     <span class="karakter-microchip-label karakter-inventory-item-name" data-item-id="{{this.itemId}}">{{this.name}}</span>
-                    <button type="button" class="karakter-item-chat" data-item-id="{{this.itemId}}" title="Chat-be küldés"><i class="fas fa-comment-dots"></i></button>
+                    <button type="button" class="karakter-item-chat" data-item-id="{{this.itemId}}" title="Beküldés"><i class="fas fa-comment-dots"></i></button>
                   </td>
                   <td class="karakter-equipment-cell-type">{{this.typeLabel}}</td>
                   <td class="karakter-equipment-cell-kp">{{#if this.isActive}}{{this.kp}}{{else}}—{{/if}}</td>
                   <td class="karakter-equipment-cell-desc">{{this.description}}</td>
                   <td class="karakter-equipment-cell-delete">
-                    <button type="button" class="karakter-equipment-delete karakter-microchip-delete" data-item-id="{{this.itemId}}" data-slot-key="{{this.slotKey}}" data-actor-id="{{this.actorId}}" title="Alt+klikk: Törlés az inventory-ból">✕</button>
+                    <button type="button" class="karakter-equipment-delete karakter-microchip-delete" data-item-id="{{this.itemId}}" data-slot-key="{{this.slotKey}}" data-actor-id="{{this.actorId}}" title="Törlés: Alt + Kattintás">✕</button>
                   </td>
                 </tr>
               {{/each}}
@@ -360,7 +359,7 @@
                   </td>
                   <td class="karakter-equipment-cell-desc">{{this.description}}</td>
                   <td class="karakter-equipment-cell-delete">
-                    <button type="button" class="karakter-equipment-delete karakter-item-delete" data-item-id="{{this.itemId}}" data-actor-id="{{this.actorId}}" title="Alt+klikk: Törlés az inventory-ból">✕</button>
+                    <button type="button" class="karakter-equipment-delete karakter-item-delete" data-item-id="{{this.itemId}}" data-actor-id="{{this.actorId}}" title="Törlés: Alt + Kattintás">✕</button>
                   </td>
                 </tr>
               {{/each}}
@@ -415,8 +414,8 @@
                   <span class="karakter-inventory-item-name karakter-notes-egyeb-name" data-item-id="{{this.itemId}}">{{this.name}}</span>
                   {{#if this.description}}<p class="karakter-notes-egyeb-desc">{{this.description}}</p>{{/if}}
                 </div>
-                <button type="button" class="karakter-item-chat" data-item-id="{{this.itemId}}" title="Chat-be küldés"><i class="fas fa-comment-dots"></i></button>
-                <button type="button" class="karakter-equipment-delete karakter-item-delete" data-item-id="{{this.itemId}}" data-actor-id="{{this.actorId}}" title="Alt+klikk: Törlés">✕</button>
+                <button type="button" class="karakter-item-chat" data-item-id="{{this.itemId}}" title="Beküldés"><i class="fas fa-comment-dots"></i></button>
+                <button type="button" class="karakter-equipment-delete karakter-item-delete" data-item-id="{{this.itemId}}" data-actor-id="{{this.actorId}}" title="Törlés: Alt + Kattintás">✕</button>
               </div>
             {{else}}
               <p class="karakter-notes-egyeb-placeholder">Húzz ide egyéb információt</p>

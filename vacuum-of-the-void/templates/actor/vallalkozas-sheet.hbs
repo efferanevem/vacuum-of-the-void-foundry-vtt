@@ -92,14 +92,14 @@
                   type="button"
                   class="karakter-equipment-delete vallalkozas-employee-delete"
                   data-index="{{@index}}"
-                  title="Alt+klikk: Sor törlése"
+                  title="Törlés: Alt + Kattintás"
                 >✕</button>
               </td>
             </tr>
           {{/each}}
         </tbody>
       </table>
-      <button type="button" class="vallalkozas-employee-add" title="Új alkalmazott sor hozzáadása">+</button>
+      <button type="button" class="vallalkozas-employee-add">+</button>
     </section>
 
     <section class="karakter-panel vallalkozas-level-bonus">
@@ -255,14 +255,14 @@
                     type="button"
                     class="karakter-equipment-delete vallalkozas-production-delete"
                     data-index="{{@index}}"
-                    title="Alt+klikk: Sor törlése"
+                    title="Törlés: Alt + Kattintás"
                   >✕</button>
                 </td>
               </tr>
             {{/each}}
           </tbody>
         </table>
-        <button type="button" class="vallalkozas-production-add" title="Új gyártósor sor hozzáadása">+</button>
+        <button type="button" class="vallalkozas-production-add">+</button>
       </section>
     {{/if}}
 
@@ -348,7 +348,7 @@
                     type="button"
                     class="karakter-equipment-delete vallalkozas-mission-delete"
                     data-index="{{@index}}"
-                    title="Alt+klikk: Sor törlése"
+                    title="Törlés: Alt + Kattintás"
                   >✕</button>
                 </td>
               </tr>
@@ -358,7 +358,6 @@
         <button
           type="button"
           class="vallalkozas-mission-add"
-          title="Új küldetés sor hozzáadása"
         >+</button>
       </section>
     {{/if}}
@@ -414,7 +413,7 @@
                         class="karakter-equipment-delete jarmu-item-delete vallalkozas-item-delete"
                         data-item-id="{{this.itemId}}"
                         data-actor-id="{{this.actorId}}"
-                        title="Alt+klikk: Törlés a raktárból"
+                        title="Törlés: Alt + Kattintás"
                       >✕</button>
                     </td>
                   </tr>
@@ -463,7 +462,7 @@
                         class="karakter-equipment-delete jarmu-item-delete vallalkozas-item-delete"
                         data-item-id="{{this.itemId}}"
                         data-actor-id="{{this.actorId}}"
-                        title="Alt+klikk: Törlés a raktárból"
+                        title="Törlés: Alt + Kattintás"
                       >✕</button>
                     </td>
                   </tr>
@@ -512,7 +511,7 @@
                         class="karakter-equipment-delete jarmu-item-delete vallalkozas-item-delete"
                         data-item-id="{{this.itemId}}"
                         data-actor-id="{{this.actorId}}"
-                        title="Alt+klikk: Törlés a raktárból"
+                        title="Törlés: Alt + Kattintás"
                       >✕</button>
                     </td>
                   </tr>
@@ -564,7 +563,7 @@
                         class="karakter-equipment-delete karakter-item-delete vallalkozas-item-delete"
                         data-item-id="{{this.itemId}}"
                         data-actor-id="{{this.actorId}}"
-                        title="Alt+klikk: Törlés a raktárból"
+                        title="Törlés: Alt + Kattintás"
                       >✕</button>
                     </td>
                   </tr>
@@ -596,7 +595,7 @@
                   <span class="karakter-inventory-item-name karakter-notes-egyeb-name" data-item-id="{{this.itemId}}">{{this.name}}</span>
                   {{#if this.description}}<p class="karakter-notes-egyeb-desc">{{this.description}}</p>{{/if}}
                 </div>
-                <button type="button" class="karakter-item-chat" data-item-id="{{this.itemId}}" title="Chat-be küldés">
+                <button type="button" class="karakter-item-chat" data-item-id="{{this.itemId}}" title="Beküldés">
                   <i class="fas fa-comment-dots"></i>
                 </button>
                 <button
@@ -604,7 +603,7 @@
                   class="karakter-equipment-delete vallalkozas-egyeb-delete"
                   data-item-id="{{this.itemId}}"
                   data-actor-id="{{this.actorId}}"
-                  title="Alt+klikk: Törlés"
+                  title="Törlés: Alt + Kattintás"
                 >✕</button>
               </div>
             {{else}}

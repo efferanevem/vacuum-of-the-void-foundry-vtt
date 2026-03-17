@@ -590,7 +590,7 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
     context.itemsTable = targyDocs.map((item) => {
       const sys = item?.system ?? {};
       const descRaw = (sys.description ?? "").trim();
-      const description = descRaw ? (descRaw.length > 60 ? descRaw.slice(0, 57) + "…" : descRaw) : "—";
+      const description = descRaw || "—";
       const quantity = sys.quantity != null ? String(sys.quantity).trim() : "1";
       return {
         itemId: item.id,
@@ -667,7 +667,7 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
       const isActive = abilityType === "active";
       const kp = Number(item?.system?.replaceCost) >= 0 ? Number(item.system.replaceCost) : 0;
       const descRaw = (item?.system?.description ?? "").trim();
-      const description = descRaw ? (descRaw.length > 60 ? descRaw.slice(0, 57) + "…" : descRaw) : "—";
+      const description = descRaw || "—";
       return {
         itemId,
         actorId: this.actor.id,
