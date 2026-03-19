@@ -166,6 +166,8 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
     const weaponTypeLabels = { kinetic: "Kinetikus", projectile: "Lövedékes", blade: "Pengés", explosive: "Robbanó", other: "Egyéb" };
     const weaponSizeLabels = { light: "Könnyű", medium: "Közepes", heavy: "Nehéz", thrown: "Dobható" };
     const emptyLabel = "— Nincs fegyver —";
+    const DEFAULT_BAG_ICON = "icons/svg/item-bag.svg";
+    const cleanImg = (rawImg) => (rawImg === DEFAULT_BAG_ICON ? "" : rawImg);
     const weaponDocs = (this.actor.items?.contents ?? []).filter(i => i.type === "Fegyver");
     context.weaponsTable = weaponDocs.map((item) => {
       const sys = item?.system ?? {};
@@ -182,7 +184,7 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
         itemId: item.id,
         actorId: this.actor.id,
         name: item?.name ?? emptyLabel,
-        img: item?.img ?? "",
+        img: cleanImg(item?.img ?? ""),
         bonus: String(sys.bonus ?? "").trim() || "0",
         damage: sys.damage ?? "",
         rangeStr: rangeStr || "—",
@@ -203,7 +205,7 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
         itemId: item.id,
         actorId: this.actor.id,
         name: item?.name ?? "—",
-        img: item?.img ?? "",
+        img: cleanImg(item?.img ?? ""),
         protectionBonus: (sys.protectionBonus ?? "").toString().trim() || "—",
         speedPenalty: (sys.speedPenalty ?? "").toString().trim() || "—",
         level: _armorLevelLabel((sys.level ?? "").toString().trim()),
@@ -223,7 +225,7 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
         itemId: item.id,
         actorId: this.actor.id,
         name: item?.name ?? "—",
-        img: item?.img ?? "",
+        img: cleanImg(item?.img ?? ""),
         typeLabel,
         description,
         kp,
@@ -251,7 +253,7 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
         itemId: item.id,
         actorId: this.actor.id,
         name: item?.name ?? "—",
-        img: item?.img ?? "",
+        img: cleanImg(item?.img ?? ""),
         quantity: "—",
         description,
         isPackage: true,
@@ -283,7 +285,7 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
         const rawQty = (dSys.quantity ?? "").toString().trim();
         const quantity = rawQty || "1";
         const rawImg = doc.img ?? "";
-        const img = rawImg;
+        const img = cleanImg(rawImg);
 
         packageEntries.push({
           itemId: doc.id,
@@ -309,7 +311,7 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
         const descRaw = (sys.description ?? "").trim();
         const description = descRaw || "—";
         const quantity = sys.quantity != null ? String(sys.quantity).trim() : "1";
-        const img = item.img ?? "";
+        const img = cleanImg(item.img ?? "");
         return {
           itemId: item.id,
           actorId: this.actor.id,
@@ -384,7 +386,7 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
           itemId: item.id,
           actorId: this.actor.id,
           name: item?.name ?? "—",
-          img: item?.img ?? "",
+          img: cleanImg(item?.img ?? ""),
           level,
           hit,
           abilities: abilityItems,
@@ -420,7 +422,7 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
         itemId: item.id,
         actorId: this.actor.id,
         name: item?.name ?? "—",
-        img: item?.img ?? "",
+        img: cleanImg(item?.img ?? ""),
         level,
         hpMax,
         hpValue,

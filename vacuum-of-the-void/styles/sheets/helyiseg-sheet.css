@@ -4,10 +4,10 @@
   flex-direction: column;
   gap: 10px;
   font-size: var(--votv-font-body);
-  background: linear-gradient(145deg, rgba(5, 7, 10, 0.9), rgba(5, 10, 18, 0.98));
-  border-radius: var(--votv-radius);
-  border: 1px solid rgba(66, 135, 245, 0.25);
-  box-shadow: var(--votv-shadow-soft);
+  background: transparent;
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
   padding: 12px 14px;
   color: var(--votv-text-main);
 }

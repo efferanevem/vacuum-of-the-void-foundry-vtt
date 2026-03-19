@@ -124,6 +124,8 @@ export class VoidVallalkozasSheet extends foundry.applications.api.HandlebarsApp
       thrown: "Dobható"
     };
     const emptyWeaponLabel = "— Nincs fegyver —";
+    const DEFAULT_BAG_ICON = "icons/svg/item-bag.svg";
+    const cleanImg = (rawImg) => (rawImg === DEFAULT_BAG_ICON ? "" : rawImg);
 
     const itemDocs = actor.items?.contents ?? [];
 
@@ -144,7 +146,7 @@ export class VoidVallalkozasSheet extends foundry.applications.api.HandlebarsApp
         itemId: item.id,
         actorId: actor.id,
         name: item.name ?? emptyWeaponLabel,
-        img: item.img ?? "",
+        img: cleanImg(item.img ?? ""),
         bonus: String(sys.bonus ?? "").trim() || "0",
         damage: sys.damage ?? "",
         rangeStr: rangeStr || "—",
@@ -167,7 +169,7 @@ export class VoidVallalkozasSheet extends foundry.applications.api.HandlebarsApp
         itemId: item.id,
         actorId: actor.id,
         name: item.name ?? "—",
-        img: item.img ?? "",
+        img: cleanImg(item.img ?? ""),
         protectionBonus: (sys.protectionBonus ?? "").toString().trim() || "—",
         speedPenalty: (sys.speedPenalty ?? "").toString().trim() || "—",
         level: (sys.level ?? "").toString().trim() || "—",
@@ -199,7 +201,7 @@ export class VoidVallalkozasSheet extends foundry.applications.api.HandlebarsApp
         itemId: item.id,
         actorId: actor.id,
         name: item.name ?? "—",
-        img: item.img ?? "",
+        img: cleanImg(item.img ?? ""),
         typeLabel,
         description,
         kp,
@@ -227,7 +229,7 @@ export class VoidVallalkozasSheet extends foundry.applications.api.HandlebarsApp
         itemId: item.id,
         actorId: actor.id,
         name: item.name ?? "—",
-        img: item.img ?? "",
+        img: cleanImg(item.img ?? ""),
         quantity: "—",
         description,
         isPackage: true,
@@ -259,7 +261,7 @@ export class VoidVallalkozasSheet extends foundry.applications.api.HandlebarsApp
         const rawQty = (dSys.quantity ?? "").toString().trim();
         const quantity = rawQty || "1";
         const rawImg = doc.img ?? "";
-        const img = rawImg;
+        const img = cleanImg(rawImg);
 
         packageEntries.push({
           itemId: doc.id,
@@ -284,7 +286,7 @@ export class VoidVallalkozasSheet extends foundry.applications.api.HandlebarsApp
         const descRaw = (sys.description ?? "").trim();
         const description = descRaw || "—";
         const quantity = sys.quantity != null ? String(sys.quantity).trim() : "1";
-        const img = item.img ?? "";
+        const img = cleanImg(item.img ?? "");
         return {
           itemId: item.id,
           actorId: actor.id,

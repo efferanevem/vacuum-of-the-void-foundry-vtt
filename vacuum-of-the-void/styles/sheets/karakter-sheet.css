@@ -12,7 +12,16 @@
   box-shadow: var(--votv-shadow-soft);
   color: var(--votv-text-main);
   height: 100%;
-  overflow-y: auto;
+  overflow-y: visible;
+}
+
+/* Karakterlap külső "doboz" / keret eltávolítása.
+   A belső paneleken továbbra is ugyanaz a stílus (border/padding/background). */
+.votv.karakter-sheet {
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 /* NPC sheet: let form grow with content so .window-content scrolls */
@@ -2415,13 +2424,36 @@
 
 .votv.karakter-sheet .karakter-equipment-items .karakter-package-child-row .karakter-equipment-cell-name {
   padding-left: 26px;
-  font-size: 0.95em;
+  font-size: var(--votv-font-body);
+}
+
+.votv.karakter-sheet .karakter-equipment-items .karakter-package-child-row {
+  background-color: rgba(60, 60, 70, 0.2) !important;
+}
+
+.votv.karakter-sheet .karakter-equipment-items .karakter-package-child-row td {
+  background: transparent !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  border-top: 1px solid rgba(255, 255, 255, 0.06) !important;
+  border-right: none !important;
+}
+
+.votv.karakter-sheet .karakter-equipment-items .karakter-package-child-row:hover {
+  background-color: rgba(60, 60, 70, 0.2) !important;
+}
+
+.votv.karakter-sheet .karakter-equipment-items .karakter-package-child-row:hover td {
+  background: transparent !important;
+  box-shadow: none;
 }
 
 .votv.karakter-sheet .karakter-equipment-items .karakter-package-child-marker {
   margin-right: 6px;
   opacity: 0.8;
   display: inline-block;
+  width: 8px;
+  text-align: center;
 }
 .votv.karakter-sheet .karakter-equipment-items .karakter-equipment-th-qty {
   width: 1%;
@@ -2555,12 +2587,12 @@
   width: auto;
 }
 
-.votv.karakter-sheet .karakter-equipment-armor .karakter-equipment-th-protection,
-.votv.karakter-sheet .karakter-equipment-armor .karakter-equipment-cell-bonus,
-.votv.karakter-sheet .karakter-equipment-armor .karakter-equipment-th-speed,
-.votv.karakter-sheet .karakter-equipment-armor .karakter-equipment-cell-speed,
-.votv.karakter-sheet .karakter-equipment-armor .karakter-equipment-th-level,
-.votv.karakter-sheet .karakter-equipment-armor .karakter-equipment-cell-level {
+.votv.karakter-sheet:not(.jarmu-sheet):not(.bazis-sheet):not(.vallalkozas-sheet) .karakter-equipment-armor .karakter-equipment-th-protection,
+.votv.karakter-sheet:not(.jarmu-sheet):not(.bazis-sheet):not(.vallalkozas-sheet) .karakter-equipment-armor .karakter-equipment-cell-bonus,
+.votv.karakter-sheet:not(.jarmu-sheet):not(.bazis-sheet):not(.vallalkozas-sheet) .karakter-equipment-armor .karakter-equipment-th-speed,
+.votv.karakter-sheet:not(.jarmu-sheet):not(.bazis-sheet):not(.vallalkozas-sheet) .karakter-equipment-armor .karakter-equipment-cell-speed,
+.votv.karakter-sheet:not(.jarmu-sheet):not(.bazis-sheet):not(.vallalkozas-sheet) .karakter-equipment-armor .karakter-equipment-th-level,
+.votv.karakter-sheet:not(.jarmu-sheet):not(.bazis-sheet):not(.vallalkozas-sheet) .karakter-equipment-armor .karakter-equipment-cell-level {
   width: 1%;
   white-space: nowrap;
 }

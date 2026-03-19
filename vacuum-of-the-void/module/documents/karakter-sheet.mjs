@@ -491,6 +491,8 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
     const weaponItems = weaponDocs.map(i => ({ id: i.id, name: i.name, img: i.img }));
     context.weaponItems = weaponItems;
     const emptyLabel = "— Nincs fegyver —";
+    const DEFAULT_BAG_ICON = "icons/svg/item-bag.svg";
+    const cleanImg = (rawImg) => (rawImg === DEFAULT_BAG_ICON ? "" : rawImg);
     // Only show slots that actually have an existing weapon item assigned.
     const equippedSlotKeys = slotKeys.filter(slotKey => {
       const slotData = weapons[slotKey] ?? {};
@@ -512,7 +514,7 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
         itemId,
         slotNum: idx + 1,
         displayName: item?.name || slotData.name || emptyLabel,
-        img: item?.img || "",
+        img: cleanImg(item?.img || ""),
         bonus: Number(slotData.bonus) || 0,
         damage: slotData.damage ?? "",
         isThrown,
@@ -555,7 +557,7 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
         itemId,
         actorId: this.actor.id,
         name: item?.name ?? emptyLabel,
-        img: item?.img ?? "",
+        img: cleanImg(item?.img ?? ""),
         bonus: bonusStr,
         damage: slotData.damage ?? sys.damage ?? "",
         rangeStr: rangeStr || "—",
@@ -577,7 +579,7 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
         itemId: item.id,
         actorId: this.actor.id,
         name: item?.name ?? "—",
-        img: item?.img ?? "",
+        img: cleanImg(item?.img ?? ""),
         protectionBonus: (sys.protectionBonus ?? "").toString().trim() || "—",
         speedPenalty: (sys.speedPenalty ?? "").toString().trim() || "—",
         level: _armorLevelLabel((sys.level ?? "").toString().trim()),
@@ -604,7 +606,7 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
         itemId: item.id,
         actorId: this.actor.id,
         name: item?.name ?? "—",
-        img: item?.img ?? "",
+        img: cleanImg(item?.img ?? ""),
         quantity: "—",
         description,
         isPackage: true,
@@ -636,11 +638,7 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
         const rawQty = (dSys.quantity ?? "").toString().trim();
         const quantity = rawQty || "1";
         const rawImg = doc.img ?? "";
-        // Csak Egyeb típusú itemeknél tüntessük el az alap bag ikont; Targyknál és más típusoknál mutassuk a képet.
-        const img =
-          doc.type === "Egyeb" && rawImg === "icons/svg/item-bag.svg"
-            ? ""
-            : rawImg;
+        const img = cleanImg(rawImg);
 
         packageEntries.push({
           itemId: doc.id,
@@ -666,7 +664,7 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
         const descRaw = (sys.description ?? "").trim();
         const description = descRaw || "—";
         const quantity = sys.quantity != null ? String(sys.quantity).trim() : "1";
-        const img = item.img ?? "";
+        const img = cleanImg(item.img ?? "");
         return {
           itemId: item.id,
           actorId: this.actor.id,
@@ -700,7 +698,7 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
       };
     });
     const microchipDocs = (this.actor.items?.contents ?? []).filter(i => i.type === "MikroChip");
-    const microchipItems = microchipDocs.map(i => ({ id: i.id, name: i.name, img: i.img }));
+    const microchipItems = microchipDocs.map(i => ({ id: i.id, name: i.name, img: cleanImg(i.img ?? "") }));
     const emptyChipLabel = "— Nincs Mikro-Chip —";
     const MICROCHIP_SLOTS = ["slot1", "slot2", "slot3"];
     const otherSlotIds = (slotNum) => {
@@ -722,7 +720,7 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
         slotKey,
         itemId,
         displayName: item?.name || slotData.name || emptyChipLabel,
-        img: item?.img || "",
+        img: cleanImg(item?.img || ""),
         active: slotData.active === true
       };
     });
@@ -756,7 +754,7 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
         itemId,
         actorId: this.actor.id,
         name: item?.name ?? "—",
-        img: item?.img ?? "",
+        img: cleanImg(item?.img ?? ""),
         typeLabel,
         description,
         kp,
@@ -779,7 +777,7 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
     const abilityItems = (this.actor.items?.contents ?? []).map(i => ({
       id: i.id,
       name: i.name,
-      img: i.img,
+      img: cleanImg(i.img ?? ""),
       kind: i.system?.kind ?? "passive",
       description: i.system?.description ?? "",
       kp: Number(i.system?.kp ?? 0) || 0
@@ -796,7 +794,7 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
       return {
         itemId,
         displayName: item?.name || slotData.name || emptyAbilityLabel,
-        img: item?.img || "",
+        img: cleanImg(item?.img || ""),
         description,
         kp
       };

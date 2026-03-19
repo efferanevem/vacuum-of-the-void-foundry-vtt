@@ -5,13 +5,13 @@
   font-size: var(--votv-font-body);
   padding: 10px 14px;
   box-sizing: border-box;
-  background: linear-gradient(145deg, rgba(5, 7, 10, 0.9), rgba(5, 10, 18, 0.98));
-  border-radius: var(--votv-radius);
-  border: 1px solid rgba(66, 135, 245, 0.25);
-  box-shadow: var(--votv-shadow-soft);
+  background: transparent;
+  border-radius: 0;
+  border: none;
+  box-shadow: none;
   color: var(--votv-text-main);
   height: 100%;
-  overflow-y: auto;
+  overflow-y: visible;
 }
 
 .votv.jarmu-sheet .jarmu-header label,
@@ -540,7 +540,7 @@
 .votv.jarmu-sheet .jarmu-unit-abilities-row td {
   padding-top: 0;
   /* Képességsor: saját, halványszürke háttér (mint a toolsRange mező) */
-  background-color: rgba(60, 60, 70, 0.5) !important;
+  background-color: rgba(60, 60, 70, 0.2) !important;
 }
 
 .votv.jarmu-sheet .jarmu-unit-abilities-cell {
@@ -558,11 +558,19 @@
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  /* Kétszeres indent az eddigihez képest */
-  padding-left: 36px;
+  /* Csomag-gyerek jelölő + indent */
+  padding-left: 26px;
   padding-right: 4px;
   font-size: var(--votv-font-body);
   border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.votv.jarmu-sheet .jarmu-unit-ability-marker {
+  margin-right: 6px;
+  opacity: 0.8;
+  display: inline-block;
+  width: 8px;
+  text-align: center;
 }
 
 .votv.jarmu-sheet .jarmu-unit-ability-name {
@@ -598,7 +606,7 @@
 
 /* Járműegység képességsor: hover alatt is maradjon ugyanaz a háttér, csak árnyék nélkül */
 .votv.jarmu-sheet .jarmu-unit-abilities-row:hover td {
-  background-color: rgba(60, 60, 70, 0.5) !important;
+  background-color: rgba(60, 60, 70, 0.2) !important;
   box-shadow: none;
 }
 

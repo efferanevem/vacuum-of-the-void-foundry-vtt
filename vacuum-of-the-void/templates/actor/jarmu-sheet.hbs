@@ -228,6 +228,7 @@
                       {{#each this.abilities}}
                         <div class="jarmu-unit-ability-pill jarmu-unit-ability-line" data-ability-ref="{{this.ref}}" data-ability-id="{{this.id}}">
                           <span class="jarmu-unit-ability-name">
+                            <span class="jarmu-unit-ability-marker" aria-hidden="true">↳</span>
                             {{#if (eq this.kind "module")}}<strong>Modul:</strong> {{/if}}
                             {{#if (eq this.kind "module")}}
                               <strong>{{this.name}}</strong>

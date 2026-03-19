@@ -83,7 +83,6 @@ Hooks.once("init", () => {
 
   // Item típusok alapértelmezett ikonjai (amit a Foundry használ, ha nincs img megadva).
   CONFIG.Item.typeIcons ??= {};
-  CONFIG.Item.typeIcons.Targy = "systems/vacuum-of-the-void/assets/default/targy.png";
 
   // Status effectek: tokenre kattintva / Active Effectsnél választhatók, mindegyiknek id + megjelenített név + ikon (img)
   const VOTV_STATUS = "systems/vacuum-of-the-void/assets/status";
@@ -190,8 +189,6 @@ Hooks.once("init", () => {
 
   // Bázis és Vállalkozás: ne legyen látható kép – üres/transzparens asset (a listában se default ikon)
   const VOTV_BAZIS_BLANK_IMG = "systems/vacuum-of-the-void/assets/blank.svg";
-  // Tárgy: saját default ikon (nem a Foundry bag).
-  const VOTV_TARGY_DEFAULT_IMG = "systems/vacuum-of-the-void/assets/default/targy.png";
   Hooks.on("preCreateActor", (document, data, _options) => {
     if (data?.type === "Bazis" || data?.type === "Vallalkozas") data.img = VOTV_BAZIS_BLANK_IMG;
   });
@@ -212,13 +209,9 @@ Hooks.once("init", () => {
 
   // Egyéb Információ itemek: alapértelmezett kép ugyanaz az üres asset, mint a bázisnál,
   // hogy az Items menüben se jelenjen meg a Foundry bag ikon, ha nincs saját képük.
-  // Tárgyak: kapjanak saját default ikont (targy.png), a Foundry bag helyett.
   Hooks.on("preCreateItem", (document, data, _options) => {
     if (data?.type === "Egyeb") {
       data.img = VOTV_BAZIS_BLANK_IMG;
-    } else if (data?.type === "Targy") {
-      // Új Tárgy mindig a saját default ikont kapja.
-      data.img = VOTV_TARGY_DEFAULT_IMG;
     }
   });
   Hooks.on("preUpdateItem", (document, change, _options) => {
@@ -229,7 +222,6 @@ Hooks.once("init", () => {
   });
   Hooks.on("ready", () => {
     const blank = VOTV_BAZIS_BLANK_IMG;
-    const bag = "icons/svg/item-bag.svg";
     const allItems = game.items?.contents ?? [];
 
     // Egyeb: mindig blank ikon legyen (mint bázisnál).
@@ -240,17 +232,6 @@ Hooks.once("init", () => {
     );
     if (egyebNeedBlank.length) {
       egyebNeedBlank.forEach((i) => i.update({ img: blank }).catch(() => {}));
-    }
-
-    // Targy: ha még az alap Foundry bag ikonon vagy üresen vannak, cseréljük le a saját default Targy ikonra.
-    const targyNeedDefault = allItems.filter(
-      (i) => {
-        const img = (i.img ?? "").toString().trim();
-        return i.type === "Targy" && (img === "" || img === bag);
-      }
-    );
-    if (targyNeedDefault.length) {
-      targyNeedDefault.forEach((i) => i.update({ img: VOTV_TARGY_DEFAULT_IMG }).catch(() => {}));
     }
 
     // Fegyvereknél nem nyúlunk az img-hez – marad a Foundry alap viselkedése vagy a kézzel beállított ikon.
