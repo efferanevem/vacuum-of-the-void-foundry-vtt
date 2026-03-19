@@ -784,5 +784,992 @@
       "level": "Alap",
       "special": "Egy kiválasztott testrészt véd, és annak emeli a Védelmi Értékét +5-tel. Ebből egyszerre csak egyet hordhat egy karakter."
     }
+  },
+  {
+    "_id": "atveres-erzelem-maszkolo-ideg-modul",
+    "name": "Átverés Eszköz (Érzelem Maszkoló Ideg-Modul)",
+    "type": "Targy",
+    "path": "/Eszközök/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": "Egyszer Használatos (+3/+6) vagy Többször Használatos Átverés Eszköz"
+    }
+  },
+  {
+    "_id": "betegellatas-elso-segelynyujto-szkenner",
+    "name": "Betegellátás Eszköz (Elsősegélynyújtó Szkenner)",
+    "type": "Targy",
+    "path": "/Eszközök/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": "Egyszer Használatos (+3/+6) vagy Többször Használatos Betegellátás Eszköz"
+    }
+  },
+  {
+    "_id": "eszleles-agyi-neuron-hidrosztatikus-ideg-kompjuter-lencse",
+    "name": "Észlelés Eszköz (Agyi Neuron Hidrosztatikus Ideg-Kompjúter Lencse)",
+    "type": "Targy",
+    "path": "/Eszközök/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": "Egyszer Használatos (+3/+6) vagy Többször Használatos Észlelés Eszköz"
+    }
+  },
+  {
+    "_id": "eronlet-izomserkento-tabletta",
+    "name": "Erőnlét Eszköz (Izomserkentő Tabletta)",
+    "type": "Targy",
+    "path": "/Eszközök/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": "Egyszer Használatos (+3/+6) vagy Többször Használatos Erőnlét Eszköz"
+    }
+  },
+  {
+    "_id": "fozes-titkos-hozzavalo",
+    "name": "Főzés Eszköz („Titkos Hozzávaló”)",
+    "type": "Targy",
+    "path": "/Eszközök/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": "Egyszer Használatos (+3/+6) vagy Többször Használatos Főzés Eszköz"
+    }
+  },
+  {
+    "_id": "gyorsgondolkodas-idegrendszer-serkento-energia-szelet",
+    "name": "Gyorsgondolkodás Eszköz (Idegrendszer Serkentő Energia Szelet)",
+    "type": "Targy",
+    "path": "/Eszközök/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": "Egyszer Használatos (+3/+6) vagy Többször Használatos Gyorsgondolkodás Eszköz"
+    }
+  },
+  {
+    "_id": "harckepzettseg-programozhato-anasztazit-harci-stimulans",
+    "name": "Harcképzettség Eszköz (Programozható Anasztazit Harci Stimuláns)",
+    "type": "Targy",
+    "path": "/Eszközök/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": "Egyszer Használatos (+3/+6) vagy Többször Használatos Harcképzettség Eszköz"
+    }
+  },
+  {
+    "_id": "kezifegyver-hasznalat-celzast-elosegito-miniatur-szerkezet",
+    "name": "Kézifegyver Használat Eszköz (Célzást Elősegítő Miniatűr Szerkezet)",
+    "type": "Targy",
+    "path": "/Eszközök/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": "Egyszer Használatos (+3/+6) vagy Többször Használatos Kézifegyver Használat Eszköz"
+    }
+  },
+  {
+    "_id": "lopakodas-kornyezetbe-beleolvado-mikrolencses-kopeny",
+    "name": "Lopakodás Eszköz (Környezetbe Beleolvadó Mikrolencsés Köpeny)",
+    "type": "Targy",
+    "path": "/Eszközök/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": "Egyszer Használatos (+3/+6) vagy Többször Használatos Lopakodás Eszköz"
+    }
+  },
+  {
+    "_id": "mentaliserosseg-idegzeterosito-tabletta",
+    "name": "Mentális Erősség Eszköz (Idegzeterősítő Tabletta)",
+    "type": "Targy",
+    "path": "/Eszközök/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": "Egyszer Használatos (+3/+6) vagy Többször Használatos Mentális Erősség Eszköz"
+    }
+  },
+  {
+    "_id": "megfelemlites-tudatalatti-szorongas-gerjeszto-jelado",
+    "name": "Megfélemlítés Eszköz (Tudatalatti Szorongás Gerjesztő Jeladó)",
+    "type": "Targy",
+    "path": "/Eszközök/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": "Egyszer Használatos (+3/+6) vagy Többször Használatos Megfélemlítés Eszköz"
+    }
+  },
+  {
+    "_id": "meggyozes-tarsadalmi-rangot-emelo-nevjegykartya",
+    "name": "Meggyőzés Eszköz (Társadalmi Rangot Emelő Névjegykártya)",
+    "type": "Targy",
+    "path": "/Eszközök/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": "Egyszer Használatos (+3/+6) vagy Többször Használatos Meggyőzés Eszköz"
+    }
+  },
+  {
+    "_id": "memoria-visszaemlekezest-stimulalo-elektronikus-egyseg",
+    "name": "Memória Eszköz (Visszaemlékezést Stimuláló Elektronikus Egység)",
+    "type": "Targy",
+    "path": "/Eszközök/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": "Egyszer Használatos (+3/+6) vagy Többször Használatos Memória Eszköz"
+    }
+  },
+  {
+    "_id": "nyelvek-dekodolo-szerkezet",
+    "name": "Nyelvek Eszköz (Dekódoló Szerkezet)",
+    "type": "Targy",
+    "path": "/Eszközök/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": "Egyszer Használatos (+3/+6) vagy Többször Használatos Nyelvek Eszköz"
+    }
+  },
+  {
+    "_id": "szerencse-szerencse-suti",
+    "name": "Szerencse Eszköz (Szerencse Süti)",
+    "type": "Targy",
+    "path": "/Eszközök/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": "Egyszer Használatos (+3/+6) vagy Többször Használatos Szerencse Eszköz"
+    }
+  },
+  {
+    "_id": "technikai-tudas-szerelesben-segito-zsebdroid",
+    "name": "Technikai Tudás Eszköz (Szerelésben Segítő Zsebdroid)",
+    "type": "Targy",
+    "path": "/Eszközök/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": "Egyszer Használatos (+3/+6) vagy Többször Használatos Technikai Tudás Eszköz"
+    }
+  },
+  {
+    "_id": "loveg-hasznalat-loveg-celzast-segito-hoerzekelo-modul",
+    "name": "Löveg Használat Eszköz (Löveg Célzást Segítő Hőérzékelő Modul)",
+    "type": "Targy",
+    "path": "/Eszközök/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": "Egyszer Használatos (+3/+6) vagy Többször Használatos Löveg Használat Eszköz"
+    }
+  },
+  {
+    "_id": "jarmu-iranyitas-muszerfalra-szerelheto-mi-vel-ellatott-stabilizator",
+    "name": "Jármű Irányítás Eszköz (Műszerfalra Szerelhető MI-vel Ellátott Stabilizátor)",
+    "type": "Targy",
+    "path": "/Eszközök/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": "Egyszer Használatos (+3/+6) vagy Többször Használatos Jármű Irányítás Eszköz"
+    }
+  },
+  {
+    "_id": "lexikalis-tudas-ismeretlen-jelenseg-analizator",
+    "name": "Lexikális Tudás Eszköz (Ismeretlen Jelenség Analizátor)",
+    "type": "Targy",
+    "path": "/Eszközök/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": "Egyszer Használatos (+3/+6) vagy Többször Használatos Lexikális Tudás Eszköz"
+    }
+  },
+  {
+    "_id": "zene-levegorezegteto-es-harmonizalo-zsebhangszoro",
+    "name": "Zene Eszköz (Levegőrezegtető és Harmonizáló Zsebhangszóró)",
+    "type": "Targy",
+    "path": "/Eszközök/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": "Egyszer Használatos (+3/+6) vagy Többször Használatos Zene Eszköz"
+    }
+  },
+  {
+    "_id": "altalanos-targyak-alarc",
+    "name": "Álarc",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-kartyapakli",
+    "name": "Kártyapakli",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-kocka-szett",
+    "name": "Kocka Szett",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-aramkor-forraszto",
+    "name": "Áramkör-forrasztó",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-kemcso",
+    "name": "Kémcső",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-lombik",
+    "name": "Lombik",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-atlagos-ruhak",
+    "name": "Átlagos Ruhák",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-kemiai-faklya",
+    "name": "Kémiai Fáklya",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-bio-szkenner",
+    "name": "Bio-Szkenner",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-kommunikator",
+    "name": "Kommunikátor",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-csavarhuzo",
+    "name": "Csavarhúzó",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-lezemlovas-szett",
+    "name": "Lemezlovas Szett",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-csipesz",
+    "name": "Csipesz",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-magneszaras-lakat",
+    "name": "Mágneszáras Lakat",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-data-pad",
+    "name": "Data-Pad",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-mikrofon",
+    "name": "Mikrofon",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-edeny",
+    "name": "Edény",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-tal",
+    "name": "Tál",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-mobil-indukcios-fozolap",
+    "name": "Mobil Indukciós Főzőlap",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-egy-fiolanyi-megye",
+    "name": "Egy Fiolányi Méreg",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-mozgaserzekelo-szenzor",
+    "name": "Mozgásérzékelő Szenzor",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-elegans-ruhak",
+    "name": "Elegáns Ruhák",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-napszemuveg",
+    "name": "Napszemüveg",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-evoeszkoz-szett",
+    "name": "Evőeszköz Szett",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-nyaklanc",
+    "name": "Nyaklánc",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-fejkendo",
+    "name": "Fejkendő",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-ongyujto",
+    "name": "Öngyújtó",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-fertotlenitogel",
+    "name": "Fertőtlenítőgél",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-papiralapu-konyv",
+    "name": "Papíralapú Könyv",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-feszitovas",
+    "name": "Feszítővas",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-parfum",
+    "name": "Parfüm",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-flaska",
+    "name": "Flaska",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-sator",
+    "name": "Sátor",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-forralolap",
+    "name": "Forralólap",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-sisak",
+    "name": "Sisak",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-fulbevalo",
+    "name": "Fülbevaló",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-steril-kesztyuk",
+    "name": "Steril Kesztyűk",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-fuszergranulatum-tablettak",
+    "name": "Fűszergranulátum Tabletták",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-sugarzasmero",
+    "name": "Sugárzásmérő",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-gazmaszk",
+    "name": "Gázmaszk",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-tavcso",
+    "name": "Távcső",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-gyuru",
+    "name": "Gyűrű",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-titanyim-otvozet-lanc-5-meter",
+    "name": "Titánium-Ötvözet Lánc (5 méter)",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-hamis-szemelyazonossag",
+    "name": "Hamis Személyazonosság",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-toll",
+    "name": "Toll",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-hangszoro",
+    "name": "Hangszóró",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-ures-mikro-chip",
+    "name": "Üres Mikro-Chip",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-halozsak",
+    "name": "Hálózsák",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-uvegszalas-kotel-20-meter",
+    "name": "Üvegszálas Kötél (20 méter)",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-hatizsak",
+    "name": "Hátizsák",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-varrokeszlet",
+    "name": "Varrókészlet",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-hidro-kulcs",
+    "name": "Hidro-Kulcs",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-vastuskek-20-darab",
+    "name": "Vastüskék (20 darab)",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-hordozhato-futoegyseg",
+    "name": "Hordozható Fűtőegység",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-vilagito-rud",
+    "name": "Világító Rúd",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-hordozhato-mikroszkop",
+    "name": "Hordozható Mikroszkóp",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-zarfeltoro-keszlet",
+    "name": "Zárfeltörő Készlet",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-injekcios-pisztoly",
+    "name": "Injekciós Pisztoly",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-zseblampa",
+    "name": "Zseblámpa",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-mobilhegeszto",
+    "name": "Mobilhegesztő",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "altalanos-targyak-furogep",
+    "name": "Fúrógép",
+    "type": "Targy",
+    "path": "/Általános Tárgyak/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "csomag-szerszamoslada",
+    "name": "Szerszámosláda",
+    "type": "Csomag",
+    "path": "/Csomagok/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": "",
+      "contents": [
+        "altalanos-targyak-zseblampa",
+        "altalanos-targyak-mobilhegeszto",
+        "altalanos-targyak-csavarhuzo",
+        "altalanos-targyak-furogep",
+        "altalanos-targyak-hidro-kulcs",
+        "altalanos-targyak-aramkor-forraszto",
+        "altalanos-targyak-sugarzasmero",
+        "technikai-tudas-szerelesben-segito-zsebdroid|qty=3"
+      ]
+    }
+  },
+  {
+    "_id": "csomag-elsosegelycsomag",
+    "name": "Elsősegélycsomag",
+    "type": "Csomag",
+    "path": "/Csomagok/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": "",
+      "contents": [
+        "altalanos-targyak-bio-szkenner",
+        "altalanos-targyak-fertotlenitogel",
+        "altalanos-targyak-csipesz",
+        "altalanos-targyak-injekcios-pisztoly",
+        "altalanos-targyak-steril-kesztyuk",
+        "gyogyszer",
+        "erzestelenito-injekcio",
+        "javito-nanodroidok",
+        "surgossegi-nanodroidok"
+      ]
+    }
+  },
+  {
+    "_id": "csomag-fozoekeszlet",
+    "name": "Főzőkészlet",
+    "type": "Csomag",
+    "path": "/Csomagok/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": "",
+      "contents": [
+        "kes",
+        "altalanos-targyak-evoeszkoz-szett|qty=4",
+        "altalanos-targyak-mobil-indukcios-fozolap",
+        "altalanos-targyak-edeny|qty=4",
+        "altalanos-targyak-tal|qty=4",
+        "altalanos-targyak-fuszergranulatum-tablettak|qty=4",
+        "altalanos-targyak-flaska|qty=4",
+        "tartos-etel|qty=10",
+        "vakum-viztartaly|qty=10",
+        "fozes-titkos-hozzavalo|qty=4"
+      ]
+    }
+  },
+  {
+    "_id": "csomag-tulelocsomag",
+    "name": "Túlélőcsomag",
+    "type": "Csomag",
+    "path": "/Csomagok/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": "",
+      "contents": [
+        "altalanos-targyak-hatizsak",
+        "altalanos-targyak-halozsak",
+        "altalanos-targyak-sator",
+        "altalanos-targyak-vilagito-rud|qty=5",
+        "altalanos-targyak-kemiai-faklya|qty=3",
+        "altalanos-targyak-uvegszalas-kotel-20-meter",
+        "altalanos-targyak-flaska",
+        "altalanos-targyak-ongyujto",
+        "altalanos-targyak-hordozhato-futoegyseg",
+        "altalanos-targyak-varrokeszlet",
+        "tartos-etel|qty=5",
+        "vakum-viztartaly|qty=5",
+        "lexikalis-tudas-ismeretlen-jelenseg-analizator|qty=2"
+      ]
+    }
+  },
+  {
+    "_id": "csomag-mobilislaborfelszereles",
+    "name": "Mobilis Laborfelszerelés",
+    "type": "Csomag",
+    "path": "/Csomagok/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": "",
+      "contents": [
+        "altalanos-targyak-kemcso|qty=5",
+        "altalanos-targyak-lombik|qty=5",
+        "altalanos-targyak-hordozhato-mikroszkop",
+        "altalanos-targyak-data-pad",
+        "altalanos-targyak-steril-kesztyuk|qty=5",
+        "altalanos-targyak-gazmaszk",
+        "altalanos-targyak-ongyujto",
+        "altalanos-targyak-forralolap",
+        "betegellatas-elso-segelynyujto-szkenner|qty=2",
+        "lexikalis-tudas-ismeretlen-jelenseg-analizator|qty=2"
+      ]
+    }
+  },
+  {
+    "_id": "csomag-bunozocsomag",
+    "name": "Bűnözőcsomag",
+    "type": "Csomag",
+    "path": "/Csomagok/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": "",
+      "contents": [
+        "altalanos-targyak-hatizsak",
+        "altalanos-targyak-zseblampa",
+        "altalanos-targyak-vilagito-rud|qty=5",
+        "altalanos-targyak-uvegszalas-kotel-20-meter",
+        "altalanos-targyak-egy-fiolanyi-megye",
+        "altalanos-targyak-feszitovas",
+        "altalanos-targyak-vastuskek-20-darab|qty=3",
+        "altalanos-targyak-fejkendo",
+        "altalanos-targyak-alarc",
+        "altalanos-targyak-hamis-szemelyazonossag",
+        "altalanos-targyak-zarfeltoro-keszlet",
+        "lopakodas-kornyezetbe-beleolvado-mikrolencses-kopeny|qty=2"
+      ]
+    }
+  },
+  {
+    "_id": "csomag-szorakoztatocsomag",
+    "name": "Szórakoztatócsomag",
+    "type": "Csomag",
+    "path": "/Csomagok/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": "",
+      "contents": [
+        "altalanos-targyak-elegans-ruhak",
+        "altalanos-targyak-parfum",
+        "altalanos-targyak-napszemuveg",
+        "altalanos-targyak-kartyapakli",
+        "altalanos-targyak-kocka-szett",
+        "altalanos-targyak-hangszoro",
+        "altalanos-targyak-lezemlovas-szett",
+        "altalanos-targyak-mikrofon",
+        "atveres-erzelem-maszkolo-ideg-modul|qty=2",
+        "meggyozes-tarsadalmi-rangot-emelo-nevjegykartya|qty=2"
+      ]
+    }
+  },
+  {
+    "_id": "csomag-diplomatacsomag",
+    "name": "Diplomatacsomag",
+    "type": "Csomag",
+    "path": "/Csomagok/",
+    "img": "systems/vacuum-of-the-void/assets/default/targy.png",
+    "system": {
+      "description": "",
+      "contents": [
+        "altalanos-targyak-elegans-ruhak",
+        "altalanos-targyak-parfum|qty=5",
+        "altalanos-targyak-gyuru|qty=2",
+        "altalanos-targyak-nyaklanc",
+        "altalanos-targyak-fulbevalo|qty=2",
+        "altalanos-targyak-papiralapu-konyv",
+        "altalanos-targyak-toll",
+        "nyelvek-dekodolo-szerkezet|qty=5",
+        "meggyozes-tarsadalmi-rangot-emelo-nevjegykartya|qty=5"
+      ]
+    }
   }
 ]

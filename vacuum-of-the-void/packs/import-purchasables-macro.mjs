@@ -33,12 +33,34 @@
     return;
   }
 
+  // Import sorrend:
+  // - Először minden nem "Csomag" tételt hozzunk létre, hogy a csomagok system.contents hivatkozásai
+  //   már fel legyenek oldva (sourceId -> doc.uuid).
+  const orderedEntries = [
+    ...entries.filter((e) => (e?.type ?? "Targy") !== "Csomag"),
+    ...entries.filter((e) => (e?.type ?? "Targy") === "Csomag")
+  ];
+
   // 3) Már létező dokumentumok lekérése (duplikátumok elkerülésére)
   const existing       = await pack.getDocuments();
   const existingByName = new Map(existing.map(doc => [doc.name, doc]));
   const existingById   = new Map(
     existing.map(doc => [doc.getFlag(SYSTEM_ID, "_sourceId") ?? doc.id, doc])
   );
+
+  // Régi, csomag-specifikus próbálkozásból megmaradt itemek takarítása
+  const obsoleteSourceIds = new Set([
+    "technikai-tudas-szerelesben-segito-zsebdroid-csomag-3"
+  ]);
+  for (const sid of obsoleteSourceIds) {
+    const doc = existingById.get(sid);
+    if (!doc) continue;
+    try {
+      await doc.delete();
+    } catch (err) {
+      console.warn("Obsolete item törlés sikertelen:", sid, err);
+    }
+  }
 
   // 4) Folders cache a packon belül (név + parent alapján)
   const packFolders = [...(pack.folders ?? [])];
@@ -105,18 +127,31 @@
   let skipped = 0;
 
   // 5) Import ciklus
-  for (const raw of entries) {
+  for (const raw of orderedEntries) {
     const data = foundry.utils.duplicate(raw);
     const sourceId = data._id;  // forrás azonosító (pl. "loveg-lovedek")
 
-    // Duplikátum ellenőrzés: ha már hoztunk létre ilyen sourceId-t vagy névvel
-    if (sourceId && existingById.has(sourceId)) {
-      skipped++;
-      continue;
-    }
-    if (data.name && existingByName.has(data.name)) {
-      skipped++;
-      continue;
+    // Duplikátum ellenőrzés:
+    // - Nem "Csomag" tételeknél: ha már létezik, skip
+    // - "Csomag" tételeknél: ha már létezik, update (pl. system.contents újrakódolás miatt)
+    const incomingType = data.type ?? "Targy";
+    let existingItem = null;
+    if (sourceId && existingById.has(sourceId)) existingItem = existingById.get(sourceId);
+    else if (data.name && existingByName.has(data.name)) existingItem = existingByName.get(data.name);
+
+    if (existingItem && incomingType !== "Csomag") {
+      // Ha az item már létezik, de az `_sourceId` flag nincs rajta, akkor frissítjük,
+      // hogy a Csomag contents feloldása (sourceId -> uuid) működjön.
+      if (sourceId) {
+        const currentFlag = existingItem.getFlag?.(SYSTEM_ID, "_sourceId");
+        if (currentFlag === sourceId) {
+          skipped++;
+          continue;
+        }
+      } else {
+        skipped++;
+        continue;
+      }
     }
 
     delete data._id;            // a Foundry generáljon saját 16 hosszú ID-t
@@ -125,6 +160,35 @@
     // Mappa a "path" alapján
     const path = data.path;
     delete data.path;
+
+    // Csomag tartalom feloldás:
+    // - a purchasables.json-ban a system.contents elemei lehetnek "sourceId" stringek
+    // - a csomag sheet viszont valós UUID-ket vár (fromUuid), ezért sourceId -> doc.uuid feloldjuk
+    if (data.type === "Csomag") {
+      const sys = data.system ?? {};
+      if (Array.isArray(sys.contents)) {
+        const resolved = sys.contents.map((ref) => {
+          if (typeof ref !== "string") return ref;
+          const s = ref.trim();
+          if (!s) return s;
+
+          // Encode: "baseRef|qty=3" -> feloldjuk a baseRef-et, majd visszaragasztjuk a paramétereket.
+          // (A CsomagDataModel csak stringet enged, ezért a mennyiséget string-encoded módon visszük át.)
+          const parts = s.split("|");
+          const base = parts[0];
+          const suffix = parts.length > 1 ? "|" + parts.slice(1).join("|") : "";
+
+          // Ha már UUID/compendium jellegű, hagyjuk.
+          if (base.startsWith("Compendium.") || base.startsWith("Item.")) return s;
+
+          const doc = existingById.get(base) ?? null;
+          if (!doc) return s; // hiányzó tartalom esetén marad
+          const resolvedBase = doc.uuid ?? doc.id ?? base;
+          return resolvedBase + suffix;
+        });
+        data.system = { ...sys, contents: resolved };
+      }
+    }
 
     let folderId = null;
     try {
@@ -138,15 +202,24 @@
     }
 
     try {
-      const createdItem = await Item.create(data, { pack: pack.collection });
-      if (sourceId && createdItem) {
-        await createdItem.setFlag(SYSTEM_ID, "_sourceId", sourceId);
-        existingById.set(sourceId, createdItem);
+      if (existingItem) {
+        await existingItem.update(data);
+        if (sourceId) {
+          await existingItem.setFlag(SYSTEM_ID, "_sourceId", sourceId).catch(() => {});
+          existingById.set(sourceId, existingItem);
+        }
+        if (existingItem?.name) existingByName.set(existingItem.name, existingItem);
+      } else {
+        const createdItem = await Item.create(data, { pack: pack.collection });
+        if (sourceId && createdItem) {
+          await createdItem.setFlag(SYSTEM_ID, "_sourceId", sourceId);
+          existingById.set(sourceId, createdItem);
+        }
+        if (createdItem?.name) {
+          existingByName.set(createdItem.name, createdItem);
+        }
+        created++;
       }
-      if (createdItem?.name) {
-        existingByName.set(createdItem.name, createdItem);
-      }
-      created++;
     } catch (err) {
       console.warn("Nem sikerült importálni:", data.name, err);
       skipped++;

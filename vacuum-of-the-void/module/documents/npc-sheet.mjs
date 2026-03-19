@@ -296,33 +296,53 @@ export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplication
 
       if (!refs.length) continue;
 
-      const docs = await Promise.all(
-        refs.map(async (ref) => {
-          if (!ref) return null;
-          try {
-            const doc = await fromUuid(ref);
-            if (doc?.documentName === "Item") return doc;
-          } catch {
-            const fallback = game.items?.get(ref);
-            if (fallback) return fallback;
-          }
-          return null;
-        })
-      );
+      const parseEncodedRef = (refStr) => {
+        if (typeof refStr !== "string") return { baseRef: "", qtyMul: 1 };
+        const [baseRef, ...parts] = refStr.split("|");
+        let qtyMul = 1;
+        for (const p of parts) {
+          const m = p.match(/^qty=(.+)$/);
+          if (!m) continue;
+          const n = Number.parseInt(m[1], 10);
+          if (Number.isFinite(n) && n > 0) qtyMul = n;
+        }
+        return { baseRef, qtyMul };
+      };
 
-      for (const doc of docs) {
+      const docsWithQty = [];
+      for (const ref of refs) {
+        if (!ref) continue;
+        const { baseRef, qtyMul } = parseEncodedRef(ref);
+        if (!baseRef) continue;
+
+        let doc = null;
+        try {
+          doc = await fromUuid(baseRef);
+          if (doc?.documentName !== "Item") doc = null;
+        } catch {
+          doc = game.items?.get(baseRef) ?? null;
+        }
         if (!doc) continue;
+
+        docsWithQty.push({ doc, qtyMul, baseRef });
+      }
+
+      for (const { doc, qtyMul, baseRef } of docsWithQty) {
         childIds.add(doc.id);
         const dSys = doc.system ?? {};
         const dDescRaw = (dSys.description ?? "").toString().trim();
         const dDescription = dDescRaw || "—";
+
         const rawQty = (dSys.quantity ?? "").toString().trim();
-        const quantity = rawQty || "1";
+        const rawQtyNum = Number.parseInt(rawQty, 10);
+        const baseQty = Number.isFinite(rawQtyNum) && rawQtyNum > 0 ? rawQtyNum : 1;
+        const quantity = String(baseQty * qtyMul);
+
         const rawImg = doc.img ?? "";
         const img = rawImg;
 
         packageEntries.push({
-          itemId: doc.id,
+          itemId: baseRef,
           actorId: actor.id,
           name: doc.name ?? "—",
           img,
@@ -527,8 +547,20 @@ export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplication
     const openInventoryItem = (target) => {
       const itemId = target?.dataset?.itemId;
       if (!itemId || !this.actor) return;
-      const item = this.actor.items.get(itemId);
-      item?.sheet?.render(true);
+      let item = this.actor.items.get(itemId) ?? null;
+      if (item) {
+        item.sheet?.render(true);
+        return;
+      }
+      const baseRef = typeof itemId === "string" ? itemId.split("|")[0] : itemId;
+      if (!baseRef) return;
+      // Kompendiumból behúzott tartalmaknál az itemId lehet UUID/Compendium ref.
+      fromUuid(baseRef)
+        .then((doc) => {
+          if (doc?.documentName !== "Item") return;
+          doc.sheet?.render(true);
+        })
+        .catch(() => {});
     };
     $html.on("click", ".karakter-inventory-item-name", (ev) => {
       ev.preventDefault();

@@ -44,10 +44,12 @@ export class VoidCsomagSheet extends foundry.applications.api.HandlebarsApplicat
       ev.preventDefault();
       const ref = ev.currentTarget?.dataset?.itemRef;
       const itemId = ev.currentTarget?.dataset?.itemId;
+      const openRef =
+        typeof ref === "string" && ref.includes("|") ? ref.split("|")[0] : ref;
       let item = null;
-      if (ref) {
+      if (openRef) {
         try {
-          item = await fromUuid(ref);
+          item = await fromUuid(openRef);
         } catch {
           item = null;
         }
@@ -77,20 +79,86 @@ export class VoidCsomagSheet extends foundry.applications.api.HandlebarsApplicat
       const itemId = input.dataset.itemId;
       if (!itemId) return;
 
-      const parent = this.document.parent;
+      console.debug("Void | QtyEdit (CsomagSheet) start", {
+        itemId,
+        inputValue: input.value,
+        inputDisabled: !!input.disabled
+      });
+
+      // itemId itt valójában a ref base része (| encoding nélkül), ezért fromUuid-val oldjuk fel,
+      // hogy compendiumból vagy embeddedből is biztosan megtaláljuk.
+      const baseRef = typeof itemId === "string" ? itemId.split("|")[0] : itemId;
       let item = null;
-      if (parent?.items) {
-        item = parent.items.get(itemId) ?? null;
+      try {
+        const resolved = await fromUuid(baseRef);
+        if (resolved?.documentName === "Item") item = resolved;
+      } catch {
+        item = game.items?.get(baseRef) ?? null;
       }
-      if (!item) {
-        item = game.items?.get(itemId) ?? null;
-      }
+      console.debug("Void | QtyEdit (CsomagSheet) resolved", {
+        baseRef,
+        resolvedFound: !!item,
+        resolved: item
+          ? {
+              uuid: item.uuid,
+              id: item.id,
+              parentId: item.parent?.id,
+              parentName: item.parent?.name,
+              docType: item.type,
+              docName: item.name,
+              currentQty: item.system?.quantity
+            }
+          : null
+      });
       if (!item) return;
 
       const raw = (input.value ?? "").toString().trim();
       const safe = raw === "" ? "1" : raw;
-      await item.update({ "system.quantity": safe });
+      try {
+        await item.update({ "system.quantity": safe });
+        console.debug("Void | QtyEdit (CsomagSheet) updated", { baseRef, newQty: safe });
+      } catch (err) {
+        console.warn("Void | QtyEdit (CsomagSheet) update failed", { baseRef, safe, err });
+      }
     });
+
+    // Ha a csomag tartalmának quantity-je az inventory táblázatból változik,
+    // akkor a csomaglapot is azonnal újrarendereljük.
+    if (!this._votvCsomagItemUpdateHookRegistered) {
+      this._votvCsomagItemUpdateHook = (updatedItem, _changed, _options, _userId) => {
+        try {
+          const actorParent = this.document?.parent;
+          const actorId = actorParent?.id ?? "";
+          if (!actorId) return;
+
+          // Csak az aktorhoz tartozó embedded itemek frissülése érdekes.
+          if (updatedItem?.parent?.id !== actorId) return;
+
+          const refs = Array.isArray(this.document?.system?.contents) ? this.document.system.contents : [];
+          if (!refs.length) return;
+
+          const updatedId = updatedItem?.id ?? "";
+          const updatedUuid = updatedItem?.uuid ?? "";
+          if (!updatedId && !updatedUuid) return;
+
+          const matches = refs.some((refStr) => {
+            if (!refStr) return false;
+            const s = String(refStr);
+            const base = s.includes("|") ? s.split("|")[0] : s;
+            return s === updatedId || s === updatedUuid || base === updatedId || base === updatedUuid;
+          });
+
+          if (!matches) return;
+          // Kis késleltetés, hogy a DOM update-ek ne versenyezzenek egymással.
+          setTimeout(() => this.render(true), 0);
+        } catch (err) {
+          console.warn("VoidCsomagSheet item update hook error:", err);
+        }
+      };
+
+      Hooks.on("updateItem", this._votvCsomagItemUpdateHook);
+      this._votvCsomagItemUpdateHookRegistered = true;
+    }
 
     // Globális drop: bármilyen actor-lapról / compendiumból rá lehessen dobni itemeket.
     if (!this._votvGlobalDrop) {
@@ -176,6 +244,13 @@ export class VoidCsomagSheet extends foundry.applications.api.HandlebarsApplicat
       window.removeEventListener("drop", this._votvGlobalDrop, true);
       this._votvGlobalDrop = null;
     }
+    if (this._votvCsomagItemUpdateHookRegistered) {
+      if (this._votvCsomagItemUpdateHook) {
+        Hooks.off("updateItem", this._votvCsomagItemUpdateHook);
+        this._votvCsomagItemUpdateHook = null;
+      }
+      this._votvCsomagItemUpdateHookRegistered = false;
+    }
     return super._tearDown?.(options);
   }
 
@@ -200,39 +275,71 @@ export class VoidCsomagSheet extends foundry.applications.api.HandlebarsApplicat
   async _prepareContext(options) {
     const context = await super._prepareContext(options) ?? {};
     context.item = this.document;
+    const parentActor = this.document?.parent ?? null;
     const sys = foundry.utils.deepClone(this.document.system ?? {});
     const refs = Array.isArray(sys.contents) ? sys.contents : [];
+
+    const parseEncodedRef = (refStr) => {
+      if (typeof refStr !== "string") return { baseRef: "", qtyMul: 1, hasQty: false };
+      const [baseRef, ...parts] = refStr.split("|");
+      let qtyMul = 1;
+      let hasQty = false;
+      for (const p of parts) {
+        const m = p.match(/^qty=(.+)$/);
+        if (!m) continue;
+        const n = Number.parseInt(m[1], 10);
+        if (Number.isFinite(n) && n > 0) qtyMul = n;
+        hasQty = true;
+      }
+      return { baseRef, qtyMul, hasQty };
+    };
 
     const docs = await Promise.all(
       refs.map(async (ref) => {
         if (!ref) return null;
+        const { baseRef } = parseEncodedRef(ref);
+        if (!baseRef) return null;
         try {
-          const doc = await fromUuid(ref);
+          const doc = await fromUuid(baseRef);
           if (doc?.documentName === "Item") return doc;
         } catch {
-          const item = game.items?.get(ref);
+          const item = game.items?.get(baseRef) ?? null;
           if (item) return item;
         }
         return null;
       })
     );
 
-    const contentsList = docs
-      .map((doc, index) => ({ doc, ref: refs[index] }))
-      .filter((pair) => !!pair.doc && !!pair.ref)
-      .map(({ doc, ref }) => {
-        const dSys = doc.system ?? {};
-        const rawQty = (dSys.quantity ?? "").toString().trim();
-        const quantity = rawQty || "1";
-        return {
-          id: doc.id,
-          ref,
-          name: doc.name,
-          img: doc.img,
-          type: doc.type,
-          quantity
-        };
+    const contentsList = [];
+    for (let i = 0; i < docs.length; i++) {
+      const doc = docs[i];
+      const ref = refs[i];
+      if (!doc || !ref) continue;
+
+      const { qtyMul, hasQty } = parseEncodedRef(ref);
+      const { baseRef } = parseEncodedRef(ref);
+      const dSys = doc.system ?? {};
+      const rawQty = (dSys.quantity ?? "").toString().trim();
+      const baseQtyNum = Number.parseInt(rawQty, 10);
+      const baseQty = Number.isFinite(baseQtyNum) && baseQtyNum > 0 ? baseQtyNum : 1;
+
+      // Ha a contents tartalom már actor-embedded itemre mutat, akkor a mennyiség szerkeszthető.
+      // fromUuid() visszaadhat embedded itemet is; itt doc.parent alapján döntünk.
+      const isEmbedded = !!(parentActor && doc?.parent?.id === parentActor.id);
+      const isQuantityDisabled = hasQty && qtyMul !== 1 && !isEmbedded;
+
+      contentsList.push({
+        // data-item-id: a ref base része (|qty encoding nélkül), így a mennyiség update biztosan feloldható.
+        id: baseRef,
+        ref, // encoded ref: remove button uses it to remove exact string
+        name: doc.name,
+        img: doc.img,
+        type: doc.type,
+        quantity: String(baseQty * qtyMul),
+        isFixedQuantity: hasQty && qtyMul !== 1,
+        isQuantityDisabled
       });
+    }
 
     context.system = sys;
     context.contentsList = contentsList;

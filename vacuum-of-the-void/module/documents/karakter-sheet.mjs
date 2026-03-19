@@ -615,33 +615,52 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
 
       if (!refs.length) continue;
 
-      const docs = await Promise.all(
-        refs.map(async (ref) => {
-          if (!ref) return null;
-          try {
-            const doc = await fromUuid(ref);
-            if (doc?.documentName === "Item") return doc;
-          } catch {
-            const fallback = game.items?.get(ref);
-            if (fallback) return fallback;
-          }
-          return null;
-        })
-      );
+      const parseEncodedRef = (refStr) => {
+        if (typeof refStr !== "string") return { baseRef: "", qtyMul: 1 };
+        const [baseRef, ...parts] = refStr.split("|");
+        let qtyMul = 1;
+        for (const p of parts) {
+          const m = p.match(/^qty=(.+)$/);
+          if (!m) continue;
+          const n = Number.parseInt(m[1], 10);
+          if (Number.isFinite(n) && n > 0) qtyMul = n;
+        }
+        return { baseRef, qtyMul };
+      };
 
-      for (const doc of docs) {
+      const docsWithQty = [];
+      for (const ref of refs) {
+        if (!ref) continue;
+        const { baseRef, qtyMul } = parseEncodedRef(ref);
+        if (!baseRef) continue;
+
+        let doc = null;
+        try {
+          doc = await fromUuid(baseRef);
+          if (doc?.documentName !== "Item") doc = null;
+        } catch {
+          doc = game.items?.get(baseRef) ?? null;
+        }
         if (!doc) continue;
+        docsWithQty.push({ doc, qtyMul, baseRef });
+      }
+
+      for (const { doc, qtyMul, baseRef } of docsWithQty) {
         childIds.add(doc.id);
         const dSys = doc.system ?? {};
         const dDescRaw = (dSys.description ?? "").toString().trim();
         const dDescription = dDescRaw || "—";
+
         const rawQty = (dSys.quantity ?? "").toString().trim();
-        const quantity = rawQty || "1";
+        const rawQtyNum = Number.parseInt(rawQty, 10);
+        const baseQty = Number.isFinite(rawQtyNum) && rawQtyNum > 0 ? rawQtyNum : 1;
+        const quantity = String(baseQty * qtyMul);
+
         const rawImg = doc.img ?? "";
         const img = cleanImg(rawImg);
 
         packageEntries.push({
-          itemId: doc.id,
+          itemId: baseRef, // click/open és quantity update is erről tud feloldódni
           actorId: this.actor.id,
           name: doc.name ?? "—",
           img,
@@ -957,7 +976,8 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
           return refs.some((ref) => {
             if (!ref) return false;
             const refStr = String(ref);
-            return refStr === updatedId || refStr === updatedUuid;
+            const baseRef = refStr.includes("|") ? refStr.split("|")[0] : refStr;
+            return baseRef === updatedId || baseRef === updatedUuid || refStr === updatedId || refStr === updatedUuid;
           });
         });
 
@@ -1084,16 +1104,28 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
     });
 
     // Inventory: click weapon or item name/icon to open its sheet.
-    const openInventoryItem = (target, ev) => {
+    const openInventoryItem = async (target, ev) => {
       const itemId = target.dataset.itemId;
       if (!itemId) return;
 
       // Először az actor saját itemjei között keresünk,
       // ha ott nincs, fallback a globális Item collectionre (pl. Csomag tartalma).
-      const item =
+      let item =
         this.actor.items.get(itemId) ??
+        this.actor.items.contents?.find?.(i => i.id === itemId) ??
         game.items?.get(itemId) ??
         null;
+      if (!item) {
+        // compendiumból húzott tartalmaknál az itemId gyakran UUID/Compendium ref,
+        // amit innen kell feloldani.
+        const baseRef = typeof itemId === "string" ? itemId.split("|")[0] : itemId;
+        try {
+          const resolved = await fromUuid(baseRef);
+          if (resolved?.documentName === "Item") item = resolved;
+        } catch {
+          // ignore
+        }
+      }
       if (!item) return;
 
       // For weapons assigned to a slot, allow Alt+click on the name to roll instead of opening the sheet.
@@ -1122,6 +1154,12 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
       const itemId = (input.dataset.itemId ?? "").trim();
       if (!itemId) return;
 
+      console.debug("Void | QtyEdit (KarakterSheet) start", {
+        itemId,
+        inputValue: input.value,
+        inputDisabled: !!input.disabled
+      });
+
       // Elsődlegesen az aktor saját itemjei között keresünk,
       // ha ott nincs, fallback a globális Item collectionre (pl. Csomag tartalma).
       const item =
@@ -1129,10 +1167,42 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
         this.actor.items.contents?.find?.(i => i.id === itemId) ??
         game.items?.get(itemId) ??
         null;
-      if (!item) return;
+
+      // Ha a csomag `|qty=` kódolást használt, az itemId lehet encoded baseRef.
+      // Ilyenkor a quantity-t a baseRef-re feloldott Itemen frissítjük.
+      if (!item) {
+        const baseRef = itemId.split("|")[0];
+        try {
+          const resolved = await fromUuid(baseRef);
+          if (resolved?.documentName === "Item") {
+            console.debug("Void | QtyEdit (KarakterSheet) resolvedFromUuid", {
+              baseRef,
+              uuid: resolved.uuid,
+              id: resolved.id,
+              parentId: resolved.parent?.id,
+              currentQty: resolved.system?.quantity
+            });
+            const raw = (input.value ?? "").toString().trim();
+            const safe = raw === "" ? "0" : raw;
+            await resolved.update({ "system.quantity": safe });
+            console.debug("Void | QtyEdit (KarakterSheet) updated", { baseRef, newQty: safe });
+          }
+        } catch {
+          // ignore
+        }
+        return;
+      }
 
       const raw = (input.value ?? "").toString().trim();
       const safe = raw === "" ? "0" : raw;
+      console.debug("Void | QtyEdit (KarakterSheet) updatingEmbeddedOrGlobal", {
+        itemId,
+        resolvedUuid: item.uuid,
+        id: item.id,
+        parentId: item.parent?.id,
+        currentQty: item.system?.quantity,
+        newQty: safe
+      });
       await item.update({ "system.quantity": safe });
     });
 

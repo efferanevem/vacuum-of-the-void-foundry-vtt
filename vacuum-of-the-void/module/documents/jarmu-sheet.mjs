@@ -262,33 +262,52 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
 
       if (!refs.length) continue;
 
-      const docs = await Promise.all(
-        refs.map(async (ref) => {
-          if (!ref) return null;
-          try {
-            const doc = await fromUuid(ref);
-            if (doc?.documentName === "Item") return doc;
-          } catch {
-            const fallback = game.items?.get(ref);
-            if (fallback) return fallback;
-          }
-          return null;
-        })
-      );
+      const parseEncodedRef = (refStr) => {
+        if (typeof refStr !== "string") return { baseRef: "", qtyMul: 1 };
+        const [baseRef, ...parts] = refStr.split("|");
+        let qtyMul = 1;
+        for (const p of parts) {
+          const m = p.match(/^qty=(.+)$/);
+          if (!m) continue;
+          const n = Number.parseInt(m[1], 10);
+          if (Number.isFinite(n) && n > 0) qtyMul = n;
+        }
+        return { baseRef, qtyMul };
+      };
 
-      for (const doc of docs) {
+      const docsWithQty = [];
+      for (const ref of refs) {
+        if (!ref) continue;
+        const { baseRef, qtyMul } = parseEncodedRef(ref);
+        if (!baseRef) continue;
+
+        let doc = null;
+        try {
+          doc = await fromUuid(baseRef);
+          if (doc?.documentName !== "Item") doc = null;
+        } catch {
+          doc = game.items?.get(baseRef) ?? null;
+        }
         if (!doc) continue;
+        docsWithQty.push({ doc, qtyMul, baseRef });
+      }
+
+      for (const { doc, qtyMul, baseRef } of docsWithQty) {
         childIds.add(doc.id);
         const dSys = doc.system ?? {};
         const dDescRaw = (dSys.description ?? "").toString().trim();
         const dDescription = dDescRaw || "—";
+
         const rawQty = (dSys.quantity ?? "").toString().trim();
-        const quantity = rawQty || "1";
+        const rawQtyNum = Number.parseInt(rawQty, 10);
+        const baseQty = Number.isFinite(rawQtyNum) && rawQtyNum > 0 ? rawQtyNum : 1;
+        const quantity = String(baseQty * qtyMul);
+
         const rawImg = doc.img ?? "";
         const img = cleanImg(rawImg);
 
         packageEntries.push({
-          itemId: doc.id,
+          itemId: baseRef,
           actorId: this.actor.id,
           name: doc.name ?? "—",
           img,
@@ -536,7 +555,16 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
       ev.preventDefault();
       const itemId = ev.currentTarget?.dataset?.itemId;
       if (!itemId) return;
-      const item = this.actor.items.get(itemId);
+      let item = this.actor.items.get(itemId) ?? null;
+      if (!item) {
+        const baseRef = typeof itemId === "string" ? itemId.split("|")[0] : itemId;
+        fromUuid(baseRef)
+          .then((doc) => {
+            if (doc?.documentName === "Item") doc.sheet?.render(true);
+          })
+          .catch(() => {});
+        return;
+      }
       item?.sheet?.render(true);
     });
     // Raktár: Alt+klikk törlés
@@ -554,8 +582,20 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
       const input = ev.currentTarget;
       const itemId = input?.dataset?.itemId;
       if (!itemId) return;
-      const item = this.actor.items.get(itemId);
-      if (!item || (item.type !== "Targy" && item.type !== "Fegyver")) return;
+      let item = this.actor.items.get(itemId);
+      if (item && (item.type !== "Targy" && item.type !== "Fegyver")) return;
+      if (!item) {
+        const baseRef = typeof itemId === "string" ? itemId.split("|")[0] : itemId;
+        try {
+          const resolved = await fromUuid(baseRef);
+          if (resolved?.documentName === "Item" && (resolved.type === "Targy" || resolved.type === "Fegyver")) {
+            await resolved.update({ "system.quantity": (input.value ?? "").trim() });
+          }
+        } catch {
+          // ignore
+        }
+        return;
+      }
       await item.update({ "system.quantity": (input.value ?? "").trim() });
     });
     // Raktár: páncél felszerelt
