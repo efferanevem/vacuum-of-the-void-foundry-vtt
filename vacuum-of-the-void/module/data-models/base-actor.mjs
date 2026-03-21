@@ -107,31 +107,31 @@ export class BaseActorDataModel extends foundry.abstract.TypeDataModel {
         threatBonus: new NumberField({ required: false, integer: false, initial: 0 })
       }),
       skills: new SchemaField({
-        deception: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
-        medicalCare: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
-        endurance: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
-        perception: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
-        cooking: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
+        deception: new NumberField({ required: false, integer: true, min: -99, initial: 0 }),
+        medicalCare: new NumberField({ required: false, integer: true, min: -99, initial: 0 }),
+        endurance: new NumberField({ required: false, integer: true, min: -99, initial: 0 }),
+        perception: new NumberField({ required: false, integer: true, min: -99, initial: 0 }),
+        cooking: new NumberField({ required: false, integer: true, min: -99, initial: 0 }),
         // Alap Gyorsgondolkodás jártasság (PC-k és egyéb referenciák használják)
-        quickThinking: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
+        quickThinking: new NumberField({ required: false, integer: true, min: -99, initial: 0 }),
         // NPC header mezők – itt szöveg is lehet, ezért StringField
         quickThinking1: new StringField({ required: false, blank: true, initial: "" }),
         quickThinking2: new StringField({ required: false, blank: true, initial: "" }),
         quickThinking3: new StringField({ required: false, blank: true, initial: "" }),
-        combatTraining: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
-        vehicleOperation: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
-        grenadeUse: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
-        lexicalKnowledge: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
-        stealth: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
-        firearms: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
-        intimidation: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
-        persuasion: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
-        memory: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
-        mentalStrength: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
-        luck: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
-        languages: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
-        technicalKnowledge: new NumberField({ required: false, integer: true, min: 0, initial: 0 }),
-        music: new NumberField({ required: false, integer: true, min: 0, initial: 0 })
+        combatTraining: new NumberField({ required: false, integer: true, min: -99, initial: 0 }),
+        vehicleOperation: new NumberField({ required: false, integer: true, min: -99, initial: 0 }),
+        grenadeUse: new NumberField({ required: false, integer: true, min: -99, initial: 0 }),
+        lexicalKnowledge: new NumberField({ required: false, integer: true, min: -99, initial: 0 }),
+        stealth: new NumberField({ required: false, integer: true, min: -99, initial: 0 }),
+        firearms: new NumberField({ required: false, integer: true, min: -99, initial: 0 }),
+        intimidation: new NumberField({ required: false, integer: true, min: -99, initial: 0 }),
+        persuasion: new NumberField({ required: false, integer: true, min: -99, initial: 0 }),
+        memory: new NumberField({ required: false, integer: true, min: -99, initial: 0 }),
+        mentalStrength: new NumberField({ required: false, integer: true, min: -99, initial: 0 }),
+        luck: new NumberField({ required: false, integer: true, min: -99, initial: 0 }),
+        languages: new NumberField({ required: false, integer: true, min: -99, initial: 0 }),
+        technicalKnowledge: new NumberField({ required: false, integer: true, min: -99, initial: 0 }),
+        music: new NumberField({ required: false, integer: true, min: -99, initial: 0 })
       }),
       weapons: new SchemaField({
         slotOrder: new StringField({ required: false, blank: true, initial: "slot1" }),
@@ -257,7 +257,9 @@ export class BaseActorDataModel extends foundry.abstract.TypeDataModel {
         })
       }),
       notes: new SchemaField({
-        biography: new HTMLField({ required: false, blank: true })
+        biography: new HTMLField({ required: false, blank: true }),
+        /** Mesélői megjelölés: jártasság kulcsok (Alt+katt a lapon), pl. ["persuasion","deception"] */
+        markedSkills: new ArrayField(new StringField({ required: false, blank: false }), { required: false, initial: [] })
       })
     };
   }

@@ -1,3 +1,7 @@
+import { hideDefaultItemBagImg } from "../util/hide-default-item-bag.mjs";
+
+const VOTV_ABILITY_PROFILE_PLACEHOLDER = "systems/vacuum-of-the-void/assets/blank.svg";
+
 export class VoidAbilitySheet extends foundry.applications.api.HandlebarsApplicationMixin(
   foundry.applications.sheets.ItemSheetV2
 ) {
@@ -123,6 +127,9 @@ export class VoidAbilitySheet extends foundry.applications.api.HandlebarsApplica
     const base = 6;
     const rows = Math.min(Math.max(lines, base), base * 3);
     context.descriptionRows = rows;
+    // Fejléc: alap táska ikon helyett üres (átlátszó) helyőrző; kattintásra továbbra is kép választható
+    const customImg = hideDefaultItemBagImg(this.item.img ?? "");
+    context.profileDisplayImg = customImg || VOTV_ABILITY_PROFILE_PLACEHOLDER;
     return context;
   }
 }

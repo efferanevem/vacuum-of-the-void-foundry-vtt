@@ -123,6 +123,12 @@ body.system-vacuum-of-the-void .directory.item-directory .document.item[data-doc
   display: none !important;
 }
 
+/* Items menü: Képesség – alap táska ikon thumbnail elrejtése */
+body.system-vacuum-of-the-void .directory.item-directory .document.item[data-document-type="Kepesseg"] .thumbnail img[src*="icons/svg/item-bag.svg"],
+body.system-vacuum-of-the-void .directory.item-directory .document.item[data-document-type="ability"] .thumbnail img[src*="icons/svg/item-bag.svg"] {
+  display: none !important;
+}
+
 /* Combat: Roll Initiative gombok elrejtése */
 body.system-vacuum-of-the-void #combat [data-action="rollAll"],
 body.system-vacuum-of-the-void #combat [data-action="rollNPCs"],

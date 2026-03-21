@@ -471,7 +471,7 @@
     "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/throwable/grenade.webp",
     "system": {
       "type": "explosive",
-      "size": "throwable",
+      "size": "thrown",
       "damage": "3d6",
       "range": "13,5 m",
       "special": "*Mentődobás: 14-es nehézségű Harcképzettség\n*Hatás: 3 méteren belül sebzi azt, aki nem jár sikerrel a mentődobásban."
@@ -485,7 +485,7 @@
     "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/throwable/grenade.webp",
     "system": {
       "type": "explosive",
-      "size": "throwable",
+      "size": "thrown",
       "damage": "0",
       "range": "13,5 m",
       "special": "*Mentődobás: 12-es nehézségű Harcképzettség\n*Hatás: 3 méteren belül elkábítja azt, aki nem jár sikerrel a mentődobásban."
@@ -499,7 +499,7 @@
     "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/throwable/grenade.webp",
     "system": {
       "type": "explosive",
-      "size": "throwable",
+      "size": "thrown",
       "damage": "0",
       "range": "13,5 m",
       "special": "*Mentődobás: 16-os nehézségű Harcképzettség (csak Droidoknak)\n*Hatás: 4,5 méteren belül lekapcsol minden elektronikát egy körre, és a Droidokat elkábítja, ha nem járnak sikerrel a mentődobásban."
@@ -513,7 +513,7 @@
     "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/throwable/grenade.webp",
     "system": {
       "type": "explosive",
-      "size": "throwable",
+      "size": "thrown",
       "damage": "2d4+2",
       "range": "13,5 m",
       "special": "*Mentődobás: 14-es nehézségű Harcképzettség\n*Hatás: 3 méteren belül sebez mindenkit, és ezen a területen minden gyúlékony anyag felgyullad. Ezek a következő 3 körükben Égő állapotba kerülnek."
@@ -527,7 +527,7 @@
     "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/throwable/c4.webp",
     "system": {
       "type": "explosive",
-      "size": "throwable",
+      "size": "thrown",
       "damage": "3d12+6",
       "range": "13,5 m, 30 méterig detonálható",
       "special": "*Mentődobás: 16-es nehézségű Harcképzettség\n*Hatás: 12 méteren belül sebzi azt, aki nem jár sikerrel a mentődobásban, azonban detonálni kell 1 KP-ért."
@@ -541,7 +541,7 @@
     "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/throwable/mine.webp",
     "system": {
       "type": "explosive",
-      "size": "throwable",
+      "size": "thrown",
       "damage": "3d12+6",
       "range": "Lehelyezhető",
       "special": "*Mentődobás nem dobható.\n*Nem eldobni, hanem elhelyezni kell, és ha valaki rálép vagy belép a közvetlen környezetébe, akkor felrobban."
@@ -555,7 +555,7 @@
     "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/throwable/grenade.webp",
     "system": {
       "type": "explosive",
-      "size": "throwable",
+      "size": "thrown",
       "damage": "3d6+6",
       "range": "13,5 m",
       "special": "*Mentődobás: 14-es nehézségű Harcképzettség\n*Hatás: 3 méteren belül sebzi azt, aki nem jár sikerrel a mentődobásban."
@@ -569,7 +569,7 @@
     "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/throwable/grenade.webp",
     "system": {
       "type": "explosive",
-      "size": "throwable",
+      "size": "thrown",
       "damage": "2d12+3",
       "range": "10,5 m",
       "special": "*Mentődobás: 16-os nehézségű Harcképzettség\n*Hatás: 3 méteren belül sebzi azt, aki nem jár sikerrel a mentődobásban, és elbont minden nemű fedezéket."
@@ -583,7 +583,7 @@
     "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/throwable/grenade.webp",
     "system": {
       "type": "explosive",
-      "size": "throwable",
+      "size": "thrown",
       "damage": "0",
       "range": "13,5 m",
       "special": "*Mentődobás: 14-es nehézségű Harcképzettség\n*Hatás: 3 méteren belül minden gyúlékony anyag felgyullad. Ezek a következő 6 körükben Égő állapotba kerülnek."
@@ -597,7 +597,7 @@
     "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/weapons/throwable/grenade.webp",
     "system": {
       "type": "explosive",
-      "size": "throwable",
+      "size": "thrown",
       "damage": "0",
       "range": "13,5 m",
       "special": "*Hatás: 6 méteres körzetben sűrű füstöt hoz létre, amiben nem lehet látni. Mindenki 1d6 hátránnyal támad a ködön belüliekre, vagy a ködből kifelé."
@@ -1770,6 +1770,286 @@
         "nyelvek-dekodolo-szerkezet|qty=5",
         "meggyozes-tarsadalmi-rangot-emelo-nevjegykartya|qty=5"
       ]
+    }
+  },
+  {
+    "_id": "fogyaszthato-dolgok-italok-viz-15l",
+    "name": "Víz (1,5 l)",
+    "type": "Targy",
+    "path": "/Fogyasztható Dolgok/Italok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/consumables.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "fogyaszthato-dolgok-italok-kave-1-csesze",
+    "name": "Kávé (1 csésze)",
+    "type": "Targy",
+    "path": "/Fogyasztható Dolgok/Italok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/consumables.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "fogyaszthato-dolgok-italok-shake-1-pohar",
+    "name": "Shake (1 pohár)",
+    "type": "Targy",
+    "path": "/Fogyasztható Dolgok/Italok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/consumables.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "fogyaszthato-dolgok-italok-sor-1-korso",
+    "name": "Sör (1 korsó)",
+    "type": "Targy",
+    "path": "/Fogyasztható Dolgok/Italok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/consumables.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "fogyaszthato-dolgok-italok-bor-1-uveg",
+    "name": "Bor (1 üveg)",
+    "type": "Targy",
+    "path": "/Fogyasztható Dolgok/Italok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/consumables.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "fogyaszthato-dolgok-italok-tea-1-bogre",
+    "name": "Tea (1 bögre)",
+    "type": "Targy",
+    "path": "/Fogyasztható Dolgok/Italok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/consumables.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "fogyaszthato-dolgok-italok-koktelok-1-pohar",
+    "name": "Koktélok (1 pohár)",
+    "type": "Targy",
+    "path": "/Fogyasztható Dolgok/Italok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/consumables.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "fogyaszthato-dolgok-italok-tomenyek-5cl",
+    "name": "Tömények (5 cl)",
+    "type": "Targy",
+    "path": "/Fogyasztható Dolgok/Italok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/consumables.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "fogyaszthato-dolgok-etelek-szendvics",
+    "name": "Szendvics",
+    "type": "Targy",
+    "path": "/Fogyasztható Dolgok/Ételek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/consumables.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "fogyaszthato-dolgok-etelek-sushi",
+    "name": "Sushi",
+    "type": "Targy",
+    "path": "/Fogyasztható Dolgok/Ételek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/consumables.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "fogyaszthato-dolgok-etelek-leves",
+    "name": "Leves",
+    "type": "Targy",
+    "path": "/Fogyasztható Dolgok/Ételek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/consumables.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "fogyaszthato-dolgok-etelek-foetel",
+    "name": "Főétel",
+    "type": "Targy",
+    "path": "/Fogyasztható Dolgok/Ételek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/consumables.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "fogyaszthato-dolgok-etelek-menu",
+    "name": "Menü",
+    "type": "Targy",
+    "path": "/Fogyasztható Dolgok/Ételek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/consumables.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "fogyaszthato-dolgok-etelek-desszertek",
+    "name": "Desszertek",
+    "type": "Targy",
+    "path": "/Fogyasztható Dolgok/Ételek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/consumables.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "fogyaszthato-dolgok-dohanytermekek-cigaretta-1-doboz-20-db",
+    "name": "Cigaretta (1 doboz/20 db)",
+    "type": "Targy",
+    "path": "/Fogyasztható Dolgok/Dohánytermékek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/tobacco.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "fogyaszthato-dolgok-dohanytermekek-szivar-1-darab",
+    "name": "Szivar",
+    "type": "Targy",
+    "path": "/Fogyasztható Dolgok/Dohánytermékek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/tobacco.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "fogyaszthato-dolgok-dohanytermekek-dohany-50-g",
+    "name": "Dohány (50 g)",
+    "type": "Targy",
+    "path": "/Fogyasztható Dolgok/Dohánytermékek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/tobacco.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "fogyaszthato-dolgok-dohanytermekek-elektromos-cigaretta",
+    "name": "Elektromos Cigaretta",
+    "type": "Targy",
+    "path": "/Fogyasztható Dolgok/Dohánytermékek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/tobacco.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "fogyaszthato-dolgok-dohanytermekek-elektromos-cigaretta-likvid-20-ml",
+    "name": "Elektromos Cigaretta Likvid (20 ml)",
+    "type": "Targy",
+    "path": "/Fogyasztható Dolgok/Dohánytermékek/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/tobacco.png",
+    "system": {
+      "description": ""
+    }
+  },
+  {
+    "_id": "fogyaszthato-dolgok-narkotikumok-marihuana",
+    "name": "Marihuána",
+    "type": "Targy",
+    "path": "/Fogyasztható Dolgok/Narkotikumok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/narcotics.png",
+    "system": {
+      "description": "Nyugtató hatású, kedélyállapot-növelő szer. Gyakran alkohollal együtt fogyasztják, több rendszerben legális. A hatás kezdetekor a karakter dob egy 11-es nehézségű Mentális Erősségpróbát; sikertelenség esetén Bódult állapotba kerül. Ettől függetlenül minden rá irányuló sebzés 1-gyel csökken.\n\nHatás ideje: 1d6+2 óra"
+    }
+  },
+  {
+    "_id": "fogyaszthato-dolgok-narkotikumok-lsd",
+    "name": "LSD",
+    "type": "Targy",
+    "path": "/Fogyasztható Dolgok/Narkotikumok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/narcotics.png",
+    "system": {
+      "description": "Bélyegre cseppentve a nyelv alá helyezik, erősen hallucinogén hatású. A hatás alatt a karakter Bódult állapotba kerül, és minden rá irányuló sebzés 2-vel csökken, azonban a kapott Stressz Pontok száma megduplázódik.\n\nHatás ideje: 2d4+2 óra"
+    }
+  },
+  {
+    "_id": "fogyaszthato-dolgok-narkotikumok-heroin",
+    "name": "Heroin",
+    "type": "Targy",
+    "path": "/Fogyasztható Dolgok/Narkotikumok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/narcotics.png",
+    "system": {
+      "description": "Intravénásan alkalmazott szer, amely gyorsan roncsolja a szervezetet. A hatása alatt a karakter Bódult állapotba kerül, és nem tud gyógyulni.\n\nHatás ideje: 1d4+1 óra"
+    }
+  },
+  {
+    "_id": "fogyaszthato-dolgok-narkotikumok-alprazolam-xanax",
+    "name": "Alprazolám (Xanax)",
+    "type": "Targy",
+    "path": "/Fogyasztható Dolgok/Narkotikumok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/narcotics.png",
+    "system": {
+      "description": "Extrém mértékben nyugtató hatású, eredetileg gyógyszerként gyártott anyag. A hatása alatt a kapott Stressz Pontok csak felét kapod meg, felfelé kerekítve.\n\nHatás ideje: 1d4+1 óra"
+    }
+  },
+  {
+    "_id": "fogyaszthato-dolgok-narkotikumok-gurlang-ver",
+    "name": "„Gurlang Vér”",
+    "type": "Targy",
+    "path": "/Fogyasztható Dolgok/Narkotikumok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/narcotics.png",
+    "system": {
+      "description": "Nevét vöröses színéről és erősen hallucinogén hatásáról kapta. Intravénásan adják be. A hatása alatt a karakter Bódult állapotba kerül; a ficánkolás miatt a Védelmi Értéke 3-mal nő, azonban a Mozgási Sebessége megfeleződik.\n\nHatás ideje: 1d4 óra"
+    }
+  },
+  {
+    "_id": "fogyaszthato-dolgok-narkotikumok-kek-csok",
+    "name": "„Kék Csók”",
+    "type": "Targy",
+    "path": "/Fogyasztható Dolgok/Narkotikumok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/narcotics.png",
+    "system": {
+      "description": "Enyhén ciánkék, kristályos narkotikum, amelyből 0,5-1 grammot a nyelv alá helyeznek. A legtisztább változata hosszan tartó eufóriát okozhat. A hatása alatt minden a karakterre irányuló sebzés 3-mal csökken.\n\nHatás ideje: 5d8+5 óra"
+    }
+  },
+  {
+    "_id": "fogyaszthato-dolgok-narkotikumok-wagawi-kivonat",
+    "name": "„Wagawi Kivonat”",
+    "type": "Targy",
+    "path": "/Fogyasztható Dolgok/Narkotikumok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/narcotics.png",
+    "system": {
+      "description": "A Wagawi-k epekövéből készült, ma már szintetikusan is előállítható, enyhén eufórikus és ellazító hatású por. Jellemzően orrba szívják. A hatása alatt minden Átverés- és Meggyőzéspróbára +1 bónuszt kap a karakter.\n\nHatás ideje: 1d6+1 óra"
+    }
+  },
+  {
+    "_id": "fogyaszthato-dolgok-narkotikumok-prnk-0165",
+    "name": "PRNK-0165",
+    "type": "Targy",
+    "path": "/Fogyasztható Dolgok/Narkotikumok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/narcotics.png",
+    "system": {
+      "description": "Olcsó, fehér kristályos drog, amelyet dohánnyal keverve szívnak el. Hirtelen eufóriát és hallucinációt okoz, de erősen roncsolja a tüdőt. A hatása alatt a karakter Bódult állapotba kerül, és minden eltöltött óra után a Törzse 1 sebzést szenved.\n\nHatás ideje: 1d6 óra"
+    }
+  },
+  {
+    "_id": "fogyaszthato-dolgok-narkotikumok-rampage",
+    "name": "„Rampage”",
+    "type": "Targy",
+    "path": "/Fogyasztható Dolgok/Narkotikumok/",
+    "img": "systems/vacuum-of-the-void/assets/compendium/purchasables/narcotics.png",
+    "system": {
+      "description": "Az idegrendszert stimulálja, hiperaktivitást okoz; gyakori hosszú bulikban és túlterhelt munkakörnyezetben. A hatása alatt minden kör elején dobj 1d4-et: 1-2 esetén 1 KP, 3-4 esetén 2 KP.\n\nHatás ideje: 1d4+3 óra"
     }
   }
 ]

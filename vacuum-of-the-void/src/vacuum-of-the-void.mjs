@@ -11,6 +11,30 @@ function npcTokenGridSizeFromMéret(size) {
   return 1;
 }
 
+const VOTV_FLAG_SCOPE = "vacuum-of-the-void";
+/**
+ * Actor flag: a prototype token w/h kézzel lett állítva (Token beállítások) → új NPC tokenek ehhez igazodjanak.
+ * A „Méret” mező változása NEM írja felül a már pályán lévő tokeneket (Foundry linkelt token + prototype sync elkerülése).
+ * Törlés: actor.unsetFlag(VOTV_FLAG_SCOPE, VOTV_NPC_TOKEN_SIZE_MANUAL_FLAG)
+ */
+const VOTV_NPC_TOKEN_SIZE_MANUAL_FLAG = "npcTokenSizeManual";
+
+/**
+ * Foundry a prototype token w/h változást néha beágyazva (`prototypeToken: { width }`),
+ * néha lapos kulccsal (`"prototypeToken.width"`) adja meg a `changed` objektumban.
+ */
+function npcPrototypeTokenSizeWasTouched(changed) {
+  if (!changed || typeof changed !== "object") return false;
+  const pt = changed.prototypeToken;
+  if (pt && typeof pt === "object") {
+    if (Object.prototype.hasOwnProperty.call(pt, "width") && pt.width !== undefined) return true;
+    if (Object.prototype.hasOwnProperty.call(pt, "height") && pt.height !== undefined) return true;
+  }
+  if (Object.prototype.hasOwnProperty.call(changed, "prototypeToken.width")) return true;
+  if (Object.prototype.hasOwnProperty.call(changed, "prototypeToken.height")) return true;
+  return false;
+}
+
 // Expose a system namespace following the tutorial style.
 Hooks.once("init", () => {
   console.log("Vacuum of the Void | Initializing system");
@@ -281,6 +305,18 @@ Hooks.on("updateActor", (actor, changed, _options, _userId) => {
   const actorId = actor?.id;
   if (!actorId) return;
 
+    // NPC: prototype w/h változott (Token beállítások) → kézi lock; ha visszaegyezik a Méret szerinti ráccsal, lock törlése
+    if (actor.type === "Npc" && npcPrototypeTokenSizeWasTouched(changed)) {
+      const gridSize = npcTokenGridSizeFromMéret(actor.system?.identity?.size);
+      const w = Number(actor.prototypeToken?.width ?? 1);
+      const h = Number(actor.prototypeToken?.height ?? 1);
+      if (w !== gridSize || h !== gridSize) {
+        actor.setFlag(VOTV_FLAG_SCOPE, VOTV_NPC_TOKEN_SIZE_MANUAL_FLAG, true).catch(() => {});
+      } else {
+        actor.unsetFlag(VOTV_FLAG_SCOPE, VOTV_NPC_TOKEN_SIZE_MANUAL_FLAG).catch(() => {});
+      }
+    }
+
     // Karakter/NPC kezdeményezés (initiativeResult) → Combat Tracker initiative mező szinkron
     if ((actor.type === "Karakter" || actor.type === "Npc") && changed?.system?.combat && "initiativeResult" in changed.system.combat) {
       const value = Number(actor.system?.combat?.initiativeResult);
@@ -297,14 +333,9 @@ Hooks.on("updateActor", (actor, changed, _options, _userId) => {
       }
     }
 
-    // NPC: ha a méret (system.identity.size) változott, prototype token 1×1 / 2×2 / 3×3
-    if (actor.type === "Npc" && changed?.system?.identity && "size" in changed.system.identity) {
-      const gridSize = npcTokenGridSizeFromMéret(actor.system?.identity?.size);
-      actor.update({
-        "prototypeToken.width": gridSize,
-        "prototypeToken.height": gridSize
-      }).catch((err) => console.warn("Vacuum of the Void | NPC token size update failed for", actor.name, err));
-    }
+    // NPC: a „Méret” mezőt szándékosan NEM írjuk át a prototypeToken w/h-ra – a Foundry a linkelt tokeneket
+    // szinkronizálná vele, és minden példány egyforma méretű lenne. Új token = preCreateToken (Méret vagy kézi prototype).
+
     const activeEl = document.activeElement;
     const isInputLike = activeEl && (
       (activeEl.tagName === "INPUT" && activeEl.type !== "checkbox" && activeEl.type !== "radio") ||
@@ -807,13 +838,24 @@ Hooks.on("preCreateToken", (tokenDocument, data, _options) => {
   }
   if (actor.type === "Npc") {
     const gridSize = npcTokenGridSizeFromMéret(actor.system?.identity?.size);
-    tokenDocument.updateSource({
+    const usePrototypeForNewTokens = !!actor.getFlag(VOTV_FLAG_SCOPE, VOTV_NPC_TOKEN_SIZE_MANUAL_FLAG);
+    const npcPatch = {
       ...(sourceId ? { actorId: sourceId } : {}),
       "bar1.attribute": "",
-      "bar2.attribute": "resources.health",
-      width: gridSize,
-      height: gridSize
-    });
+      "bar2.attribute": "resources.health"
+    };
+    if (usePrototypeForNewTokens) {
+      const pw = actor.prototypeToken?.width;
+      const ph = actor.prototypeToken?.height;
+      if (pw !== undefined && ph !== undefined) {
+        npcPatch.width = pw;
+        npcPatch.height = ph;
+      }
+    } else {
+      npcPatch.width = gridSize;
+      npcPatch.height = gridSize;
+    }
+    tokenDocument.updateSource(npcPatch);
   }
 });
 

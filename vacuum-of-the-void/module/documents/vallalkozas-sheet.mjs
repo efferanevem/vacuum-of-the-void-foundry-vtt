@@ -313,7 +313,7 @@ export class VoidVallalkozasSheet extends foundry.applications.api.HandlebarsApp
     context.egyebList = egyebDocs.map((item) => {
       const sys = item.system ?? {};
       const descRaw = (sys.description ?? "").trim();
-      const description = descRaw ? (descRaw.length > 80 ? `${descRaw.slice(0, 77)}…` : descRaw) : "";
+      const description = descRaw;
       const rawImg = item.img ?? "";
       const img =
         rawImg === "icons/svg/item-bag.svg"

@@ -66,6 +66,13 @@
       "type": "Item",
       "system": "vacuum-of-the-void",
       "path": "packs/microchips.db"
+    },
+    {
+      "name": "egyeb-informaciok",
+      "label": "Egyéb Információk",
+      "type": "Item",
+      "system": "vacuum-of-the-void",
+      "path": "packs/egyeb-informaciok.db"
     }
   ],
   "grid": {

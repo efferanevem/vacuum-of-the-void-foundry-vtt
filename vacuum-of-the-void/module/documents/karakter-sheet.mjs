@@ -1,4 +1,5 @@
 import { computeVotvCritInfo } from "../util/votv-result-type.mjs";
+import { hideDefaultItemBagImg } from "../util/hide-default-item-bag.mjs";
 
 /** Páncél szint nyers érték → megjelenített szöveg (karakterlap táblázat). */
 function _armorLevelLabel(raw) {
@@ -7,6 +8,22 @@ function _armorLevelLabel(raw) {
   if (raw === "2") return "2. szint";
   if (raw === "3") return "3. szint";
   return raw === "Alap" ? "Alap" : raw;
+}
+
+/**
+ * Mikrochip lenyíló + slot miniatűr: üres, ha nincs saját kép, vagy a táskaikon / a típus alapikonja.
+ */
+function imgSrcForMicrochipUi(rawImg) {
+  const s = hideDefaultItemBagImg(rawImg);
+  if (!s) return "";
+  try {
+    const icons = globalThis.CONFIG?.Item?.typeIcons;
+    const def = icons?.MikroChip ?? icons?.microchip;
+    if (typeof def === "string" && def.trim() && def.trim() === s) return "";
+  } catch {
+    /* ignore */
+  }
+  return s;
 }
 
 export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplicationMixin(
@@ -426,6 +443,7 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
       context.skillDisabled[skill] = status === 0 ? " disabled" : "";
       context.skillHasHealthTint[skill] = true;
     }
+    context.skillMarked = buildSkillMarkedContext(this.actor);
     const weapons = this.actor.system.weapons ?? {};
     const ALL_WEAPON_SLOTS = ["slot1", "slot2", "slot3", "slot4", "slot5", "slot6", "slot7", "slot8", "slot9", "slot10"];
     const slotOrderRaw = (weapons.slotOrder ?? "").trim();
@@ -491,8 +509,7 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
     const weaponItems = weaponDocs.map(i => ({ id: i.id, name: i.name, img: i.img }));
     context.weaponItems = weaponItems;
     const emptyLabel = "— Nincs fegyver —";
-    const DEFAULT_BAG_ICON = "icons/svg/item-bag.svg";
-    const cleanImg = (rawImg) => (rawImg === DEFAULT_BAG_ICON ? "" : rawImg);
+    const cleanImg = hideDefaultItemBagImg;
     // Only show slots that actually have an existing weapon item assigned.
     const equippedSlotKeys = slotKeys.filter(slotKey => {
       const slotData = weapons[slotKey] ?? {};
@@ -702,12 +719,8 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
     context.egyebList = egyebDocs.map((item) => {
       const sys = item?.system ?? {};
       const descRaw = (sys.description ?? "").trim();
-      const description = descRaw ? (descRaw.length > 80 ? descRaw.slice(0, 77) + "…" : descRaw) : "";
-      const rawImg = item.img ?? "";
-      const img =
-        rawImg === "icons/svg/item-bag.svg"
-          ? ""
-          : rawImg;
+      const description = descRaw;
+      const img = hideDefaultItemBagImg(item.img ?? "");
       return {
         itemId: item.id,
         actorId: this.actor.id,
@@ -717,7 +730,11 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
       };
     });
     const microchipDocs = (this.actor.items?.contents ?? []).filter(i => i.type === "MikroChip");
-    const microchipItems = microchipDocs.map(i => ({ id: i.id, name: i.name, img: cleanImg(i.img ?? "") }));
+    const microchipItems = microchipDocs.map((i) => ({
+      id: i.id,
+      name: i.name,
+      img: imgSrcForMicrochipUi(i.img ?? "")
+    }));
     const emptyChipLabel = "— Nincs Mikro-Chip —";
     const MICROCHIP_SLOTS = ["slot1", "slot2", "slot3"];
     const otherSlotIds = (slotNum) => {
@@ -739,7 +756,7 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
         slotKey,
         itemId,
         displayName: item?.name || slotData.name || emptyChipLabel,
-        img: cleanImg(item?.img || ""),
+        img: imgSrcForMicrochipUi(item?.img || ""),
         active: slotData.active === true
       };
     });
@@ -1071,11 +1088,26 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
       fp.browse();
     });
 
-    // Skill rolls: click on skill label opens roll sheet (delegated)
+    // Skill rolls: click on skill label opens roll sheet; Alt+click toggles mesélői megjelölés (piros pötty)
     $html.on("click", ".karakter-skill-label", async (ev) => {
       ev.preventDefault();
       const element = ev.currentTarget;
-      const skillKey = element.dataset.skill;
+      const skillKey = (element.dataset.skill ?? "").trim();
+      if (!skillKey || !this.actor) return;
+      if (ev.altKey) {
+        if (!game.user?.isGM) {
+          ui.notifications?.warn?.("Csak a mesélő jelölhet meg jártasságokat (Alt+katt).");
+          return;
+        }
+        const raw = this.actor.system?.notes?.markedSkills;
+        const arr = Array.isArray(raw) ? raw.filter((s) => typeof s === "string" && s.trim()) : [];
+        const i = arr.indexOf(skillKey);
+        if (i >= 0) arr.splice(i, 1);
+        else arr.push(skillKey);
+        await this.actor.update({ "system.notes.markedSkills": arr });
+        this.render(true);
+        return;
+      }
       const label = element.textContent?.trim() || skillKey;
       const { openRollSheetForSkill } = await import("./roll-sheet.mjs");
       openRollSheetForSkill(this.actor, skillKey, label);
@@ -1306,7 +1338,7 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
       if (!slot) return;
       const itemId = (li.dataset.itemId ?? "").trim();
       const displayName = (li.dataset.itemName ?? li.textContent?.trim() ?? "").trim() || "— Nincs Mikro-Chip —";
-      const itemImg = (li.dataset.itemImg ?? "").trim();
+      const itemImg = imgSrcForMicrochipUi(li.dataset.itemImg ?? "");
       const displayEl = wrap?.querySelector(".karakter-microchip-slot-display-text");
       if (displayEl) displayEl.textContent = displayName;
       let thumb = wrap?.querySelector(".karakter-microchip-slot-thumb");
@@ -2263,5 +2295,19 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
       rollMode
     });
   }
+}
+
+/**
+ * Mesélői megjelölés (system.notes.markedSkills) → { skillKey: boolean } a sablonhoz.
+ */
+export function buildSkillMarkedContext(actor) {
+  const keys = Object.keys(VoidKarakterSheet.BODY_PART_BY_SKILL);
+  const raw = actor?.system?.notes?.markedSkills;
+  const set = new Set(
+    Array.isArray(raw) ? raw.filter((s) => typeof s === "string" && s.trim()) : []
+  );
+  const skillMarked = {};
+  for (const k of keys) skillMarked[k] = set.has(k);
+  return skillMarked;
 }
 

@@ -1,0 +1,1182 @@
+[
+  {
+    "_id": "elcsufito-seb-sebesult",
+    "name": "Elcsúfító Seb (Sebesült)",
+    "type": "Egyeb",
+    "path": "/Kritikus Sérülések/Fej/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Letört Arc-Panelek)\n-3 Átverés, Meggyőzés,\n+1 Megfélemlítés"
+    }
+  },
+  {
+    "_id": "elcsufito-seb-stabil",
+    "name": "Elcsúfító Seb (Stabil)",
+    "type": "Egyeb",
+    "path": "/Kritikus Sérülések/Fej/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Letört Arc-Panelek)\n-2 Átverés, Meggyőzés,\n+1 Megfélemlítés"
+    }
+  },
+  {
+    "_id": "elcsufito-seb-gyogyitott",
+    "name": "Elcsúfító Seb (Gyógyított)",
+    "type": "Egyeb",
+    "path": "/Kritikus Sérülések/Fej/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Letört Arc-Panelek)\n-1 Átverés, Meggyőzés,"
+    }
+  },
+  {
+    "_id": "eltort-allkapocs-sebesult",
+    "name": "Eltört Állkapocs (Sebesült)",
+    "type": "Egyeb",
+    "path": "/Kritikus Sérülések/Fej/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Meghibásodott Hangszóró)\n-2 Átverés, Meggyőzés, Megfélemlítés"
+    }
+  },
+  {
+    "_id": "eltort-allkapocs-stabil",
+    "name": "Eltört Állkapocs (Stabil)",
+    "type": "Egyeb",
+    "path": "/Kritikus Sérülések/Fej/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Meghibásodott Hangszóró)\n-1 Átverés, Meggyőzés, Megfélemlítés"
+    }
+  },
+  {
+    "_id": "eltort-allkapocs-gyogyitott",
+    "name": "Eltört Állkapocs (Gyógyított)",
+    "type": "Egyeb",
+    "path": "/Kritikus Sérülések/Fej/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Meghibásodott Hangszóró)\n-1 Átverés, Meggyőzés"
+    }
+  },
+  {
+    "_id": "agyrazkodas-sebesult",
+    "name": "Agyrázkódás (Sebesült)",
+    "type": "Egyeb",
+    "path": "/Kritikus Sérülések/Fej/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Részleges Impulzus Kihagyás)\n-2 Gyorsgondolkodás, Mentális Erősség, Memória, Nyelvek"
+    }
+  },
+  {
+    "_id": "agyrazkodas-stabil",
+    "name": "Agyrázkódás (Stabil)",
+    "type": "Egyeb",
+    "path": "/Kritikus Sérülések/Fej/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Részleges Impulzus Kihagyás)\n-2 Gyorsgondolkodás, Mentális Erősség, Memória"
+    }
+  },
+  {
+    "_id": "agyrazkodas-gyogyitott",
+    "name": "Agyrázkódás (Gyógyított)",
+    "type": "Egyeb",
+    "path": "/Kritikus Sérülések/Fej/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Részleges Impulzus Kihagyás)\n-1 Mentális Erősség, Memória"
+    }
+  },
+  {
+    "_id": "beszorult-idegen-test-sebesult",
+    "name": "Beszorult Idegen Test (Sebesült)",
+    "type": "Egyeb",
+    "path": "/Kritikus Sérülések/Törzs/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "-2 Lopakodás, -3 méter Sebesség"
+    }
+  },
+  {
+    "_id": "beszorult-idegen-test-stabil",
+    "name": "Beszorult Idegen Test (Stabil)",
+    "type": "Egyeb",
+    "path": "/Kritikus Sérülések/Törzs/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "-2 Lopakodás, -1,5 méter Sebesség"
+    }
+  },
+  {
+    "_id": "beszorult-idegen-test-gyogyitott",
+    "name": "Beszorult Idegen Test (Gyógyított)",
+    "type": "Egyeb",
+    "path": "/Kritikus Sérülések/Törzs/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "-1 Lopakodás"
+    }
+  },
+  {
+    "_id": "megrepedt-bordak-sebesult",
+    "name": "Megrepedt Bordák (Sebesült)",
+    "type": "Egyeb",
+    "path": "/Kritikus Sérülések/Törzs/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Deformált Dugattyúk)\n-2 Erőnlét, Löveghasználat"
+    }
+  },
+  {
+    "_id": "megrepedt-bordak-stabil",
+    "name": "Megrepedt Bordák (Stabil)",
+    "type": "Egyeb",
+    "path": "/Kritikus Sérülések/Törzs/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Deformált Dugattyúk)\n-1 Erőnlét, Löveghasználat"
+    }
+  },
+  {
+    "_id": "megrepedt-bordak-gyogyitott",
+    "name": "Megrepedt Bordák (Gyógyított)",
+    "type": "Egyeb",
+    "path": "/Kritikus Sérülések/Törzs/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Deformált Dugattyúk)\n-1 Erőnlét"
+    }
+  },
+  {
+    "_id": "sebesult-maj-sebesult",
+    "name": "Sebesült Máj (Sebesült)",
+    "type": "Egyeb",
+    "path": "/Kritikus Sérülések/Törzs/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Sérült Önjavító Egység)\nGyógyításra használt eszközök 3-mal kevesebbet gyógyítanak kockánként"
+    }
+  },
+  {
+    "_id": "sebesult-maj-stabil",
+    "name": "Sebesült Máj (Stabil)",
+    "type": "Egyeb",
+    "path": "/Kritikus Sérülések/Törzs/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Sérült Önjavító Egység)\nGyógyításra használt eszközök 2-vel kevesebbet gyógyítanak kockánként"
+    }
+  },
+  {
+    "_id": "sebesult-maj-gyogyitott",
+    "name": "Sebesült Máj (Gyógyított)",
+    "type": "Egyeb",
+    "path": "/Kritikus Sérülések/Törzs/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Sérült Önjavító Egység)\nGyógyításra használt eszközök 1-gyel kevesebbet gyógyítanak kockánként"
+    }
+  },
+  {
+    "_id": "torott-csuklo-sebesult",
+    "name": "Törött Csukló (Sebesült)",
+    "type": "Egyeb",
+    "path": "/Kritikus Sérülések/Karok/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Megrepedt Finommotorikai-Chip)\n-2 Kézifegyver Használat, Járműirányítás"
+    }
+  },
+  {
+    "_id": "torott-csuklo-stabil",
+    "name": "Törött Csukló (Stabil)",
+    "type": "Egyeb",
+    "path": "/Kritikus Sérülések/Karok/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Megrepedt Finommotorikai-Chip)\n-1 Kézifegyver Használat, Járműirányítás"
+    }
+  },
+  {
+    "_id": "torott-csuklo-gyogyitott",
+    "name": "Törött Csukló (Gyógyított)",
+    "type": "Egyeb",
+    "path": "/Kritikus Sérülések/Karok/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Megrepedt Finommotorikai-Chip)\n-1 Kézifegyver Használat"
+    }
+  },
+  {
+    "_id": "megrepedt-vallcsont-sebesult",
+    "name": "Megrepedt Vállcsont (Sebesült)",
+    "type": "Egyeb",
+    "path": "/Kritikus Sérülések/Karok/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Felszakadt Kar-Panelek)\n-2 Erőnlét, Járműirányítás"
+    }
+  },
+  {
+    "_id": "megrepedt-vallcsont-stabil",
+    "name": "Megrepedt Vállcsont (Stabil)",
+    "type": "Egyeb",
+    "path": "/Kritikus Sérülések/Karok/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Felszakadt Kar-Panelek)\n-1 Erőnlét, Járműirányítás"
+    }
+  },
+  {
+    "_id": "megrepedt-vallcsont-gyogyitott",
+    "name": "Megrepedt Vállcsont (Gyógyított)",
+    "type": "Egyeb",
+    "path": "/Kritikus Sérülések/Karok/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Felszakadt Kar-Panelek)\n-1 Járműirányítás"
+    }
+  },
+  {
+    "_id": "felkarcsont-tores-sebesult",
+    "name": "Felkarcsont Törés (Sebesült)",
+    "type": "Egyeb",
+    "path": "/Kritikus Sérülések/Karok/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Eltört Kar-Chip Hűtőcellák)\n-3 Főzés. Kézifegyver Használat, Járműirányítás"
+    }
+  },
+  {
+    "_id": "felkarcsont-tores-stabil",
+    "name": "Felkarcsont Törés (Stabil)",
+    "type": "Egyeb",
+    "path": "/Kritikus Sérülések/Karok/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Eltört Kar-Chip Hűtőcellák)\n-2 Főzés. Kézifegyver Használat, Járműirányítás"
+    }
+  },
+  {
+    "_id": "felkarcsont-tores-gyogyitott",
+    "name": "Felkarcsont Törés (Gyógyított)",
+    "type": "Egyeb",
+    "path": "/Kritikus Sérülések/Karok/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Eltört Kar-Chip Hűtőcellák)\n-1 Kézifegyver Használat, Járműirányítás"
+    }
+  },
+  {
+    "_id": "kificamodott-boka-sebesult",
+    "name": "Kificamodott Boka (Sebesült)",
+    "type": "Egyeb",
+    "path": "/Kritikus Sérülések/Lábak/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Koordinációs-Chiphűtő Meghibásodása)\n-2 Lopakodás, -1,5 méter Sebesség"
+    }
+  },
+  {
+    "_id": "kificamodott-boka-stabil",
+    "name": "Kificamodott Boka (Stabil)",
+    "type": "Egyeb",
+    "path": "/Kritikus Sérülések/Lábak/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Koordinációs-Chiphűtő Meghibásodása)\n-1 Lopakodás, -1,5 méter Sebesség"
+    }
+  },
+  {
+    "_id": "kificamodott-boka-gyogyitott",
+    "name": "Kificamodott Boka (Gyógyított)",
+    "type": "Egyeb",
+    "path": "/Kritikus Sérülések/Lábak/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Koordinációs-Chiphűtő Meghibásodása)\n-1 Lopakodás"
+    }
+  },
+  {
+    "_id": "megrepedt-medence-csont-sebesult",
+    "name": "Megrepedt Medence-Csont (Sebesült)",
+    "type": "Egyeb",
+    "path": "/Kritikus Sérülések/Lábak/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Motorikus-Chip Meghibásodása)\n-2 Erőnlét, Löveg Használat, Lopakodás"
+    }
+  },
+  {
+    "_id": "megrepedt-medence-csont-stabil",
+    "name": "Megrepedt Medence-Csont (Stabil)",
+    "type": "Egyeb",
+    "path": "/Kritikus Sérülések/Lábak/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Motorikus-Chip Meghibásodása)\n-1 Erőnlét, Löveg Használat, Lopakodás"
+    }
+  },
+  {
+    "_id": "megrepedt-medence-csont-gyogyitott",
+    "name": "Megrepedt Medence-Csont (Gyógyított)",
+    "type": "Egyeb",
+    "path": "/Kritikus Sérülések/Lábak/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Motorikus-Chip Meghibásodása)\n-2 Erőnlét, Löveg Használat"
+    }
+  },
+  {
+    "_id": "inszalag-szakadas-sebesult",
+    "name": "Ínszalag Szakadás (Sebesült)",
+    "type": "Egyeb",
+    "path": "/Kritikus Sérülések/Lábak/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Jelváltó Vezetékek Elszakadása)\n-2 Lopakodás, -4,5 méter Sebesség"
+    }
+  },
+  {
+    "_id": "inszalag-szakadas-stabil",
+    "name": "Ínszalag Szakadás (Stabil)",
+    "type": "Egyeb",
+    "path": "/Kritikus Sérülések/Lábak/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Jelváltó Vezetékek Elszakadása)\n-2 Lopakodás, -3 méter Sebesség"
+    }
+  },
+  {
+    "_id": "inszalag-szakadas-gyogyitott",
+    "name": "Ínszalag Szakadás (Gyógyított)",
+    "type": "Egyeb",
+    "path": "/Kritikus Sérülések/Lábak/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Jelváltó Vezetékek Elszakadása)\n-1,5 méter Sebesség"
+    }
+  },
+  {
+    "_id": "sebesult-szem-sebesult",
+    "name": "Sebesült Szem (Sebesült)",
+    "type": "Egyeb",
+    "path": "/Brutális Sérülések/Fej/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Kamera Meghibásodás)\n-10 Észlelés, -15 látás alapú Észlelésre"
+    }
+  },
+  {
+    "_id": "sebesult-szem-stabil",
+    "name": "Sebesült Szem (Stabil)",
+    "type": "Egyeb",
+    "path": "/Brutális Sérülések/Fej/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Kamera Meghibásodás)\n-7 Észlelés, -10 látás alapú Észlelésre"
+    }
+  },
+  {
+    "_id": "sebesult-szem-gyogyitott",
+    "name": "Sebesült Szem (Gyógyított)",
+    "type": "Egyeb",
+    "path": "/Brutális Sérülések/Fej/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Kamera Meghibásodás)\n-4 Észlelés, -6 látás alapú Észlelésre"
+    }
+  },
+  {
+    "_id": "sulyos-agyrazkodas-sebesult",
+    "name": "Súlyos Agyrázkódás (Sebesült)",
+    "type": "Egyeb",
+    "path": "/Brutális Sérülések/Fej/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Gyakori Impulzus Kihagyás)\n-2 Betegellátás, Főzés, Gyorsgondolkodás, Harcképzettség, Mentális Erősség, Memória, Nyelvek, Technikai Tudás, Lexikális Tudás"
+    }
+  },
+  {
+    "_id": "sulyos-agyrazkodas-stabil",
+    "name": "Súlyos Agyrázkódás (Stabil)",
+    "type": "Egyeb",
+    "path": "/Brutális Sérülések/Fej/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Gyakori Impulzus Kihagyás)\n-2 Gyorsgondolkodás, Harcképzettség, Mentális Erősség, Memória, Technikai Tudás, Lexikális Tudás"
+    }
+  },
+  {
+    "_id": "sulyos-agyrazkodas-gyogyitott",
+    "name": "Súlyos Agyrázkódás (Gyógyított)",
+    "type": "Egyeb",
+    "path": "/Brutális Sérülések/Fej/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Gyakori Impulzus Kihagyás)\n-2 Gyorsgondolkodás, Harcképzettség, Mentális Erősség, Memória"
+    }
+  },
+  {
+    "_id": "koponyatores-sebesult",
+    "name": "Koponyatörés (Sebesült)",
+    "type": "Egyeb",
+    "path": "/Brutális Sérülések/Fej/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Alaplap Meghibásodás)\n-4 Gyorsgondolkodás, Mentális Erősség, Memória, Nyelvek\nA fejedre mért támadások a négyszeresüket sebzik."
+    }
+  },
+  {
+    "_id": "koponyatores-stabil",
+    "name": "Koponyatörés (Stabil)",
+    "type": "Egyeb",
+    "path": "/Brutális Sérülések/Fej/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Alaplap Meghibásodás)\n-3 Gyorsgondolkodás, Mentális Erősség\nA fejedre mért támadások a kétszeresüket sebzik."
+    }
+  },
+  {
+    "_id": "koponyatores-gyogyitott",
+    "name": "Koponyatörés (Gyógyított)",
+    "type": "Egyeb",
+    "path": "/Brutális Sérülések/Fej/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Alaplap Meghibásodás)\n-3 Gyorsgondolkodás, Mentális Erősség"
+    }
+  },
+  {
+    "_id": "torott-bordak-sebesult",
+    "name": "Törött Bordák (Sebesült)",
+    "type": "Egyeb",
+    "path": "/Brutális Sérülések/Törzs/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Elromlott Dugattyúk)\n-4 Erőnlét, Löveghasználat"
+    }
+  },
+  {
+    "_id": "torott-bordak-stabil",
+    "name": "Törött Bordák (Stabil)",
+    "type": "Egyeb",
+    "path": "/Brutális Sérülések/Törzs/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Elromlott Dugattyúk)\n-3 Erőnlét, Löveghasználat"
+    }
+  },
+  {
+    "_id": "torott-bordak-gyogyitott",
+    "name": "Törött Bordák (Gyógyított)",
+    "type": "Egyeb",
+    "path": "/Brutális Sérülések/Törzs/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Elromlott Dugattyúk)\n-2 Erőnlét, -1 Löveghasználat"
+    }
+  },
+  {
+    "_id": "felszakadt-belek-sebesult",
+    "name": "Felszakadt Belek (Sebesült)",
+    "type": "Egyeb",
+    "path": "/Brutális Sérülések/Törzs/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Szikra Okozta Belső Tűz)\nMinden körben sebződsz 1d4-et a Törzsedbe"
+    }
+  },
+  {
+    "_id": "felszakadt-belek-stabil",
+    "name": "Felszakadt Belek (Stabil)",
+    "type": "Egyeb",
+    "path": "/Brutális Sérülések/Törzs/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Szikra Okozta Belső Tűz)\n-2 minden dobásodra"
+    }
+  },
+  {
+    "_id": "felszakadt-belek-gyogyitott",
+    "name": "Felszakadt Belek (Gyógyított)",
+    "type": "Egyeb",
+    "path": "/Brutális Sérülések/Törzs/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Szikra Okozta Belső Tűz)\n-2 Erőnlét, -1 Löveghasználat, Kézifegyver Használat, Lopakodás"
+    }
+  },
+  {
+    "_id": "szivserules-sebesult",
+    "name": "Szívsérülés (Sebesült)",
+    "type": "Egyeb",
+    "path": "/Brutális Sérülések/Törzs/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Mechanikai Egység Meghibásodása)\nAzonnal dobj egy 18-as nehézségű Mentális Erősségprópát, hogy eszméletednél maradsz-e.\nA Törzsed maximum életereje csökken 9-cel."
+    }
+  },
+  {
+    "_id": "szivserules-stabil",
+    "name": "Szívsérülés (Stabil)",
+    "type": "Egyeb",
+    "path": "/Brutális Sérülések/Törzs/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Mechanikai Egység Meghibásodása)\nA Törzsed maximum életereje csökken 6-tal."
+    }
+  },
+  {
+    "_id": "szivserules-gyogyitott",
+    "name": "Szívsérülés (Gyógyított)",
+    "type": "Egyeb",
+    "path": "/Brutális Sérülések/Törzs/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Mechanikai Egység Meghibásodása)\nA Törzsed maximum életereje csökken 3-mal."
+    }
+  },
+  {
+    "_id": "ujjak-vesztese-sebesult",
+    "name": "Ujjak Vesztése (Sebesült)",
+    "type": "Egyeb",
+    "path": "/Brutális Sérülések/Karok/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "-3 Főzés, Kézifegyver Használat, Löveghasználat, Járműirányítás"
+    }
+  },
+  {
+    "_id": "ujjak-vesztese-stabil",
+    "name": "Ujjak Vesztése (Stabil)",
+    "type": "Egyeb",
+    "path": "/Brutális Sérülések/Karok/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "-2 Főzés, Kézifegyver Használat, Löveghasználat, Járműirányítás"
+    }
+  },
+  {
+    "_id": "ujjak-vesztese-gyogyitott",
+    "name": "Ujjak Vesztése (Gyógyított)",
+    "type": "Egyeb",
+    "path": "/Brutális Sérülések/Karok/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "-1 Főzés, Kézifegyver Használat, Löveghasználat, Járműirányítás"
+    }
+  },
+  {
+    "_id": "nyilt-singcsont-tores-sebesult",
+    "name": "Nyílt Singcsont Törés (Sebesült)",
+    "type": "Egyeb",
+    "path": "/Brutális Sérülések/Karok/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Vezetékek Elszakadása)\n-4 Főzés, Erőnlét, Kézifegyver Használat, Járműirányítás"
+    }
+  },
+  {
+    "_id": "nyilt-singcsont-tores-stabil",
+    "name": "Nyílt Singcsont Törés (Stabil)",
+    "type": "Egyeb",
+    "path": "/Brutális Sérülések/Karok/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Vezetékek Elszakadása)\n-3 Főzés, Erőnlét, Kézifegyver Használat, Járműirányítás"
+    }
+  },
+  {
+    "_id": "nyilt-singcsont-tores-gyogyitott",
+    "name": "Nyílt Singcsont Törés (Gyógyított)",
+    "type": "Egyeb",
+    "path": "/Brutális Sérülések/Karok/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Vezetékek Elszakadása)\n-2 Kézifegyver Használat, Járműirányítás"
+    }
+  },
+  {
+    "_id": "alkar-lecsonkitasa-sebesult",
+    "name": "Alkar Lecsonkítása (Sebesült)",
+    "type": "Egyeb",
+    "path": "/Brutális Sérülések/Karok/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Kar-Modul Elvesztése)\nAzonnal dobj egy 16-os nehézségű Mentális Erősségpróbát, hogy eszméletednél maradsz-e.\nA Karjaid maximum életereje csökken 9-cel."
+    }
+  },
+  {
+    "_id": "alkar-lecsonkitasa-stabil",
+    "name": "Alkar Lecsonkítása (Stabil)",
+    "type": "Egyeb",
+    "path": "/Brutális Sérülések/Karok/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Kar-Modul Elvesztése)\nA Karjaid maximum életereje csökken 6-tal.\nNem tudsz semmit csinálni ezzel a kezeddel.\nSzintetikus- vagy Kiber-Testrész még nem helyezhető fel."
+    }
+  },
+  {
+    "_id": "alkar-lecsonkitasa-gyogyitott",
+    "name": "Alkar Lecsonkítása (Gyógyított)",
+    "type": "Egyeb",
+    "path": "/Brutális Sérülések/Karok/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Kar-Modul Elvesztése)\nA Karjaid maximum életereje csökken 3-mal, ha nem helyeznek fel a helyére Szintetikus- vagy Kiber-Testrészt. (Ekkor már felhelyezhetőek.)"
+    }
+  },
+  {
+    "_id": "torott-combcsont-sebesult",
+    "name": "Törött Combcsont (Sebesült)",
+    "type": "Egyeb",
+    "path": "/Brutális Sérülések/Lábak/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Koordinációs Jeladó Megsemmisülése)\n-4 Lopakodás, -6 méter Sebesség"
+    }
+  },
+  {
+    "_id": "torott-combcsont-stabil",
+    "name": "Törött Combcsont (Stabil)",
+    "type": "Egyeb",
+    "path": "/Brutális Sérülések/Lábak/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Koordinációs Jeladó Megsemmisülése)\n-3 Lopakodás, -4,5 méter Sebesség"
+    }
+  },
+  {
+    "_id": "torott-combcsont-gyogyitott",
+    "name": "Törött Combcsont (Gyógyított)",
+    "type": "Egyeb",
+    "path": "/Brutális Sérülések/Lábak/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Koordinációs Jeladó Megsemmisülése)\n-1 Lopakodás, -3 méter Sebesség"
+    }
+  },
+  {
+    "_id": "nyilt-sipcsont-tores-sebesult",
+    "name": "Nyílt Sípcsont Törés (Sebesült)",
+    "type": "Egyeb",
+    "path": "/Brutális Sérülések/Lábak/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Lábpanelek Leszakadása)\n-4 Harcképzettség (emiatt a Védelmi Értéked is csökken 4-gyel), -3 méter Sebesség"
+    }
+  },
+  {
+    "_id": "nyilt-sipcsont-tores-stabil",
+    "name": "Nyílt Sípcsont Törés (Stabil)",
+    "type": "Egyeb",
+    "path": "/Brutális Sérülések/Lábak/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Lábpanelek Leszakadása)\n-3 Harcképzettség (emiatt a Védelmi Értéked is csökken 3-mal), -1,5 méter Sebesség"
+    }
+  },
+  {
+    "_id": "nyilt-sipcsont-tores-gyogyitott",
+    "name": "Nyílt Sípcsont Törés (Gyógyított)",
+    "type": "Egyeb",
+    "path": "/Brutális Sérülések/Lábak/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Lábpanelek Leszakadása)\n-2 Harcképzettség (emiatt a Védelmi Értéked is csökken 2-vel)"
+    }
+  },
+  {
+    "_id": "lab-lecsonkitasa-sebesult",
+    "name": "Láb Lecsonkítása (Sebesült)",
+    "type": "Egyeb",
+    "path": "/Brutális Sérülések/Lábak/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Láb-Modul Elvesztése)\nAzonnal dobj egy 16-os nehézségű Mentális Erősségpróbát, hogy eszméletednél maradsz-e.\nA Lábaid maximum életereje csökken 9-cel."
+    }
+  },
+  {
+    "_id": "lab-lecsonkitasa-stabil",
+    "name": "Láb Lecsonkítása (Stabil)",
+    "type": "Egyeb",
+    "path": "/Brutális Sérülések/Lábak/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Láb-Modul Elvesztése)\nA Lábaid maximum életereje csökken 6-tal.\nNem tudsz semmit csinálni ezzel a lábaddal.\nSzintetikus- vagy Kiber-Testrész még nem helyezhető fel."
+    }
+  },
+  {
+    "_id": "lab-lecsonkitasa-gyogyitott",
+    "name": "Láb Lecsonkítása (Gyógyított)",
+    "type": "Egyeb",
+    "path": "/Brutális Sérülések/Lábak/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "(Droid: Láb-Modul Elvesztése)\nA Lábaid maximum életereje csökken 3-mal, ha nem helyeznek fel a helyére Szintetikus- vagy Kiber-Testrészt. (Ekkor már felhelyezhetőek.)"
+    }
+  },
+  {
+    "_id": "panikbetegseg",
+    "name": "Pánikbetegség",
+    "type": "Egyeb",
+    "path": "/Mentális Betegségek/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "Bármikor, amikor a karaktered Stressz Pontot kap, dobnod kell egy 10+Jelenleg Kapott Stressz Pontok nehézségű Mentális Erősségpróbát. Amennyiben ezt nem dobod meg, akkor nem tudsz logikusan cselekedni, és mozgásképtelen állapotba kerülsz. Minden körben dobsz, és az effekt addig tart, amíg egy körben meg nem dobod a Mentális Erősségpróbát."
+    }
+  },
+  {
+    "_id": "inszomnia",
+    "name": "Inszomnia",
+    "type": "Egyeb",
+    "path": "/Mentális Betegségek/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "Nem tudsz kielégítően aludni folyamatos rémálmok miatt. Emiatt egész nap összeszedetlen vagy. Kapsz -3 büntetést Gyorsgondolkodásodra."
+    }
+  },
+  {
+    "_id": "veriszony",
+    "name": "Vériszony",
+    "type": "Egyeb",
+    "path": "/Mentális Betegségek/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "A karaktered teljesen megundorodott, már-már félni kezdett a vér látványától. Amennyiben nyílt sebet lát pánikolni kezd, és nem tudsz logikusan gondolkodni. Nyílt sebek esetén -5 büntetést kap Betegellátáspróbákra."
+    }
+  },
+  {
+    "_id": "fuggoseghajlam",
+    "name": "Függőséghajlam",
+    "type": "Egyeb",
+    "path": "/Mentális Betegségek/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "Amennyiben a karaktered kipróbál egy addiktív tevékenységet (narkotikumok, alkohol, szerencsejáték...), dobnia kell egy 13-as nehézségű Mentális Erősségpróbát, és ha nem dobja meg, ráfügg."
+    }
+  },
+  {
+    "_id": "figyelemzavar",
+    "name": "Figyelemzavar",
+    "type": "Egyeb",
+    "path": "/Mentális Betegségek/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "Mivel a karaktered nem tud sokáig egy dologra figyelni, azért kap -2 büntetést Memória és Észleléspróbákra."
+    }
+  },
+  {
+    "_id": "poszttraumas-stressz-zavar-ptsd",
+    "name": "Poszttraumás Stressz Zavar (PTSD)",
+    "type": "Egyeb",
+    "path": "/Mentális Betegségek/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "Minden harci szituáció elején dobnod kell egy 14-es nehézségű Mentális Erősségpróbát, hogy képes vagy-e összetartani a gondolataidat a PTSD-d ellenére. Amennyiben nem sikerül, minden jártasságpróbára, amit a harcban dobsz hátrányt kapsz."
+    }
+  },
+  {
+    "_id": "kleptomania",
+    "name": "Kleptománia",
+    "type": "Egyeb",
+    "path": "/Mentális Betegségek/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "Folyamatos lopási kényszered van. Minél nagyobb értékű tárggyal találod szembe magad, annál nagyobb ez az inger. A Mesélő döntésére dobnod kell egy 13-as nehézségű Mentális Erősségpróbát, és ha nem dobod meg, akkor kényszeresen el akarod lopni az adott tárgyat."
+    }
+  },
+  {
+    "_id": "paranoia",
+    "name": "Paranoia",
+    "type": "Egyeb",
+    "path": "/Mentális Betegségek/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "Minden helyzetben gyanakvó vagy. Ennek hatására az ellened érkező Megfélemlítés és Meggyőzés +3, az Átveréspróbák -3 bónuszt kapnak."
+    }
+  },
+  {
+    "_id": "mazochizmus",
+    "name": "Mazochizmus",
+    "type": "Egyeb",
+    "path": "/Mentális Betegségek/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "A karaktered lételeme a fájdalom, legyen az mentális vagy fizikai. Amennyiben Stressz Pontot kapnál egy fájdalmat okozó esemény vagy sérülés hatására, akkor annak csak a felét (felfelé kerekítve) kapod meg, azonban, ha hosszú ideig nem érzékelsz fájdalmat, akkor a Mesélő Stressz Pontokat adhat."
+    }
+  },
+  {
+    "_id": "kiberfobia",
+    "name": "Kiberfóbia",
+    "type": "Egyeb",
+    "path": "/Mentális Betegségek/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "Minden testbe épített kibernetikus módosítástól irtózol és félsz. Nem építhetsz be Mikro-Chip-eket a testedbe. Amennyiben van bent Mikro-Chiped, akkor azt ki kell venned. Ha Szintetikus vagy Kibertestrésszel végzel egy cselekedetet, akkor -1 büntetést kapsz rá."
+    }
+  },
+  {
+    "_id": "hireseg-1-szint",
+    "name": "Híresség - 1. szint",
+    "type": "Egyeb",
+    "path": "/Hírnév/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "Az adott területen kapsz +1 bónuszt Meggyőzés és Átveréspróbáidra."
+    }
+  },
+  {
+    "_id": "hireseg-2-szint",
+    "name": "Híresség - 2. szint",
+    "type": "Egyeb",
+    "path": "/Hírnév/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "Az adott területen kapsz +2 bónuszt Meggyőzés és Átveréspróbáidra, és -1 büntetést Megfélemlítéspróbáidra."
+    }
+  },
+  {
+    "_id": "hireseg-3-szint",
+    "name": "Híresség - 3. szint",
+    "type": "Egyeb",
+    "path": "/Hírnév/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "Az adott területen kapsz +3 bónuszt Meggyőzés és Átveréspróbáidra, és -2 büntetést Megfélemlítéspróbáidra."
+    }
+  },
+  {
+    "_id": "hirhedtseg-1-szint",
+    "name": "Hírhedtség - 1. szint",
+    "type": "Egyeb",
+    "path": "/Hírnév/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "Az adott területen kapsz +2 bónuszt Megfélemlítéspróbáidra."
+    }
+  },
+  {
+    "_id": "hirhedtseg-2-szint",
+    "name": "Hírhedtség - 2. szint",
+    "type": "Egyeb",
+    "path": "/Hírnév/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "Az adott területen kapsz +5 bónuszt Megfélemlítéspróbáidra, és -1 büntetést Meggyőzés és Átveréspróbáidra."
+    }
+  },
+  {
+    "_id": "hirhedtseg-3-szint",
+    "name": "Hírhedtség - 3. szint",
+    "type": "Egyeb",
+    "path": "/Hírnév/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "Az adott területen kapsz +8 bónuszt Megfélemlítéspróbáidra, és -2 büntetést Meggyőzés és Átveréspróbáidra."
+    }
+  },
+  {
+    "_id": "sima-tetovalas-fej",
+    "name": "Sima Tetoválás - Fej",
+    "type": "Egyeb",
+    "path": "/Tetoválások/Sima/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "+2 Megfélemlítés/Meggyőzés (célponttól függően)"
+    }
+  },
+  {
+    "_id": "sima-tetovalas-torzs",
+    "name": "Sima Tetoválás - Törzs",
+    "type": "Egyeb",
+    "path": "/Tetoválások/Sima/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "+1 Megfélemlítés/Meggyőzés (célponttól függően)"
+    }
+  },
+  {
+    "_id": "sima-tetovalas-karok",
+    "name": "Sima Tetoválás - Karok",
+    "type": "Egyeb",
+    "path": "/Tetoválások/Sima/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "+1 Megfélemlítés/Meggyőzés (célponttól függően)"
+    }
+  },
+  {
+    "_id": "sima-tetovalas-labak",
+    "name": "Sima Tetoválás - Lábak",
+    "type": "Egyeb",
+    "path": "/Tetoválások/Sima/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "+1 Megfélemlítés/Meggyőzés (célponttól függően)"
+    }
+  },
+  {
+    "_id": "vilagito-tetovalas-fej",
+    "name": "Világító Tetoválás - Fej",
+    "type": "Egyeb",
+    "path": "/Tetoválások/Világító/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "-3 Lopakodás, +3 Megfélemlítés/Meggyőzés (célponttól függően)"
+    }
+  },
+  {
+    "_id": "vilagito-tetovalas-torzs",
+    "name": "Világító Tetoválás - Törzs",
+    "type": "Egyeb",
+    "path": "/Tetoválások/Világító/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "-2 Lopakodás, +2 Megfélemlítés/Meggyőzés (célponttól függően)"
+    }
+  },
+  {
+    "_id": "vilagito-tetovalas-karok",
+    "name": "Világító Tetoválás - Karok",
+    "type": "Egyeb",
+    "path": "/Tetoválások/Világító/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "-2 Lopakodás, +2 Megfélemlítés/Meggyőzés (célponttól függően)"
+    }
+  },
+  {
+    "_id": "vilagito-tetovalas-labak",
+    "name": "Világító Tetoválás - Lábak",
+    "type": "Egyeb",
+    "path": "/Tetoválások/Világító/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "-2 Lopakodás, +2 Megfélemlítés/Meggyőzés (célponttól függően)"
+    }
+  },
+  {
+    "_id": "adathordozo-tetovalas-fej",
+    "name": "Adathordozó Tetoválás - Fej",
+    "type": "Egyeb",
+    "path": "/Tetoválások/Adathordozó/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "+2 Memória"
+    }
+  },
+  {
+    "_id": "adathordozo-tetovalas-torzs",
+    "name": "Adathordozó Tetoválás - Törzs",
+    "type": "Egyeb",
+    "path": "/Tetoválások/Adathordozó/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "+1 Memória"
+    }
+  },
+  {
+    "_id": "adathordozo-tetovalas-karok",
+    "name": "Adathordozó Tetoválás - Karok",
+    "type": "Egyeb",
+    "path": "/Tetoválások/Adathordozó/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "+1 Memória"
+    }
+  },
+  {
+    "_id": "adathordozo-tetovalas-labak",
+    "name": "Adathordozó Tetoválás - Lábak",
+    "type": "Egyeb",
+    "path": "/Tetoválások/Adathordozó/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "+1 Memória"
+    }
+  },
+  {
+    "_id": "borkemenyito-tetovalas-fej",
+    "name": "Bőrkeményítő Tetoválás - Fej",
+    "type": "Egyeb",
+    "path": "/Tetoválások/Bőrkeményítő/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "A kapott sebzésből levon ennyit az adott testrésznél: 2"
+    }
+  },
+  {
+    "_id": "borkemenyito-tetovalas-torzs",
+    "name": "Bőrkeményítő Tetoválás - Törzs",
+    "type": "Egyeb",
+    "path": "/Tetoválások/Bőrkeményítő/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "A kapott sebzésből levon ennyit az adott testrésznél: 3"
+    }
+  },
+  {
+    "_id": "borkemenyito-tetovalas-karok",
+    "name": "Bőrkeményítő Tetoválás - Karok",
+    "type": "Egyeb",
+    "path": "/Tetoválások/Bőrkeményítő/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "A kapott sebzésből levon ennyit az adott testrésznél: 2"
+    }
+  },
+  {
+    "_id": "borkemenyito-tetovalas-labak",
+    "name": "Bőrkeményítő Tetoválás - Lábak",
+    "type": "Egyeb",
+    "path": "/Tetoválások/Bőrkeményítő/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "A kapott sebzésből levon ennyit az adott testrésznél: 2"
+    }
+  },
+  {
+    "_id": "walanizmus-bevallott-hivo",
+    "name": "Walanizmus - Bevallott Hívő",
+    "type": "Egyeb",
+    "path": "/Vallások/Walanizmus/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "Tisztában van a walanizmus lapgondolataival, általánosságban próbál azok szerint cselekedni.\n+1 Lexikális Tudás walanizmussal kapcsolatban"
+    }
+  },
+  {
+    "_id": "walanizmus-aktiv-hivo",
+    "name": "Walanizmus - Aktív Hívő",
+    "type": "Egyeb",
+    "path": "/Vallások/Walanizmus/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "Döntéseinél szem előtt tartja a walanizmus erkölcsi kódexét, tiszteli Űrwalát, gyakran imádkozik, próbál mindennap jót tenni.\n+1 Lexikális Tudás walanizmussal kapcsolatban; +1 Lexikális Tudás más közismert vallásokkal kapcsolatban; +2 Meggyőzés más walanistákkal szemben"
+    }
+  },
+  {
+    "_id": "walanizmus-melyen-hivo",
+    "name": "Walanizmus - Mélyen Hívő",
+    "type": "Egyeb",
+    "path": "/Vallások/Walanizmus/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "Minden élethelyzetben szinte mindennel szemben priorizálja a hitét, az erkölcsi kódex szerint él, a Szertartások, vallásgyakorlás bekezdésben leírtak mindegyikét szigorúan betartja.\n+3 Lexikális Tudás walanizmussal kapcsolatban, +2 Mentális Erősség, a Mesélő döntése szerint szinte minden területen fel tudod venni a kapcsolatot egy másik walanistával, aki alapjáraton barátságosan viszonyul hozzád"
+    }
+  },
+  {
+    "_id": "feher-seytanizmus-ertekek-es-hivo-szavak",
+    "name": "Fehér Seytanizmus - Értékek és Hívószavak",
+    "type": "Egyeb",
+    "path": "/Vallások/Seytan Kultusz/Fehér Seytanizmus/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "béke, pacifizmus, pszichedelikus rockzene, szexuális forradalom, marihuána, LSD, nomád életmód, szabad gondolkodás és szerelem, zenei fesztiválok, zöld-ökológiai mozgalom, öltözködésben virágmotívumok és színkavalkád, akár a nihilizmus bizonyos formái"
+    }
+  },
+  {
+    "_id": "feher-seytanizmus-bevallott-hivo",
+    "name": "Fehér Seytanizmus - Bevallott Hívő",
+    "type": "Egyeb",
+    "path": "/Vallások/Seytan Kultusz/Fehér Seytanizmus/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "Lázadó szellemben éli az életét, esetleg hangoztatja is véleményét, de érdemben nem tesz semmit.\n-1 Meggyőzés nem-seytanistákkal szemben; +1 Meggyőzés seytanistákkal, vagy más módon lázadókkal szemben"
+    }
+  },
+  {
+    "_id": "feher-seytanizmus-aktiv-hivo",
+    "name": "Fehér Seytanizmus - Aktív Hívő",
+    "type": "Egyeb",
+    "path": "/Vallások/Seytan Kultusz/Fehér Seytanizmus/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "A felsorolt „értékek” közül legalább hármat magáénak tud, tüntetésekre és fehér seytanista találkozókra jár, próbálja magát elszeparálni a társadalomtól az élet minden területén.\n-1 Meggyőzés nem-seytanistákkal szemben; +1 Zene; +2 Lexikális Tudás a seytanizmussal kapcsolatban"
+    }
+  },
+  {
+    "_id": "feher-seytanizmus-melyen-hivo",
+    "name": "Fehér Seytanizmus - Mélyen Hívő",
+    "type": "Egyeb",
+    "path": "/Vallások/Seytan Kultusz/Fehér Seytanizmus/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "A fehér seytanizmusnak szentelte életét, a felsorolt „értékek” közül legalább tízet magáénak tud és napi szinten művel. A társadalmi normákra fittyet hány.\n-3 Meggyőzés nem-seytanistákkal szemben; a Mesélő döntése szerint szinte minden területen hozzá tudsz jutni marihuánához vagy LSD-hez, kedvezményes áron; napi egyszer 1d4-gyel csökkentheted Stressz Pontjaid számát harci szituáción kívül"
+    }
+  },
+  {
+    "_id": "voros-seytanizmus-ertekek-es-hivo-szavak",
+    "name": "Vörös Seytanizmus - Értékek és Hívószavak",
+    "type": "Egyeb",
+    "path": "/Vallások/Seytan Kultusz/Vörös Seytanizmus/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "okkultizmus, fekete mágia, véráldozatok, anti-walanizmus, rasszizmus, kígyók, démonok, cinizmus, militarizmus, erőszakosság, vörös seytanista death metál, vandalizmus, asztrológia, alkímia, fegyverimádat, öngyilkos merénylők, halálvágy"
+    }
+  },
+  {
+    "_id": "voros-seytanizmus-bevallott-hivo",
+    "name": "Vörös Seytanizmus - Bevallott Hívő",
+    "type": "Egyeb",
+    "path": "/Vallások/Seytan Kultusz/Vörös Seytanizmus/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "Lázadó szellemben éli az életét, esetleg hangoztatja is véleményét, de érdemben nem tesz semmit.\n-1 Meggyőzés nem-seytanistákkal szemben; +1 Meggyőzés seytanistákkal, vagy más módon lázadókkal szemben"
+    }
+  },
+  {
+    "_id": "voros-seytanizmus-aktiv-hivo",
+    "name": "Vörös Seytanizmus - Aktív Hívő",
+    "type": "Egyeb",
+    "path": "/Vallások/Seytan Kultusz/Vörös Seytanizmus/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "A felsorolt „értékek” közül legalább hármat magáénak tud, titkos vörös seytanista találkozókra jár, próbálja magát elszeparálni az általa megvetett társadalomtól az élet minden területén, haragszik a világra.\n-2 Meggyőzés nem-seytanistákkal szemben; +1 Megfélemlítés; +2 Lexikális Tudás a seytanizmussal kapcsolatban"
+    }
+  },
+  {
+    "_id": "voros-seytanizmus-melyen-hivo",
+    "name": "Vörös Seytanizmus - Mélyen Hívő",
+    "type": "Egyeb",
+    "path": "/Vallások/Seytan Kultusz/Vörös Seytanizmus/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "A vörös seytanizmusnak szentelte életét, a felsorolt „értékek” közül legalább tízet magáénak tud és napi szinten művel. A társadalommal teljesen összeférhetetlen eszméket vall, gyűlöli a világot, közveszélyes. Bármelyik pillanatban kész meghalni szent célja érdekében.\n-7 Meggyőzés nem-seytanistákkal szemben; +2 Megfélemlítés; vallatással és kínzással, legyen az bármilyen extrém, semmilyen fontos információt nem lehet kiszedni belőled"
+    }
+  },
+  {
+    "_id": "eber-szcientologia-bevallott-hivo",
+    "name": "Éber Szcientológia - Bevallott Hívő",
+    "type": "Egyeb",
+    "path": "/Vallások/Éber Szcientológia/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "Szimpatizál a szcientológia által megfogalmazott összeesküvés elméletekkel, azonban ezzel nem kezd semmit, azon kívül, hogy baráti beszélgetések során néha felhozza a témát. Közéleti történéseket a szcientológián keresztül próbál értelmezni.\nMindenki -1-et kap Meggyőzéspróbákra ellened; szcientológusok vagy szcientológia hívők +3-at kapnak Meggyőzés és Átveréspróbákra ellened"
+    }
+  },
+  {
+    "_id": "eber-szcientologia-aktiv-hivo",
+    "name": "Éber Szcientológia - Aktív Hívő",
+    "type": "Egyeb",
+    "path": "/Vallások/Éber Szcientológia/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "Havi 50 kreditet fizet az egyháznak, jobban beleásta magát a szcientológiába. Legalább kéthetente jár előadásokra, prédikációkra. Más hívőkkel ismerkedik. Nem drogozik, nem fogyaszt alkoholt.\nMindenki -1-et kap Átveréspróbákra ellened; szcientológusok vagy szcientológia hívők +3-at kapnak Meggyőzés és Átveréspróbákra ellened"
+    }
+  },
+  {
+    "_id": "eber-szcientologia-melyen-hivo",
+    "name": "Éber Szcientológia - Mélyen Hívő",
+    "type": "Egyeb",
+    "path": "/Vallások/Éber Szcientológia/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "description": "Legalább havi 150 kreditet fizet az egyháznak, exkluzív módszertani, mentális egészséget segítő foglalkozásokra van belépése. Kiválasztottnak gondolja magát, akit nem vezet meg a társadalom színjátéka. Másokat is próbál bevonzani a szcientológiába, megfelelő juss ellenében (anélkül féltékeny a tudására).\nMinden alkalommal, amikor kigyűlnek Stressz Pontjaid és kapnál egy Mentális Betegséget, 50% eséllyel mégsem alakul ki Mentális Betegség. Ilyenkor Stressz Pontjaid száma nem nullázódik, hanem 1-gyel csökken, azaz, ha ezután megint kapsz Stressz Pontot, ismét van esély, hogy Mentális Betegség alakul ki."
+    }
+  }
+]

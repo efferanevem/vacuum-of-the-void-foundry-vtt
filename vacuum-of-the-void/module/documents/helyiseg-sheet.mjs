@@ -1,3 +1,5 @@
+import { hideDefaultItemBagImg } from "../util/hide-default-item-bag.mjs";
+
 export class VoidHelyisegSheet extends foundry.applications.api.HandlebarsApplicationMixin(
   foundry.applications.sheets.ItemSheetV2
 ) {
@@ -226,7 +228,7 @@ export class VoidHelyisegSheet extends foundry.applications.api.HandlebarsApplic
           id: doc.id,
           ref,
           name: doc.name,
-          img: doc.img,
+          img: hideDefaultItemBagImg(doc.img),
           kind,
           kpDisplay: isSpecies ? 0 : kp
         };

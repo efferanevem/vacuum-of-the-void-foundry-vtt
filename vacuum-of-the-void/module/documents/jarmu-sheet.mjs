@@ -393,7 +393,7 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
             id: doc.id,
             ref,
             name: doc.name,
-            img: doc.img,
+            img: cleanImg(doc.img ?? ""),
             kind,
             kpDisplay: isSpecies ? 0 : kp
           };
@@ -506,7 +506,7 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
     context.egyebList = egyebDocs.map((item) => {
       const sys = item?.system ?? {};
       const descRaw = (sys.description ?? "").trim();
-      const description = descRaw ? (descRaw.length > 80 ? descRaw.slice(0, 77) + "…" : descRaw) : "";
+      const description = descRaw;
       return {
         itemId: item.id,
         actorId: this.actor.id,

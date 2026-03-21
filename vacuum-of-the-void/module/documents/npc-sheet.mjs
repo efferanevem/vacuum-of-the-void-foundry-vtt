@@ -1,4 +1,6 @@
 import { computeVotvCritInfo } from "../util/votv-result-type.mjs";
+import { hideDefaultItemBagImg } from "../util/hide-default-item-bag.mjs";
+import { buildSkillMarkedContext } from "./karakter-sheet.mjs";
 
 /** Páncél szint nyers érték → megjelenített szöveg (karakterlap táblázat). */
 function _armorLevelLabel(raw) {
@@ -384,12 +386,8 @@ export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplication
     context.egyebList = egyebDocs.map((item) => {
       const sys = item?.system ?? {};
       const descRaw = (sys.description ?? "").trim();
-      const description = descRaw ? (descRaw.length > 80 ? descRaw.slice(0, 77) + "…" : descRaw) : "";
-      const rawImg = item?.img ?? "";
-      const img =
-        rawImg === "icons/svg/item-bag.svg"
-          ? ""
-          : rawImg;
+      const description = descRaw;
+      const img = hideDefaultItemBagImg(item?.img ?? "");
       return {
         itemId: item.id,
         actorId: actor.id,
@@ -415,7 +413,7 @@ export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplication
       .map((i) => ({
         id: i.id,
         name: i.name,
-        img: i.img,
+        img: hideDefaultItemBagImg(i.img),
         description: i.system?.description ?? "",
         kp: Number(i.system?.kp ?? 0) || 0,
         kind: (i.system?.kind ?? "passive").toString()
@@ -508,6 +506,8 @@ export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplication
     context.showInitiativeResult = typeof initiativeResult === "number";
     context.initiativeResult = context.showInitiativeResult ? initiativeResult : "";
     context.speedUnitForSelect = context.system?.combat?.speedUnit ?? "m";
+
+    context.skillMarked = buildSkillMarkedContext(actor);
 
     return context;
   }
@@ -623,13 +623,27 @@ export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplication
       await this.actor.update({ [`system.resources.kpDot${index}`]: current ? 0 : 1 });
     });
 
-    // Jártasságok: kattintás a jártasság nevére → dobás lap megnyitása (ugyanúgy mint karakterlapon)
+    // Jártasságok: katt → dobás lap; Alt+katt → mesélői megjelölés (piros pötty)
     $html.on("click", ".karakter-skill-label", async (ev) => {
       ev.preventDefault();
       const el = ev.currentTarget;
       const skillKey = (el?.dataset?.skill ?? "").trim();
-      const label = el?.textContent?.trim() || skillKey;
       if (!skillKey || !this.actor) return;
+      if (ev.altKey) {
+        if (!game.user?.isGM) {
+          ui.notifications?.warn?.("Csak a mesélő jelölhet meg jártasságokat (Alt+katt).");
+          return;
+        }
+        const raw = this.actor.system?.notes?.markedSkills;
+        const arr = Array.isArray(raw) ? raw.filter((s) => typeof s === "string" && s.trim()) : [];
+        const i = arr.indexOf(skillKey);
+        if (i >= 0) arr.splice(i, 1);
+        else arr.push(skillKey);
+        await this.actor.update({ "system.notes.markedSkills": arr });
+        this.render(true);
+        return;
+      }
+      const label = el?.textContent?.trim() || skillKey;
       const { openRollSheetForSkill } = await import("./roll-sheet.mjs");
       openRollSheetForSkill(this.actor, skillKey, label);
     });

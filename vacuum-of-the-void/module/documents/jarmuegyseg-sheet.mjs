@@ -1,3 +1,5 @@
+import { hideDefaultItemBagImg } from "../util/hide-default-item-bag.mjs";
+
 export class VoidJarmuEgysegSheet extends foundry.applications.api.HandlebarsApplicationMixin(
   foundry.applications.sheets.ItemSheetV2
 ) {
@@ -253,15 +255,13 @@ export class VoidJarmuEgysegSheet extends foundry.applications.api.HandlebarsApp
           id: doc.id,
           ref,
           name: doc.name,
-          img: doc.img,
+          img: hideDefaultItemBagImg(doc.img),
           kind,
           // Faji (species) képességnél ne jelenjen meg a KP mennyiség,
           // aktív/passzív stb. esetén igen.
           kpDisplay: isSpecies ? 0 : kp
         };
       });
-
-    console.log("VOTV JarmuEgysegSheet _prepareContext abilityItems=", abilityItems);
 
     context.system = sys;
     context.abilityList = abilityItems;
