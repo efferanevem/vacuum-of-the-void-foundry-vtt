@@ -1732,9 +1732,9 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
           }
 
           const kind = (doc.system?.kind ?? "passive").toString();
-          // Modul típusú képességek csak járműegység lapra húzhatók, karakterlapra nem
+          // Modul típusú képességek csak járműegység vagy helyiség lapra húzhatók, karakterlapra nem
           if (kind === "module") {
-            ui.notifications?.warn?.("Modul típusú képességet csak Járműegység lapra lehet húzni.");
+            ui.notifications?.warn?.("Modul típusú képességet csak Járműegység vagy Helyiség lapra lehet húzni.");
             return;
           }
           const abilities = this.actor.system.abilities ?? {};

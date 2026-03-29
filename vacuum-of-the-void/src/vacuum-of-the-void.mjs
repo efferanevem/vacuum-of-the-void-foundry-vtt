@@ -1,5 +1,6 @@
 import { BaseActorDataModel, KarakterDataModel, JarmuDataModel, BazisDataModel, VallalkozasDataModel, WeaponDataModel, ShieldDataModel, MicrochipDataModel, AbilityDataModel, TargyDataModel, EgyebDataModel, CsomagDataModel, JarmuEgysegDataModel, HelyisegDataModel } from "../module/data-models/index.mjs";
 import { VoidKarakterSheet, VoidNpcSheet, VoidJarmuSheet, VoidBazisSheet, VoidVallalkozasSheet, VoidWeaponSheet, VoidShieldSheet, VoidMicrochipSheet, VoidAbilitySheet, VoidTargySheet, VoidEgyebSheet, VoidCsomagSheet, VoidJarmuEgysegSheet, VoidHelyisegSheet } from "../module/documents.mjs";
+import { nextEmbeddedUnitSortForTail, nextEmptyHitForActorUnit } from "../module/util/jarmu-unit-hit-increment.mjs";
 
 const VOTV_DEFAULT_SCENE_BG = "systems/vacuum-of-the-void/assets/void-bg.jpg";
 
@@ -237,11 +238,41 @@ Hooks.once("init", () => {
     if (data?.type === "Egyeb") {
       data.img = VOTV_BAZIS_BLANK_IMG;
     }
+    if (data?.type === "Kepesseg" || data?.type === "ability") {
+      const k = String(data?.system?.kind ?? "passive");
+      if (k !== "active" && k !== "module") {
+        if (!data.system || typeof data.system !== "object") data.system = {};
+        data.system.kp = 0;
+      }
+    }
+    // Járműegység / helyiség: üres cépont → következő szám; mindig a lista végére (sort).
+    if (data?.type === "Jarmuegyseg" || data?.type === "Helyiseg") {
+      const actor = document?.actor;
+      if (actor && (actor.type === "Jarmu" || actor.type === "Bazis")) {
+        if (!(data.system?.hit ?? "").toString().trim()) {
+          if (!data.system || typeof data.system !== "object") data.system = {};
+          data.system.hit = String(nextEmptyHitForActorUnit(actor, data.type));
+        }
+        data.sort = nextEmbeddedUnitSortForTail(actor, data.type);
+      }
+    }
   });
   Hooks.on("preUpdateItem", (document, change, _options) => {
     if (document?.type === "Egyeb" && Object.prototype.hasOwnProperty.call(change ?? {}, "img")) {
       // Egyéb mindig üres ikont használ.
       change.img = VOTV_BAZIS_BLANK_IMG;
+    }
+    // Képesség: csak aktív és modul típusnak van KP; egyébként a tárolt érték mindig 0.
+    if (document?.type === "Kepesseg" || document?.type === "ability") {
+      const nextKind =
+        change?.system && typeof change.system === "object" && change.system.kind !== undefined
+          ? change.system.kind
+          : document.system?.kind ?? "passive";
+      const k = String(nextKind);
+      if (k !== "active" && k !== "module") {
+        if (!change.system || typeof change.system !== "object") change.system = {};
+        change.system.kp = 0;
+      }
     }
   });
   Hooks.on("ready", () => {
@@ -891,6 +922,13 @@ function votvAutoResizeTextareas(root, selector) {
 Hooks.on("renderVoidAbilitySheet", (app, html, _data) => {
   const root = html[0] ?? html;
   votvAutoResizeTextareas(root, 'textarea[name="system.description"]');
+});
+
+Hooks.on("renderVoidEmbeddedUnitAbilitySheet", (app, html, _data) => {
+  const root = app?.element ?? html?.[0] ?? html;
+  const run = () => votvAutoResizeTextareas(root, 'textarea[name="system.description"]');
+  // Ne az első pixelben állítsuk a magasságot: ütközhet a kurzor-visszaállítással (ApplicationV2 lap).
+  requestAnimationFrame(() => requestAnimationFrame(run));
 });
 
 Hooks.on("renderVoidMicrochipSheet", (app, html, _data) => {

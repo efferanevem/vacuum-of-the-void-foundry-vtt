@@ -985,9 +985,9 @@ export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplication
     // Képesség: minden (aktív/passzív/stb.) a Képességek szekció alá kerül
     if (doc.type === "Kepesseg" || doc.type === "ability") {
       const kind = (doc.system?.kind ?? "passive").toString();
-      // Modul típusú képességek csak járműegység lapra húzhatók, NPC lapra nem
+      // Modul típusú képességek csak járműegység vagy helyiség lapra húzhatók, NPC lapra nem
       if (kind === "module") {
-        ui.notifications?.warn?.("Modul típusú képességet csak Járműegység lapra lehet húzni.");
+        ui.notifications?.warn?.("Modul típusú képességet csak Járműegység vagy Helyiség lapra lehet húzni.");
         return;
       }
       let itemId = doc.id;

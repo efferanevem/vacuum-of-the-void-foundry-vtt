@@ -6,7 +6,7 @@ export { VoidVallalkozasSheet } from "./documents/vallalkozas-sheet.mjs";
 export { VoidWeaponSheet } from "./documents/weapon-sheet.mjs";
 export { VoidShieldSheet } from "./documents/shield-sheet.mjs";
 export { VoidMicrochipSheet } from "./documents/microchip-sheet.mjs";
-export { VoidAbilitySheet } from "./documents/ability-sheet.mjs";
+export { VoidAbilitySheet, VoidEmbeddedUnitAbilitySheet } from "./documents/ability-sheet.mjs";
 export { VoidTargySheet } from "./documents/targy-sheet.mjs";
 export { VoidEgyebSheet } from "./documents/egyeb-sheet.mjs";
 export { VoidCsomagSheet } from "./documents/csomag-sheet.mjs";

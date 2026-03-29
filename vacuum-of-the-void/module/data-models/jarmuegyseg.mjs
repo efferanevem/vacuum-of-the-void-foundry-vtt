@@ -1,4 +1,4 @@
-const { NumberField, StringField, SchemaField, ArrayField } = foundry.data.fields;
+const { NumberField, StringField, SchemaField, ArrayField, ObjectField } = foundry.data.fields;
 
 /** Járműegység item adatmodell. */
 export class JarmuEgysegDataModel extends foundry.abstract.TypeDataModel {
@@ -11,12 +11,13 @@ export class JarmuEgysegDataModel extends foundry.abstract.TypeDataModel {
         max: new NumberField({ required: true, integer: true, min: 0, initial: 0 }),
         value: new NumberField({ required: true, integer: true, min: 0, initial: 0 })
       }),
-      /** Képességek: hivatkozott Képesség itemek UUID listája. */
+      /** Képességek: régi UUID lista; új behúzások: beágyazott másolatok (külön Item nélkül). */
       abilities: new SchemaField({
         items: new ArrayField(
           new StringField({ required: false, blank: true }),
           { required: false, initial: [] }
-        )
+        ),
+        embedded: new ArrayField(new ObjectField(), { required: false, initial: [] })
       }),
       /** Sebesség (szabad szöveg, opcionális). */
       speed: new StringField({ required: false, blank: true, initial: "" }),

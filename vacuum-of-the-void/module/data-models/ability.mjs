@@ -1,6 +1,12 @@
 const { NumberField, StringField } = foundry.data.fields;
 
 export class AbilityDataModel extends foundry.abstract.TypeDataModel {
+  static migrateData(source, migrationData) {
+    const kind = (source.kind ?? "passive").toString();
+    if (kind !== "active" && kind !== "module") source.kp = 0;
+    return super.migrateData(source, migrationData);
+  }
+
   static defineSchema() {
     return {
       kind: new StringField({

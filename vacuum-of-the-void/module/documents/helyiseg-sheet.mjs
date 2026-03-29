@@ -1,4 +1,12 @@
 import { hideDefaultItemBagImg } from "../util/hide-default-item-bag.mjs";
+import {
+  buildAbilityChatHtmlFromSnapshot,
+  buildAbilitySnapshotForUnit,
+  buildMergedUnitAbilityList,
+  isEmbeddedAbilityRef,
+  openEmbeddedUnitAbilitySheet,
+  parseEmbeddedAbilityIndex
+} from "../util/unit-ability-embedded.mjs";
 
 export class VoidHelyisegSheet extends foundry.applications.api.HandlebarsApplicationMixin(
   foundry.applications.sheets.ItemSheetV2
@@ -45,6 +53,11 @@ export class VoidHelyisegSheet extends foundry.applications.api.HandlebarsApplic
       ev.preventDefault();
       const ref = ev.currentTarget?.dataset?.itemRef;
       const itemId = ev.currentTarget?.dataset?.itemId;
+      if (isEmbeddedAbilityRef(ref)) {
+        const idx = parseEmbeddedAbilityIndex(ref);
+        if (idx >= 0) openEmbeddedUnitAbilitySheet(sheet.document, idx);
+        return;
+      }
       let item = null;
       if (ref) {
         try {
@@ -65,7 +78,7 @@ export class VoidHelyisegSheet extends foundry.applications.api.HandlebarsApplic
       const itemId = ev.currentTarget?.dataset?.itemId;
       const key = ref || itemId;
       if (!key) return;
-      await this._postAbilityToChat(key);
+      await sheet._postAbilityToChat(key);
     });
 
     $html.on("click", ".karakter-ability-pill-remove", async (ev) => {
@@ -73,11 +86,19 @@ export class VoidHelyisegSheet extends foundry.applications.api.HandlebarsApplic
       if (!ev.altKey) return;
       const ref = ev.currentTarget?.dataset?.itemRef;
       if (!ref) return;
-      const sys = this.document.system ?? {};
+      if (isEmbeddedAbilityRef(ref)) {
+        const idx = parseEmbeddedAbilityIndex(ref);
+        if (idx < 0) return;
+        const embedded = [...(sheet.document.system?.abilities?.embedded ?? [])];
+        embedded.splice(idx, 1);
+        await sheet.document.update({ "system.abilities.embedded": embedded });
+        return;
+      }
+      const sys = sheet.document.system ?? {};
       const current = Array.isArray(sys.abilities?.items) ? sys.abilities.items.slice() : [];
       const idx = current.indexOf(ref);
       const next = idx >= 0 ? [...current.slice(0, idx), ...current.slice(idx + 1)] : current;
-      await this.document.update({ "system.abilities.items": next });
+      await sheet.document.update({ "system.abilities.items": next });
     });
 
     const abilityArea = root?.querySelector?.(".karakter-ability-area[data-area='abilities']");
@@ -135,13 +156,10 @@ export class VoidHelyisegSheet extends foundry.applications.api.HandlebarsApplic
           if (!doc || doc.documentName !== "Item") return;
 
           if (doc.type === "Kepesseg" || doc.type === "ability") {
-            // Csak hivatkozást tárolunk: abilities.items = forrás képesség UUID / id.
-            const ref = doc.uuid ?? doc.id;
-            if (!ref) return;
-            const sys = this.document.system ?? {};
-            const current = Array.isArray(sys.abilities?.items) ? sys.abilities.items.slice() : [];
-            current.push(ref);
-            await this.document.update({ "system.abilities.items": current });
+            const snap = buildAbilitySnapshotForUnit(doc);
+            const current = [...(this.document.system?.abilities?.embedded ?? [])];
+            current.push(snap);
+            await this.document.update({ "system.abilities.embedded": current });
           }
         } catch (err) {
           console.error("VoidHelyisegSheet global drop error", err);
@@ -201,38 +219,7 @@ export class VoidHelyisegSheet extends foundry.applications.api.HandlebarsApplic
     context.item = this.document;
     const sys = foundry.utils.deepClone(this.document.system ?? {});
     const abilities = sys.abilities ?? {};
-    const abilityRefs = Array.isArray(abilities.items) ? abilities.items : [];
-
-    const abilityDocs = await Promise.all(
-      abilityRefs.map(async (ref) => {
-        if (!ref) return null;
-        try {
-          const doc = await fromUuid(ref);
-          if (doc && (doc.type === "Kepesseg" || doc.type === "ability")) return doc;
-        } catch {
-          const item = game.items?.get(ref);
-          if (item && (item.type === "Kepesseg" || item.type === "ability")) return item;
-        }
-        return null;
-      })
-    );
-
-    const abilityItems = abilityDocs
-      .map((doc, index) => ({ doc, ref: abilityRefs[index] }))
-      .filter((pair) => !!pair.doc && !!pair.ref)
-      .map(({ doc, ref }) => {
-        const kind = (doc.system?.kind ?? "passive").toString();
-        const kp = Number(doc.system?.kp ?? 0) || 0;
-        const isSpecies = kind === "species";
-        return {
-          id: doc.id,
-          ref,
-          name: doc.name,
-          img: hideDefaultItemBagImg(doc.img),
-          kind,
-          kpDisplay: isSpecies ? 0 : kp
-        };
-      });
+    const abilityItems = await buildMergedUnitAbilityList(abilities, hideDefaultItemBagImg);
 
     context.system = sys;
     context.abilityList = abilityItems;
@@ -241,6 +228,16 @@ export class VoidHelyisegSheet extends foundry.applications.api.HandlebarsApplic
 
   async _postAbilityToChat(ref) {
     if (!ref) return;
+    if (isEmbeddedAbilityRef(ref)) {
+      const idx = parseEmbeddedAbilityIndex(ref);
+      const snap = this.document.system?.abilities?.embedded?.[idx];
+      if (!snap) return;
+      return ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({}),
+        content: buildAbilityChatHtmlFromSnapshot(snap),
+        flags: { "vacuum-of-the-void": {} }
+      });
+    }
     let item = null;
     try {
       item = await fromUuid(ref);
@@ -289,13 +286,10 @@ export class VoidHelyisegSheet extends foundry.applications.api.HandlebarsApplic
     }
 
     if (document.type === "Kepesseg" || document.type === "ability") {
-      // Csak a meglévő képességre hivatkozunk – nem hozunk létre új Itemet.
-      const ref = document.uuid ?? document.id;
-      if (!ref) return document;
-      const sys = this.document.system ?? {};
-      const current = Array.isArray(sys.abilities?.items) ? sys.abilities.items.slice() : [];
-      current.push(ref);
-      await this.document.update({ "system.abilities.items": current });
+      const snap = buildAbilitySnapshotForUnit(document);
+      const current = [...(this.document.system?.abilities?.embedded ?? [])];
+      current.push(snap);
+      await this.document.update({ "system.abilities.embedded": current });
       return document;
     }
 

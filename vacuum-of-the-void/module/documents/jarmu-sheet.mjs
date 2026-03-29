@@ -1,3 +1,12 @@
+import {
+  buildAbilityChatHtmlFromSnapshot,
+  buildMergedUnitAbilityList,
+  isEmbeddedAbilityRef,
+  openEmbeddedUnitAbilitySheet,
+  parseEmbeddedAbilityIndex
+} from "../util/unit-ability-embedded.mjs";
+import { nextEmbeddedUnitSortForTail, nextEmptyHitForActorUnit } from "../util/jarmu-unit-hit-increment.mjs";
+
 /** Páncél szint → megjelenített szöveg (Raktár táblázat). */
 function _armorLevelLabel(raw) {
   if (!raw) return "Alap";
@@ -368,36 +377,7 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
       if (Number.isFinite(unitStorageNum)) totalStorageUsed += unitStorageNum;
 
       const abilities = sys.abilities ?? {};
-      const abilityRefs = Array.isArray(abilities.items) ? abilities.items : [];
-      const abilityDocs = await Promise.all(
-        abilityRefs.map(async (ref) => {
-          if (!ref) return null;
-          try {
-            const doc = await fromUuid(ref);
-            if (doc && (doc.type === "Kepesseg" || doc.type === "ability")) return doc;
-          } catch {
-            const itemDoc = game.items?.get(ref);
-            if (itemDoc && (itemDoc.type === "Kepesseg" || itemDoc.type === "ability")) return itemDoc;
-          }
-          return null;
-        })
-      );
-      const abilityItems = abilityDocs
-        .map((doc, index) => ({ doc, ref: abilityRefs[index] }))
-        .filter((pair) => !!pair.doc && !!pair.ref)
-        .map(({ doc, ref }) => {
-          const kind = (doc.system?.kind ?? "passive").toString();
-          const kp = Number(doc.system?.kp ?? 0) || 0;
-          const isSpecies = kind === "species";
-          return {
-            id: doc.id,
-            ref,
-            name: doc.name,
-            img: cleanImg(doc.img ?? ""),
-            kind,
-            kpDisplay: isSpecies ? 0 : kp
-          };
-        });
+      const abilityItems = await buildMergedUnitAbilityList(abilities, cleanImg);
 
       if (unitItemType === "Helyiseg") {
         const hit = (sys.hit ?? "").toString().trim();
@@ -707,11 +687,19 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
       await this.actor.updateEmbeddedDocuments("Item", updates);
     });
 
-    // Járműegység képességek: név / ikon → képesség lap megnyitása
+    // Járműegység képességek: név / ikon → képesség lap vagy beágyazott szerkesztő
     $html.on("click", ".jarmu-unit-ability-name, .jarmu-unit-ability-icon", async (ev) => {
       ev.preventDefault();
-      const ref = ev.currentTarget?.closest?.(".jarmu-unit-ability-pill")?.dataset?.abilityRef;
-      const abilityId = ev.currentTarget?.closest?.(".jarmu-unit-ability-pill")?.dataset?.abilityId;
+      const pill = ev.currentTarget?.closest?.(".jarmu-unit-ability-pill");
+      const ref = pill?.dataset?.abilityRef;
+      const abilityId = pill?.dataset?.abilityId;
+      if (isEmbeddedAbilityRef(ref)) {
+        const idx = parseEmbeddedAbilityIndex(ref);
+        const unitId = ev.currentTarget?.closest?.(".jarmu-unit-abilities-row")?.dataset?.itemId;
+        const unitItem = unitId ? this.actor.items.get(unitId) : null;
+        if (unitItem && idx >= 0) openEmbeddedUnitAbilitySheet(unitItem, idx);
+        return;
+      }
       let doc = null;
       if (ref) {
         try {
@@ -734,7 +722,9 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
       const abilityId = pill?.dataset?.abilityId;
       const key = ref || abilityId;
       if (!key) return;
-      await this._postUnitAbilityToChat(key);
+      const unitId = pill?.closest?.(".jarmu-unit-abilities-row")?.dataset?.itemId;
+      const unitItem = unitId ? this.actor.items.get(unitId) : null;
+      await this._postUnitAbilityToChat(key, unitItem);
     });
 
     const doSubmit = (form) => {
@@ -879,8 +869,18 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
     });
   }
 
-  async _postUnitAbilityToChat(ref) {
+  async _postUnitAbilityToChat(ref, unitItem) {
     if (!ref) return;
+    if (isEmbeddedAbilityRef(ref)) {
+      const idx = parseEmbeddedAbilityIndex(ref);
+      const snap = unitItem?.system?.abilities?.embedded?.[idx];
+      if (!snap) return;
+      return ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({}),
+        content: buildAbilityChatHtmlFromSnapshot(snap),
+        flags: { "vacuum-of-the-void": {} }
+      });
+    }
     let item = null;
     try {
       item = await fromUuid(ref);
@@ -947,9 +947,18 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
         : ["Fegyver", "Pancel", "MikroChip", "Targy", "Egyeb", "Jarmuegyseg"];
     if (!allowed.includes(doc.type)) return super._onDropItem(event, data);
     if (doc.parent?.id === actor.id) return;
-    const itemData = foundry.utils.mergeObject(doc.toObject(), {
-      system: { ...(doc.toObject().system ?? {}), equipped: doc.type === "Pancel" ? false : undefined }
+    const baseObj = doc.toObject();
+    const itemData = foundry.utils.mergeObject(baseObj, {
+      system: { ...(baseObj.system ?? {}), equipped: doc.type === "Pancel" ? false : undefined }
     });
+    if (doc.type === "Jarmuegyseg" || doc.type === "Helyiseg") {
+      const sys = itemData.system ?? {};
+      if (!(sys.hit ?? "").toString().trim()) {
+        const n = nextEmptyHitForActorUnit(actor, doc.type);
+        itemData.system = foundry.utils.mergeObject(sys, { hit: String(n) });
+      }
+      itemData.sort = nextEmbeddedUnitSortForTail(actor, doc.type);
+    }
     await actor.createEmbeddedDocuments("Item", [itemData]);
   }
 }

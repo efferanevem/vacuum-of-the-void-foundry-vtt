@@ -1,4 +1,12 @@
 import { hideDefaultItemBagImg } from "../util/hide-default-item-bag.mjs";
+import {
+  buildAbilityChatHtmlFromSnapshot,
+  buildAbilitySnapshotForUnit,
+  buildMergedUnitAbilityList,
+  isEmbeddedAbilityRef,
+  openEmbeddedUnitAbilitySheet,
+  parseEmbeddedAbilityIndex
+} from "../util/unit-ability-embedded.mjs";
 
 export class VoidJarmuEgysegSheet extends foundry.applications.api.HandlebarsApplicationMixin(
   foundry.applications.sheets.ItemSheetV2
@@ -100,14 +108,10 @@ export class VoidJarmuEgysegSheet extends foundry.applications.api.HandlebarsApp
           if (!doc || doc.documentName !== "Item") return;
 
           if (doc.type === "Kepesseg" || doc.type === "ability") {
-            // Csak hivatkozást tárolunk: abilities.items = forrás képesség UUID / id.
-            const ref = doc.uuid ?? doc.id;
-            if (!ref) return;
-            const sys = this.document.system ?? {};
-            const current = Array.isArray(sys.abilities?.items) ? sys.abilities.items.slice() : [];
-            current.push(ref);
-            console.log("VOTV JarmuEgysegSheet global drop updating abilities.items to", current);
-            await this.document.update({ "system.abilities.items": current });
+            const snap = buildAbilitySnapshotForUnit(doc);
+            const current = [...(this.document.system?.abilities?.embedded ?? [])];
+            current.push(snap);
+            await this.document.update({ "system.abilities.embedded": current });
           }
         } catch (err) {
           console.error("VOTV JarmuEgysegSheet global drop handler error", err);
@@ -121,6 +125,11 @@ export class VoidJarmuEgysegSheet extends foundry.applications.api.HandlebarsApp
       ev.preventDefault();
       const ref = ev.currentTarget?.dataset?.itemRef;
       const itemId = ev.currentTarget?.dataset?.itemId;
+      if (isEmbeddedAbilityRef(ref)) {
+        const idx = parseEmbeddedAbilityIndex(ref);
+        if (idx >= 0) openEmbeddedUnitAbilitySheet(sheet.document, idx);
+        return;
+      }
       let item = null;
       if (ref) {
         try {
@@ -142,7 +151,7 @@ export class VoidJarmuEgysegSheet extends foundry.applications.api.HandlebarsApp
       const itemId = ev.currentTarget?.dataset?.itemId;
       const key = ref || itemId;
       if (!key) return;
-      await this._postAbilityToChat(key);
+      await sheet._postAbilityToChat(key);
     });
 
     // Képesség eltávolítása (Alt+klikk)
@@ -151,11 +160,19 @@ export class VoidJarmuEgysegSheet extends foundry.applications.api.HandlebarsApp
       if (!ev.altKey) return;
       const ref = ev.currentTarget?.dataset?.itemRef;
       if (!ref) return;
-      const sys = this.document.system ?? {};
+      if (isEmbeddedAbilityRef(ref)) {
+        const idx = parseEmbeddedAbilityIndex(ref);
+        if (idx < 0) return;
+        const embedded = [...(sheet.document.system?.abilities?.embedded ?? [])];
+        embedded.splice(idx, 1);
+        await sheet.document.update({ "system.abilities.embedded": embedded });
+        return;
+      }
+      const sys = sheet.document.system ?? {};
       const current = Array.isArray(sys.abilities?.items) ? sys.abilities.items.slice() : [];
       const idx = current.indexOf(ref);
       const next = idx >= 0 ? [...current.slice(0, idx), ...current.slice(idx + 1)] : current;
-      await this.document.update({ "system.abilities.items": next });
+      await sheet.document.update({ "system.abilities.items": next });
     });
 
     // Drag-over highlight (NPC lap mintájára) – csak vizuális kiemelés, a tényleges drop-ot a DragDrop kezeli.
@@ -226,42 +243,7 @@ export class VoidJarmuEgysegSheet extends foundry.applications.api.HandlebarsApp
     context.item = this.document;
     const sys = foundry.utils.deepClone(this.document.system ?? {});
     const abilities = sys.abilities ?? {};
-    const abilityRefs = Array.isArray(abilities.items) ? abilities.items : [];
-
-    console.log("VOTV JarmuEgysegSheet _prepareContext refs=", abilityRefs);
-
-    const abilityDocs = await Promise.all(
-      abilityRefs.map(async (ref) => {
-        if (!ref) return null;
-        try {
-          const doc = await fromUuid(ref);
-          if (doc && (doc.type === "Kepesseg" || doc.type === "ability")) return doc;
-        } catch {
-          const item = game.items?.get(ref);
-          if (item && (item.type === "Kepesseg" || item.type === "ability")) return item;
-        }
-        return null;
-      })
-    );
-
-    const abilityItems = abilityDocs
-      .map((doc, index) => ({ doc, ref: abilityRefs[index] }))
-      .filter((pair) => !!pair.doc && !!pair.ref)
-      .map(({ doc, ref }) => {
-        const kind = (doc.system?.kind ?? "passive").toString();
-        const kp = Number(doc.system?.kp ?? 0) || 0;
-        const isSpecies = kind === "species";
-        return {
-          id: doc.id,
-          ref,
-          name: doc.name,
-          img: hideDefaultItemBagImg(doc.img),
-          kind,
-          // Faji (species) képességnél ne jelenjen meg a KP mennyiség,
-          // aktív/passzív stb. esetén igen.
-          kpDisplay: isSpecies ? 0 : kp
-        };
-      });
+    const abilityItems = await buildMergedUnitAbilityList(abilities, hideDefaultItemBagImg);
 
     context.system = sys;
     context.abilityList = abilityItems;
@@ -270,6 +252,16 @@ export class VoidJarmuEgysegSheet extends foundry.applications.api.HandlebarsApp
 
   async _postAbilityToChat(ref) {
     if (!ref) return;
+    if (isEmbeddedAbilityRef(ref)) {
+      const idx = parseEmbeddedAbilityIndex(ref);
+      const snap = this.document.system?.abilities?.embedded?.[idx];
+      if (!snap) return;
+      return ChatMessage.create({
+        speaker: ChatMessage.getSpeaker({}),
+        content: buildAbilityChatHtmlFromSnapshot(snap),
+        flags: { "vacuum-of-the-void": {} }
+      });
+    }
     let item = null;
     try {
       item = await fromUuid(ref);
@@ -313,24 +305,18 @@ export class VoidJarmuEgysegSheet extends foundry.applications.api.HandlebarsApp
   }
 
   /**
-   * ItemSheetV2 drop logika: a Foundry már feloldja a dokumentumot, itt csak kezeljük a képesség referenciát.
+   * ItemSheetV2 drop: képességből új példány, majd annak uuid-ja kerül a listába.
    */
   async _onDropDocument(event, document) {
-    console.log("VOTV JarmuEgysegSheet _onDropDocument doc=", document);
-
     if (!document || document.documentName !== "Item") {
       return super._onDropDocument?.(event, document);
     }
 
     if (document.type === "Kepesseg" || document.type === "ability") {
-      // Csak a meglévő képességre hivatkozunk – nem hozunk létre új Itemet.
-      const ref = document.uuid ?? document.id;
-      if (!ref) return document;
-      const sys = this.document.system ?? {};
-      const current = Array.isArray(sys.abilities?.items) ? sys.abilities.items.slice() : [];
-      current.push(ref);
-      console.log("VOTV JarmuEgysegSheet _onDropDocument updating abilities.items to", current);
-      await this.document.update({ "system.abilities.items": current });
+      const snap = buildAbilitySnapshotForUnit(document);
+      const current = [...(this.document.system?.abilities?.embedded ?? [])];
+      current.push(snap);
+      await this.document.update({ "system.abilities.embedded": current });
       return document;
     }
 
