@@ -1,6 +1,7 @@
 import { BaseActorDataModel, KarakterDataModel, JarmuDataModel, BazisDataModel, VallalkozasDataModel, WeaponDataModel, ShieldDataModel, MicrochipDataModel, AbilityDataModel, TargyDataModel, EgyebDataModel, CsomagDataModel, JarmuEgysegDataModel, HelyisegDataModel } from "../module/data-models/index.mjs";
 import { VoidKarakterSheet, VoidNpcSheet, VoidJarmuSheet, VoidBazisSheet, VoidVallalkozasSheet, VoidWeaponSheet, VoidShieldSheet, VoidMicrochipSheet, VoidAbilitySheet, VoidTargySheet, VoidEgyebSheet, VoidCsomagSheet, VoidJarmuEgysegSheet, VoidHelyisegSheet } from "../module/documents.mjs";
 import { nextEmbeddedUnitSortForTail, nextEmptyHitForActorUnit } from "../module/util/jarmu-unit-hit-increment.mjs";
+import { installVotvSheetRenderPreserveWindowStack } from "../module/util/sheet-render-preserve-stack.mjs";
 
 const VOTV_DEFAULT_SCENE_BG = "systems/vacuum-of-the-void/assets/void-bg.jpg";
 
@@ -14,11 +15,14 @@ function npcTokenGridSizeFromMéret(size) {
 
 const VOTV_FLAG_SCOPE = "vacuum-of-the-void";
 /**
- * Actor flag: a prototype token w/h kézzel lett állítva (Token beállítások) → új NPC tokenek ehhez igazodjanak.
- * A „Méret” mező változása NEM írja felül a már pályán lévő tokeneket (Foundry linkelt token + prototype sync elkerülése).
+ * Actor flag: a prototype token w/h kézzel lett állítva (Token beállítások), és eltér a Méret szerinti ráctól →
+ * új NPC tokenek a prototype w/h-t követik. A lap „Méret” select megváltoztatásakor a rendszer visszaállítja a w/h-t
+ * és törli ezt a flaget.
  * Törlés: actor.unsetFlag(VOTV_FLAG_SCOPE, VOTV_NPC_TOKEN_SIZE_MANUAL_FLAG)
  */
 const VOTV_NPC_TOKEN_SIZE_MANUAL_FLAG = "npcTokenSizeManual";
+/** Színészekről térképre húzott NPC: token flag → createToken új világ-beli Actor példányt hoz létre. */
+const VOTV_NPC_DROP_DUP_FLAG = "npcDropDuplicateFrom";
 
 /**
  * Foundry a prototype token w/h változást néha beágyazva (`prototypeToken: { width }`),
@@ -34,6 +38,76 @@ function npcPrototypeTokenSizeWasTouched(changed) {
   if (Object.prototype.hasOwnProperty.call(changed, "prototypeToken.width")) return true;
   if (Object.prototype.hasOwnProperty.call(changed, "prototypeToken.height")) return true;
   return false;
+}
+
+/** `changed` tartalmazza-e az NPC `system.identity.size` mezőt (beágyazott vagy dot kulcs). */
+function npcIdentitySizeWasChanged(changed) {
+  if (!changed || typeof changed !== "object") return false;
+  const id = changed.system?.identity;
+  if (id && typeof id === "object" && Object.prototype.hasOwnProperty.call(id, "size")) return true;
+  if (Object.prototype.hasOwnProperty.call(changed, "system.identity.size")) return true;
+  return false;
+}
+
+function votvSortedActorItemIds(actor) {
+  const list = actor?.items?.contents?.slice?.() ?? [];
+  list.sort(
+    (a, b) =>
+      (Number(a.sort) || 0) - (Number(b.sort) || 0) ||
+      (a.name ?? "").localeCompare(b.name ?? "", undefined, { sensitivity: "base" }) ||
+      (a.id ?? "").localeCompare(b.id ?? "")
+  );
+  return list.map((i) => i.id);
+}
+
+function votvRemapItemIdsInSystem(system, idMap) {
+  if (!system || !idMap?.size) return system;
+  const clone = foundry.utils.duplicate(system);
+  const walk = (obj) => {
+    if (obj == null || typeof obj !== "object") return;
+    if (Array.isArray(obj)) {
+      for (const el of obj) walk(el);
+      return;
+    }
+    for (const k of Object.keys(obj)) {
+      const v = obj[k];
+      if (k === "itemId" && typeof v === "string" && idMap.has(v)) {
+        obj[k] = idMap.get(v);
+      } else {
+        walk(v);
+      }
+    }
+  };
+  walk(clone);
+  return clone;
+}
+
+/**
+ * Új világ-beli NPC dokumentum a sablon másolataként (felszerelés + fegyver slot itemId szinkron).
+ */
+async function votvDuplicateWorldNpcForSceneToken(sourceActor) {
+  if (!sourceActor || sourceActor.type !== "Npc") return null;
+  const oldIdsOrdered = votvSortedActorItemIds(sourceActor);
+  const actorData = foundry.utils.duplicate(sourceActor.toObject(true));
+  delete actorData._id;
+  if (Array.isArray(actorData.effects)) {
+    for (const ef of actorData.effects) delete ef._id;
+  }
+  if (Array.isArray(actorData.items)) {
+    for (const it of actorData.items) delete it._id;
+  }
+  const created = await Actor.create(actorData);
+  if (!created) return null;
+  const newIdsOrdered = votvSortedActorItemIds(created);
+  const idMap = new Map();
+  for (let i = 0; i < oldIdsOrdered.length && i < newIdsOrdered.length; i++) {
+    idMap.set(oldIdsOrdered[i], newIdsOrdered[i]);
+  }
+  if (idMap.size) {
+    const nextSystem = votvRemapItemIdsInSystem(created.system, idMap);
+    await created.update({ system: nextSystem });
+  }
+  return created;
 }
 
 // Expose a system namespace following the tutorial style.
@@ -348,6 +422,33 @@ Hooks.on("updateActor", (actor, changed, _options, _userId) => {
       }
     }
 
+    // NPC: „Méret” select → prototype w/h + minden pályán lévő token erre a rácsméretre (csak a frissítő user kliense, ne legyen többszörös socket)
+    if (
+      actor.type === "Npc" &&
+      npcIdentitySizeWasChanged(changed) &&
+      (!_userId || _userId === game.user?.id)
+    ) {
+      const gridSize = npcTokenGridSizeFromMéret(actor.system?.identity?.size);
+      (async () => {
+        try {
+          await actor.update({
+            "prototypeToken.width": gridSize,
+            "prototypeToken.height": gridSize
+          });
+          for (const scene of game.scenes ?? []) {
+            const tokens = scene.tokens?.filter?.((t) => t.actorId === actorId) ?? [];
+            if (!tokens.length) continue;
+            await scene.updateEmbeddedDocuments(
+              "Token",
+              tokens.map((t) => ({ _id: t.id, width: gridSize, height: gridSize }))
+            );
+          }
+        } catch (err) {
+          console.warn("Vacuum of the Void | NPC méret → token szinkron sikertelen:", err);
+        }
+      })();
+    }
+
     // Karakter/NPC kezdeményezés (initiativeResult) → Combat Tracker initiative mező szinkron
     if ((actor.type === "Karakter" || actor.type === "Npc") && changed?.system?.combat && "initiativeResult" in changed.system.combat) {
       const value = Number(actor.system?.combat?.initiativeResult);
@@ -363,9 +464,6 @@ Hooks.on("updateActor", (actor, changed, _options, _userId) => {
         }
       }
     }
-
-    // NPC: a „Méret” mezőt szándékosan NEM írjuk át a prototypeToken w/h-ra – a Foundry a linkelt tokeneket
-    // szinkronizálná vele, és minden példány egyforma méretű lenne. Új token = preCreateToken (Méret vagy kézi prototype).
 
     const activeEl = document.activeElement;
     const isInputLike = activeEl && (
@@ -834,6 +932,8 @@ Hooks.on("ready", () => {
       }
     }
   })();
+
+  installVotvSheetRenderPreserveWindowStack();
 });
 
 Hooks.on("preCreateToken", (tokenDocument, data, _options) => {
@@ -886,7 +986,57 @@ Hooks.on("preCreateToken", (tokenDocument, data, _options) => {
       npcPatch.width = gridSize;
       npcPatch.height = gridSize;
     }
+    // Színészek lista → térkép: külön Actor példány (createToken), ne a sablon + token delta keveredjen.
+    if (sourceId) {
+      npcPatch.flags = foundry.utils.mergeObject(npcPatch.flags ?? {}, {
+        [VOTV_FLAG_SCOPE]: {
+          ...(npcPatch.flags?.[VOTV_FLAG_SCOPE] ?? {}),
+          [VOTV_NPC_DROP_DUP_FLAG]: sourceId
+        }
+      });
+    }
     tokenDocument.updateSource(npcPatch);
+  }
+});
+
+Hooks.on("createToken", async (tokenDocument) => {
+  const dupFrom = tokenDocument.getFlag?.(VOTV_FLAG_SCOPE, VOTV_NPC_DROP_DUP_FLAG);
+  if (!dupFrom || typeof dupFrom !== "string") return;
+  const tokenActorId = tokenDocument.actorId;
+  if (!tokenActorId || tokenActorId !== dupFrom) {
+    await tokenDocument.unsetFlag?.(VOTV_FLAG_SCOPE, VOTV_NPC_DROP_DUP_FLAG).catch(() => {});
+    return;
+  }
+  const sourceActor = game.actors?.get(dupFrom);
+  if (!sourceActor || sourceActor.type !== "Npc") {
+    await tokenDocument.unsetFlag?.(VOTV_FLAG_SCOPE, VOTV_NPC_DROP_DUP_FLAG).catch(() => {});
+    return;
+  }
+  try {
+    const ActorCls = CONFIG.Actor.documentClass ?? Actor;
+    if (typeof ActorCls.canUserCreate === "function" && !ActorCls.canUserCreate(game.user)) {
+      ui.notifications?.warn(
+        game.i18n?.localize?.("VOTV.NpcDropNoActorCreatePerm") ??
+          "Nincs jogosultság új NPC létrehozásához — a token a sablonhoz maradt."
+      );
+      return;
+    }
+    const newActor = await votvDuplicateWorldNpcForSceneToken(sourceActor);
+    if (newActor?.id) {
+      await tokenDocument.update({ actorId: newActor.id });
+    } else {
+      ui.notifications?.warn(
+        game.i18n?.localize?.("VOTV.NpcDropDuplicateFailed") ??
+          "Az NPC térképi példány másolása sikertelen."
+      );
+    }
+  } catch (err) {
+    console.warn("Vacuum of the Void | NPC drop duplicate failed:", err);
+    ui.notifications?.warn(
+      game.i18n?.localize?.("VOTV.NpcDropDuplicateFailed") ?? "Az NPC térképi példány másolása sikertelen."
+    );
+  } finally {
+    await tokenDocument.unsetFlag?.(VOTV_FLAG_SCOPE, VOTV_NPC_DROP_DUP_FLAG).catch(() => {});
   }
 });
 

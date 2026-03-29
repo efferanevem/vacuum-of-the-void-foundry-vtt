@@ -476,13 +476,38 @@ export class VoidVallalkozasSheet extends foundry.applications.api.HandlebarsApp
       await this.actor.deleteEmbeddedDocuments("Item", [itemId]);
     });
 
-    // Raktár: kattintás név/ikon → item lap megnyitása
-    $html.on("click", ".vallalkozas-raktar-table .karakter-inventory-item-name, .vallalkozas-raktar-table .karakter-equipment-icon", (ev) => {
-      ev.preventDefault();
-      const itemId = ev.currentTarget?.dataset?.itemId;
+    // Raktár + Egyéb információk: név/ikon → item lap (minden tábla, mint a karakterlapon: actor / világ / fromUuid)
+    const openVallalkozasInventoryItem = async (target) => {
+      const itemId = (target?.dataset?.itemId ?? "").trim();
       if (!itemId || !this.actor) return;
-      const item = this.actor.items.get(itemId);
-      item?.sheet?.render(true);
+      let item =
+        this.actor.items.get(itemId) ??
+        this.actor.items.contents?.find?.((i) => i.id === itemId) ??
+        game.items?.get(itemId) ??
+        null;
+      if (!item) {
+        const baseRef = typeof itemId === "string" ? itemId.split("|")[0] : itemId;
+        try {
+          const resolved = await fromUuid(baseRef);
+          if (resolved?.documentName === "Item") item = resolved;
+        } catch {
+          // ignore
+        }
+      }
+      if (!item) return;
+      item.sheet?.render(true);
+    };
+    $html.on(
+      "click",
+      ".vallalkozas-raktar-panel .karakter-inventory-item-name, .vallalkozas-raktar-panel .karakter-inventory-item-icon, .vallalkozas-raktar-panel .karakter-equipment-icon",
+      async (ev) => {
+        ev.preventDefault();
+        await openVallalkozasInventoryItem(ev.currentTarget);
+      }
+    );
+    $html.on("click", ".vallalkozas-egyeb .karakter-notes-egyeb-name, .vallalkozas-egyeb .karakter-notes-egyeb-icon", async (ev) => {
+      ev.preventDefault();
+      await openVallalkozasInventoryItem(ev.currentTarget);
     });
 
     // Raktár: mennyiség mező változtatása

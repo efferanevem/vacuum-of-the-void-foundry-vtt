@@ -804,6 +804,13 @@ export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplication
     };
     document.body.addEventListener("blur", sheet._votvNpcBlur, true);
 
+    // Méret: választáskor azonnal mentés (a többi mező továbbra is blur-ra megy)
+    $html.on("change", 'select[name="system.identity.size"]', (ev) => {
+      const form = ev.currentTarget?.form;
+      if (!form || !isOurForm(form)) return;
+      doSubmit(form);
+    });
+
     // Ha az aktor egy itemje (pl. fegyver) frissül a saját lapján, az NPC lap táblázata is frissüljön
     // deleteItem: ha törlünk itemet (pl. felszerelést), a lap újrarenderelődjön – így a "Húzz ide..." drop zone megjelenik üres inventory esetén
     if (!sheet._votvNpcItemHookRegistered) {
