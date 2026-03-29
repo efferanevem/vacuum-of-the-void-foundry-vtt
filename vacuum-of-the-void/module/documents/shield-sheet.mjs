@@ -94,9 +94,20 @@ export class VoidShieldSheet extends foundry.applications.api.HandlebarsApplicat
   }
 
   async _prepareContext(options) {
-    const context = await super._prepareContext(options) ?? {};
-    context.item = this.document;
-    context.system = foundry.utils.deepClone(this.document.system ?? {});
-    return context;
+    return buildShieldSheetTemplateContext(this.document, options);
   }
+}
+
+export async function buildShieldSheetTemplateContext(item, options = {}) {
+  const fake = { document: item, item, options };
+  let context = {};
+  try {
+    context =
+      (await foundry.applications.sheets.ItemSheetV2.prototype._prepareContext.call(fake, options)) ?? {};
+  } catch {
+    context = {};
+  }
+  context.item = item;
+  context.system = foundry.utils.deepClone(item.system ?? {});
+  return context;
 }

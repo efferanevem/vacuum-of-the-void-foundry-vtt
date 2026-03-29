@@ -1,4 +1,4 @@
-const { StringField, ArrayField } = foundry.data.fields;
+const { StringField, ArrayField, ObjectField } = foundry.data.fields;
 
 /** Csomag item adatmodell – más itemek hivatkozásait tárolja. */
 export class CsomagDataModel extends foundry.abstract.TypeDataModel {
@@ -13,7 +13,9 @@ export class CsomagDataModel extends foundry.abstract.TypeDataModel {
       contents: new ArrayField(
         new StringField({ required: false, blank: true }),
         { required: false, initial: [] }
-      )
+      ),
+      /** Beágyazott tárgy-másolatok (`emb:` index a contents-ben). */
+      embeddedItems: new ArrayField(new ObjectField(), { required: false, initial: [] })
     };
   }
 }

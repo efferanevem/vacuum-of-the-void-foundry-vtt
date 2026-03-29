@@ -1,6 +1,7 @@
 import { BaseActorDataModel, KarakterDataModel, JarmuDataModel, BazisDataModel, VallalkozasDataModel, WeaponDataModel, ShieldDataModel, MicrochipDataModel, AbilityDataModel, TargyDataModel, EgyebDataModel, CsomagDataModel, JarmuEgysegDataModel, HelyisegDataModel } from "../module/data-models/index.mjs";
 import { VoidKarakterSheet, VoidNpcSheet, VoidJarmuSheet, VoidBazisSheet, VoidVallalkozasSheet, VoidWeaponSheet, VoidShieldSheet, VoidMicrochipSheet, VoidAbilitySheet, VoidTargySheet, VoidEgyebSheet, VoidCsomagSheet, VoidJarmuEgysegSheet, VoidHelyisegSheet } from "../module/documents.mjs";
 import { nextEmbeddedUnitSortForTail, nextEmptyHitForActorUnit } from "../module/util/jarmu-unit-hit-increment.mjs";
+import { migrateCsomagToEmbeddedSnapshots } from "../module/util/csomag-embedded-utils.mjs";
 import { installVotvSheetRenderPreserveWindowStack } from "../module/util/sheet-render-preserve-stack.mjs";
 
 const VOTV_DEFAULT_SCENE_BG = "systems/vacuum-of-the-void/assets/void-bg.jpg";
@@ -523,233 +524,32 @@ Hooks.on("updateActor", (actor, changed, _options, _userId) => {
     if (Object.keys(updates).length) actor.update(updates);
   });
 
-  // Csomag: compendiumból behúzáskor a contents elemeit embedeljük az actorba,
-  // hogy a mennyiség/egyéb módosítás ne a compendium itemet változtassa.
+  // Csomag: tartalom másolat a csomag dokumentumban (`emb:`), nem közös actor Item.
   Hooks.on("createItem", async (item, _options, _userId) => {
     try {
       if (!item || item.type !== "Csomag") return;
       const actor = item.parent;
       if (!actor || actor.documentName !== "Actor") return;
-
-      const SYSTEM_NAMESPACE = game.votv?.systemId ?? "vacuum-of-the-void";
-      const already = item.getFlag?.(SYSTEM_NAMESPACE, "_contentsEmbedded");
-      const sys = item.system ?? {};
-      const refs = Array.isArray(sys.contents) ? sys.contents : [];
-      const hasEncodedQtyRefs = refs.some((r) => typeof r === "string" && r.includes("|"));
-      // Ha a flag már be van állítva, attól még lehet, hogy a contents továbbra is |qty= kódolt refeket tartalmaz.
-      // Ilyenkor újra embedeljük, hogy a mennyiség szerkeszthető legyen actor-szinten.
-      if (already === true && !hasEncodedQtyRefs) return;
-      if (!refs.length) return;
-
-      const parseEncodedContentsRef = (refStr) => {
-        if (typeof refStr !== "string") return { baseRef: "", qtyMul: 1 };
-        const [baseRef, ...parts] = refStr.split("|");
-        let qtyMul = 1;
-        for (const p of parts) {
-          const m = p.match(/^qty=(.+)$/);
-          if (!m) continue;
-          const n = Number.parseInt(m[1], 10);
-          if (Number.isFinite(n) && n > 0) qtyMul = n;
-        }
-        return { baseRef, qtyMul };
-      };
-
-      // Összegyűjtjük a qty-t baseRef szerint, és egy darab embedded itemet hozunk létre.
-      const qtyByBaseRef = new Map();
-      for (const ref of refs) {
-        const { baseRef, qtyMul } = parseEncodedContentsRef(ref);
-        if (!baseRef) continue;
-        qtyByBaseRef.set(baseRef, (qtyByBaseRef.get(baseRef) ?? 0) + qtyMul);
-      }
-      if (!qtyByBaseRef.size) return;
-
-      const embeddedItemsData = [];
-      const embeddedUuids = [];
-
-      // Bármilyen forrásból feloldott (compendium vagy világ item) tartalmakat klónozunk az actorba,
-      // hogy a mennyiség/egyéb szerkesztés ne a globális/compendium példányt módosítsa.
-      for (const [baseRef, qtyMulSum] of qtyByBaseRef.entries()) {
-        if (typeof baseRef !== "string") continue;
-
-        let sourceItem = null;
-        // 1) UUID/Compendium ref először próbáljuk
-        try {
-          sourceItem = await fromUuid(baseRef);
-          if (sourceItem?.documentName !== "Item") sourceItem = null;
-        } catch {
-          sourceItem = null;
-        }
-        // 2) Ha nem uuid, akkor lehet világ item id
-        if (!sourceItem) {
-          sourceItem = game.items?.get(baseRef) ?? null;
-        }
-        // 3) Extra: ha épp actoron belüli már létező item ref (ritkább), akkor azt is engedjük
-        if (!sourceItem) {
-          sourceItem = actor.items?.get?.(baseRef) ?? null;
-        }
-
-        if (!sourceItem || sourceItem.documentName !== "Item") continue;
-
-        // Ha már actorba beágyazott itemről van szó, ne duplikáljuk: frissítsük a quantity-t és használjuk a meglévő uuid-t.
-        if (sourceItem.parent?.id === actor.id) {
-          const sourceSys = sourceItem.system ?? {};
-          const rawQty = (sourceSys.quantity ?? "").toString().trim();
-          const baseQtyNum = Number.parseInt(rawQty, 10);
-          const baseQty = Number.isFinite(baseQtyNum) && baseQtyNum > 0 ? baseQtyNum : 1;
-          const finalQty = baseQty * qtyMulSum;
-          await sourceItem.update({ "system.quantity": String(finalQty) });
-          const u = sourceItem.uuid ?? sourceItem.id;
-          if (u) embeddedUuids.push(u);
-          continue;
-        }
-
-        const sourceSys = sourceItem.system ?? {};
-        const rawQty = (sourceSys.quantity ?? "").toString().trim();
-        const baseQtyNum = Number.parseInt(rawQty, 10);
-        const baseQty = Number.isFinite(baseQtyNum) && baseQtyNum > 0 ? baseQtyNum : 1;
-        const finalQty = baseQty * qtyMulSum;
-
-        const nestedSystem = foundry.utils.duplicate(sourceSys);
-        nestedSystem.quantity = String(finalQty);
-
-        const nested = {
-          name: sourceItem.name,
-          type: sourceItem.type ?? "Targy",
-          img: sourceItem.img ?? "",
-          system: nestedSystem
-        };
-        embeddedItemsData.push(nested);
-      }
-
-      if (!embeddedItemsData.length) return;
-
-      const created = await actor.createEmbeddedDocuments("Item", embeddedItemsData);
-      for (const c of created) {
-        // createEmbeddedDocuments visszaadhat egyszerű objektumot is, de általában Document.
-        const u = c?.uuid ?? c?.id ?? null;
-        if (u) embeddedUuids.push(u);
-      }
-
-      if (!embeddedUuids.length) return;
-
-      await item.update({ "system.contents": embeddedUuids });
-      await item.setFlag(SYSTEM_NAMESPACE, "_contentsEmbedded", true);
+      await migrateCsomagToEmbeddedSnapshots(item, actor);
     } catch (err) {
-      console.warn("Void | Csomag contents embed failed:", err);
+      console.warn("Void | Csomag embedded migráció (createItem) failed:", err);
     }
   });
 });
 
 Hooks.on("ready", () => {
-  // Migráció: a már meglévő csomagoknál (actorban), ahol a contents még `|qty=` kódolt refeket tartalmaz,
-  // embedeljük a tartalmat, hogy a mennyiség szerkeszthető legyen actor-szinten.
+  // Csomagok: régi UUID / dedikált klón tartalom → `embeddedItems` + `emb:` (mint helyiség embedded).
   (async () => {
     try {
-      const SYSTEM_NAMESPACE = game.votv?.systemId ?? "vacuum-of-the-void";
       const actors = game.actors?.contents ?? [];
-      const hasEncodedQty = (r) => typeof r === "string" && r.includes("|") && r.includes("qty=");
-
-      const parseEncodedContentsRef = (refStr) => {
-        if (typeof refStr !== "string") return { baseRef: "", qtyMul: 1 };
-        const [baseRef, ...parts] = refStr.split("|");
-        let qtyMul = 1;
-        for (const p of parts) {
-          const m = p.match(/^qty=(.+)$/);
-          if (!m) continue;
-          const n = Number.parseInt(m[1], 10);
-          if (Number.isFinite(n) && n > 0) qtyMul = n;
-        }
-        return { baseRef, qtyMul };
-      };
-
-      const embedCsomagContents = async (csomagItem) => {
-        const actor = csomagItem?.parent;
-        if (!actor || actor.documentName !== "Actor") return;
-        const sys = csomagItem.system ?? {};
-        const refs = Array.isArray(sys.contents) ? sys.contents : [];
-        if (!refs.some(hasEncodedQty)) return;
-
-        const already = csomagItem.getFlag?.(SYSTEM_NAMESPACE, "_contentsEmbedded");
-        if (already === true) {
-          // Ha biztosan kódolt, akkor újra kell embedelni (különben a quantity edit nem fog működni).
-        }
-
-        const qtyByBaseRef = new Map();
-        for (const ref of refs) {
-          if (!hasEncodedQty(ref)) continue;
-          const { baseRef, qtyMul } = parseEncodedContentsRef(ref);
-          if (!baseRef) continue;
-          qtyByBaseRef.set(baseRef, (qtyByBaseRef.get(baseRef) ?? 0) + qtyMul);
-        }
-        if (!qtyByBaseRef.size) return;
-
-        const embeddedItemsData = [];
-        const embeddedUuids = [];
-
-        for (const [baseRef, qtyMulSum] of qtyByBaseRef.entries()) {
-          let sourceItem = null;
-          try {
-            sourceItem = await fromUuid(baseRef);
-            if (sourceItem?.documentName !== "Item") sourceItem = null;
-          } catch {
-            sourceItem = null;
-          }
-
-          if (!sourceItem) sourceItem = game.items?.get(baseRef) ?? null;
-          if (!sourceItem) sourceItem = actor.items?.get?.(baseRef) ?? null;
-          if (!sourceItem || sourceItem.documentName !== "Item") continue;
-
-          // Ha már van beágyazott item, csak frissítsük.
-          if (sourceItem.parent?.id === actor.id) {
-            const sourceSys = sourceItem.system ?? {};
-            const rawQty = (sourceSys.quantity ?? "").toString().trim();
-            const baseQtyNum = Number.parseInt(rawQty, 10);
-            const baseQty = Number.isFinite(baseQtyNum) && baseQtyNum > 0 ? baseQtyNum : 1;
-            const finalQty = baseQty * qtyMulSum;
-            await sourceItem.update({ "system.quantity": String(finalQty) });
-            const u = sourceItem.uuid ?? sourceItem.id;
-            if (u) embeddedUuids.push(u);
-            continue;
-          }
-
-          const sourceSys = sourceItem.system ?? {};
-          const rawQty = (sourceSys.quantity ?? "").toString().trim();
-          const baseQtyNum = Number.parseInt(rawQty, 10);
-          const baseQty = Number.isFinite(baseQtyNum) && baseQtyNum > 0 ? baseQtyNum : 1;
-          const finalQty = baseQty * qtyMulSum;
-
-          const nestedSystem = foundry.utils.duplicate(sourceSys);
-          nestedSystem.quantity = String(finalQty);
-
-          embeddedItemsData.push({
-            name: sourceItem.name,
-            type: sourceItem.type ?? "Targy",
-            img: sourceItem.img ?? "",
-            system: nestedSystem
-          });
-        }
-
-        if (!embeddedItemsData.length) return;
-
-        const created = await actor.createEmbeddedDocuments("Item", embeddedItemsData);
-        for (const c of created) {
-          const u = c?.uuid ?? c?.id ?? null;
-          if (u) embeddedUuids.push(u);
-        }
-        if (!embeddedUuids.length) return;
-
-        await csomagItem.update({ "system.contents": embeddedUuids });
-        await csomagItem.setFlag(SYSTEM_NAMESPACE, "_contentsEmbedded", true);
-      };
-
       for (const actor of actors) {
         const packages = actor?.items?.contents?.filter?.((i) => i.type === "Csomag") ?? [];
         for (const pkg of packages) {
-          await embedCsomagContents(pkg);
+          await migrateCsomagToEmbeddedSnapshots(pkg, actor);
         }
       }
     } catch (err) {
-      console.warn("Void | Csomag quantity migráció failed:", err);
+      console.warn("Void | Csomag embedded migráció (ready) failed:", err);
     }
   })();
 

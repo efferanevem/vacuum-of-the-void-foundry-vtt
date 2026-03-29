@@ -119,29 +119,39 @@ export class VoidWeaponSheet extends foundry.applications.api.HandlebarsApplicat
   }
 
   async _prepareContext(options) {
-    const context = await super._prepareContext(options) ?? {};
-    context.item = this.document;
-    const sys = foundry.utils.deepClone(this.document.system ?? {});
-    // Hatótáv: a sablon mindig szöveget kapjon (ne [object Object]).
-    if (typeof sys.range !== "string" || sys.range === "[object Object]") {
-      sys.range = "";
-    }
-    // Jártasság: ha nincs beállítva, alapértelmezett Kézifegyver Használat
-    if (sys.skillKey === undefined || sys.skillKey === null || String(sys.skillKey).trim() === "") {
-      sys.skillKey = "grenadeUse";
-    }
-    context.system = sys;
-    context.skillOptions = VOTV_WEAPON_SKILL_OPTIONS;
-    const special = String(sys.special ?? "");
-    const lines = special.split(/\r?\n/).reduce((sum, line) => {
-      if (!line) return sum + 1;
-      const approxWidth = 80;
-      return sum + Math.max(1, Math.ceil(line.length / approxWidth));
-    }, 0);
-    const base = 4;
-    const rows = Math.min(Math.max(lines, base), base * 3);
-    context.specialRows = rows;
-    return context;
+    return buildWeaponSheetTemplateContext(this.document, options);
   }
+}
+
+/** Világ/compendium Item vagy csomag beágyazott virtuális doc – ugyanaz a HBS-környezet. */
+export async function buildWeaponSheetTemplateContext(item, options = {}) {
+  const fake = { document: item, item, options };
+  let context = {};
+  try {
+    context =
+      (await foundry.applications.sheets.ItemSheetV2.prototype._prepareContext.call(fake, options)) ?? {};
+  } catch {
+    context = {};
+  }
+  context.item = item;
+  const sys = foundry.utils.deepClone(item.system ?? {});
+  if (typeof sys.range !== "string" || sys.range === "[object Object]") {
+    sys.range = "";
+  }
+  if (sys.skillKey === undefined || sys.skillKey === null || String(sys.skillKey).trim() === "") {
+    sys.skillKey = "grenadeUse";
+  }
+  context.system = sys;
+  context.skillOptions = VOTV_WEAPON_SKILL_OPTIONS;
+  const special = String(sys.special ?? "");
+  const lines = special.split(/\r?\n/).reduce((sum, line) => {
+    if (!line) return sum + 1;
+    const approxWidth = 80;
+    return sum + Math.max(1, Math.ceil(line.length / approxWidth));
+  }, 0);
+  const base = 4;
+  const rows = Math.min(Math.max(lines, base), base * 3);
+  context.specialRows = rows;
+  return context;
 }
 

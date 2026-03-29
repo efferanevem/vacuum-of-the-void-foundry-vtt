@@ -535,13 +535,19 @@
               </thead>
               <tbody>
                 {{#each itemsTable}}
-                  <tr class="karakter-equipment-row {{#if this.isPackageChild}}karakter-package-child-row{{/if}}" data-item-id="{{this.itemId}}">
+                  <tr
+                    class="karakter-equipment-row {{#if this.isPackageChild}}karakter-package-child-row{{/if}}"
+                    data-item-id="{{this.itemId}}"
+                    {{#if this.isPackageChild}}data-package-content-ref="{{{this.packageContentRef}}}" data-csomag-id="{{this.parentPackageId}}"{{/if}}
+                  >
                     <td class="karakter-equipment-cell-name">
                       {{#if this.isPackageChild}}
                         <span class="karakter-package-child-marker">↳</span>
                         <span
                           class="karakter-inventory-item-name"
                           data-item-id="{{this.itemId}}"
+                          data-package-content-ref="{{this.packageContentRef}}"
+                          data-csomag-id="{{this.parentPackageId}}"
                         >{{this.name}}</span>
                       {{else}}
                         {{#if this.img}}<img
@@ -564,6 +570,7 @@
                           type="text"
                           class="karakter-item-quantity-input vallalkozas-item-quantity-input"
                           data-item-id="{{this.itemId}}"
+                          {{#if this.packageContentRef}}data-package-content-ref="{{this.packageContentRef}}" data-csomag-id="{{this.parentPackageId}}"{{/if}}
                           value="{{this.quantity}}"
                         />
                       {{/if}}

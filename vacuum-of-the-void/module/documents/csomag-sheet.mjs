@@ -1,3 +1,44 @@
+import {
+  isEmbeddedCsomagRef,
+  parseEmbeddedCsomagIndex,
+  parseCsomagContentsEncodedRef,
+  removeEmbeddedPackageRow
+} from "../util/csomag-embedded-utils.mjs";
+import {
+  openEmbeddedCsomagItemSheetFromRef,
+  pushCsomagEmbeddedSnapshotFromItem
+} from "./csomag-embedded-item-sheet.mjs";
+
+const PACKAGE_ENTRY_FLAG = "packageEntryOf";
+
+function votvSystemNamespace() {
+  return game.votv?.systemId ?? "vacuum-of-the-void";
+}
+
+function parseCsomagEncodedRef(refStr) {
+  const { baseRef, qtyMul } = parseCsomagContentsEncodedRef(refStr);
+  const hasQty = typeof refStr === "string" && refStr.includes("|qty=");
+  return { baseRef, qtyMul, hasQty };
+}
+
+function findCsomagContentsIndex(contents, refString) {
+  if (!Array.isArray(contents) || typeof refString !== "string") return -1;
+  let idx = contents.indexOf(refString);
+  if (idx >= 0) return idx;
+  const want = parseCsomagEncodedRef(refString).baseRef;
+  if (!want) return -1;
+  return contents.findIndex(
+    (r) => typeof r === "string" && parseCsomagEncodedRef(r).baseRef === want
+  );
+}
+
+function isCsomagDedicatedPackageItem(item, csomagId) {
+  if (!item || !csomagId) return false;
+  const ns = votvSystemNamespace();
+  const a = item.getFlag?.(ns, PACKAGE_ENTRY_FLAG);
+  return a === csomagId || String(a ?? "") === String(csomagId);
+}
+
 export class VoidCsomagSheet extends foundry.applications.api.HandlebarsApplicationMixin(
   foundry.applications.sheets.ItemSheetV2
 ) {
@@ -39,13 +80,16 @@ export class VoidCsomagSheet extends foundry.applications.api.HandlebarsApplicat
       this.element;
     const $html = root ? $(root) : $([]);
 
-    // Elem megnyitása a listából.
     $html.on("click", ".csomag-item-open", async (ev) => {
       ev.preventDefault();
-      const ref = ev.currentTarget?.dataset?.itemRef;
-      const itemId = ev.currentTarget?.dataset?.itemId;
-      const openRef =
-        typeof ref === "string" && ref.includes("|") ? ref.split("|")[0] : ref;
+      const ref = ev.currentTarget?.dataset?.itemRef ?? "";
+      const openRef = typeof ref === "string" && ref.includes("|") ? ref.split("|")[0] : ref;
+
+      if (isEmbeddedCsomagRef(openRef)) {
+        openEmbeddedCsomagItemSheetFromRef(sheet.document, openRef);
+        return;
+      }
+
       let item = null;
       if (openRef) {
         try {
@@ -54,103 +98,117 @@ export class VoidCsomagSheet extends foundry.applications.api.HandlebarsApplicat
           item = null;
         }
       }
-      if (!item && itemId) {
-        item = game.items?.get(itemId) ?? null;
+      if (!item) {
+        const itemId = ev.currentTarget?.dataset?.itemId;
+        const actor = sheet.document.parent;
+        item =
+          (actor?.documentName === "Actor" ? actor.items?.get?.(itemId) ?? null : null) ??
+          game.items?.get(itemId) ??
+          null;
       }
       item?.sheet?.render(true);
     });
 
-    // Tartalom törlése (Alt+klikk).
     $html.on("click", ".csomag-item-remove", async (ev) => {
       ev.preventDefault();
       if (!ev.altKey) return;
       const ref = ev.currentTarget?.dataset?.itemRef;
       if (!ref) return;
-      const sys = this.document.system ?? {};
+
+      if (isEmbeddedCsomagRef(String(ref))) {
+        const idx = parseEmbeddedCsomagIndex(ref);
+        await removeEmbeddedPackageRow(sheet.document, idx);
+        return;
+      }
+
+      const actor = sheet.document.parent;
+      const sys = sheet.document.system ?? {};
       const current = Array.isArray(sys.contents) ? sys.contents.slice() : [];
-      const idx = current.indexOf(ref);
+      const idx = findCsomagContentsIndex(current, ref);
+      const { baseRef } = parseCsomagEncodedRef(ref);
       const next = idx >= 0 ? [...current.slice(0, idx), ...current.slice(idx + 1)] : current;
-      await this.document.update({ "system.contents": next });
+      await sheet.document.update({ "system.contents": next });
+
+      let doc = null;
+      try {
+        doc = await fromUuid(baseRef);
+        if (doc?.documentName !== "Item") doc = null;
+      } catch {
+        doc = null;
+      }
+      if (!doc && actor?.documentName === "Actor") {
+        doc = actor.items?.get?.(baseRef) ?? null;
+      }
+      const ns = votvSystemNamespace();
+      if (
+        doc &&
+        actor?.documentName === "Actor" &&
+        doc.parent?.id === actor.id &&
+        isCsomagDedicatedPackageItem(doc, sheet.document.id)
+      ) {
+        await doc.delete();
+      }
     });
 
-    // Tartalom mennyiség: közvetlenül a child item system.quantity-jét frissítjük.
     $html.on("change", ".csomag-item-quantity-input", async (ev) => {
       const input = ev.currentTarget;
-      const itemId = input.dataset.itemId;
-      if (!itemId) return;
+      const itemRefFull = (input.dataset?.itemRef ?? "").trim();
 
-      console.debug("Void | QtyEdit (CsomagSheet) start", {
-        itemId,
-        inputValue: input.value,
-        inputDisabled: !!input.disabled
-      });
+      const raw = (input.value ?? "").toString().trim();
+      const safe = raw === "" ? "1" : raw;
 
-      // itemId itt valójában a ref base része (| encoding nélkül), ezért fromUuid-val oldjuk fel,
-      // hogy compendiumból vagy embeddedből is biztosan megtaláljuk.
-      const baseRef = typeof itemId === "string" ? itemId.split("|")[0] : itemId;
+      if (isEmbeddedCsomagRef(itemRefFull)) {
+        const idx = parseEmbeddedCsomagIndex(itemRefFull);
+        if (idx < 0) return;
+        const arr = [...(sheet.document.system?.embeddedItems ?? [])];
+        const cur = foundry.utils.deepClone(
+          arr[idx] ?? { type: "Targy", name: "—", img: "", system: {} }
+        );
+        cur.system = cur.system ?? {};
+        cur.system.quantity = safe;
+        arr[idx] = cur;
+        try {
+          await sheet.document.update({ "system.embeddedItems": arr });
+        } catch (err) {
+          console.warn("Void | QtyEdit (CsomagSheet emb) failed", err);
+        }
+        return;
+      }
+
+      const itemId = input.dataset?.itemId;
+      const baseRef = itemRefFull
+        ? parseCsomagEncodedRef(itemRefFull).baseRef
+        : (typeof itemId === "string" ? itemId.split("|")[0] : itemId);
+      if (!baseRef) return;
+
       let item = null;
       try {
         const resolved = await fromUuid(baseRef);
         if (resolved?.documentName === "Item") item = resolved;
       } catch {
-        item = game.items?.get(baseRef) ?? null;
+        item = null;
       }
-      console.debug("Void | QtyEdit (CsomagSheet) resolved", {
-        baseRef,
-        resolvedFound: !!item,
-        resolved: item
-          ? {
-              uuid: item.uuid,
-              id: item.id,
-              parentId: item.parent?.id,
-              parentName: item.parent?.name,
-              docType: item.type,
-              docName: item.name,
-              currentQty: item.system?.quantity
-            }
-          : null
-      });
+      if (!item) {
+        const actor = sheet.document.parent;
+        item =
+          (actor?.documentName === "Actor" ? actor.items?.get?.(baseRef) ?? null : null) ??
+          game.items?.get(baseRef) ??
+          null;
+      }
       if (!item) return;
 
-      const raw = (input.value ?? "").toString().trim();
-      const safe = raw === "" ? "1" : raw;
       try {
         await item.update({ "system.quantity": safe });
-        console.debug("Void | QtyEdit (CsomagSheet) updated", { baseRef, newQty: safe });
       } catch (err) {
         console.warn("Void | QtyEdit (CsomagSheet) update failed", { baseRef, safe, err });
       }
     });
 
-    // Ha a csomag tartalmának quantity-je az inventory táblázatból változik,
-    // akkor a csomaglapot is azonnal újrarendereljük.
     if (!this._votvCsomagItemUpdateHookRegistered) {
       this._votvCsomagItemUpdateHook = (updatedItem, _changed, _options, _userId) => {
         try {
-          const actorParent = this.document?.parent;
-          const actorId = actorParent?.id ?? "";
-          if (!actorId) return;
-
-          // Csak az aktorhoz tartozó embedded itemek frissülése érdekes.
-          if (updatedItem?.parent?.id !== actorId) return;
-
-          const refs = Array.isArray(this.document?.system?.contents) ? this.document.system.contents : [];
-          if (!refs.length) return;
-
-          const updatedId = updatedItem?.id ?? "";
-          const updatedUuid = updatedItem?.uuid ?? "";
-          if (!updatedId && !updatedUuid) return;
-
-          const matches = refs.some((refStr) => {
-            if (!refStr) return false;
-            const s = String(refStr);
-            const base = s.includes("|") ? s.split("|")[0] : s;
-            return s === updatedId || s === updatedUuid || base === updatedId || base === updatedUuid;
-          });
-
-          if (!matches) return;
-          // Kis késleltetés, hogy a DOM update-ek ne versenyezzenek egymással.
-          setTimeout(() => this.render(true), 0);
+          if (updatedItem?.id !== sheet.document?.id) return;
+          setTimeout(() => sheet.render(true), 0);
         } catch (err) {
           console.warn("VoidCsomagSheet item update hook error:", err);
         }
@@ -160,7 +218,6 @@ export class VoidCsomagSheet extends foundry.applications.api.HandlebarsApplicat
       this._votvCsomagItemUpdateHookRegistered = true;
     }
 
-    // Globális drop: bármilyen actor-lapról / compendiumból rá lehessen dobni itemeket.
     if (!this._votvGlobalDrop) {
       this._votvGlobalDrop = async (ev) => {
         try {
@@ -200,16 +257,10 @@ export class VoidCsomagSheet extends foundry.applications.api.HandlebarsApplicat
           const doc = await fromUuid(uuid);
           if (!doc || doc.documentName !== "Item") return;
 
-          // Csak felszerelés jellegű itemeket engedünk a csomagba.
           const allowedTypes = new Set(["Fegyver", "weapon", "Pancel", "MikroChip", "Targy"]);
           if (!allowedTypes.has(doc.type)) return;
 
-          const ref = doc.uuid ?? doc.id;
-          if (!ref) return;
-          const sys = this.document.system ?? {};
-          const current = Array.isArray(sys.contents) ? sys.contents.slice() : [];
-          current.push(ref);
-          await this.document.update({ "system.contents": current });
+          await pushCsomagEmbeddedSnapshotFromItem(sheet.document, doc);
         } catch (err) {
           console.error("VoidCsomagSheet global drop error", err);
         }
@@ -273,65 +324,60 @@ export class VoidCsomagSheet extends foundry.applications.api.HandlebarsApplicat
   }
 
   async _prepareContext(options) {
-    const context = await super._prepareContext(options) ?? {};
+    const context = (await super._prepareContext(options)) ?? {};
     context.item = this.document;
     const parentActor = this.document?.parent ?? null;
     const sys = foundry.utils.deepClone(this.document.system ?? {});
     const refs = Array.isArray(sys.contents) ? sys.contents : [];
 
-    const parseEncodedRef = (refStr) => {
-      if (typeof refStr !== "string") return { baseRef: "", qtyMul: 1, hasQty: false };
-      const [baseRef, ...parts] = refStr.split("|");
-      let qtyMul = 1;
-      let hasQty = false;
-      for (const p of parts) {
-        const m = p.match(/^qty=(.+)$/);
-        if (!m) continue;
-        const n = Number.parseInt(m[1], 10);
-        if (Number.isFinite(n) && n > 0) qtyMul = n;
-        hasQty = true;
-      }
-      return { baseRef, qtyMul, hasQty };
-    };
-
-    const docs = await Promise.all(
-      refs.map(async (ref) => {
-        if (!ref) return null;
-        const { baseRef } = parseEncodedRef(ref);
-        if (!baseRef) return null;
-        try {
-          const doc = await fromUuid(baseRef);
-          if (doc?.documentName === "Item") return doc;
-        } catch {
-          const item = game.items?.get(baseRef) ?? null;
-          if (item) return item;
-        }
-        return null;
-      })
-    );
-
     const contentsList = [];
-    for (let i = 0; i < docs.length; i++) {
-      const doc = docs[i];
-      const ref = refs[i];
-      if (!doc || !ref) continue;
+    for (const ref of refs) {
+      if (!ref) continue;
+      const refStr = String(ref);
 
-      const { qtyMul, hasQty } = parseEncodedRef(ref);
-      const { baseRef } = parseEncodedRef(ref);
+      if (isEmbeddedCsomagRef(refStr)) {
+        const idx = parseEmbeddedCsomagIndex(refStr);
+        const snap = this.document.system?.embeddedItems?.[idx];
+        if (!snap) continue;
+        const dSys = snap.system ?? {};
+        const rawQty = (dSys.quantity ?? "").toString().trim();
+        contentsList.push({
+          id: refStr,
+          ref: refStr,
+          name: snap.name ?? "—",
+          img: snap.img ?? "",
+          type: snap.type ?? "Targy",
+          quantity: rawQty || "1",
+          isFixedQuantity: false,
+          isQuantityDisabled: false
+        });
+        continue;
+      }
+
+      const { baseRef, qtyMul, hasQty } = parseCsomagEncodedRef(refStr);
+      if (!baseRef) continue;
+
+      let doc = null;
+      try {
+        doc = await fromUuid(baseRef);
+        if (doc?.documentName !== "Item") doc = null;
+      } catch {
+        const item = game.items?.get(baseRef) ?? null;
+        if (item) doc = item;
+      }
+      if (!doc) continue;
+
       const dSys = doc.system ?? {};
       const rawQty = (dSys.quantity ?? "").toString().trim();
       const baseQtyNum = Number.parseInt(rawQty, 10);
       const baseQty = Number.isFinite(baseQtyNum) && baseQtyNum > 0 ? baseQtyNum : 1;
 
-      // Ha a contents tartalom már actor-embedded itemre mutat, akkor a mennyiség szerkeszthető.
-      // fromUuid() visszaadhat embedded itemet is; itt doc.parent alapján döntünk.
       const isEmbedded = !!(parentActor && doc?.parent?.id === parentActor.id);
       const isQuantityDisabled = hasQty && qtyMul !== 1 && !isEmbedded;
 
       contentsList.push({
-        // data-item-id: a ref base része (|qty encoding nélkül), így a mennyiség update biztosan feloldható.
-        id: baseRef,
-        ref, // encoded ref: remove button uses it to remove exact string
+        id: isEmbedded ? doc.id : baseRef,
+        ref: refStr,
         name: doc.name,
         img: doc.img,
         type: doc.type,
@@ -346,4 +392,3 @@ export class VoidCsomagSheet extends foundry.applications.api.HandlebarsApplicat
     return context;
   }
 }
-

@@ -94,19 +94,30 @@ export class VoidTargySheet extends foundry.applications.api.HandlebarsApplicati
   }
 
   async _prepareContext(options) {
-    const context = await super._prepareContext(options) ?? {};
-    context.item = this.document;
-    const sys = foundry.utils.deepClone(this.document.system ?? {});
-    context.system = sys;
-    const desc = String(sys.description ?? "");
-    const lines = desc.split(/\r?\n/).reduce((sum, line) => {
-      if (!line) return sum + 1;
-      const approxWidth = 80;
-      return sum + Math.max(1, Math.ceil(line.length / approxWidth));
-    }, 0);
-    const base = 8;
-    const rows = Math.min(Math.max(lines, base), base * 3);
-    context.descriptionRows = rows;
-    return context;
+    return buildTargySheetTemplateContext(this.document, options);
   }
+}
+
+export async function buildTargySheetTemplateContext(item, options = {}) {
+  const fake = { document: item, item, options };
+  let context = {};
+  try {
+    context =
+      (await foundry.applications.sheets.ItemSheetV2.prototype._prepareContext.call(fake, options)) ?? {};
+  } catch {
+    context = {};
+  }
+  context.item = item;
+  const sys = foundry.utils.deepClone(item.system ?? {});
+  context.system = sys;
+  const desc = String(sys.description ?? "");
+  const lines = desc.split(/\r?\n/).reduce((sum, line) => {
+    if (!line) return sum + 1;
+    const approxWidth = 80;
+    return sum + Math.max(1, Math.ceil(line.length / approxWidth));
+  }, 0);
+  const base = 8;
+  const rows = Math.min(Math.max(lines, base), base * 3);
+  context.descriptionRows = rows;
+  return context;
 }

@@ -1,6 +1,8 @@
 import { computeVotvCritInfo } from "../util/votv-result-type.mjs";
 import { hideDefaultItemBagImg } from "../util/hide-default-item-bag.mjs";
 import { bindInventoryTableReorder, refreshInventoryRowDraggable, sortDocsByItemSort } from "../util/inventory-table-reorder.mjs";
+import { collectItemIdsHiddenByPackageContents, buildCsomagChildInventoryRows } from "../util/csomag-actor-inventory-rows.mjs";
+import { openActorInventoryEmbeddedCsomagRow, patchActorInventoryEmbeddedCsomagQuantity } from "../util/csomag-inventory-handlers.mjs";
 
 /** Páncél szint nyers érték → megjelenített szöveg (karakterlap táblázat). */
 function _armorLevelLabel(raw) {
@@ -612,36 +614,7 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
     const packageDocs = allItems.filter((i) => i.type === "Csomag");
     const targyDocs = allItems.filter((i) => i.type === "Targy");
 
-    const parseEncodedRef = (refStr) => {
-      if (typeof refStr !== "string") return { baseRef: "", qtyMul: 1 };
-      const [baseRef, ...parts] = refStr.split("|");
-      let qtyMul = 1;
-      for (const p of parts) {
-        const m = p.match(/^qty=(.+)$/);
-        if (!m) continue;
-        const n = Number.parseInt(m[1], 10);
-        if (Number.isFinite(n) && n > 0) qtyMul = n;
-      }
-      return { baseRef, qtyMul };
-    };
-
-    const childIds = new Set();
-    for (const pkg of packageDocs) {
-      const refs = Array.isArray(pkg?.system?.contents) ? pkg.system.contents : [];
-      for (const ref of refs) {
-        if (!ref) continue;
-        const { baseRef } = parseEncodedRef(ref);
-        if (!baseRef) continue;
-        let doc = null;
-        try {
-          doc = await fromUuid(baseRef);
-          if (doc?.documentName !== "Item") doc = null;
-        } catch {
-          doc = game.items?.get(baseRef) ?? null;
-        }
-        if (doc) childIds.add(doc.id);
-      }
-    }
+    const childIds = await collectItemIdsHiddenByPackageContents(packageDocs, this.actor);
 
     const targyOnly = targyDocs.filter((item) => !childIds.has(item.id));
     const topLevelItems = sortDocsByItemSort([...packageDocs, ...targyOnly]);
@@ -665,50 +638,8 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
           isPackageChild: false
         });
 
-        const docsWithQty = [];
-        for (const ref of refs) {
-          if (!ref) continue;
-          const { baseRef, qtyMul } = parseEncodedRef(ref);
-          if (!baseRef) continue;
-
-          let doc = null;
-          try {
-            doc = await fromUuid(baseRef);
-            if (doc?.documentName !== "Item") doc = null;
-          } catch {
-            doc = game.items?.get(baseRef) ?? null;
-          }
-          if (!doc) continue;
-          docsWithQty.push({ doc, qtyMul, baseRef });
-        }
-
-        for (const { doc, qtyMul, baseRef } of docsWithQty) {
-          const dSys = doc.system ?? {};
-          const dDescRaw = (dSys.description ?? "").toString().trim();
-          const dDescription = dDescRaw || "—";
-
-          const rawQty = (dSys.quantity ?? "").toString().trim();
-          const rawQtyNum = Number.parseInt(rawQty, 10);
-          const baseQty = Number.isFinite(rawQtyNum) && rawQtyNum > 0 ? rawQtyNum : 1;
-          const quantity = String(baseQty * qtyMul);
-
-          const rawImg = doc.img ?? "";
-          const img = cleanImg(rawImg);
-
-          itemsTable.push({
-            itemId: baseRef,
-            actorId: this.actor.id,
-            name: doc.name ?? "—",
-            img,
-            quantity,
-            description: dDescription,
-            isPackage: false,
-            isPackageChild: true,
-            parentPackageId: item.id,
-            parentPackageName: item.name ?? "Csomag",
-            innerType: doc.type
-          });
-        }
+        const childRows = await buildCsomagChildInventoryRows(item, this.actor, { cleanImg });
+        for (const row of childRows) itemsTable.push(row);
       } else if (item.type === "Targy") {
         const sys = item?.system ?? {};
         const descRaw = (sys.description ?? "").trim();
@@ -1154,6 +1085,8 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
 
     // Inventory: click weapon or item name/icon to open its sheet.
     const openInventoryItem = async (target, ev) => {
+      if (openActorInventoryEmbeddedCsomagRow(this.actor, target)) return;
+
       const itemId = target.dataset.itemId;
       if (!itemId) return;
 
@@ -1203,6 +1136,10 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
       const itemId = (input.dataset.itemId ?? "").trim();
       if (!itemId) return;
 
+      const raw = (input.value ?? "").toString().trim();
+      const safe = raw === "" ? "0" : raw;
+      if (await patchActorInventoryEmbeddedCsomagQuantity(this.actor, input, safe)) return;
+
       console.debug("Void | QtyEdit (KarakterSheet) start", {
         itemId,
         inputValue: input.value,
@@ -1224,17 +1161,7 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
         try {
           const resolved = await fromUuid(baseRef);
           if (resolved?.documentName === "Item") {
-            console.debug("Void | QtyEdit (KarakterSheet) resolvedFromUuid", {
-              baseRef,
-              uuid: resolved.uuid,
-              id: resolved.id,
-              parentId: resolved.parent?.id,
-              currentQty: resolved.system?.quantity
-            });
-            const raw = (input.value ?? "").toString().trim();
-            const safe = raw === "" ? "0" : raw;
             await resolved.update({ "system.quantity": safe });
-            console.debug("Void | QtyEdit (KarakterSheet) updated", { baseRef, newQty: safe });
           }
         } catch {
           // ignore
@@ -1242,8 +1169,6 @@ export class VoidKarakterSheet extends foundry.applications.api.HandlebarsApplic
         return;
       }
 
-      const raw = (input.value ?? "").toString().trim();
-      const safe = raw === "" ? "0" : raw;
       console.debug("Void | QtyEdit (KarakterSheet) updatingEmbeddedOrGlobal", {
         itemId,
         resolvedUuid: item.uuid,

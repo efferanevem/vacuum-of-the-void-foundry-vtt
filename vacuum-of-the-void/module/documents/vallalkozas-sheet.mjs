@@ -1,4 +1,6 @@
 import { bindInventoryTableReorder, refreshInventoryRowDraggable, sortDocsByItemSort } from "../util/inventory-table-reorder.mjs";
+import { collectItemIdsHiddenByPackageContents, buildCsomagChildInventoryRows } from "../util/csomag-actor-inventory-rows.mjs";
+import { openActorInventoryEmbeddedCsomagRow, patchActorInventoryEmbeddedCsomagQuantity } from "../util/csomag-inventory-handlers.mjs";
 
 export class VoidVallalkozasSheet extends foundry.applications.api.HandlebarsApplicationMixin(
   foundry.applications.sheets.ActorSheetV2
@@ -220,26 +222,7 @@ export class VoidVallalkozasSheet extends foundry.applications.api.HandlebarsApp
     const packageDocs = allItems.filter((i) => i.type === "Csomag");
     const targyDocs = allItems.filter((i) => i.type === "Targy");
 
-    const resolveRefDoc = async (ref) => {
-      if (!ref) return null;
-      try {
-        const doc = await fromUuid(ref);
-        if (doc?.documentName === "Item") return doc;
-      } catch {
-        const fallback = game.items?.get(ref);
-        if (fallback) return fallback;
-      }
-      return null;
-    };
-
-    const childIds = new Set();
-    for (const pkg of packageDocs) {
-      const refs = Array.isArray(pkg.system?.contents) ? pkg.system.contents : [];
-      const docs = await Promise.all(refs.map((ref) => resolveRefDoc(ref)));
-      for (const doc of docs) {
-        if (doc) childIds.add(doc.id);
-      }
-    }
+    const childIds = await collectItemIdsHiddenByPackageContents(packageDocs, actor);
 
     const targyOnly = targyDocs.filter((item) => !childIds.has(item.id));
     const topLevelItems = sortDocsByItemSort([...packageDocs, ...targyOnly]);
@@ -263,33 +246,8 @@ export class VoidVallalkozasSheet extends foundry.applications.api.HandlebarsApp
           isPackageChild: false
         });
 
-        if (!refs.length) continue;
-
-        const docs = await Promise.all(refs.map((ref) => resolveRefDoc(ref)));
-        for (const doc of docs) {
-          if (!doc) continue;
-          const dSys = doc.system ?? {};
-          const dDescRaw = (dSys.description ?? "").toString().trim();
-          const dDescription = dDescRaw || "—";
-          const rawQty = (dSys.quantity ?? "").toString().trim();
-          const quantity = rawQty || "1";
-          const rawImg = doc.img ?? "";
-          const img = cleanImg(rawImg);
-
-          itemsTable.push({
-            itemId: doc.id,
-            actorId: actor.id,
-            name: doc.name ?? "—",
-            img,
-            quantity,
-            description: dDescription,
-            isPackage: false,
-            isPackageChild: true,
-            parentPackageId: item.id,
-            parentPackageName: item.name ?? "Csomag",
-            innerType: doc.type
-          });
-        }
+        const childRows = await buildCsomagChildInventoryRows(item, actor, { cleanImg });
+        for (const row of childRows) itemsTable.push(row);
       } else if (item.type === "Targy") {
         const sys = item.system ?? {};
         const descRaw = (sys.description ?? "").trim();
@@ -490,6 +448,7 @@ export class VoidVallalkozasSheet extends foundry.applications.api.HandlebarsApp
 
     // Raktár + Egyéb információk: név/ikon → item lap (minden tábla, mint a karakterlapon: actor / világ / fromUuid)
     const openVallalkozasInventoryItem = async (target) => {
+      if (openActorInventoryEmbeddedCsomagRow(this.actor, target)) return;
       const itemId = (target?.dataset?.itemId ?? "").trim();
       if (!itemId || !this.actor) return;
       let item =
@@ -527,10 +486,24 @@ export class VoidVallalkozasSheet extends foundry.applications.api.HandlebarsApp
       const input = ev.currentTarget;
       const itemId = (input?.dataset?.itemId ?? "").trim();
       if (!itemId || !this.actor) return;
-      const item = this.actor.items.get(itemId);
-      if (!item || item.type !== "Targy") return;
       const val = (input.value ?? "").trim();
-      await item.update({ "system.quantity": val });
+      const safe = val === "" ? "0" : val;
+      if (await patchActorInventoryEmbeddedCsomagQuantity(this.actor, input, safe)) return;
+      let item = this.actor.items.get(itemId);
+      if (!item) {
+        const baseRef = itemId.split("|")[0];
+        try {
+          const resolved = await fromUuid(baseRef);
+          if (resolved?.documentName === "Item" && resolved.type === "Targy") {
+            await resolved.update({ "system.quantity": safe });
+          }
+        } catch {
+          // ignore
+        }
+        return;
+      }
+      if (item.type !== "Targy") return;
+      await item.update({ "system.quantity": safe });
     });
 
     // Raktár: Alt+klikk törlés

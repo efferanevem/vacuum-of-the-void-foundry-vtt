@@ -7,6 +7,8 @@ import {
 } from "../util/unit-ability-embedded.mjs";
 import { nextEmbeddedUnitSortForTail, nextEmptyHitForActorUnit } from "../util/jarmu-unit-hit-increment.mjs";
 import { bindInventoryTableReorder, refreshInventoryRowDraggable, sortDocsByItemSort } from "../util/inventory-table-reorder.mjs";
+import { collectItemIdsHiddenByPackageContents, buildCsomagChildInventoryRows } from "../util/csomag-actor-inventory-rows.mjs";
+import { openActorInventoryEmbeddedCsomagRow, patchActorInventoryEmbeddedCsomagQuantity } from "../util/csomag-inventory-handlers.mjs";
 
 /** Páncél szint → megjelenített szöveg (Raktár táblázat). */
 function _armorLevelLabel(raw) {
@@ -251,36 +253,7 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
     const packageDocs = allItems.filter((i) => i.type === "Csomag");
     const targyDocs = allItems.filter((i) => i.type === "Targy");
 
-    const parseEncodedRef = (refStr) => {
-      if (typeof refStr !== "string") return { baseRef: "", qtyMul: 1 };
-      const [baseRef, ...parts] = refStr.split("|");
-      let qtyMul = 1;
-      for (const p of parts) {
-        const m = p.match(/^qty=(.+)$/);
-        if (!m) continue;
-        const n = Number.parseInt(m[1], 10);
-        if (Number.isFinite(n) && n > 0) qtyMul = n;
-      }
-      return { baseRef, qtyMul };
-    };
-
-    const childIds = new Set();
-    for (const pkg of packageDocs) {
-      const refs = Array.isArray(pkg?.system?.contents) ? pkg.system.contents : [];
-      for (const ref of refs) {
-        if (!ref) continue;
-        const { baseRef } = parseEncodedRef(ref);
-        if (!baseRef) continue;
-        let doc = null;
-        try {
-          doc = await fromUuid(baseRef);
-          if (doc?.documentName !== "Item") doc = null;
-        } catch {
-          doc = game.items?.get(baseRef) ?? null;
-        }
-        if (doc) childIds.add(doc.id);
-      }
-    }
+    const childIds = await collectItemIdsHiddenByPackageContents(packageDocs, this.actor);
 
     const targyOnly = targyDocs.filter((item) => !childIds.has(item.id));
     const topLevelItems = sortDocsByItemSort([...packageDocs, ...targyOnly]);
@@ -304,50 +277,8 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
           isPackageChild: false
         });
 
-        const docsWithQty = [];
-        for (const ref of refs) {
-          if (!ref) continue;
-          const { baseRef, qtyMul } = parseEncodedRef(ref);
-          if (!baseRef) continue;
-
-          let doc = null;
-          try {
-            doc = await fromUuid(baseRef);
-            if (doc?.documentName !== "Item") doc = null;
-          } catch {
-            doc = game.items?.get(baseRef) ?? null;
-          }
-          if (!doc) continue;
-          docsWithQty.push({ doc, qtyMul, baseRef });
-        }
-
-        for (const { doc, qtyMul, baseRef } of docsWithQty) {
-          const dSys = doc.system ?? {};
-          const dDescRaw = (dSys.description ?? "").toString().trim();
-          const dDescription = dDescRaw || "—";
-
-          const rawQty = (dSys.quantity ?? "").toString().trim();
-          const rawQtyNum = Number.parseInt(rawQty, 10);
-          const baseQty = Number.isFinite(rawQtyNum) && rawQtyNum > 0 ? rawQtyNum : 1;
-          const quantity = String(baseQty * qtyMul);
-
-          const rawImg = doc.img ?? "";
-          const img = cleanImg(rawImg);
-
-          itemsTable.push({
-            itemId: baseRef,
-            actorId: this.actor.id,
-            name: doc.name ?? "—",
-            img,
-            quantity,
-            description: dDescription,
-            isPackage: false,
-            isPackageChild: true,
-            parentPackageId: item.id,
-            parentPackageName: item.name ?? "Csomag",
-            innerType: doc.type
-          });
-        }
+        const childRows = await buildCsomagChildInventoryRows(item, this.actor, { cleanImg });
+        for (const row of childRows) itemsTable.push(row);
       } else if (item.type === "Targy") {
         const sys = item?.system ?? {};
         const descRaw = (sys.description ?? "").trim();
@@ -548,21 +479,24 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
     });
 
     // Raktár: kattintás név/ikon → item lap
-    $html.on("click", ".jarmu-inventory-item-name, .jarmu-inventory-item-icon", (ev) => {
+    $html.on("click", ".jarmu-inventory-item-name, .jarmu-inventory-item-icon", async (ev) => {
       ev.preventDefault();
-      const itemId = ev.currentTarget?.dataset?.itemId;
+      const target = ev.currentTarget;
+      if (openActorInventoryEmbeddedCsomagRow(this.actor, target)) return;
+      const itemId = target?.dataset?.itemId;
       if (!itemId) return;
       let item = this.actor.items.get(itemId) ?? null;
       if (!item) {
         const baseRef = typeof itemId === "string" ? itemId.split("|")[0] : itemId;
-        fromUuid(baseRef)
-          .then((doc) => {
-            if (doc?.documentName === "Item") doc.sheet?.render(true);
-          })
-          .catch(() => {});
-        return;
+        try {
+          const doc = await fromUuid(baseRef);
+          if (doc?.documentName === "Item") item = doc;
+        } catch {
+          item = null;
+        }
       }
-      item?.sheet?.render(true);
+      if (!item) return;
+      item.sheet?.render(true);
     });
     // Raktár: Alt+klikk törlés
     $html.on("click", ".jarmu-item-delete", async (ev) => {
@@ -579,21 +513,24 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
       const input = ev.currentTarget;
       const itemId = input?.dataset?.itemId;
       if (!itemId) return;
+      const raw = (input.value ?? "").toString().trim();
+      const safe = raw === "" ? "0" : raw;
+      if (await patchActorInventoryEmbeddedCsomagQuantity(this.actor, input, safe)) return;
       let item = this.actor.items.get(itemId);
-      if (item && (item.type !== "Targy" && item.type !== "Fegyver")) return;
+      if (item && item.type !== "Targy" && item.type !== "Fegyver") return;
       if (!item) {
         const baseRef = typeof itemId === "string" ? itemId.split("|")[0] : itemId;
         try {
           const resolved = await fromUuid(baseRef);
           if (resolved?.documentName === "Item" && (resolved.type === "Targy" || resolved.type === "Fegyver")) {
-            await resolved.update({ "system.quantity": (input.value ?? "").trim() });
+            await resolved.update({ "system.quantity": safe });
           }
         } catch {
           // ignore
         }
         return;
       }
-      await item.update({ "system.quantity": (input.value ?? "").trim() });
+      await item.update({ "system.quantity": safe });
     });
     // Raktár: páncél felszerelt
     $html.on("change", ".jarmu-armor-equipped-checkbox", async (ev) => {

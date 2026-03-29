@@ -1,6 +1,8 @@
 import { computeVotvCritInfo } from "../util/votv-result-type.mjs";
 import { hideDefaultItemBagImg } from "../util/hide-default-item-bag.mjs";
 import { bindInventoryTableReorder, refreshInventoryRowDraggable, sortDocsByItemSort } from "../util/inventory-table-reorder.mjs";
+import { collectItemIdsHiddenByPackageContents, buildCsomagChildInventoryRows } from "../util/csomag-actor-inventory-rows.mjs";
+import { openActorInventoryEmbeddedCsomagRow, patchActorInventoryEmbeddedCsomagQuantity } from "../util/csomag-inventory-handlers.mjs";
 import { buildSkillMarkedContext } from "./karakter-sheet.mjs";
 
 /** Páncél szint nyers érték → megjelenített szöveg (karakterlap táblázat). */
@@ -278,36 +280,7 @@ export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplication
     const packageDocs = allItems.filter((i) => i.type === "Csomag");
     const targyDocs = allItems.filter((i) => i.type === "Targy");
 
-    const parseEncodedRef = (refStr) => {
-      if (typeof refStr !== "string") return { baseRef: "", qtyMul: 1 };
-      const [baseRef, ...parts] = refStr.split("|");
-      let qtyMul = 1;
-      for (const p of parts) {
-        const m = p.match(/^qty=(.+)$/);
-        if (!m) continue;
-        const n = Number.parseInt(m[1], 10);
-        if (Number.isFinite(n) && n > 0) qtyMul = n;
-      }
-      return { baseRef, qtyMul };
-    };
-
-    const childIds = new Set();
-    for (const pkg of packageDocs) {
-      const refs = Array.isArray(pkg?.system?.contents) ? pkg.system.contents : [];
-      for (const ref of refs) {
-        if (!ref) continue;
-        const { baseRef } = parseEncodedRef(ref);
-        if (!baseRef) continue;
-        let doc = null;
-        try {
-          doc = await fromUuid(baseRef);
-          if (doc?.documentName !== "Item") doc = null;
-        } catch {
-          doc = game.items?.get(baseRef) ?? null;
-        }
-        if (doc) childIds.add(doc.id);
-      }
-    }
+    const childIds = await collectItemIdsHiddenByPackageContents(packageDocs, actor);
 
     const targyOnly = targyDocs.filter((item) => !childIds.has(item.id));
     const topLevelItems = sortDocsByItemSort([...packageDocs, ...targyOnly]);
@@ -331,51 +304,8 @@ export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplication
           isPackageChild: false
         });
 
-        const docsWithQty = [];
-        for (const ref of refs) {
-          if (!ref) continue;
-          const { baseRef, qtyMul } = parseEncodedRef(ref);
-          if (!baseRef) continue;
-
-          let doc = null;
-          try {
-            doc = await fromUuid(baseRef);
-            if (doc?.documentName !== "Item") doc = null;
-          } catch {
-            doc = game.items?.get(baseRef) ?? null;
-          }
-          if (!doc) continue;
-
-          docsWithQty.push({ doc, qtyMul, baseRef });
-        }
-
-        for (const { doc, qtyMul, baseRef } of docsWithQty) {
-          const dSys = doc.system ?? {};
-          const dDescRaw = (dSys.description ?? "").toString().trim();
-          const dDescription = dDescRaw || "—";
-
-          const rawQty = (dSys.quantity ?? "").toString().trim();
-          const rawQtyNum = Number.parseInt(rawQty, 10);
-          const baseQty = Number.isFinite(rawQtyNum) && rawQtyNum > 0 ? rawQtyNum : 1;
-          const quantity = String(baseQty * qtyMul);
-
-          const rawImg = doc.img ?? "";
-          const img = rawImg;
-
-          itemsTable.push({
-            itemId: baseRef,
-            actorId: actor.id,
-            name: doc.name ?? "—",
-            img,
-            quantity,
-            description: dDescription,
-            isPackage: false,
-            isPackageChild: true,
-            parentPackageId: item.id,
-            parentPackageName: item.name ?? "Csomag",
-            innerType: doc.type
-          });
-        }
+        const childRows = await buildCsomagChildInventoryRows(item, actor, { cleanImg: (u) => u ?? "" });
+        for (const row of childRows) itemsTable.push(row);
       } else if (item.type === "Targy") {
         const sys = item?.system ?? {};
         const descRaw = (sys.description ?? "").trim();
@@ -559,23 +489,23 @@ export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplication
     });
 
     // Felszerelés / inventory: névre vagy ikonra kattintva item lap megnyitása (mint karakterlapon)
-    const openInventoryItem = (target) => {
+    const openInventoryItem = async (target) => {
+      if (openActorInventoryEmbeddedCsomagRow(this.actor, target)) return;
       const itemId = target?.dataset?.itemId;
       if (!itemId || !this.actor) return;
       let item = this.actor.items.get(itemId) ?? null;
-      if (item) {
-        item.sheet?.render(true);
-        return;
+      if (!item) {
+        const baseRef = typeof itemId === "string" ? itemId.split("|")[0] : itemId;
+        if (!baseRef) return;
+        try {
+          const doc = await fromUuid(baseRef);
+          if (doc?.documentName === "Item") item = doc;
+        } catch {
+          item = null;
+        }
       }
-      const baseRef = typeof itemId === "string" ? itemId.split("|")[0] : itemId;
-      if (!baseRef) return;
-      // Kompendiumból behúzott tartalmaknál az itemId lehet UUID/Compendium ref.
-      fromUuid(baseRef)
-        .then((doc) => {
-          if (doc?.documentName !== "Item") return;
-          doc.sheet?.render(true);
-        })
-        .catch(() => {});
+      if (!item) return;
+      item.sheet?.render(true);
     };
     $html.on("click", ".karakter-inventory-item-name", (ev) => {
       ev.preventDefault();
@@ -584,6 +514,28 @@ export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplication
     $html.on("click", ".karakter-inventory-item-icon", (ev) => {
       ev.preventDefault();
       openInventoryItem(ev.currentTarget);
+    });
+
+    $html.on("change", ".karakter-item-quantity-input", async (ev) => {
+      const input = ev.currentTarget;
+      const itemId = (input.dataset?.itemId ?? "").trim();
+      if (!itemId || !this.actor) return;
+      const raw = (input.value ?? "").toString().trim();
+      const safe = raw === "" ? "0" : raw;
+      if (await patchActorInventoryEmbeddedCsomagQuantity(this.actor, input, safe)) return;
+      let item = this.actor.items.get(itemId) ?? null;
+      if (!item) {
+        const baseRef = itemId.split("|")[0];
+        try {
+          const doc = await fromUuid(baseRef);
+          if (doc?.documentName === "Item") item = doc;
+        } catch {
+          item = null;
+        }
+        if (item) await item.update({ "system.quantity": safe });
+        return;
+      }
+      await item.update({ "system.quantity": safe });
     });
 
     // Fegyver slot: Támadások szekcióban kattintás a slotra → fegyver lap megnyitása
