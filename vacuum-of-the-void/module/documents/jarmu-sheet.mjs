@@ -6,6 +6,7 @@ import {
   parseEmbeddedAbilityIndex
 } from "../util/unit-ability-embedded.mjs";
 import { nextEmbeddedUnitSortForTail, nextEmptyHitForActorUnit } from "../util/jarmu-unit-hit-increment.mjs";
+import { bindInventoryTableReorder, refreshInventoryRowDraggable, sortDocsByItemSort } from "../util/inventory-table-reorder.mjs";
 
 /** Páncél szint → megjelenített szöveg (Raktár táblázat). */
 function _armorLevelLabel(raw) {
@@ -146,6 +147,8 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
       setTimeout(restoreScrollAndFocus, 300);
       setTimeout(restoreScrollAndFocus, 450);
     }
+    const refreshRoot = this.form ?? this.element;
+    if (refreshRoot) refreshInventoryRowDraggable(refreshRoot);
     return out;
   }
 
@@ -177,7 +180,7 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
     const emptyLabel = "— Nincs fegyver —";
     const DEFAULT_BAG_ICON = "icons/svg/item-bag.svg";
     const cleanImg = (rawImg) => (rawImg === DEFAULT_BAG_ICON ? "" : rawImg);
-    const weaponDocs = (this.actor.items?.contents ?? []).filter(i => i.type === "Fegyver");
+    const weaponDocs = sortDocsByItemSort((this.actor.items?.contents ?? []).filter(i => i.type === "Fegyver"));
     context.weaponsTable = weaponDocs.map((item) => {
       const sys = item?.system ?? {};
       const typeRaw = sys.type ?? "";
@@ -206,7 +209,7 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
         special: (sys.special ?? "").trim() || "—"
       };
     });
-    const armorDocs = (this.actor.items?.contents ?? []).filter(i => i.type === "Pancel");
+    const armorDocs = sortDocsByItemSort((this.actor.items?.contents ?? []).filter(i => i.type === "Pancel"));
     context.armorTable = armorDocs.map((item) => {
       const sys = item?.system ?? {};
       const equipped = !!(item.system?.equipped);
@@ -222,7 +225,7 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
         equipped
       };
     });
-    const microchipDocs = (this.actor.items?.contents ?? []).filter(i => i.type === "MikroChip");
+    const microchipDocs = sortDocsByItemSort((this.actor.items?.contents ?? []).filter(i => i.type === "MikroChip"));
     context.microchipsTable = microchipDocs.map((item) => {
       const abilityType = item?.system?.abilityType ?? "";
       const typeLabel = abilityType === "active" ? "Aktív" : abilityType === "passive" ? "Passzív" : (abilityType || "—");
@@ -243,53 +246,31 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
         equipped: false
       };
     });
-    // Felszerelés: Tárgyak + Csomagok táblázat (ugyanaz a flatten logika, mint a karakterlapon).
+    // Felszerelés: Tárgyak + Csomagok (top-level sorrend Item.sort szerint, mint a karakterlapon).
     const allItems = this.actor.items?.contents ?? [];
     const packageDocs = allItems.filter((i) => i.type === "Csomag");
     const targyDocs = allItems.filter((i) => i.type === "Targy");
 
-    const packageEntries = [];
+    const parseEncodedRef = (refStr) => {
+      if (typeof refStr !== "string") return { baseRef: "", qtyMul: 1 };
+      const [baseRef, ...parts] = refStr.split("|");
+      let qtyMul = 1;
+      for (const p of parts) {
+        const m = p.match(/^qty=(.+)$/);
+        if (!m) continue;
+        const n = Number.parseInt(m[1], 10);
+        if (Number.isFinite(n) && n > 0) qtyMul = n;
+      }
+      return { baseRef, qtyMul };
+    };
+
     const childIds = new Set();
-
-    // Csomagok: először maga a csomag, utána a tartalma külön sorokban, behúzva.
-    for (const item of packageDocs) {
-      const sys = item?.system ?? {};
-      const descRaw = (sys.description ?? "").trim();
-      const description = descRaw || "—";
-      const refs = Array.isArray(sys.contents) ? sys.contents : [];
-
-      packageEntries.push({
-        itemId: item.id,
-        actorId: this.actor.id,
-        name: item?.name ?? "—",
-        img: cleanImg(item?.img ?? ""),
-        quantity: "—",
-        description,
-        isPackage: true,
-        isPackageChild: false
-      });
-
-      if (!refs.length) continue;
-
-      const parseEncodedRef = (refStr) => {
-        if (typeof refStr !== "string") return { baseRef: "", qtyMul: 1 };
-        const [baseRef, ...parts] = refStr.split("|");
-        let qtyMul = 1;
-        for (const p of parts) {
-          const m = p.match(/^qty=(.+)$/);
-          if (!m) continue;
-          const n = Number.parseInt(m[1], 10);
-          if (Number.isFinite(n) && n > 0) qtyMul = n;
-        }
-        return { baseRef, qtyMul };
-      };
-
-      const docsWithQty = [];
+    for (const pkg of packageDocs) {
+      const refs = Array.isArray(pkg?.system?.contents) ? pkg.system.contents : [];
       for (const ref of refs) {
         if (!ref) continue;
-        const { baseRef, qtyMul } = parseEncodedRef(ref);
+        const { baseRef } = parseEncodedRef(ref);
         if (!baseRef) continue;
-
         let doc = null;
         try {
           doc = await fromUuid(baseRef);
@@ -297,50 +278,83 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
         } catch {
           doc = game.items?.get(baseRef) ?? null;
         }
-        if (!doc) continue;
-        docsWithQty.push({ doc, qtyMul, baseRef });
-      }
-
-      for (const { doc, qtyMul, baseRef } of docsWithQty) {
-        childIds.add(doc.id);
-        const dSys = doc.system ?? {};
-        const dDescRaw = (dSys.description ?? "").toString().trim();
-        const dDescription = dDescRaw || "—";
-
-        const rawQty = (dSys.quantity ?? "").toString().trim();
-        const rawQtyNum = Number.parseInt(rawQty, 10);
-        const baseQty = Number.isFinite(rawQtyNum) && rawQtyNum > 0 ? rawQtyNum : 1;
-        const quantity = String(baseQty * qtyMul);
-
-        const rawImg = doc.img ?? "";
-        const img = cleanImg(rawImg);
-
-        packageEntries.push({
-          itemId: baseRef,
-          actorId: this.actor.id,
-          name: doc.name ?? "—",
-          img,
-          quantity,
-          description: dDescription,
-          isPackage: false,
-          isPackageChild: true,
-          parentPackageId: item.id,
-          parentPackageName: item.name ?? "Csomag",
-          innerType: doc.type
-        });
+        if (doc) childIds.add(doc.id);
       }
     }
 
-    // Sima tárgyak, amelyek nem szerepelnek egyetlen csomagban sem.
-    const targyEntries = targyDocs
-      .filter((item) => !childIds.has(item.id))
-      .map((item) => {
+    const targyOnly = targyDocs.filter((item) => !childIds.has(item.id));
+    const topLevelItems = sortDocsByItemSort([...packageDocs, ...targyOnly]);
+
+    const itemsTable = [];
+    for (const item of topLevelItems) {
+      if (item.type === "Csomag") {
+        const sys = item?.system ?? {};
+        const descRaw = (sys.description ?? "").trim();
+        const description = descRaw || "—";
+        const refs = Array.isArray(sys.contents) ? sys.contents : [];
+
+        itemsTable.push({
+          itemId: item.id,
+          actorId: this.actor.id,
+          name: item?.name ?? "—",
+          img: cleanImg(item?.img ?? ""),
+          quantity: "—",
+          description,
+          isPackage: true,
+          isPackageChild: false
+        });
+
+        const docsWithQty = [];
+        for (const ref of refs) {
+          if (!ref) continue;
+          const { baseRef, qtyMul } = parseEncodedRef(ref);
+          if (!baseRef) continue;
+
+          let doc = null;
+          try {
+            doc = await fromUuid(baseRef);
+            if (doc?.documentName !== "Item") doc = null;
+          } catch {
+            doc = game.items?.get(baseRef) ?? null;
+          }
+          if (!doc) continue;
+          docsWithQty.push({ doc, qtyMul, baseRef });
+        }
+
+        for (const { doc, qtyMul, baseRef } of docsWithQty) {
+          const dSys = doc.system ?? {};
+          const dDescRaw = (dSys.description ?? "").toString().trim();
+          const dDescription = dDescRaw || "—";
+
+          const rawQty = (dSys.quantity ?? "").toString().trim();
+          const rawQtyNum = Number.parseInt(rawQty, 10);
+          const baseQty = Number.isFinite(rawQtyNum) && rawQtyNum > 0 ? rawQtyNum : 1;
+          const quantity = String(baseQty * qtyMul);
+
+          const rawImg = doc.img ?? "";
+          const img = cleanImg(rawImg);
+
+          itemsTable.push({
+            itemId: baseRef,
+            actorId: this.actor.id,
+            name: doc.name ?? "—",
+            img,
+            quantity,
+            description: dDescription,
+            isPackage: false,
+            isPackageChild: true,
+            parentPackageId: item.id,
+            parentPackageName: item.name ?? "Csomag",
+            innerType: doc.type
+          });
+        }
+      } else if (item.type === "Targy") {
         const sys = item?.system ?? {};
         const descRaw = (sys.description ?? "").trim();
         const description = descRaw || "—";
         const quantity = sys.quantity != null ? String(sys.quantity).trim() : "1";
         const img = cleanImg(item.img ?? "");
-        return {
+        itemsTable.push({
           itemId: item.id,
           actorId: this.actor.id,
           name: item?.name ?? "—",
@@ -349,10 +363,11 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
           description,
           isPackage: false,
           isPackageChild: false
-        };
-      });
+        });
+      }
+    }
 
-    context.itemsTable = [...packageEntries, ...targyEntries];
+    context.itemsTable = itemsTable;
     const unitItemType = this.actor.type === "Bazis" ? "Helyiseg" : "Jarmuegyseg";
     const unitDocs = (this.actor.items?.contents ?? [])
       .filter((i) => i.type === unitItemType)
@@ -515,6 +530,8 @@ export class VoidJarmuSheet extends foundry.applications.api.HandlebarsApplicati
     });
 
     if (!this.isEditable) return;
+
+    bindInventoryTableReorder(this, $html, this.actor);
 
     $html.on("click", ".jarmu-portrait-img", (ev) => {
       ev.preventDefault();

@@ -463,9 +463,6 @@
   <section class="jarmu-section jarmu-egyeb karakter-panel karakter-notes">
     <h2>Egyéb Információk</h2>
     <div class="karakter-notes-split">
-      <div class="karakter-notes-left">
-        <textarea name="system.notes.biography" data-dtype="String" rows="3" placeholder="Egyéb információk…">{{system.notes.biography}}</textarea>
-      </div>
       <div class="karakter-notes-right" data-drop-zone="egyeb">
         <div class="karakter-notes-egyeb-list">
           {{#each egyebList}}
@@ -482,6 +479,9 @@
             <p class="karakter-notes-egyeb-placeholder">Húzz ide egyéb információt</p>
           {{/each}}
         </div>
+      </div>
+      <div class="karakter-notes-left">
+        <textarea name="system.notes.biography" data-dtype="String" rows="3" placeholder="Írj ide egyéb információkat...">{{system.notes.biography}}</textarea>
       </div>
     </div>
   </section>

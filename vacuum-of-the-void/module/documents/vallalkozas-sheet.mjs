@@ -1,3 +1,5 @@
+import { bindInventoryTableReorder, refreshInventoryRowDraggable, sortDocsByItemSort } from "../util/inventory-table-reorder.mjs";
+
 export class VoidVallalkozasSheet extends foundry.applications.api.HandlebarsApplicationMixin(
   foundry.applications.sheets.ActorSheetV2
 ) {
@@ -99,6 +101,8 @@ export class VoidVallalkozasSheet extends foundry.applications.api.HandlebarsApp
         }
       }
     }
+    const refreshRoot = this.form ?? this.element;
+    if (refreshRoot) refreshInventoryRowDraggable(refreshRoot);
     return out;
   }
 
@@ -130,7 +134,7 @@ export class VoidVallalkozasSheet extends foundry.applications.api.HandlebarsApp
     const itemDocs = actor.items?.contents ?? [];
 
     // Fegyverek táblázat
-    const weaponDocs = itemDocs.filter((i) => i.type === "Fegyver");
+    const weaponDocs = sortDocsByItemSort(itemDocs.filter((i) => i.type === "Fegyver"));
     context.weaponsTable = weaponDocs.map((item) => {
       const sys = item.system ?? {};
       const typeRaw = sys.type ?? "";
@@ -161,7 +165,7 @@ export class VoidVallalkozasSheet extends foundry.applications.api.HandlebarsApp
     });
 
     // Páncélok táblázat
-    const armorDocs = itemDocs.filter((i) => i.type === "Pancel");
+    const armorDocs = sortDocsByItemSort(itemDocs.filter((i) => i.type === "Pancel"));
     context.armorTable = armorDocs.map((item) => {
       const sys = item.system ?? {};
       const equipped = !!item.system?.equipped;
@@ -179,7 +183,7 @@ export class VoidVallalkozasSheet extends foundry.applications.api.HandlebarsApp
     });
 
     // Mikro-Chipek táblázat
-    const microchipDocs = itemDocs.filter((i) => i.type === "MikroChip");
+    const microchipDocs = sortDocsByItemSort(itemDocs.filter((i) => i.type === "MikroChip"));
     context.microchipsTable = microchipDocs.map((item) => {
       const abilityType = item.system?.abilityType ?? "";
       const typeLabel =
@@ -211,83 +215,88 @@ export class VoidVallalkozasSheet extends foundry.applications.api.HandlebarsApp
       };
     });
 
-    // Egyéb tárgyak + Csomagok táblázata (ugyanaz a flatten logika, mint a karakterlapon).
+    // Egyéb tárgyak + Csomagok (top-level sorrend Item.sort szerint; gyereksorok itemId = doc.id).
     const allItems = itemDocs;
     const packageDocs = allItems.filter((i) => i.type === "Csomag");
     const targyDocs = allItems.filter((i) => i.type === "Targy");
 
-    const packageEntries = [];
+    const resolveRefDoc = async (ref) => {
+      if (!ref) return null;
+      try {
+        const doc = await fromUuid(ref);
+        if (doc?.documentName === "Item") return doc;
+      } catch {
+        const fallback = game.items?.get(ref);
+        if (fallback) return fallback;
+      }
+      return null;
+    };
+
     const childIds = new Set();
-
-    for (const item of packageDocs) {
-      const sys = item.system ?? {};
-      const descRaw = (sys.description ?? "").trim();
-      const description = descRaw || "—";
-      const refs = Array.isArray(sys.contents) ? sys.contents : [];
-
-      packageEntries.push({
-        itemId: item.id,
-        actorId: actor.id,
-        name: item.name ?? "—",
-        img: cleanImg(item.img ?? ""),
-        quantity: "—",
-        description,
-        isPackage: true,
-        isPackageChild: false
-      });
-
-      if (!refs.length) continue;
-
-      const docs = await Promise.all(
-        refs.map(async (ref) => {
-          if (!ref) return null;
-          try {
-            const doc = await fromUuid(ref);
-            if (doc?.documentName === "Item") return doc;
-          } catch {
-            const fallback = game.items?.get(ref);
-            if (fallback) return fallback;
-          }
-          return null;
-        })
-      );
-
+    for (const pkg of packageDocs) {
+      const refs = Array.isArray(pkg.system?.contents) ? pkg.system.contents : [];
+      const docs = await Promise.all(refs.map((ref) => resolveRefDoc(ref)));
       for (const doc of docs) {
-        if (!doc) continue;
-        childIds.add(doc.id);
-        const dSys = doc.system ?? {};
-        const dDescRaw = (dSys.description ?? "").toString().trim();
-        const dDescription = dDescRaw || "—";
-        const rawQty = (dSys.quantity ?? "").toString().trim();
-        const quantity = rawQty || "1";
-        const rawImg = doc.img ?? "";
-        const img = cleanImg(rawImg);
-
-        packageEntries.push({
-          itemId: doc.id,
-          actorId: actor.id,
-          name: doc.name ?? "—",
-          img,
-          quantity,
-          description: dDescription,
-          isPackage: false,
-          isPackageChild: true,
-          parentPackageId: item.id,
-          parentPackageName: item.name ?? "Csomag",
-          innerType: doc.type
-        });
+        if (doc) childIds.add(doc.id);
       }
     }
 
-    const targyEntries = targyDocs
-      .filter((item) => !childIds.has(item.id))
-      .map((item) => {
+    const targyOnly = targyDocs.filter((item) => !childIds.has(item.id));
+    const topLevelItems = sortDocsByItemSort([...packageDocs, ...targyOnly]);
+
+    const itemsTable = [];
+    for (const item of topLevelItems) {
+      if (item.type === "Csomag") {
+        const sys = item.system ?? {};
+        const descRaw = (sys.description ?? "").trim();
+        const description = descRaw || "—";
+        const refs = Array.isArray(sys.contents) ? sys.contents : [];
+
+        itemsTable.push({
+          itemId: item.id,
+          actorId: actor.id,
+          name: item.name ?? "—",
+          img: cleanImg(item.img ?? ""),
+          quantity: "—",
+          description,
+          isPackage: true,
+          isPackageChild: false
+        });
+
+        if (!refs.length) continue;
+
+        const docs = await Promise.all(refs.map((ref) => resolveRefDoc(ref)));
+        for (const doc of docs) {
+          if (!doc) continue;
+          const dSys = doc.system ?? {};
+          const dDescRaw = (dSys.description ?? "").toString().trim();
+          const dDescription = dDescRaw || "—";
+          const rawQty = (dSys.quantity ?? "").toString().trim();
+          const quantity = rawQty || "1";
+          const rawImg = doc.img ?? "";
+          const img = cleanImg(rawImg);
+
+          itemsTable.push({
+            itemId: doc.id,
+            actorId: actor.id,
+            name: doc.name ?? "—",
+            img,
+            quantity,
+            description: dDescription,
+            isPackage: false,
+            isPackageChild: true,
+            parentPackageId: item.id,
+            parentPackageName: item.name ?? "Csomag",
+            innerType: doc.type
+          });
+        }
+      } else if (item.type === "Targy") {
         const sys = item.system ?? {};
         const descRaw = (sys.description ?? "").trim();
         const description = descRaw || "—";
         const quantity = sys.quantity != null ? String(sys.quantity).trim() : "1";
         const img = cleanImg(item.img ?? "");
-        return {
+        itemsTable.push({
           itemId: item.id,
           actorId: actor.id,
           name: item.name ?? "—",
@@ -296,10 +305,11 @@ export class VoidVallalkozasSheet extends foundry.applications.api.HandlebarsApp
           description,
           isPackage: false,
           isPackageChild: false
-        };
-      });
+        });
+      }
+    }
 
-    context.itemsTable = [...packageEntries, ...targyEntries];
+    context.itemsTable = itemsTable;
 
     const hasEquipment =
       (context.weaponsTable?.length ?? 0) > 0 ||
@@ -365,6 +375,8 @@ export class VoidVallalkozasSheet extends foundry.applications.api.HandlebarsApp
     const $html = root ? $(root) : $([]);
 
     if (!this.isEditable) return;
+
+    bindInventoryTableReorder(this, $html, this.actor);
 
     // Alkalmazottak táblázat – új sor hozzáadása
     $html.on("click", ".vallalkozas-employee-add", async (ev) => {

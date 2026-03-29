@@ -11,12 +11,20 @@
   padding: 6px 8px;
 }
 
+/* Szekciócímek: mint járműegység / egyéb „> ” + zöld (votv-header-accent) */
 .votv-csomag-sheet .karakter-panel h2 {
-  margin: 0 0 4px;
+  margin: 0 0 6px;
   font-size: var(--votv-font-label, 11px);
   text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--votv-text-muted, #9ca3af);
+  letter-spacing: 0.12em;
+  color: var(--votv-header-accent, #2bff88);
+  position: relative;
+}
+
+.votv-csomag-sheet .karakter-panel h2::before {
+  content: "> ";
+  color: rgba(43, 255, 136, 0.9);
+  margin-right: 2px;
 }
 
 .votv-csomag-sheet textarea[name="system.description"] {

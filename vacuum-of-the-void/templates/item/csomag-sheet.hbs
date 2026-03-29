@@ -9,16 +9,6 @@
 
   <section class="sheet-body">
     <section class="karakter-panel">
-      <h2>Leírás</h2>
-      <textarea
-        name="system.description"
-        data-dtype="String"
-        rows="3"
-        placeholder="Rövid leírás a csomagról…"
-      >{{system.description}}</textarea>
-    </section>
-
-    <section class="karakter-panel">
       <h2>Tartalom</h2>
       <div class="csomag-contents-area" data-area="contents" data-drop-zone="item">
         <div class="csomag-contents-list">
@@ -64,6 +54,16 @@
           {{/each}}
         </div>
       </div>
+    </section>
+
+    <section class="karakter-panel">
+      <h2>Leírás</h2>
+      <textarea
+        name="system.description"
+        data-dtype="String"
+        rows="3"
+        placeholder="Rövid leírás a csomagról…"
+      >{{system.description}}</textarea>
     </section>
   </section>
 </form>

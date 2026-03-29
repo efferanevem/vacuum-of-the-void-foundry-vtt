@@ -1,5 +1,6 @@
 import { computeVotvCritInfo } from "../util/votv-result-type.mjs";
 import { hideDefaultItemBagImg } from "../util/hide-default-item-bag.mjs";
+import { bindInventoryTableReorder, refreshInventoryRowDraggable, sortDocsByItemSort } from "../util/inventory-table-reorder.mjs";
 import { buildSkillMarkedContext } from "./karakter-sheet.mjs";
 
 /** Páncél szint nyers érték → megjelenített szöveg (karakterlap táblázat). */
@@ -127,6 +128,8 @@ export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplication
       setTimeout(restoreScrollAndFocus, 300);
       setTimeout(restoreScrollAndFocus, 450);
     }
+    const refreshRoot = this.form ?? this.element;
+    if (refreshRoot) refreshInventoryRowDraggable(refreshRoot);
     return out;
   }
 
@@ -151,7 +154,7 @@ export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplication
     const ALL_WEAPON_SLOTS = ["slot1", "slot2", "slot3", "slot4", "slot5", "slot6", "slot7", "slot8", "slot9", "slot10"];
     const slotOrderRaw = (weapons.slotOrder ?? "").trim();
     const slotOrderList = slotOrderRaw ? slotOrderRaw.split(/\s*,\s*/).filter((s) => ALL_WEAPON_SLOTS.includes(s)) : [];
-    const weaponDocs = items.filter((i) => i.type === "Fegyver");
+    const weaponDocs = sortDocsByItemSort(items.filter((i) => i.type === "Fegyver"));
     const weaponItems = weaponDocs.map((i) => ({ id: i.id, name: i.name, img: i.img }));
     const emptyLabel = "— Nincs fegyver —";
     const orderToUse = slotOrderList.length > 0 ? slotOrderList : ALL_WEAPON_SLOTS;
@@ -223,7 +226,7 @@ export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplication
       };
     });
 
-    const armorDocs = items.filter((i) => i.type === "Pancel");
+    const armorDocs = sortDocsByItemSort(items.filter((i) => i.type === "Pancel"));
     context.armorTable = armorDocs.map((item) => {
       const sys = item?.system ?? {};
       const equipped = item.system?.equipped === true;
@@ -242,7 +245,7 @@ export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplication
 
     const microchips = actor?.system?.gear?.microchips ?? {};
     const MICROCHIP_SLOTS = ["slot1", "slot2", "slot3"];
-    const microchipDocs = items.filter((i) => i.type === "MikroChip");
+    const microchipDocs = sortDocsByItemSort(items.filter((i) => i.type === "MikroChip"));
     context.microchipsTable = microchipDocs.map((item) => {
       const itemId = item.id;
       let slotKey = null;
@@ -270,53 +273,31 @@ export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplication
       };
     });
 
-    // Felszerelés: Tárgyak + Csomagok táblázat (ugyanaz a flatten logika, mint a karakterlapon).
+    // Felszerelés: Tárgyak + Csomagok (top-level sorrend Item.sort szerint).
     const allItems = items;
     const packageDocs = allItems.filter((i) => i.type === "Csomag");
     const targyDocs = allItems.filter((i) => i.type === "Targy");
 
-    const packageEntries = [];
+    const parseEncodedRef = (refStr) => {
+      if (typeof refStr !== "string") return { baseRef: "", qtyMul: 1 };
+      const [baseRef, ...parts] = refStr.split("|");
+      let qtyMul = 1;
+      for (const p of parts) {
+        const m = p.match(/^qty=(.+)$/);
+        if (!m) continue;
+        const n = Number.parseInt(m[1], 10);
+        if (Number.isFinite(n) && n > 0) qtyMul = n;
+      }
+      return { baseRef, qtyMul };
+    };
+
     const childIds = new Set();
-
-    // Csomagok: először maga a csomag, utána a tartalma külön sorokban, behúzva.
-    for (const item of packageDocs) {
-      const sys = item?.system ?? {};
-      const descRaw = (sys.description ?? "").trim();
-      const description = descRaw || "—";
-      const refs = Array.isArray(sys.contents) ? sys.contents : [];
-
-      packageEntries.push({
-        itemId: item.id,
-        actorId: actor.id,
-        name: item?.name ?? "—",
-        img: item?.img ?? "",
-        quantity: "—",
-        description,
-        isPackage: true,
-        isPackageChild: false
-      });
-
-      if (!refs.length) continue;
-
-      const parseEncodedRef = (refStr) => {
-        if (typeof refStr !== "string") return { baseRef: "", qtyMul: 1 };
-        const [baseRef, ...parts] = refStr.split("|");
-        let qtyMul = 1;
-        for (const p of parts) {
-          const m = p.match(/^qty=(.+)$/);
-          if (!m) continue;
-          const n = Number.parseInt(m[1], 10);
-          if (Number.isFinite(n) && n > 0) qtyMul = n;
-        }
-        return { baseRef, qtyMul };
-      };
-
-      const docsWithQty = [];
+    for (const pkg of packageDocs) {
+      const refs = Array.isArray(pkg?.system?.contents) ? pkg.system.contents : [];
       for (const ref of refs) {
         if (!ref) continue;
-        const { baseRef, qtyMul } = parseEncodedRef(ref);
+        const { baseRef } = parseEncodedRef(ref);
         if (!baseRef) continue;
-
         let doc = null;
         try {
           doc = await fromUuid(baseRef);
@@ -324,51 +305,84 @@ export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplication
         } catch {
           doc = game.items?.get(baseRef) ?? null;
         }
-        if (!doc) continue;
-
-        docsWithQty.push({ doc, qtyMul, baseRef });
-      }
-
-      for (const { doc, qtyMul, baseRef } of docsWithQty) {
-        childIds.add(doc.id);
-        const dSys = doc.system ?? {};
-        const dDescRaw = (dSys.description ?? "").toString().trim();
-        const dDescription = dDescRaw || "—";
-
-        const rawQty = (dSys.quantity ?? "").toString().trim();
-        const rawQtyNum = Number.parseInt(rawQty, 10);
-        const baseQty = Number.isFinite(rawQtyNum) && rawQtyNum > 0 ? rawQtyNum : 1;
-        const quantity = String(baseQty * qtyMul);
-
-        const rawImg = doc.img ?? "";
-        const img = rawImg;
-
-        packageEntries.push({
-          itemId: baseRef,
-          actorId: actor.id,
-          name: doc.name ?? "—",
-          img,
-          quantity,
-          description: dDescription,
-          isPackage: false,
-          isPackageChild: true,
-          parentPackageId: item.id,
-          parentPackageName: item.name ?? "Csomag",
-          innerType: doc.type
-        });
+        if (doc) childIds.add(doc.id);
       }
     }
 
-    // Sima tárgyak, amelyek nem szerepelnek egyetlen csomagban sem.
-    const targyEntries = targyDocs
-      .filter((item) => !childIds.has(item.id))
-      .map((item) => {
+    const targyOnly = targyDocs.filter((item) => !childIds.has(item.id));
+    const topLevelItems = sortDocsByItemSort([...packageDocs, ...targyOnly]);
+
+    const itemsTable = [];
+    for (const item of topLevelItems) {
+      if (item.type === "Csomag") {
+        const sys = item?.system ?? {};
+        const descRaw = (sys.description ?? "").trim();
+        const description = descRaw || "—";
+        const refs = Array.isArray(sys.contents) ? sys.contents : [];
+
+        itemsTable.push({
+          itemId: item.id,
+          actorId: actor.id,
+          name: item?.name ?? "—",
+          img: item?.img ?? "",
+          quantity: "—",
+          description,
+          isPackage: true,
+          isPackageChild: false
+        });
+
+        const docsWithQty = [];
+        for (const ref of refs) {
+          if (!ref) continue;
+          const { baseRef, qtyMul } = parseEncodedRef(ref);
+          if (!baseRef) continue;
+
+          let doc = null;
+          try {
+            doc = await fromUuid(baseRef);
+            if (doc?.documentName !== "Item") doc = null;
+          } catch {
+            doc = game.items?.get(baseRef) ?? null;
+          }
+          if (!doc) continue;
+
+          docsWithQty.push({ doc, qtyMul, baseRef });
+        }
+
+        for (const { doc, qtyMul, baseRef } of docsWithQty) {
+          const dSys = doc.system ?? {};
+          const dDescRaw = (dSys.description ?? "").toString().trim();
+          const dDescription = dDescRaw || "—";
+
+          const rawQty = (dSys.quantity ?? "").toString().trim();
+          const rawQtyNum = Number.parseInt(rawQty, 10);
+          const baseQty = Number.isFinite(rawQtyNum) && rawQtyNum > 0 ? rawQtyNum : 1;
+          const quantity = String(baseQty * qtyMul);
+
+          const rawImg = doc.img ?? "";
+          const img = rawImg;
+
+          itemsTable.push({
+            itemId: baseRef,
+            actorId: actor.id,
+            name: doc.name ?? "—",
+            img,
+            quantity,
+            description: dDescription,
+            isPackage: false,
+            isPackageChild: true,
+            parentPackageId: item.id,
+            parentPackageName: item.name ?? "Csomag",
+            innerType: doc.type
+          });
+        }
+      } else if (item.type === "Targy") {
         const sys = item?.system ?? {};
         const descRaw = (sys.description ?? "").trim();
         const description = descRaw || "—";
         const quantity = sys.quantity != null ? String(sys.quantity).trim() : "1";
         const img = item?.img ?? "";
-        return {
+        itemsTable.push({
           itemId: item.id,
           actorId: actor.id,
           name: item?.name ?? "—",
@@ -377,10 +391,11 @@ export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplication
           description,
           isPackage: false,
           isPackageChild: false
-        };
-      });
+        });
+      }
+    }
 
-    context.itemsTable = [...packageEntries, ...targyEntries];
+    context.itemsTable = itemsTable;
 
     const egyebDocs = items.filter((i) => i.type === "Egyeb");
     context.egyebList = egyebDocs.map((item) => {
@@ -759,12 +774,13 @@ export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplication
       if (typeof this.render === "function") this.render(true);
     });
 
-    // Itemek húzhatósága: sorok és képesség pill-ek Foundry formátummal (másik lapra / canvasra ejthető)
-    const draggableSelector = ".karakter-equipment-row[data-item-id], .karakter-ability-pill[data-item-id], .karakter-notes-egyeb-row[data-item-id]";
-    root?.querySelectorAll?.(draggableSelector)?.forEach((el) => {
+    // Képesség pill + Egyéb infó sor: húzás másik lapra/canvasra (felszerelés sorokat a bindInventoryTableReorder kezeli)
+    const draggableOutsideSelector =
+      ".karakter-ability-pill[data-item-id], .karakter-notes-egyeb-row[data-item-id]";
+    root?.querySelectorAll?.(draggableOutsideSelector)?.forEach((el) => {
       if ((el.dataset?.itemId ?? "").trim()) el.draggable = true;
     });
-    $html.on("dragstart", draggableSelector, (ev) => {
+    $html.on("dragstart", draggableOutsideSelector, (ev) => {
       const el = ev.currentTarget;
       const itemId = el?.dataset?.itemId?.trim();
       if (!itemId || !this.actor) return;
@@ -780,6 +796,8 @@ export class VoidNpcSheet extends foundry.applications.api.HandlebarsApplication
         ev.dataTransfer.setDragImage(el, 0, 0);
       }
     });
+
+    bindInventoryTableReorder(this, $html, this.actor);
 
     // Mentés kikattintáskor (blur), mint a karakterlapon (karakter-sheet.mjs)
     const sheet = this;

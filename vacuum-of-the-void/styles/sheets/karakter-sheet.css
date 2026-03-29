@@ -1690,6 +1690,10 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
 }
 
+.votv.karakter-sheet tr.karakter-equipment-row.karakter-actions-row-drag-over td {
+  background: rgba(43, 255, 136, 0.06);
+}
+
 .votv.karakter-sheet .karakter-actions-table thead {
   background: var(--votv-panel-bg-soft);
   border: 1px solid var(--votv-border-muted);
@@ -2512,6 +2516,15 @@
   grid-column: 1 / -1;
 }
 
+/* Inventory sor átrendezés: fogó a „Név” cellán (<tr draggable> böngészőnként hibás) */
+.votv.karakter-sheet .karakter-equipment-table tbody tr.karakter-equipment-row[data-item-id]:not(.jarmu-unit-row):not(.karakter-package-child-row) td.karakter-equipment-cell-name {
+  cursor: grab;
+}
+
+.votv.karakter-sheet .karakter-equipment-table tbody tr.karakter-equipment-row[data-item-id]:not(.jarmu-unit-row):not(.karakter-package-child-row):active td.karakter-equipment-cell-name {
+  cursor: grabbing;
+}
+
 .votv.karakter-sheet .karakter-equipment-spacer {
   height: 10px;
   flex-shrink: 0;
@@ -2898,7 +2911,7 @@
   letter-spacing: 0.08em;
 }
 
-/* Egyéb Információk: két oszlop, mindig egymagas, magasság auto */
+/* Egyéb Információk: felül behúzó lista (teljes szélesség), alul szabad szöveg (teljes szélesség) */
 .votv.karakter-sheet .karakter-notes {
   grid-column: 1 / -1;
   display: flex;
@@ -2912,6 +2925,7 @@
 
 .votv.karakter-sheet .karakter-notes-split {
   display: flex;
+  flex-direction: column;
   gap: 10px;
   align-items: stretch;
   height: auto;
@@ -2919,7 +2933,8 @@
 
 .votv.karakter-sheet .karakter-notes-left,
 .votv.karakter-sheet .karakter-notes-right {
-  flex: 1 1 0;
+  flex: 0 1 auto;
+  width: 100%;
   min-width: 0;
   display: flex;
   flex-direction: column;
@@ -2938,6 +2953,16 @@
   background: transparent;
   padding: 0;
   box-shadow: none;
+  font-family: inherit;
+  font-size: var(--votv-font-body);
+  color: var(--votv-text-muted);
+  opacity: 0.85;
+  line-height: inherit;
+}
+
+.votv.karakter-sheet .karakter-notes-left textarea::placeholder {
+  color: var(--votv-text-muted);
+  opacity: 0.85;
 }
 
 .votv.karakter-sheet .karakter-notes-left textarea:focus,
@@ -2955,7 +2980,7 @@
   min-height: 0;
 }
 
-/* Egyéb Információk jobb oldal: Egyeb típusú elemek listája + drop zone */
+/* Egyéb Információk behúzós blokk: Egyeb típusú elemek listája + drop zone */
 .votv.karakter-sheet .karakter-notes-egyeb-list {
   display: flex;
   flex-direction: column;
@@ -2975,7 +3000,7 @@
   align-items: flex-start;
   gap: 6px;
   padding: 4px 6px;
-  border: 1px solid var(--votv-border-muted);
+  border: 1px dashed var(--votv-border-muted);
   border-radius: var(--votv-radius);
   background: rgba(3, 6, 10, 0.5);
 }
