@@ -33,6 +33,11 @@
     kp: 0
   };
 
+  /** Ugyanazon a néven lehet pl. Jarmuegyseg és Helyiseg is — csak típus+név együtt legyen „duplikátum”. */
+  function typeNameKey(type, name) {
+    return `${type ?? ""}\t${name ?? ""}`;
+  }
+
   function normalizeItemData(data) {
     const t = data.type;
     if (!ALLOWED_TYPES.has(t)) {
@@ -77,7 +82,9 @@
   }
 
   const existing = await pack.getDocuments();
-  const existingByName = new Map(existing.map((doc) => [doc.name, doc]));
+  const existingByName = new Map(
+    existing.map((doc) => [typeNameKey(doc.type, doc.name), doc])
+  );
   const existingById = new Map(
     existing.map((doc) => [doc.getFlag(SYSTEM_ID, "_sourceId") ?? doc.id, doc])
   );
@@ -154,7 +161,8 @@
       skipped++;
       continue;
     }
-    if (data.name && existingByName.has(data.name)) {
+    const tnKey = typeNameKey(data.type, data.name);
+    if (data.name && existingByName.has(tnKey)) {
       skipped++;
       continue;
     }
@@ -182,7 +190,7 @@
         existingById.set(sourceId, createdItem);
       }
       if (createdItem?.name) {
-        existingByName.set(createdItem.name, createdItem);
+        existingByName.set(typeNameKey(createdItem.type, createdItem.name), createdItem);
       }
       created++;
     } catch (err) {

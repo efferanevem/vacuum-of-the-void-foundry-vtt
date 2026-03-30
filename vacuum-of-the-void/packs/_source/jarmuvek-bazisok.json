@@ -1,39 +1,5 @@
 [
   {
-    "_id": "pelda-jarmuegyseg",
-    "name": "Példa járműegység",
-    "type": "Jarmuegyseg",
-    "path": "/Járműegységek/",
-    "img": "systems/vacuum-of-the-void/assets/blank.svg",
-    "system": {
-      "level": 0,
-      "health": { "max": 10, "value": 10 },
-      "abilities": {
-        "embedded": [
-          {
-            "name": "Példa Modul - Gyors Reagálás",
-            "img": "systems/vacuum-of-the-void/assets/blank.svg",
-            "kind": "module",
-            "kp": 3,
-            "description": "A járműegység helyzetfelismerése és reakcióideje fejlettebb: a harci műveletekben előnyt biztosít a taktikai döntésekhez."
-          },
-          {
-            "name": "Példa Passzív - Szívós Keret",
-            "img": "systems/vacuum-of-the-void/assets/blank.svg",
-            "kind": "passive",
-            "kp": 0,
-            "description": "A karbantartott vázszerkezet nagyobb túlélést ad: csökkenti a kritikus meghibásodások esélyét hosszabb üzem közben."
-          }
-        ]
-      },
-      "speed": "",
-      "range": "",
-      "storage": "",
-      "damage": "",
-      "hit": ""
-    }
-  },
-  {
     "_id": "pelda-helyiseg",
     "name": "Példa helyiség",
     "type": "Helyiseg",
@@ -42,7 +8,7 @@
     "system": {
       "level": 0,
       "abilities": { "embedded": [] },
-      "storage": "",
+      "storage": "2",
       "veszely": "",
       "hit": ""
     }
@@ -1694,6 +1660,1480 @@
       "kind": "module",
       "kp": 0,
       "description": "Beszerelhető: Raktár\n\nKépes egy vagy több járművet magában tárolni. Az összesített tárolt járműegységek számát a tároló jármű mérete adja meg:\nKicsi: 2 tárolható járműegység\nKözepes: 4 tárolható járműegység\nNagy: 6 tárolható járműegység\n\n(Polgári járművek, mint például kocsik, motorok 1 vagy kevesebb járműegységnek számítanak a Mesélő döntése alapján.)"
+    }
+  },
+  {
+    "_id": "haloszoba-0",
+    "name": "Hálószoba (0)",
+    "type": "Helyiseg",
+    "path": "/Helyiségek/Hálószoba/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "level": 0,
+      "abilities": {
+        "embedded": [
+          {
+            "name": "Pihentető Környezet",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "A legénység minden tagja +1 bónuszt kap a Gyorsgondolkodáspróbáira, amennyiben az elmúlt 3 napban a bázison pihent."
+          }
+        ]
+      },
+      "storage": "2",
+      "veszely": "",
+      "hit": ""
+    }
+  },
+  {
+    "_id": "haloszoba-1",
+    "name": "Hálószoba (1)",
+    "type": "Helyiseg",
+    "path": "/Helyiségek/Hálószoba/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "level": 1,
+      "abilities": {
+        "embedded": [
+          {
+            "name": "Pihentető Környezet",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "A legénység minden tagja +2 bónuszt kap a Gyorsgondolkodáspróbáira, amennyiben az elmúlt 3 napban a bázison pihent."
+          }
+        ]
+      },
+      "storage": "2",
+      "veszely": "",
+      "hit": ""
+    }
+  },
+  {
+    "_id": "haloszoba-2",
+    "name": "Hálószoba (2)",
+    "type": "Helyiseg",
+    "path": "/Helyiségek/Hálószoba/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "level": 2,
+      "abilities": {
+        "embedded": [
+          {
+            "name": "Pihentető Környezet",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "A legénység minden tagja +3 bónuszt kap a Gyorsgondolkodáspróbáira, amennyiben az elmúlt 3 napban a bázison pihent."
+          }
+        ]
+      },
+      "storage": "2",
+      "veszely": "",
+      "hit": ""
+    }
+  },
+  {
+    "_id": "haloszoba-3",
+    "name": "Hálószoba (3)",
+    "type": "Helyiseg",
+    "path": "/Helyiségek/Hálószoba/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "level": 3,
+      "abilities": {
+        "embedded": [
+          {
+            "name": "Pihentető Környezet",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "A legénység minden tagja +4 bónuszt kap a Gyorsgondolkodáspróbáira, amennyiben az elmúlt 3 napban a bázison pihent."
+          }
+        ]
+      },
+      "storage": "2",
+      "veszely": "",
+      "hit": ""
+    }
+  },
+  {
+    "_id": "kozossegi-ter-0",
+    "name": "Közösségi Tér (0)",
+    "type": "Helyiseg",
+    "path": "/Helyiségek/Közösségi Tér/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "level": 0,
+      "abilities": {
+        "embedded": [
+          {
+            "name": "Nyugtató Zene",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "active",
+            "kp": 3,
+            "description": "A következő 5 körben a legénység tagjai azoknak a Stressz Pontoknak csak a felét kapják meg, amit alapból kapnának. Ezt felfelé kerekítve értelmezzük."
+          },
+          {
+            "name": "Morálnövelés",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "Naponta a legénység minden tagja 1d8 Morálkockát kap."
+          }
+        ]
+      },
+      "storage": "2",
+      "veszely": "",
+      "hit": ""
+    }
+  },
+  {
+    "_id": "kozossegi-ter-1",
+    "name": "Közösségi Tér (1)",
+    "type": "Helyiseg",
+    "path": "/Helyiségek/Közösségi Tér/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "level": 1,
+      "abilities": {
+        "embedded": [
+          {
+            "name": "Nyugtató Zene",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "active",
+            "kp": 3,
+            "description": "A következő 5 körben a legénység tagjai azoknak a Stressz Pontoknak csak a felét kapják meg, amit alapból kapnának. Ezt felfelé kerekítve értelmezzük."
+          },
+          {
+            "name": "Morálnövelés",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "Naponta a legénység minden tagja 2d8 Morálkockát kap."
+          }
+        ]
+      },
+      "storage": "2",
+      "veszely": "",
+      "hit": ""
+    }
+  },
+  {
+    "_id": "kozossegi-ter-2",
+    "name": "Közösségi Tér (2)",
+    "type": "Helyiseg",
+    "path": "/Helyiségek/Közösségi Tér/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "level": 2,
+      "abilities": {
+        "embedded": [
+          {
+            "name": "Nyugtató Zene",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "active",
+            "kp": 3,
+            "description": "A következő 5 körben a legénység tagjai azoknak a Stressz Pontoknak csak a felét kapják meg, amit alapból kapnának. Ezt felfelé kerekítve értelmezzük."
+          },
+          {
+            "name": "Morálnövelés",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "Naponta a legénység minden tagja 3d8 Morálkockát kap."
+          }
+        ]
+      },
+      "storage": "2",
+      "veszely": "",
+      "hit": ""
+    }
+  },
+  {
+    "_id": "kozossegi-ter-3",
+    "name": "Közösségi Tér (3)",
+    "type": "Helyiseg",
+    "path": "/Helyiségek/Közösségi Tér/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "level": 3,
+      "abilities": {
+        "embedded": [
+          {
+            "name": "Nyugtató Zene",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "active",
+            "kp": 3,
+            "description": "A következő 5 körben a legénység tagjai azoknak a Stressz Pontoknak csak a felét kapják meg, amit alapból kapnának. Ezt felfelé kerekítve értelmezzük."
+          },
+          {
+            "name": "Morálnövelés",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "Naponta a legénység minden tagja 4d8 Morálkockát kap."
+          }
+        ]
+      },
+      "storage": "2",
+      "veszely": "",
+      "hit": ""
+    }
+  },
+  {
+    "_id": "konyha-etkezo-0-helyiség",
+    "name": "Konyha és Étkező (0)",
+    "type": "Helyiseg",
+    "path": "/Helyiségek/Konyha és Étkező/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "level": 0,
+      "abilities": {
+        "embedded": [
+          {
+            "name": "Konyhai Felszerelés",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "Minden Főzéspróbára, amit itt végeznek el +2 bónuszt ad."
+          }
+        ]
+      },
+      "storage": "2",
+      "veszely": "",
+      "hit": ""
+    }
+  },
+  {
+    "_id": "konyha-etkezo-1-helyiség",
+    "name": "Konyha és Étkező (1)",
+    "type": "Helyiseg",
+    "path": "/Helyiségek/Konyha és Étkező/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "level": 1,
+      "abilities": {
+        "embedded": [
+          {
+            "name": "Konyhai Felszerelés",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "Minden Főzéspróbára, amit itt végeznek el +4 bónuszt ad."
+          }
+        ]
+      },
+      "storage": "2",
+      "veszely": "",
+      "hit": ""
+    }
+  },
+  {
+    "_id": "konyha-etkezo-2-helyiség",
+    "name": "Konyha és Étkező (2)",
+    "type": "Helyiseg",
+    "path": "/Helyiségek/Konyha és Étkező/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "level": 2,
+      "abilities": {
+        "embedded": [
+          {
+            "name": "Konyhai Felszerelés",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "Minden Főzéspróbára, amit itt végeznek el +6 bónuszt ad."
+          }
+        ]
+      },
+      "storage": "2",
+      "veszely": "",
+      "hit": ""
+    }
+  },
+  {
+    "_id": "konyha-etkezo-3-helyiség",
+    "name": "Konyha és Étkező (3)",
+    "type": "Helyiseg",
+    "path": "/Helyiségek/Konyha és Étkező/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "level": 3,
+      "abilities": {
+        "embedded": [
+          {
+            "name": "Konyhai Felszerelés",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "Minden Főzéspróbára, amit itt végeznek el +8 bónuszt ad."
+          }
+        ]
+      },
+      "storage": "2",
+      "veszely": "",
+      "hit": ""
+    }
+  },
+  {
+    "_id": "bazis-elsosegely-egyseg-0",
+    "name": "Elsősegély Egység (0)",
+    "type": "Helyiseg",
+    "path": "/Helyiségek/Elsősegély Egység/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "level": 0,
+      "abilities": {
+        "embedded": [
+          {
+            "name": "Kórházi Felszerelés",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "Naponta 2-őt gyógyul minden testrésze annak, aki itt tölti az idejét, azonban ez nem adódik hozzá az alap 1 gyógyuláshoz."
+          },
+          {
+            "name": "Kapacitás",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "Az Elsősegély Egység egy darab ággyal van felszerelve."
+          }
+        ]
+      },
+      "storage": "2",
+      "veszely": "",
+      "hit": ""
+    }
+  },
+  {
+    "_id": "bazis-elsosegely-egyseg-1",
+    "name": "Elsősegély Egység (1)",
+    "type": "Helyiseg",
+    "path": "/Helyiségek/Elsősegély Egység/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "level": 1,
+      "abilities": {
+        "embedded": [
+          {
+            "name": "Kórházi Felszerelés",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "Naponta 3-at gyógyul minden testrésze annak, aki itt tölti az idejét, azonban ez nem adódik hozzá az alap 1 gyógyuláshoz."
+          },
+          {
+            "name": "Kapacitás",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "Az Elsősegély Egység ágyainak száma eggyel növekszik. (Egyéb fejlesztések nélkül így 2 lesz.)"
+          }
+        ]
+      },
+      "storage": "2",
+      "veszely": "",
+      "hit": ""
+    }
+  },
+  {
+    "_id": "bazis-elsosegely-egyseg-2",
+    "name": "Elsősegély Egység (2)",
+    "type": "Helyiseg",
+    "path": "/Helyiségek/Elsősegély Egység/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "level": 2,
+      "abilities": {
+        "embedded": [
+          {
+            "name": "Kórházi Felszerelés",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "Naponta 4-et gyógyul minden testrésze annak, aki itt tölti az idejét, azonban ez nem adódik hozzá az alap 1 gyógyuláshoz."
+          },
+          {
+            "name": "Kapacitás",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "Az Elsősegély Egység ágyainak száma eggyel növekszik. (Egyéb fejlesztések nélkül így 3 lesz.)"
+          }
+        ]
+      },
+      "storage": "2",
+      "veszely": "",
+      "hit": ""
+    }
+  },
+  {
+    "_id": "bazis-elsosegely-egyseg-3",
+    "name": "Elsősegély Egység (3)",
+    "type": "Helyiseg",
+    "path": "/Helyiségek/Elsősegély Egység/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "level": 3,
+      "abilities": {
+        "embedded": [
+          {
+            "name": "Kórházi Felszerelés",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "Naponta 5-öt gyógyul minden testrésze annak, aki itt tölti az idejét, azonban ez nem adódik hozzá az alap 1 gyógyuláshoz."
+          },
+          {
+            "name": "Kapacitás",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "Az Elsősegély Egység ágyainak száma eggyel növekszik. (Egyéb fejlesztések nélkül így 4 lesz.)"
+          }
+        ]
+      },
+      "storage": "2",
+      "veszely": "",
+      "hit": ""
+    }
+  },
+  {
+    "_id": "bazis-labor-0",
+    "name": "Labor (0)",
+    "type": "Helyiseg",
+    "path": "/Helyiségek/Labor/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "level": 0,
+      "abilities": {
+        "embedded": [
+          {
+            "name": "Serkentő Gáz",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "active",
+            "kp": 2,
+            "description": "A legénység egy tagja beaktiválhatja a Laborban egy serkentő gáz levegőbe pumpálását. Ez a gáz a következő 2 körben +2 bónuszt ad minden a bázison elvégzett dobásra. Ez a hatás nem hat a Droidokra."
+          }
+        ]
+      },
+      "storage": "2",
+      "veszely": "",
+      "hit": ""
+    }
+  },
+  {
+    "_id": "bazis-labor-1",
+    "name": "Labor (1)",
+    "type": "Helyiseg",
+    "path": "/Helyiségek/Labor/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "level": 1,
+      "abilities": {
+        "embedded": [
+          {
+            "name": "Serkentő Gáz",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "active",
+            "kp": 2,
+            "description": "A legénység egy tagja beaktiválhatja a Laborban egy serkentő gáz levegőbe pumpálását. Ez a gáz a következő 2 körben +2 bónuszt ad minden a bázison elvégzett dobásra. Ez a hatás nem hat a Droidokra."
+          },
+          {
+            "name": "Anomália Vizsgálat",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "Bármilyen „hordozható” anomáliát vagy ismeretlen dolgot, amelyet képes egy legénységi tag a Laborba vinni meg lehet egy 15-ös nehézségű Lexikális Tudás dobással vizsgálni. Ekkor sokkal részletesebb tudást lehet szerezni az adott anomáliáról. Ebben az esetben a tag +3 bónuszt kap a dobására."
+          }
+        ]
+      },
+      "storage": "2",
+      "veszely": "",
+      "hit": ""
+    }
+  },
+  {
+    "_id": "bazis-labor-2",
+    "name": "Labor (2)",
+    "type": "Helyiseg",
+    "path": "/Helyiségek/Labor/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "level": 2,
+      "abilities": {
+        "embedded": [
+          {
+            "name": "Serkentő Gáz",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "active",
+            "kp": 2,
+            "description": "A legénység egy tagja beaktiválhatja a Laborban egy serkentő gáz levegőbe pumpálását. Ez a gáz a következő 2 körben +2 bónuszt ad minden a bázison elvégzett dobásra. Ez a hatás nem hat a Droidokra."
+          },
+          {
+            "name": "Anomália Vizsgálat",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "Bármilyen „hordozható” anomáliát vagy ismeretlen dolgot, amelyet képes egy legénységi tag a Laborba vinni meg lehet egy 15-ös nehézségű Lexikális Tudás dobással vizsgálni. Ekkor sokkal részletesebb tudást lehet szerezni az adott anomáliáról. Ebben az esetben a tag +3 bónuszt kap a dobására."
+          },
+          {
+            "name": "Kisegítő Eszköztár",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "Az alábbi Beosztásból vagy Háttérből kapott képességek a leírt bónuszokat kapják, amikor az adott cselekedeteket a Laborban csinálják:\n- Injekciók (Orvos)\nEgy nap három injekció helyett ötöt használhat.\n- Terápia (Orvos – Terapeuta)\nA Mentális Erősség próba nehézsége 15-ről 11-re csökken le.\n- Méregkotyvasztás (Szakács – Kantin Operátor)\nA Hashajtó hatása 2 napig tart, az Idegméreg sebzése 2d8-ra nő, és a „Gina” hatása 10 percig tart.\n- Savgránát (Szakács – Kotyvasztó)\nNaponta kettő helyett négy Savgránát elkészítésére vagy képes.\n- Nyomkövető Impulzus-Torpedó (Lövegkezelő – Tüzérségi Specialista)\nAz adott alapanyagokból kettő helyett három Nyomkövető Impulzus-Torpedót vagy képes elkészíteni.\n- Hatásos Adagok (Ápoló)\nA gyógyszerek és a nano-droidok 1d6 helyett 1d8-at gyógyítanak minden testrészen. Az érzéstelenítő injekciók és a sürgősségi nano-droidok pedig 4d6 helyett 4d8-at gyógyítanak egy testrészen.\n- Találmány-Prototípus (Tudós)\nNaponta képes vagy kettő darab Egyszer Használatos Eszköz elkészítésére.\n"
+          }
+        ]
+      },
+      "storage": "2",
+      "veszely": "",
+      "hit": ""
+    }
+  },
+  {
+    "_id": "bazis-labor-3",
+    "name": "Labor (3)",
+    "type": "Helyiseg",
+    "path": "/Helyiségek/Labor/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "level": 3,
+      "abilities": {
+        "embedded": [
+          {
+            "name": "Serkentő Gáz",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "active",
+            "kp": 2,
+            "description": "A legénység egy tagja beaktiválhatja a Laborban egy serkentő gáz levegőbe pumpálását. Ez a gáz a következő 2 körben +2 bónuszt ad minden a bázison elvégzett dobásra. Ez a hatás nem hat a Droidokra."
+          },
+          {
+            "name": "Anomália Vizsgálat",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "Bármilyen „hordozható” anomáliát vagy ismeretlen dolgot, amelyet képes egy legénységi tag a Laborba vinni meg lehet egy 15-ös nehézségű Lexikális Tudás dobással vizsgálni. Ekkor sokkal részletesebb tudást lehet szerezni az adott anomáliáról. Ebben az esetben a tag +3 bónuszt kap a dobására."
+          },
+          {
+            "name": "Kisegítő Eszköztár",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "Az alábbi Beosztásból vagy Háttérből kapott képességek a leírt bónuszokat kapják, amikor az adott cselekedeteket a Laborban csinálják:\n- Injekciók (Orvos)\nEgy nap három injekció helyett ötöt használhat.\n- Terápia (Orvos – Terapeuta)\nA Mentális Erősség próba nehézsége 15-ről 11-re csökken le.\n- Méregkotyvasztás (Szakács – Kantin Operátor)\nA Hashajtó hatása 2 napig tart, az Idegméreg sebzése 2d8-ra nő, és a „Gina” hatása 10 percig tart.\n- Savgránát (Szakács – Kotyvasztó)\nNaponta kettő helyett négy Savgránát elkészítésére vagy képes.\n- Nyomkövető Impulzus-Torpedó (Lövegkezelő – Tüzérségi Specialista)\nAz adott alapanyagokból kettő helyett három Nyomkövető Impulzus-Torpedót vagy képes elkészíteni.\n- Hatásos Adagok (Ápoló)\nA gyógyszerek és a nano-droidok 1d6 helyett 1d8-at gyógyítanak minden testrészen. Az érzéstelenítő injekciók és a sürgősségi nano-droidok pedig 4d6 helyett 4d8-at gyógyítanak egy testrészen.\n- Találmány-Prototípus (Tudós)\nNaponta képes vagy kettő darab Egyszer Használatos Eszköz elkészítésére.\n"
+          },
+          {
+            "name": "Kemikália Labor",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "A legénység képes minden Kemikáliát legyártani, amely a Vállalkozások és Cégek között a Gyártás alkategóriában elkészíthető.\nA szükséges alapanyagok és az elkészítési idő nem változik."
+          }
+        ]
+      },
+      "storage": "2",
+      "veszely": "",
+      "hit": ""
+    }
+  },
+  {
+    "_id": "bazis-szerver-es-programszoba-0",
+    "name": "Szerver- és Programszoba (0)",
+    "type": "Helyiseg",
+    "path": "/Helyiségek/Szerver- és Programszoba/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "level": 0,
+      "abilities": {
+        "embedded": [
+          {
+            "name": "Rendszerek Feltörése",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "active",
+            "kp": 0,
+            "description": "Egy Technikai Tudás próbával képes feltörni civil vagy erősebb védelmi rendszerű szervereket, dokumentumokat vagy kommunikációs csatornákat, amelyekkel egy csillagrendszerben van. A Technikai Tudáspróba nehézsége célponttól függően:\nEbben a Zónában, Civil Védelem: 13\nEbben a Zónában, Erősebb Védelem: 18\nNem ebben a Zónában, azonban ezen a Bolygón, Civil Védelem: 16\nNem ebben a Zónában, azonban ezen a Bolygón, Erősebb Védelem: 21\nNem ezen a bolygón, azonban ebben a Csillagrendszerben, Civil Védelem: 19\nNem ezen a bolygón, azonban ebben a Csillagrendszerben, Erősebb Védelem: 24"
+          }
+        ]
+      },
+      "storage": "2",
+      "veszely": "",
+      "hit": ""
+    }
+  },
+  {
+    "_id": "bazis-szerver-es-programszoba-1",
+    "name": "Szerver- és Programszoba (1)",
+    "type": "Helyiseg",
+    "path": "/Helyiségek/Szerver- és Programszoba/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "level": 1,
+      "abilities": {
+        "embedded": [
+          {
+            "name": "Rendszerek Feltörése",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "active",
+            "kp": 0,
+            "description": "Egy Technikai Tudás próbával képes feltörni civil vagy erősebb védelmi rendszerű szervereket, dokumentumokat vagy kommunikációs csatornákat, amelyekkel egy csillagrendszerben van. A Technikai Tudáspróba nehézsége célponttól függően:\nEbben a Zónában, Civil Védelem: 13\nEbben a Zónában, Erősebb Védelem: 18\nNem ebben a Zónában, azonban ezen a Bolygón, Civil Védelem: 16\nNem ebben a Zónában, azonban ezen a Bolygón, Erősebb Védelem: 21\nNem ezen a bolygón, azonban ebben a Csillagrendszerben, Civil Védelem: 19\nNem ezen a bolygón, azonban ebben a Csillagrendszerben, Erősebb Védelem: 24"
+          },
+          {
+            "name": "Jel Ellenőrzés",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "Nagy táv esetén (akár más bolygókról) is képes jeleket befogni, és ellenőrizni, hogy milyen típusú jeladó bocsájtja ki őket. Ezentúl képes hamis jelek azonosítására is."
+          }
+        ]
+      },
+      "storage": "2",
+      "veszely": "",
+      "hit": ""
+    }
+  },
+  {
+    "_id": "bazis-szerver-es-programszoba-2",
+    "name": "Szerver- és Programszoba (2)",
+    "type": "Helyiseg",
+    "path": "/Helyiségek/Szerver- és Programszoba/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "level": 2,
+      "abilities": {
+        "embedded": [
+          {
+            "name": "Rendszerek Feltörése",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "active",
+            "kp": 0,
+            "description": "Egy Technikai Tudás próbával képes feltörni civil vagy erősebb védelmi rendszerű szervereket, dokumentumokat vagy kommunikációs csatornákat, amelyekkel egy csillagrendszerben van. A Technikai Tudáspróba nehézsége célponttól függően:\nEbben a Zónában, Civil Védelem: 13\nEbben a Zónában, Erősebb Védelem: 18\nNem ebben a Zónában, azonban ezen a Bolygón, Civil Védelem: 16\nNem ebben a Zónában, azonban ezen a Bolygón, Erősebb Védelem: 21\nNem ezen a bolygón, azonban ebben a Csillagrendszerben, Civil Védelem: 19\nNem ezen a bolygón, azonban ebben a Csillagrendszerben, Erősebb Védelem: 24"
+          },
+          {
+            "name": "Jel Ellenőrzés",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "Nagy táv esetén (akár más bolygókról) is képes jeleket befogni, és ellenőrizni, hogy milyen típusú jeladó bocsájtja ki őket. Ezentúl képes hamis jelek azonosítására is."
+          },
+          {
+            "name": "A Hálózat Alatt",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "A bázis rendszerére kapcsolott mesterséges intelligencia lehetővé teszi, hogy a bázis ne jelenjen meg térképeken, és minden kapcsolata a technológiától rejtve legyen. Ez azt eredményezi, hogy a bázis veszélyeztetettsége 15%-kal csökken."
+          }
+        ]
+      },
+      "storage": "2",
+      "veszely": "-15",
+      "hit": ""
+    }
+  },
+  {
+    "_id": "bazis-szerver-es-programszoba-3",
+    "name": "Szerver- és Programszoba (3)",
+    "type": "Helyiseg",
+    "path": "/Helyiségek/Szerver- és Programszoba/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "level": 3,
+      "abilities": {
+        "embedded": [
+          {
+            "name": "Rendszerek Feltörése",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "active",
+            "kp": 0,
+            "description": "Egy Technikai Tudás próbával képes feltörni civil vagy erősebb védelmi rendszerű szervereket, dokumentumokat vagy kommunikációs csatornákat, amelyekkel egy csillagrendszerben van. A Technikai Tudáspróba nehézsége célponttól függően:\nEbben a Zónában, Civil Védelem: 13\nEbben a Zónában, Erősebb Védelem: 18\nNem ebben a Zónában, azonban ezen a Bolygón, Civil Védelem: 16\nNem ebben a Zónában, azonban ezen a Bolygón, Erősebb Védelem: 21\nNem ezen a bolygón, azonban ebben a Csillagrendszerben, Civil Védelem: 19\nNem ezen a bolygón, azonban ebben a Csillagrendszerben, Erősebb Védelem: 24"
+          },
+          {
+            "name": "Jel Ellenőrzés",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "Nagy táv esetén (akár más bolygókról) is képes jeleket befogni, és ellenőrizni, hogy milyen típusú jeladó bocsájtja ki őket. Ezentúl képes hamis jelek azonosítására is."
+          },
+          {
+            "name": "A Hálózat Alatt",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "A bázis rendszerére kapcsolott mesterséges intelligencia lehetővé teszi, hogy a bázis ne jelenjen meg térképeken, és minden kapcsolata a technológiától rejtve legyen. Ez azt eredményezi, hogy a bázis veszélyeztetettsége 15%-kal csökken."
+          },
+          {
+            "name": "Objektum Identifikáló Radar",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "active",
+            "kp": 0,
+            "description": "Egy 15-ös nehézségű Technikai Tudáspróbával 10 kilométeren belül meg tudja határozni egy ismeretlen objektum következő tulajdonságait: frakció, legénység létszáma, járműegységek és felszerelések."
+          }
+        ]
+      },
+      "storage": "2",
+      "veszely": "-15",
+      "hit": ""
+    }
+  },
+  {
+    "_id": "bazis-raktar-0",
+    "name": "Raktár (0)",
+    "type": "Helyiseg",
+    "path": "/Helyiségek/Raktár/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "level": 0,
+      "abilities": {
+        "embedded": [
+          {
+            "name": "Visszafogott Tárolás",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "Amennyiben a bázis raktárát kirabolják, akkor a csapat 25%-kal kevesebb értéket veszít el."
+          }
+        ]
+      },
+      "storage": "50",
+      "veszely": "",
+      "hit": ""
+    }
+  },
+  {
+    "_id": "bazis-raktar-1",
+    "name": "Raktár (1)",
+    "type": "Helyiseg",
+    "path": "/Helyiségek/Raktár/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "level": 1,
+      "abilities": {
+        "embedded": [
+          {
+            "name": "Visszafogott Tárolás",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "Amennyiben a bázis raktárát kirabolják, akkor a csapat 50%-kal kevesebb értéket veszít el."
+          }
+        ]
+      },
+      "storage": "50",
+      "veszely": "",
+      "hit": ""
+    }
+  },
+  {
+    "_id": "bazis-raktar-2",
+    "name": "Raktár (2)",
+    "type": "Helyiseg",
+    "path": "/Helyiségek/Raktár/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "level": 2,
+      "abilities": {
+        "embedded": [
+          {
+            "name": "Visszafogott Tárolás",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "Amennyiben a bázis raktárát kirabolják, akkor a csapat 75%-kal kevesebb értéket veszít el."
+          }
+        ]
+      },
+      "storage": "50",
+      "veszely": "",
+      "hit": ""
+    }
+  },
+  {
+    "_id": "bazis-raktar-3",
+    "name": "Raktár (3)",
+    "type": "Helyiseg",
+    "path": "/Helyiségek/Raktár/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "level": 3,
+      "abilities": {
+        "embedded": [
+          {
+            "name": "Visszafogott Tárolás",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "Amennyiben a bázis raktárát kirabolják, akkor a csapat nem veszít el jelentősebb értéket."
+          }
+        ]
+      },
+      "storage": "50",
+      "veszely": "",
+      "hit": ""
+    }
+  },
+  {
+    "_id": "bazis-dokumentumtar-0",
+    "name": "Dokumentumtár (0)",
+    "type": "Helyiseg",
+    "path": "/Helyiségek/Dokumentumtár/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "level": 0,
+      "abilities": {
+        "embedded": [
+          {
+            "name": "Tudástár",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "Minden Lexikális Tudás, Nyelvek és Technikai Tudás próbára, amit itt végeznek el, +2 bónuszt ad."
+          }
+        ]
+      },
+      "storage": "2",
+      "veszely": "",
+      "hit": ""
+    }
+  },
+  {
+    "_id": "bazis-dokumentumtar-1",
+    "name": "Dokumentumtár (1)",
+    "type": "Helyiseg",
+    "path": "/Helyiségek/Dokumentumtár/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "level": 1,
+      "abilities": {
+        "embedded": [
+          {
+            "name": "Tudástár",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "Minden Lexikális Tudás, Nyelvek és Technikai Tudás próbára, amit itt végeznek el, +3 bónuszt ad."
+          }
+        ]
+      },
+      "storage": "2",
+      "veszely": "",
+      "hit": ""
+    }
+  },
+  {
+    "_id": "bazis-dokumentumtar-2",
+    "name": "Dokumentumtár (2)",
+    "type": "Helyiseg",
+    "path": "/Helyiségek/Dokumentumtár/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "level": 2,
+      "abilities": {
+        "embedded": [
+          {
+            "name": "Tudástár",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "Minden Lexikális Tudás, Nyelvek és Technikai Tudás próbára, amit itt végeznek el, +4 bónuszt ad."
+          }
+        ]
+      },
+      "storage": "2",
+      "veszely": "",
+      "hit": ""
+    }
+  },
+  {
+    "_id": "bazis-dokumentumtar-3",
+    "name": "Dokumentumtár (3)",
+    "type": "Helyiseg",
+    "path": "/Helyiségek/Dokumentumtár/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "level": 3,
+      "abilities": {
+        "embedded": [
+          {
+            "name": "Tudástár",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "Minden Lexikális Tudás, Nyelvek és Technikai Tudás próbára, amit itt végeznek el, +5 bónuszt ad."
+          }
+        ]
+      },
+      "storage": "2",
+      "veszely": "",
+      "hit": ""
+    }
+  },
+  {
+    "_id": "bazis-hangar-0",
+    "name": "Hangár (0)",
+    "type": "Helyiseg",
+    "path": "/Helyiségek/Hangár/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "level": 0,
+      "abilities": {
+        "embedded": [
+          {
+            "name": "Garázs-Varázs",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "Képes egy vagy több járművet magában tárolni. Az összesített tárolt járműegységek száma nem lépheti túl a 10-et.\n\n(Polgári járművek, mint például kocsik, motorok 1 vagy kevesebb járműegységnek számítanak a Mesélő döntése alapján.)"
+          },
+          {
+            "name": "Szervízakna",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "active",
+            "kp": 0,
+            "description": "Naponta egyszer egy járműegységen lehet javítani 1d10+2-őt."
+          }
+        ]
+      },
+      "storage": "2",
+      "veszely": "",
+      "hit": ""
+    }
+  },
+  {
+    "_id": "bazis-hangar-1",
+    "name": "Hangár (1)",
+    "type": "Helyiseg",
+    "path": "/Helyiségek/Hangár/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "level": 1,
+      "abilities": {
+        "embedded": [
+          {
+            "name": "Garázs-Varázs",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "Képes egy vagy több járművet magában tárolni. Az összesített tárolt járműegységek száma nem lépheti túl a 15-öt.\n\n(Polgári járművek, mint például kocsik, motorok 1 vagy kevesebb járműegységnek számítanak a Mesélő döntése alapján.)"
+          },
+          {
+            "name": "Szervízakna",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "active",
+            "kp": 0,
+            "description": "Naponta egyszer két járműegységen lehet javítani 1d10+2-őt."
+          }
+        ]
+      },
+      "storage": "2",
+      "veszely": "",
+      "hit": ""
+    }
+  },
+  {
+    "_id": "bazis-hangar-2",
+    "name": "Hangár (2)",
+    "type": "Helyiseg",
+    "path": "/Helyiségek/Hangár/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "level": 2,
+      "abilities": {
+        "embedded": [
+          {
+            "name": "Garázs-Varázs",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "Képes egy vagy több járművet magában tárolni. Az összesített tárolt járműegységek száma nem lépheti túl a 20-at.\n\n(Polgári járművek, mint például kocsik, motorok 1 vagy kevesebb járműegységnek számítanak a Mesélő döntése alapján.)"
+          },
+          {
+            "name": "Szervízakna",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "active",
+            "kp": 0,
+            "description": "Naponta egyszer három járműegységen lehet javítani 1d10+2-őt."
+          }
+        ]
+      },
+      "storage": "2",
+      "veszely": "",
+      "hit": ""
+    }
+  },
+  {
+    "_id": "bazis-hangar-3",
+    "name": "Hangár (3)",
+    "type": "Helyiseg",
+    "path": "/Helyiségek/Hangár/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "level": 3,
+      "abilities": {
+        "embedded": [
+          {
+            "name": "Garázs-Varázs",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "Képes egy vagy több járművet magában tárolni. Az összesített tárolt járműegységek száma nem lépheti túl a 25-öt.\n\n(Polgári járművek, mint például kocsik, motorok 1 vagy kevesebb járműegységnek számítanak a Mesélő döntése alapján.)"
+          },
+          {
+            "name": "Szervízakna",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "active",
+            "kp": 0,
+            "description": "Naponta egyszer négy járműegységen lehet javítani 1d10+2-őt."
+          }
+        ]
+      },
+      "storage": "2",
+      "veszely": "",
+      "hit": ""
+    }
+  },
+  {
+    "_id": "bazis-edzoterem-0",
+    "name": "Edzőterem (0)",
+    "type": "Helyiseg",
+    "path": "/Helyiségek/Edzőterem/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "level": 0,
+      "abilities": {
+        "embedded": [
+          {
+            "name": "Kondigépek",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "active",
+            "kp": 0,
+            "description": "Ha egy karakter eltölt egy pár órát edzéssel, akkor a következő kettő napban +2 bónuszt kap Erőnlétpróbákra."
+          }
+        ]
+      },
+      "storage": "2",
+      "veszely": "",
+      "hit": ""
+    }
+  },
+  {
+    "_id": "bazis-edzoterem-1",
+    "name": "Edzőterem (1)",
+    "type": "Helyiseg",
+    "path": "/Helyiségek/Edzőterem/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "level": 1,
+      "abilities": {
+        "embedded": [
+          {
+            "name": "Kondigépek",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "active",
+            "kp": 0,
+            "description": "Ha egy karakter eltölt egy pár órát edzéssel, akkor a következő kettő napban +3 bónuszt kap Erőnlétpróbákra."
+          }
+        ]
+      },
+      "storage": "2",
+      "veszely": "",
+      "hit": ""
+    }
+  },
+  {
+    "_id": "bazis-edzoterem-2",
+    "name": "Edzőterem (2)",
+    "type": "Helyiseg",
+    "path": "/Helyiségek/Edzőterem/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "level": 2,
+      "abilities": {
+        "embedded": [
+          {
+            "name": "Kondigépek",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "active",
+            "kp": 0,
+            "description": "Ha egy karakter eltölt egy pár órát edzéssel, akkor a következő kettő napban +4 bónuszt kap Erőnlétpróbákra."
+          }
+        ]
+      },
+      "storage": "2",
+      "veszely": "",
+      "hit": ""
+    }
+  },
+  {
+    "_id": "bazis-edzoterem-3",
+    "name": "Edzőterem (3)",
+    "type": "Helyiseg",
+    "path": "/Helyiségek/Edzőterem/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "level": 3,
+      "abilities": {
+        "embedded": [
+          {
+            "name": "Kondigépek",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "active",
+            "kp": 0,
+            "description": "Ha egy karakter eltölt egy pár órát edzéssel, akkor a következő kettő napban +5 bónuszt kap Erőnlétpróbákra."
+          }
+        ]
+      },
+      "storage": "2",
+      "veszely": "",
+      "hit": ""
+    }
+  },
+  {
+    "_id": "bazis-fegyverszoba-0",
+    "name": "Fegyverszoba (0)",
+    "type": "Helyiseg",
+    "path": "/Helyiségek/Fegyverszoba/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "level": 0,
+      "abilities": {
+        "embedded": [
+          {
+            "name": "Precíz Beállítások",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "A fegyverszoba eszközei lehetővé teszik, hogy egy fegyverrel messzebbre el lehessen lőni, nagy pontossággal. Minden fegyver (kivéve a közelharci és dobófegyverek) hatótávolsága megnövekszik 20%-kal (felfelé kerekítve)."
+          },
+          {
+            "name": "Fegyverek Tárolása",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "A fegyverszobában bármennyi fegyvert lehet tárolni."
+          }
+        ]
+      },
+      "storage": "2",
+      "veszely": "",
+      "hit": ""
+    }
+  },
+  {
+    "_id": "bazis-fegyverszoba-1",
+    "name": "Fegyverszoba (1)",
+    "type": "Helyiseg",
+    "path": "/Helyiségek/Fegyverszoba/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "level": 1,
+      "abilities": {
+        "embedded": [
+          {
+            "name": "Precíz Beállítások",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "A fegyverszoba eszközei lehetővé teszik, hogy egy fegyverrel messzebbre el lehessen lőni, nagy pontossággal. Minden fegyver (kivéve a közelharci és dobófegyverek) hatótávolsága megnövekszik 20%-kal (felfelé kerekítve)."
+          },
+          {
+            "name": "Fegyverek Tárolása",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "A fegyverszobában bármennyi fegyvert lehet tárolni."
+          },
+          {
+            "name": "Karbantartott Fegyverek",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "active",
+            "kp": 0,
+            "description": "Ha a legénység egy tagja eltölt itt 1d4 órát egy fegyverének karbantartásával, akkor az adott fegyver sebzése a következő 3 napban +2 bónuszt kap. Ezt több fegyverrel is meg lehet tenni."
+          }
+        ]
+      },
+      "storage": "2",
+      "veszely": "",
+      "hit": ""
+    }
+  },
+  {
+    "_id": "bazis-fegyverszoba-2",
+    "name": "Fegyverszoba (2)",
+    "type": "Helyiseg",
+    "path": "/Helyiségek/Fegyverszoba/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "level": 2,
+      "abilities": {
+        "embedded": [
+          {
+            "name": "Precíz Beállítások",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "A fegyverszoba eszközei lehetővé teszik, hogy egy fegyverrel messzebbre el lehessen lőni, nagy pontossággal. Minden fegyver (kivéve a közelharci és dobófegyverek) hatótávolsága megnövekszik 20%-kal (felfelé kerekítve)."
+          },
+          {
+            "name": "Fegyverek Tárolása",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "A fegyverszobában bármennyi fegyvert lehet tárolni."
+          },
+          {
+            "name": "Karbantartott Fegyverek",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "active",
+            "kp": 0,
+            "description": "Ha a legénység egy tagja eltölt itt 1d4 órát egy fegyverének karbantartásával, akkor az adott fegyver sebzése a következő 3 napban +2 bónuszt kap. Ezt több fegyverrel is meg lehet tenni."
+          },
+          {
+            "name": "Meghökkentő Gyorsaság",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "A legénység olyannyira hozzászokott a saját fegyvereihez, hogy egy harci szituációban 0 Küzdelmi Pontért tudja elővenni, elrakni vagy kicserélni ezeket a fegyvereket. Ezen túl a fegyverek újratöltése 1 Küzdelmi Ponttal kevesebbe kerül."
+          }
+        ]
+      },
+      "storage": "2",
+      "veszely": "",
+      "hit": ""
+    }
+  },
+  {
+    "_id": "bazis-fegyverszoba-3",
+    "name": "Fegyverszoba (3)",
+    "type": "Helyiseg",
+    "path": "/Helyiségek/Fegyverszoba/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "level": 3,
+      "abilities": {
+        "embedded": [
+          {
+            "name": "Precíz Beállítások",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "A fegyverszoba eszközei lehetővé teszik, hogy egy fegyverrel messzebbre el lehessen lőni, nagy pontossággal. Minden fegyver (kivéve a közelharci és dobófegyverek) hatótávolsága megnövekszik 20%-kal (felfelé kerekítve)."
+          },
+          {
+            "name": "Fegyverek Tárolása",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "A fegyverszobában bármennyi fegyvert lehet tárolni."
+          },
+          {
+            "name": "Karbantartott Fegyverek",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "active",
+            "kp": 0,
+            "description": "Ha a legénység egy tagja eltölt itt 1d4 órát egy fegyverének karbantartásával, akkor az adott fegyver sebzése a következő 3 napban +2 bónuszt kap. Ezt több fegyverrel is meg lehet tenni."
+          },
+          {
+            "name": "Meghökkentő Gyorsaság",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "A legénység olyannyira hozzászokott a saját fegyvereihez, hogy egy harci szituációban 0 Küzdelmi Pontért tudja elővenni, elrakni vagy kicserélni ezeket a fegyvereket. Ezen túl a fegyverek újratöltése 1 Küzdelmi Ponttal kevesebbe kerül."
+          },
+          {
+            "name": "Összhang az Összetűzésben",
+            "img": "systems/vacuum-of-the-void/assets/blank.svg",
+            "kind": "passive",
+            "kp": 0,
+            "description": "A legénység minden tagja kiválaszthat egy fegyvert (ezt bármikor megváltoztathatja a Fegyverszobában), amellyel a fegyverszobában kifejezetten sokat foglalkozik. Amennyiben egy harci szituációban ez a fegyver van a kezében, akkor a Harcképzettség módosítója +3 bónusszal növekszik."
+          }
+        ]
+      },
+      "storage": "2",
+      "veszely": "",
+      "hit": ""
+    }
+  },
+  {
+    "_id": "bazis-modul-barpult",
+    "name": "Bárpult",
+    "type": "Kepesseg",
+    "path": "/Modulok/Bázishelyiség-modulok/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "kind": "module",
+      "kp": 0,
+      "description": "Beszerelhető: Közösségi Tér, Konyha és Étkező\n\nEnnek a modulnak a segítségével a legénység szórakozhat és megnövelheti a kedvét. A következő 1 napra a legénység minden tagja, aki rész vesz ebben a tevékenységben kap 1d8 Morálkockát."
+    }
+  },
+  {
+    "_id": "bazis-modul-szuper-szpresszo",
+    "name": "Szuper-Szpresszó",
+    "type": "Kepesseg",
+    "path": "/Modulok/Bázishelyiség-modulok/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "kind": "module",
+      "kp": 0,
+      "description": "Beszerelhető: Konyha és Étkező\n\nEz a hangvezérléses kávéfőző robot olyan megnövelt koffein és taurin tartalmú, kávéízesítésű italt főz, aminek a hatása hasonlít egy erős energiaitaléra. Aki megissza ezt a készítményt, az +2 bónuszt kap minden Gyorsgondolkodás dobásra a következő egy napban. Ezt a bónuszt Droidok nem kapják meg."
+    }
+  },
+  {
+    "_id": "bazis-modul-konyhai-hirkozlo",
+    "name": "Konyhai Hírközlő Modul",
+    "type": "Kepesseg",
+    "path": "/Modulok/Bázishelyiség-modulok/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "kind": "module",
+      "kp": 0,
+      "description": "Beszerelhető: Konyha és Étkező\n\nFőzés vagy étkezés közben lehet hallgatni, és így napi egy Lexikális Tudás dobás esetén fel lehet idézni a hallott hírekből bizonyos információkat. Ennek hatására +4 bónusz jár erre a dobásra."
+    }
+  },
+  {
+    "_id": "bazis-modul-szerencse-suti-adagolo",
+    "name": "Szerencse Süti Adagoló",
+    "type": "Kepesseg",
+    "path": "/Modulok/Bázishelyiség-modulok/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "kind": "module",
+      "kp": 0,
+      "description": "Beszerelhető: Konyha és Étkező\n\nNapi 5 darab Szerencse Sütit tud kiadni. Ezek Egyszer Használatos Szerencse Eszközként működnek +3-as bónusszal."
+    }
+  },
+  {
+    "_id": "bazis-modul-mi-kezelofelulet",
+    "name": "M.I. Kezelőfelület",
+    "type": "Kepesseg",
+    "path": "/Modulok/Bázishelyiség-modulok/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "kind": "module",
+      "kp": 0,
+      "description": "Beszerelhető: Szerver- és Programszoba, Közösségi Tér, Dokumentumtár\n\nEgy mesterséges intelligencia (MI) kerül a bázis elektronikus rendszereibe programozva. Lehet vele kisebb beszélgetéseket folytatni, és minden tudásnak birtokában áll, ami a Holo-Neten megtalálható.\n\nEzen felül bejelenti a bázisba behatoló személyek számát és helyzetét, és üdvözli a legénység tagjait."
+    }
+  },
+  {
+    "_id": "bazis-modul-loter",
+    "name": "Lőtér",
+    "type": "Kepesseg",
+    "path": "/Modulok/Bázishelyiség-modulok/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "kind": "module",
+      "kp": 0,
+      "description": "Beszerelhető: Fegyverszoba\n\nNaponta pár órát itt eltöltve a legénység tagjai gyakorolhatják a pontos lövészet tudományát. Emiatt a következő két napban a Kézifegyver Használat próbáikra +2 bónuszt kapnak."
+    }
+  },
+  {
+    "_id": "bazis-modul-tarsas-szerepjatek-sarok",
+    "name": "Társas- és Szerepjáték Sarok",
+    "type": "Kepesseg",
+    "path": "/Modulok/Bázishelyiség-modulok/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "kind": "module",
+      "kp": 0,
+      "description": "Beszerelhető: Közösségi Tér, Dokumentumtár\n\nAmennyiben az egész legénység részt vesz egy pár órát felemésztő társas- vagy szerepjáték alkalomban, akkor a következő napban +1 bónuszt kap a legénység minden tagja Meggyőzés, Memória, és Gyorsgondolkodáspróbákra."
+    }
+  },
+  {
+    "_id": "bazis-modul-rejtett-raktar",
+    "name": "Rejtett Raktár",
+    "type": "Kepesseg",
+    "path": "/Modulok/Bázishelyiség-modulok/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "kind": "module",
+      "kp": 0,
+      "description": "Beszerelhető: Raktár\n\nSzabad szemmel szinte észrevehetetlen, így aki keresi, az -10 büntetéssel dob Észlelést rá. Ezentúl más eszközök, mint például radar vagy röntgen nem jelzi ki, hogy ott van, sem a benne található dolgokat. Kapacitása 15 láda. Ezt a modult nem lehet elrabolni, és szintúgy semmilyen benne tárolt értéket."
+    }
+  },
+  {
+    "_id": "bazis-modul-tomloc",
+    "name": "Tömlöc",
+    "type": "Kepesseg",
+    "path": "/Modulok/Bázishelyiség-modulok/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "kind": "module",
+      "kp": 0,
+      "description": "Beszerelhető: Raktár\n\nMaximum 3 fogoly fogva tartására kialakított börtön helyiség. A megszökés szinte lehetetlen, és a falak hangszigetelése megakadályozza, hogy bárki meghallja a rabok kiabálását."
+    }
+  },
+  {
+    "_id": "bazis-modul-kommunikacios-kozpont",
+    "name": "Kommunikációs Központ",
+    "type": "Kepesseg",
+    "path": "/Modulok/Bázishelyiség-modulok/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "kind": "module",
+      "kp": 2,
+      "description": "Beszerelhető: Szerver- és Programszoba\n\nA Szerver- és Programszobában lévő karakterek elkölthetnek 2 Küzdelmi Pontot arra, hogy rákapcsolódjanak mindenki kommunikációs csatornájára, aki a bázison, vagy annak 150 méteres környezetében van 3 körig. Ekkor hallanak mindent, amit mások beszélnek, és ha ezeken a kommunikációs csatornákon videóanyagot is közvetítenek, akkor azt is látják."
+    }
+  },
+  {
+    "_id": "bazis-modul-biztonsagi-rendszer",
+    "name": "Biztonsági Rendszer",
+    "type": "Kepesseg",
+    "path": "/Modulok/Bázishelyiség-modulok/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "kind": "module",
+      "kp": 0,
+      "description": "Beszerelhető: Bármely Bázis Helyiség\n\nA bázis veszélyeztetettségét 25%-kal csökkenti. Ezen felül azonnal értesíti a legénységet, ha valaki belép a bázisba. A legénység a kamerákon és mikrofonokon keresztül mindent lát és hall, ami a bázison történik."
+    }
+  },
+  {
+    "_id": "bazis-modul-virtualis-harci-szimulator",
+    "name": "Virtuális Harci Szimulátor",
+    "type": "Kepesseg",
+    "path": "/Modulok/Bázishelyiség-modulok/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "kind": "module",
+      "kp": 0,
+      "description": "Beszerelhető: Edzőterem, Fegyverszoba\n\nKépes a virtuális valóság eszközeivel egy élethű harci szituációt teremteni, amelyben a legénység tagjai gyakorolhatják a fegyveres konfliktust. Aki legalább 2 órán át gyakorol a szimulációban, az a következő egy napban +3 bónuszt kap a Harcképzettség és Kézifegyver Használat próbáira."
+    }
+  },
+  {
+    "_id": "bazis-modul-teljesitmenynoveloszer-adagolo",
+    "name": "Teljesítménynövelőszer Adagoló",
+    "type": "Kepesseg",
+    "path": "/Modulok/Bázishelyiség-modulok/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "kind": "module",
+      "kp": 0,
+      "description": "Beszerelhető: Labor, Konyha és Étkező, Edzőterem\n\nEz a szerkezet egy olyan főzetet készít el, amelyben igazából senki sem tudja mi lehet. Egy dolgot lehet róla tudni, és az az, hogy egy organikus lény szervezetét nagyon megpörgeti. Aki fogyaszt ebből a szerből, annak a következő egy napban +3 bónusz jár az Erőnlét és Gyorsgondolkodás dobásaira. Ahogy letelik az egy nap, a Törzse 1d6+2-őt sebződik. Ezt a modult Droidok nem használhatják."
+    }
+  },
+  {
+    "_id": "bazis-modul-specializalt-archivum",
+    "name": "Specializált Archívum",
+    "type": "Kepesseg",
+    "path": "/Modulok/Bázishelyiség-modulok/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "kind": "module",
+      "kp": 0,
+      "description": "Beszerelhető: Szerver- és Programszoba, Dokumentumtár\n\nMindenféle publikus és titkos dokumentumok segítségével képes a legénység tagjainak óriási tudást a kezébe adni. Amennyiben egy karakter eltölt egy héten keresztül minden nap legalább 5 órát egy Jártasság (kivéve Szerencse) tanulmányozásával, akkor arra az egy Jártaságra +3 bónuszt kap. Ez a bónusz addig marad meg, míg a karakter újra nem használja ezt a modult."
+    }
+  },
+  {
+    "_id": "bazis-modul-jakuzzi",
+    "name": "Jakuzzi",
+    "type": "Kepesseg",
+    "path": "/Modulok/Bázishelyiség-modulok/",
+    "img": "systems/vacuum-of-the-void/assets/blank.svg",
+    "system": {
+      "kind": "module",
+      "kp": 0,
+      "description": "Beszerelhető: Közösségi Tér, Edzőterem\n\nEgy karakter napi egyszer ellazulhat ennek a modulnak a segítségével. Ennek hatására d4/2 Stressz Pontot (felfelé kerekítve) levonhat magától."
     }
   }
 ]
