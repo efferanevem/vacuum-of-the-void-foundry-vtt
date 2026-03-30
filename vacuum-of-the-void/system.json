@@ -73,6 +73,13 @@
       "type": "Item",
       "system": "vacuum-of-the-void",
       "path": "packs/egyeb-informaciok.db"
+    },
+    {
+      "name": "jarmuvek-bazisok",
+      "label": "Járművek & Bázisok",
+      "type": "Item",
+      "system": "vacuum-of-the-void",
+      "path": "packs/jarmuvek-bazisok.db"
     }
   ],
   "grid": {
