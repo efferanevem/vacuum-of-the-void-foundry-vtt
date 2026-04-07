@@ -1,1 +1,12 @@
-2026/03/29-22:14:52.608 246c Delete type=3 #1
+2026/03/31-11:09:57.356 263c Recovering log #11
+2026/03/31-11:09:57.364 263c Delete type=0 #11
+2026/03/31-11:09:57.366 263c Delete type=3 #7
+2026/03/31-11:10:03.127 bcc Compacting 1@0 + 1@1 files
+2026/03/31-11:10:03.127 bcc Compacted 1@0 + 1@1 files => 0 bytes
+2026/03/31-11:10:03.130 bcc compacted to: files[ 0 0 0 0 0 0 0 ]
+2026/03/31-11:10:03.131 bcc Delete type=2 #10
+2026/03/31-11:10:03.132 bcc Delete type=2 #12
+2026/03/31-11:18:55.999 bcc Level-0 table #16: started
+2026/03/31-11:18:56.006 bcc Level-0 table #16: 349215 bytes OK
+2026/03/31-11:18:56.009 bcc Delete type=0 #14
+2026/03/31-11:18:56.009 bcc Manual compaction at level-0 from '!folders!46V4J5EGnXSoPM9B' @ 72057594037927935 : 1 .. '!items!zumr2qmLrTOOu3KV' @ 0 : 0; will stop at (end)
