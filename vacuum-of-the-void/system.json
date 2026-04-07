@@ -2,7 +2,7 @@
   "id": "vacuum-of-the-void",
   "title": "Vacuum of the Void",
   "description": "Magyar fejlesztésű sci-fi szerepjátékrendszer.",
-  "version": "1.0.0",
+  "version": "1.0",
   "compatibility": {
     "minimum": 13,
     "verified": 13
@@ -86,7 +86,7 @@
     "distance": 1.5,
     "units": "m"
   },
-  "url": "https://example.com/vacuum-of-the-void",
-  "manifest": "https://example.com/vacuum-of-the-void/system.json",
-  "download": "https://example.com/vacuum-of-the-void/system.zip"
+  "url": "https://github.com/efferanevem/vacuum-of-the-void-foundry-vtt",
+  "manifest": "https://github.com/efferanevem/vacuum-of-the-void-foundry-vtt/releases/download/v1.0/system.json",
+  "download": "https://github.com/efferanevem/vacuum-of-the-void-foundry-vtt/releases/download/v1.0/votv.zip"
 }
