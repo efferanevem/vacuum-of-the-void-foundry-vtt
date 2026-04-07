@@ -2,7 +2,7 @@
   "id": "vacuum-of-the-void",
   "title": "Vacuum of the Void",
   "description": "Magyar fejlesztésű sci-fi szerepjátékrendszer.",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "compatibility": {
     "minimum": 13,
     "verified": 13
